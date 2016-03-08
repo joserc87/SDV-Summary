@@ -1,10 +1,10 @@
 import xml.etree.ElementTree
 
-def playerInfo(saveFile):
-    tags = [line.rstrip() for line in open("./data/player.txt", "r")]
-    professions = [line.rstrip() for line in open("./data/professions.txt", "r")]
+def playerInfo(saveFileLocation):
+    tags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel', 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina', 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships']
+    professions = ['Rancher', 'Tiller', 'Coopmaster', 'Shepherd', 'Artisan', 'Agriculturist', 'Fisher', 'Trapper', 'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist', 'Tracker', 'Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout', 'Brute', 'Defender', 'Acrobat', 'Desperado']
 
-    root = xml.etree.ElementTree.parse(saveFile).getroot()
+    root = xml.etree.ElementTree.parse(saveFileLocation).getroot()
 
     player = root.find("player")
     info = {}
