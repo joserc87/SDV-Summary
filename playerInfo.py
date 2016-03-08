@@ -15,7 +15,7 @@ def playerInfo(saveFileLocation):
         else:
             if tag == "professions":
                 profs = player.find(tag)
-                s = [int(a.text) for a in profs.iter("int")]
+                s = [professions[int(a.text)] for a in profs.iter("int")]
             if tag == "friendships":
                 s = {}
                 fship = player.find(tag)
