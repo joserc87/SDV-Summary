@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SDV Summary</title>
+		<link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<div class="container">
+			<h1 class="text-center">Stardew Valley Savefile Summary</h1>
+			<div class="row center-block">
+				<form enctype="multipart/form-data" action="" method="post">
+					<div class="col-sm-11 col-xs-11">
+						<input class="form-control input-lg" type="file" name="file" value="">
+					</div>
+					<div class="col-sm-1 col-xs-1">
+						<input class="btn btn-primary btn-lg" type="submit" value="Process">
+					</div>
+				</form>
+			<p class="text-center">Stardew Valley save files can be found under <code>C:\Herp\Derp\</code></p>
+			</div>
+			{% if error %}
+				<p class="error"><strong>Error:</strong> {{ error }}</p>
+			{% endif %}
+			<br>
+			<div class="container lead">
+			</div>
+			<div class="text-center">
+				<p class="text-muted">Took {{ processtime }} seconds to process request | source at <a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a></p>
+			</div>
+		</div>
+	</body>
+</html>
