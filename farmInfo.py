@@ -41,13 +41,25 @@ def getFarmInfo(saveFileLocation):
 	s = []
 
 	for item in locations[1].find('resourceClumps').iter('ResourceClump'):
+		t = int(item.find('parentSheetIndex').text)
 		x = int(item.find('tile').find('X').text)
 		y = int(item.find('tile').find('Y').text)
 		w = int(item.find('width').text)
 		h = int(item.find('height').text)
-		s.append((x, y, w, h))
+		s.append((t,x, y, w, h))
 
 	farm['resourceClumps'] = s
+
+	s = []
+	for item in locations[1].find('buildings').iter('Building'):
+		name = item.find('buildingType').text 
+		x = int(item.find('tileX').text)
+		y = int(item.find('tileY').text)
+		w = int(item.find('tilesWide').text)
+		h = int(item.find('tilesHigh').text)
+		s.append((name, x, y, w, h))
+
+	farm['buildings'] = s
 
 	return farm
 
@@ -57,11 +69,27 @@ def colourBox(x, y, colour, pixels, scale = 8):
 			pixels[x*scale+ i, y*scale + j] = colour
 	return pixels
 
-def generateImage():
+# Renders a PNG of the players farm where one 8x8 pixel square is equivalent to one in game tile.
+# Legend:	Shades of green - Trees, Weeds, Grass
+# 		Shades of brown - Twigs, Logs
+# 		Shades of grey - Stones, Boulders, Fences
+# 		Dark red - Static buildings
+# 		Light red - Player placed objects (Scarecrows, etc)
+# 		Blue - Water
+# 		Off Tan - Tilled Soil
+
+def generateImage(saveFileLocation):
 	image = Image.open(".//data//img//base.png")
 	pixels = image.load()
 
-	farm = getFarmInfo('./save/Sketchy_116441313')
+	pixels[1,1] = (255,255,255) 
+
+	farm = getFarmInfo(saveFileLocation)
+
+	for building in farm['buildings']:
+		for i in range(building[3]):
+			for j in range(building[4]):
+				colourBox(building[1] + i, building[2] + j, (255,150,150), pixels)
 
 	for tile in farm['terrainFeatures']:
 		name = tile[0]
@@ -86,20 +114,24 @@ def generateImage():
 			colourBox(tile[1], tile[2], (153,102,51), pixels)
 		elif 'Fence' in name:
 			colourBox(tile[1], tile[2], (200,200,200), pixels)
-		elif name != "Chest":
+		else:
 			colourBox(tile[1], tile[2], (255,0,0), pixels)
 
 	for tile in farm['resourceClumps']:
-		for i in range(tile[2]):
-			for j in range(tile[3]):
-				colourBox(tile[0] + i, tile[1] + j, (75,75,75), pixels)
+		if tile[0] == 672:
+			for i in range(tile[3]):
+				for j in range(tile[3]):
+					colourBox(tile[1] + i, tile[2] + j, (102, 51, 0), pixels)
+		elif tile[0] == 600:
+			for i in range(tile[3]):
+				for j in range(tile[3]):
+					colourBox(tile[1]+i, tile[2] + j, (75,75,75), pixels)
 
 
-	image.save("test.png")
+	image.save("farm.png")
 
 def main():
-	getFarmInfo('./save/Sketchy_116441313')
-	generateImage()
+	generateImage('./save/Crono_116230451')
 
 if __name__ == '__main__':
 	main()
