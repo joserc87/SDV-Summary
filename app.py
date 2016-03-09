@@ -4,6 +4,7 @@ import config
 from werkzeug import secure_filename
 import os
 from playerInfo import playerInfo
+from farmInfo import getFarmInfo
 
 UPLOAD_FOLDER = 'uploads'
 
@@ -22,7 +23,8 @@ def home():
 			filename = secure_filename(inputfile.filename)
 			inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 			player_info = playerInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-			error = str(player_info)
+			farm_info = getFarmInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+			error = str(farm_info)
 			#note to self: need to have better handling for this, this is just a stop-gap!
 	return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
 
