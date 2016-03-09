@@ -78,13 +78,11 @@ def colourBox(x, y, colour, pixels, scale = 8):
 # 		Blue - Water
 # 		Off Tan - Tilled Soil
 
-def generateImage(saveFileLocation):
+def generateImage(farm):
 	image = Image.open(".//data//img//base.png")
 	pixels = image.load()
 
 	pixels[1,1] = (255,255,255) 
-
-	farm = getFarmInfo(saveFileLocation)
 
 	for building in farm['buildings']:
 		for i in range(building[3]):
@@ -127,11 +125,10 @@ def generateImage(saveFileLocation):
 				for j in range(tile[3]):
 					colourBox(tile[1]+i, tile[2] + j, (75,75,75), pixels)
 
-
-	image.save("farm.png")
+	return image
 
 def main():
-	generateImage('./save/Crono_116230451')
+	generateImage(getFarmInfo('./save/Crono_116230451')).save('farm.png')
 
 if __name__ == '__main__':
 	main()
