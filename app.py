@@ -43,12 +43,14 @@ def home():
 			cur = g.db.cursor()
 			dupe = is_duplicate(md5_info,player_info)
 			if dupe != False:
-				error = 'This is a duplicate entry (url = '+str(dupe)+' )'
+				return redirect(url_for('display_data',url=dupe))
 			else:
 				farm_info = getFarmInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-				error = insert_info(player_info,farm_info,md5_info)
+				outcome, error = insert_info(player_info,farm_info,md5_info)
 				#note to self: need to have better handling for this, this is just a stop-gap!
 			g.db.close()
+			if outcome != False:
+				return redirect(url_for('display_data',url=outcome))
 	return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
 
 def connect_db():
@@ -109,15 +111,15 @@ def insert_info(player_info,farm_info,md5_info):
 	try:
 		g.db.execute('INSERT INTO playerinfo ('+colstring+') VALUES ('+questionmarks+')',tuple(values))
 		cur = g.db.cursor()
-		cur.execute('SELECT id FROM playerinfo WHERE uniqueIDForThisGame=? AND name=?',(player_info['uniqueIDForThisGame'],player_info['name']))
-		rowid = cur.fetchall()[-1][0]
-		g.db.execute('INSERT INTO todo VALUES (?,?)',('process_image',rowid))
+		cur.execute('SELECT id,url FROM playerinfo WHERE uniqueIDForThisGame=? AND name=?',(player_info['uniqueIDForThisGame'],player_info['name']))
+		row = cur.fetchall()[-1]
+		g.db.execute('INSERT INTO todo VALUES (?,?)',('process_image',row[0]))
 		g.db.commit()
-		return 'Added to db'
+		return row[1], None
 	except sqlite3.OperationalError:
 		g.db.execute('INSERT INTO errors VALUES (?,?)',(time.time(),str([columns,values])))
 		g.db.commit()
-		return "Save file incompatible with current database; saving for admins to review (please check back later)"
+		return False, "Save file incompatible with current database; saving for admins to review (please check back later)"
 
 @app.route('/<url>')
 def display_data(url):
@@ -127,12 +129,9 @@ def display_data(url):
 	cur = g.db.cursor()
 	cur.execute('SELECT * FROM playerinfo WHERE url=?',(url,))
 	data = cur.fetchall()
-	print 'ITS HAPPENING!'
 	if len(data) != 1:
-		print 'failed'
 		g.db.execute('INSERT INTO error VALUES (?,?)',(time.time(),'nonunity cur.fetchall() for url:'+str(url)))
 	else:
-		print 'success..?'
 		return render_template("profile.html", data=data, error=error, processtime=round(time.time()-start_time,5))
 
 
