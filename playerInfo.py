@@ -42,15 +42,18 @@ def playerInfo(saveFileLocation):
     game_stats = {}
     stats_node = root.find('stats')
     for statistic in stats_node:
-        if statistic.text != None:
-            game_stats[statistic.tag] = int(statistic.text)
-        elif statistic.tag == 'specificMonstersKilled':
-            monsters = {}
-            for monster in statistic.iter('item'):
-                monsterName = monster.find('key').find('string').text
-                count = int(monster.find('value').find('int').text)
-                monsters[monsterName] = count
-            game_stats[statistic.tag] = monsters
+        stattag = statistic.tag[0].upper() + statistic.tag[1:]
+        if stattag not in game_stats.keys():
+            #check we're drawing info from the uppercase data and data not already exist
+            if statistic.text != None:
+                game_stats[stattag] = int(statistic.text)
+            elif stattag == 'SpecificMonstersKilled':
+                monsters = {}
+                for monster in statistic.iter('item'):
+                    monsterName = monster.find('key').find('string').text
+                    count = int(monster.find('value').find('int').text)
+                    monsters[monsterName] = count
+                game_stats[stattag] = monsters
 
     info['stats'] = game_stats
 
