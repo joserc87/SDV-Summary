@@ -3,6 +3,7 @@
 import sqlite3
 
 database_structure = '''id INTEGER PRIMARY KEY AUTOINCREMENT,
+md5 TEXT,
 url TEXT,
 isMale TEXT,
 pantsColor0 INT,

@@ -11,6 +11,7 @@ from farmInfo import getFarmInfo
 import sqlite3
 from bigbase import dec2big
 import json
+import hashlib
 
 UPLOAD_FOLDER = 'uploads'
 
@@ -20,6 +21,12 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16*1024*1024
 app.database = 'sdv.db'
 
+def md5(filename):
+	h = hashlib.md5()
+	with open(filename, 'rb') as f:
+		for chunk in iter(lambda: f.read(4096), b""):
+			h.update(chunk)
+	return h.hexdigest()
 
 @app.route('/',methods=['GET','POST'])
 def home():
@@ -30,16 +37,38 @@ def home():
 		if inputfile:
 			filename = secure_filename(inputfile.filename)
 			inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+			md5_info = md5(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 			player_info = playerInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-			farm_info = getFarmInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-			error = insert_info(player_info,farm_info)
-			#note to self: need to have better handling for this, this is just a stop-gap!
+			g.db = connect_db()
+			cur = g.db.cursor()
+			dupe = is_duplicate(md5_info,player_info)
+			if dupe != False:
+				error = 'This is a duplicate entry (url = '+str(dupe)+' )'
+			else:
+				farm_info = getFarmInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+				error = insert_info(player_info,farm_info,md5_info)
+				#note to self: need to have better handling for this, this is just a stop-gap!
+			g.db.close()
 	return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
 
 def connect_db():
 	return sqlite3.connect(app.database)
 
-def insert_info(player_info,farm_info):
+def is_duplicate(md5_info,player_info):
+	cur = g.db.cursor()
+	print 'md5:',md5_info
+	cur.execute('SELECT id, md5, name, uniqueIDForThisGame, url FROM playerinfo WHERE md5=?',(md5_info,))
+	matches = cur.fetchall()
+	print matches
+	if len(matches) > 0:
+		for match in matches:
+			if str(player_info['name'])==str(match[2]) and str(player_info['uniqueIDForThisGame'])==str(match[3]):
+				return match[4]
+		return False
+	else:
+		return False
+
+def insert_info(player_info,farm_info,md5_info):
 	columns = []
 	values = []
 	columns.append('url')
@@ -66,8 +95,9 @@ def insert_info(player_info,farm_info):
 		values.append(json.dumps(farm_info))
 		columns.append('added_time')
 		values.append(time.time())
+		columns.append('md5')
+		values.append(md5_info)
 
-	g.db = connect_db()
 	#print columns
 	#print values
 	colstring = ''
@@ -79,18 +109,15 @@ def insert_info(player_info,farm_info):
 	try:
 		g.db.execute('INSERT INTO playerinfo ('+colstring+') VALUES ('+questionmarks+')',tuple(values))
 		cur = g.db.cursor()
-		print player_info['uniqueIDForThisGame'],values[-1],'stuff'
 		cur.execute('SELECT id FROM playerinfo WHERE uniqueIDForThisGame=? AND name=?',(player_info['uniqueIDForThisGame'],player_info['name']))
 		rowid = cur.fetchall()[-1][0]
 		g.db.execute('INSERT INTO todo VALUES (?,?)',('process_image',rowid))
 		g.db.commit()
-		g.db.close()
-		return None
+		return 'Added to db'
 	except sqlite3.OperationalError:
 		g.db.execute('INSERT INTO errors VALUES (?,?)',(time.time(),str([columns,values])))
 		g.db.commit()
-		g.db.close()
-		return "Save file incompatible with current database; saving for admins (please check back later)"
+		return "Save file incompatible with current database; saving for admins to review (please check back later)"
 
 
 @app.route('/upload',methods=['GET','POST'])
