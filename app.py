@@ -119,6 +119,22 @@ def insert_info(player_info,farm_info,md5_info):
 		g.db.commit()
 		return "Save file incompatible with current database; saving for admins to review (please check back later)"
 
+@app.route('/<url>')
+def display_data(url):
+	error = None
+	start_time = time.time()
+	g.db = connect_db()
+	cur = g.db.cursor()
+	cur.execute('SELECT * FROM playerinfo WHERE url=?',(url,))
+	data = cur.fetchall()
+	print 'ITS HAPPENING!'
+	if len(data) != 1:
+		print 'failed'
+		g.db.execute('INSERT INTO error VALUES (?,?)',(time.time(),'nonunity cur.fetchall() for url:'+str(url)))
+	else:
+		print 'success..?'
+		return render_template("profile.html", data=data, error=error, processtime=round(time.time()-start_time,5))
+
 
 @app.route('/upload',methods=['GET','POST'])
 def upload():
