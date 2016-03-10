@@ -2,7 +2,8 @@
 
 import sqlite3
 
-database_structure = '''url TEXT,
+database_structure = '''id INTEGER PRIMARY KEY AUTOINCREMENT,
+url TEXT,
 isMale TEXT,
 pantsColor0 INT,
 pantsColor1 INT,
@@ -142,10 +143,14 @@ professions5 TEXT,
 professions6 TEXT,
 professions7 TEXT,
 professions8 TEXT,
-professions9 TEXT'''
+professions9 TEXT,
+farm_info TEXT,
+farm_image TEXT,
+added_time FLOAT'''
 
 with sqlite3.connect("sdv.db") as connection:
 	c = connection.cursor()
 	c.execute('CREATE TABLE playerinfo('+database_structure+')')
 	c.execute('CREATE TABLE errors(time BIGINT, notes TEXT)')
+	c.execute('CREATE TABLE todo(task TEXT, ID TEXT)')
 

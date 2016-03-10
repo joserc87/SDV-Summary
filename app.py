@@ -10,6 +10,7 @@ from playerInfo import playerInfo
 from farmInfo import getFarmInfo
 import sqlite3
 from bigbase import dec2big
+import json
 
 UPLOAD_FOLDER = 'uploads'
 
@@ -61,8 +62,13 @@ def insert_info(player_info,farm_info):
 		else:
 			columns.append(key)
 			values.append(str(player_info[key]))
+		columns.append('farm_info')
+		values.append(json.dumps(farm_info))
+		columns.append('added_time')
+		values.append(time.time())
+
 	g.db = connect_db()
-	print columns
+	#print columns
 	#print values
 	colstring = ''
 	for c in columns:
@@ -72,6 +78,11 @@ def insert_info(player_info,farm_info):
 	#print tuple(columns+values)
 	try:
 		g.db.execute('INSERT INTO playerinfo ('+colstring+') VALUES ('+questionmarks+')',tuple(values))
+		cur = g.db.cursor()
+		print player_info['uniqueIDForThisGame'],values[-1],'stuff'
+		cur.execute('SELECT id FROM playerinfo WHERE uniqueIDForThisGame=? AND name=?',(player_info['uniqueIDForThisGame'],player_info['name']))
+		rowid = cur.fetchall()[-1][0]
+		g.db.execute('INSERT INTO todo VALUES (?,?)',('process_image',rowid))
 		g.db.commit()
 		g.db.close()
 		return None
