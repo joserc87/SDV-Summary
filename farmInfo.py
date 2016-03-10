@@ -1,4 +1,4 @@
-import xml.etree.ElementTree
+from defusedxml.ElementTree import parse
 from PIL import Image 
 
 # This is a test method for returning the position location and the name of objects
@@ -11,7 +11,7 @@ def getFarmInfo(saveFileLocation):
 
 	farm = {}
 
-	root = xml.etree.ElementTree.parse(saveFileLocation).getroot()
+	root = parse(saveFileLocation).getroot()
 
 	locations = root.find('locations').findall("GameLocation")
 	# things = []
