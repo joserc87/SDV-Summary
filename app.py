@@ -58,10 +58,8 @@ def connect_db():
 
 def is_duplicate(md5_info,player_info):
 	cur = g.db.cursor()
-	print 'md5:',md5_info
 	cur.execute('SELECT id, md5, name, uniqueIDForThisGame, url FROM playerinfo WHERE md5=?',(md5_info,))
 	matches = cur.fetchall()
-	print matches
 	if len(matches) > 0:
 		for match in matches:
 			if str(player_info['name'])==str(match[2]) and str(player_info['uniqueIDForThisGame'])==str(match[3]):
@@ -73,8 +71,8 @@ def is_duplicate(md5_info,player_info):
 def insert_info(player_info,farm_info,md5_info):
 	columns = []
 	values = []
-	columns.append('url')
-	values.append(dec2big(int(time.time())))
+	#columns.append('url')
+	#values.append(dec2big(int(time.time())))
 	print 'WARNING USING dec2big OF time.time() FOR URL! THIS IS _NOT_ RIGOROUS!'
 	for key in player_info.keys():
 		if type(player_info[key]) == list:
@@ -111,7 +109,11 @@ def insert_info(player_info,farm_info,md5_info):
 	try:
 		g.db.execute('INSERT INTO playerinfo ('+colstring+') VALUES ('+questionmarks+')',tuple(values))
 		cur = g.db.cursor()
-		cur.execute('SELECT id,url FROM playerinfo WHERE uniqueIDForThisGame=? AND name=?',(player_info['uniqueIDForThisGame'],player_info['name']))
+		cur.execute('SELECT id,added_time FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND md5 =?',(player_info['uniqueIDForThisGame'],player_info['name'],md5_info))
+		rowid = cur.fetchone()
+		cur.execute('UPDATE playerinfo SET url=? WHERE id=?',(dec2big(int(rowid[0])+int(rowid[1])),rowid[0]))
+		g.db.commit()
+		cur.execute('SELECT id,url FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND md5 =?',(player_info['uniqueIDForThisGame'],player_info['name'],md5_info))
 		row = cur.fetchall()[-1]
 		g.db.execute('INSERT INTO todo VALUES (?,?)',('process_image',row[0]))
 		g.db.commit()
