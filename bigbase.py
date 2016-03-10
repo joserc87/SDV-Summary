@@ -20,5 +20,17 @@ def dec2big(num):
 		raise IOError
 	return output
 
+def big2dec(num):
+	assert all([num[x] in CHARS for x in range(len(num))])
+	base = len(CHARS)
+	output = 0
+	multiplier = 1
+	for item in num[::-1]:
+		output += multiplier * CHARS.index(item)
+		multiplier *= base
+	return output
+
+
 if __name__ == "__main__":
-	print dec2big(999999999999)
+	print dec2big(9999999999999999999999999999999999999999999999999999999)
+	print big2dec('gUFRx61gTwUoLRUcYcoUr2SbzgUyBQz')
