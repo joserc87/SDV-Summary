@@ -1,7 +1,7 @@
 import xml.etree.ElementTree
 
 def playerInfo(saveFileLocation):
-    tags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel', 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina', 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin', 'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor']
+    playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel', 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina', 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin', 'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor']
     professions = ['Rancher', 'Tiller', 'Coopmaster', 'Shepherd', 'Artisan', 'Agriculturist', 'Fisher', 'Trapper', 'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist', 'Tracker', 'Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout', 'Brute', 'Defender', 'Acrobat', 'Desperado']
 
     root = xml.etree.ElementTree.parse(saveFileLocation).getroot()
@@ -9,7 +9,8 @@ def playerInfo(saveFileLocation):
     player = root.find("player")
     info = {}
 
-    for tag in tags:
+    # Collect information stored in the player tag
+    for tag in playerTags:
         if player.find(tag).text != None:
             s = player.find(tag).text
         else:
@@ -31,6 +32,28 @@ def playerInfo(saveFileLocation):
                 s = [red, green, blue, alpha]
 
         info[tag] = s
+
+    # Information from elsewhere
+    
+    # UID for save file
+    info['uniqueIDForThisGame'] = int(root.find('uniqueIDForThisGame').text)
+
+    #Game Stats
+    game_stats = {}
+    stats_node = root.find('stats')
+    for statistic in stats_node:
+        if statistic.text != None:
+            game_stats[statistic.tag] = int(statistic.text)
+        elif statistic.tag == 'specificMonstersKilled':
+            monsters = {}
+            for monster in statistic.iter('item'):
+                monsterName = monster.find('key').find('string').text
+                count = int(monster.find('value').find('int').text)
+                monsters[monsterName] = count
+            game_stats[statistic.tag] = monsters
+
+    info['stats'] = game_stats
+
     return info
 
 def main():
