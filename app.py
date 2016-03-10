@@ -13,6 +13,15 @@ app.secret_key = config.secret_key
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16*1024*1024
 
+
+import hashlib 
+def md5(inputfile):
+	h = hashlib.md5()
+	for chunk in iter(lambda: inputfile.read(4096), b""):
+		h.update(chunk)
+	return h.hexdigest()
+
+
 @app.route('/',methods=['GET','POST'])
 def home():
 	start_time = time.time()
@@ -22,9 +31,10 @@ def home():
 		if inputfile:
 			filename = secure_filename(inputfile.filename)
 			inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+			upload_md5 = md5(inputfile)
 			player_info = playerInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 			farm_info = getFarmInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-			error = str(farm_info)
+			error = str(upload_md5)
 			#note to self: need to have better handling for this, this is just a stop-gap!
 	return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
 
