@@ -63,6 +63,10 @@ def generateAvatar(player):
 		body[9, 11] = eyeColor
 		body[6,12] = eyeColor
 		body[9, 12] = eyeColor
+		body[5,10] = white
+		body[10, 10] = white
+		body[5,11] = white
+		body[10, 11] = white
 
 	base.paste(legs, (0,-1), legs)
 	base.paste(shirt, (4,14), shirt)
