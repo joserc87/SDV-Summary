@@ -147,6 +147,7 @@ def display_data(url):
 	if len(data) != 1:
 		error = 'There is nothing here... is this URL correct?'
 		g.db.execute('INSERT INTO errors (time, notes) VALUES (?,?)',(time.time(),str(len(data))+' cur.fetchall() for url:'+str(url)))
+		g.db.commit()
 		return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
 	else:
 		datadict = {}
