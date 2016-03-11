@@ -14,6 +14,7 @@ import json
 import hashlib
 from imageDrone import process_queue
 from createdb import database_structure_dict
+import defusedxml
 
 UPLOAD_FOLDER = 'uploads'
 
@@ -45,7 +46,11 @@ def home():
 			filename = secure_filename(inputfile.filename)
 			inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 			md5_info = md5(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-			player_info = playerInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+			try:
+				player_info = playerInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+			except defusedxml.common.EntitiesForbidden:
+				error = "I don't think that's very funny"
+				return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
 			g.db = connect_db()
 			cur = g.db.cursor()
 			dupe = is_duplicate(md5_info,player_info)
