@@ -43,13 +43,21 @@ def generateAvatar(player):
 
 	shirt = cropImage('./assets/shirts.png', int(player['shirt']), 16, 8,8)
 
+	skin_color = cropImage('./assets/skinColors.png', int(player['skin']), 24, 1, 1).getpixel((0,0))
+	base = tintImage(base, skin_color)
+
 	body = base.load()
 	eyeColor = tuple(map(int, player['newEyeColor']))
+	white = (255,255,255)
 	if player['isMale']:
 		body[6,10] = eyeColor
 		body[9, 10] = eyeColor
 		body[6,11] = eyeColor
 		body[9, 11] = eyeColor
+		body[5,10] = white
+		body[10, 10] = white
+		body[5,11] = white
+		body[10, 11] = white
 	else:
 		body[6,11] = eyeColor
 		body[9, 11] = eyeColor
