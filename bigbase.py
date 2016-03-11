@@ -16,7 +16,7 @@ def dec2big(num):
 		base = len(CHARS)
 		output = ''
 		while num > 0:
-			rem = num%base
+			rem = int(num%base)
 			output = CHARS[rem] + output
 			num = (num-rem)/base
 	else:
