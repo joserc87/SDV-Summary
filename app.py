@@ -42,9 +42,7 @@ def home():
 			inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 			md5_info = md5(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 			try:
-				print 'y halo dar'
 				player_info = playerInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-				print 'nevr maed it ;('
 			except defusedxml.common.EntitiesForbidden:
 				error = "I don't think that's very funny"
 				return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
@@ -87,9 +85,6 @@ def is_duplicate(md5_info,player_info):
 def insert_info(player_info,farm_info,md5_info):
 	columns = []
 	values = []
-	#columns.append('url')
-	#values.append(dec2big(int(time.time())))
-	print 'WARNING USING dec2big OF time.time() FOR URL! THIS IS _NOT_ RIGOROUS!'
 	for key in player_info.keys():
 		if type(player_info[key]) == list:
 			for i,item in enumerate(player_info[key]):
