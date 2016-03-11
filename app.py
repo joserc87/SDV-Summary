@@ -154,7 +154,9 @@ def display_data(url):
 		for k, key in enumerate(sorted(database_structure_dict.keys())):
 			if key != 'farm_info':
 				datadict[key] = data[0][k]
-		return render_template("profile.html", data=datadict, error=error, processtime=round(time.time()-start_time,5))
+		cur.execute('SELECT url, statsDaysPlayed FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND farmName=? AND id!=?',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName'],datadict['id']))
+		other_saves = cur.fetchall()
+		return render_template("profile.html", data=datadict, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
 
 
 @app.route('/upload',methods=['GET','POST'])
