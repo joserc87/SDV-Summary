@@ -8,8 +8,22 @@
 	</head>
 	<body>
 		<div class="container">
-			<h1 class="text-center">Stardew Valley Profile</h1>
-			<p>{{ data }}</p>
+			<h1 class="text-center">{{ data.farmName }} Farm</h1>
+			<div class="row center-block">
+				<h3>Player</h3>
+				<div class="col-sm-10 col-xs-10">
+					<p>Name: {{ data.name }}</p>
+					<p>Wealth: {{ data.money }}</p>
+				</div>
+				<div class="col-sm-2 col-xs-2">
+					<img src="{{ data.avatar_url }}" style="image-rendering: pixelated;" width="100px" height="auto">
+				</div>
+			</div>
+			<div class="row center-block">
+				<h3>Farm</h3>
+				<img src="{{ data.farm_url }}" style="image-rendering: pixelated;" width="700px" height="auto">
+			</div>
+			<p> {{ data }}</p>
 			{% if error %}
 				<p class="error"><strong>Error:</strong> {{ error }}</p>
 			{% endif %}

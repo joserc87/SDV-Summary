@@ -13,6 +13,7 @@ from bigbase import dec2big
 import json
 import hashlib
 from imageDrone import process_queue
+from createdb import database_structure_dict
 
 UPLOAD_FOLDER = 'uploads'
 
@@ -21,6 +22,11 @@ app.secret_key = config.secret_key
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16*1024*1024
 app.database = config.db
+
+database_fields = ''
+for key in sorted(database_structure_dict.keys()):
+	database_fields+=key+','
+database_fields = database_fields[:-1]
 
 def md5(filename):
 	h = hashlib.md5()
@@ -132,14 +138,18 @@ def display_data(url):
 	start_time = time.time()
 	g.db = connect_db()
 	cur = g.db.cursor()
-	cur.execute('SELECT * FROM playerinfo WHERE url=?',(url,))
+	cur.execute('SELECT '+database_fields+' FROM playerinfo WHERE url=?',(url,))
 	data = cur.fetchall()
 	if len(data) != 1:
 		error = 'There is nothing here... is this URL correct?'
 		g.db.execute('INSERT INTO errors VALUES (?,?)',(time.time(),str(len(data))+' cur.fetchall() for url:'+str(url)))
 		return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
 	else:
-		return render_template("profile.html", data=data, error=error, processtime=round(time.time()-start_time,5))
+		datadict = {}
+		for k, key in enumerate(sorted(database_structure_dict.keys())):
+			if key != 'farm_info':
+				datadict[key] = data[0][k]
+		return render_template("profile.html", data=datadict, error=error, processtime=round(time.time()-start_time,5))
 
 
 @app.route('/upload',methods=['GET','POST'])
