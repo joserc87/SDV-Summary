@@ -110,14 +110,16 @@ def insert_info(player_info,farm_info,md5_info):
 		g.db.execute('INSERT INTO playerinfo ('+colstring+') VALUES ('+questionmarks+')',tuple(values))
 		cur = g.db.cursor()
 		cur.execute('SELECT id,added_time FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND md5 =?',(player_info['uniqueIDForThisGame'],player_info['name'],md5_info))
-		rowid = cur.fetchone()
-		cur.execute('UPDATE playerinfo SET url=? WHERE id=?',(dec2big(int(rowid[0])+int(rowid[1])),rowid[0]))
+		row = cur.fetchone()
+		url = dec2big(int(row[0])+int(row[1]))
+		rowid = row[0]
+		cur.execute('UPDATE playerinfo SET url=? WHERE id=?',(url,rowid))
+		#g.db.commit()
+		#cur.execute('SELECT id,url FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND md5 =?',(player_info['uniqueIDForThisGame'],player_info['name'],md5_info))
+		#row = cur.fetchall()[-1]
+		g.db.execute('INSERT INTO todo VALUES (?,?)',('process_image',rowid))
 		g.db.commit()
-		cur.execute('SELECT id,url FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND md5 =?',(player_info['uniqueIDForThisGame'],player_info['name'],md5_info))
-		row = cur.fetchall()[-1]
-		g.db.execute('INSERT INTO todo VALUES (?,?)',('process_image',row[0]))
-		g.db.commit()
-		return row[1], None
+		return url, None
 	except sqlite3.OperationalError:
 		g.db.execute('INSERT INTO errors VALUES (?,?)',(time.time(),str([columns,values])))
 		g.db.commit()
@@ -132,7 +134,7 @@ def display_data(url):
 	cur.execute('SELECT * FROM playerinfo WHERE url=?',(url,))
 	data = cur.fetchall()
 	if len(data) != 1:
-		g.db.execute('INSERT INTO error VALUES (?,?)',(time.time(),'nonunity cur.fetchall() for url:'+str(url)))
+		g.db.execute('INSERT INTO errors VALUES (?,?)',(time.time(),'nonunity cur.fetchall() for url:'+str(url)))
 	else:
 		return render_template("profile.html", data=data, error=error, processtime=round(time.time()-start_time,5))
 
