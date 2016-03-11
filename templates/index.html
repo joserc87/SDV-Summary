@@ -9,6 +9,7 @@
 	<body>
 		<div class="container">
 			<h1 class="text-center">Stardew Valley Savefile Summary</h1>
+			<h3>Upload farm</h3>
 			<div class="row center-block">
 				<form enctype="multipart/form-data" action="" method="post">
 					<div class="col-sm-11 col-xs-11">
@@ -25,6 +26,14 @@
 			{% endif %}
 			<br>
 			<div class="container lead">
+			{% if recents %}
+				<h3>Recently uploaded farms</h3>
+				<ul>
+					{% for recent in recents %}
+						<li><a href="{{ recent[0] }}">{{ recent[1] }}, {{ recent[2] }} Farm, day {{ recent[3] }}</a></li>
+					{% endfor %}
+				</ul>
+			{% endif %}
 			</div>
 			<div class="text-center">
 				<p class="text-muted">Took {{ processtime }} seconds to process request | source at <a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a></p>

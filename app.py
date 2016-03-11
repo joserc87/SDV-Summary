@@ -63,7 +63,14 @@ def home():
 			g.db.close()
 			if outcome != False:
 				return redirect(url_for('display_data',url=outcome))
-	return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
+	g.db = connect_db()
+	cur = g.db.cursor()
+	cur.execute('SELECT url, name, farmName, statsDaysPlayed FROM playerinfo ORDER BY id DESC LIMIT 5')
+	recents = cur.fetchall()
+	g.db.close()
+	if len(recents)==0:
+		recents == None
+	return render_template("index.html", recents=recents, error=error, processtime=round(time.time()-start_time,5))
 
 def connect_db():
 	return sqlite3.connect(app.database)
