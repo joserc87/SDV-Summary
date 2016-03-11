@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
-from PIL import Image, ImageChops
+from PIL import Image
+from PIL.ImageChops import offset
 from PIL.ImageOps import grayscale, colorize
 import colorsys
 
@@ -10,41 +11,63 @@ def tintImage(img, tint):
 	i.putalpha(img.split()[3])
 	return i
 
+def cropImage(fileName, index, count, width, height):
+	with Image.open(fileName) as img:
+		x = (index % count) * width
+		y = (index // count) * height
+		return offset(img, -x, -y).crop((0,0,width,height))
+
 def generateAvatar(player):
 
-	base = Image.open('./assets/male_base.png')
-	shoes = Image.open('./assets/male_shoes.png')
-	shirts = Image.open('./assets/shirts.png')
-	hairs = Image.open('./assets/hair.png')
-	legs = Image.open('./assets/male_legs.png')
+	gender = ''
+	if player['isMale']:
+		gender = 'male'
+	else:
+		gender = 'female'
+
+	base = Image.open('./assets/{0}_base.png'.format(gender))
+	boots = Image.open('./assets/{0}_boots.png'.format(gender))
+	legs = Image.open('./assets/{0}_legs.png'.format(gender))
+	hats = Image.open('./assets/hats.png')
 
 	leg_colour = (int(player['pantsColor'][0]), int(player['pantsColor'][1]), int(player['pantsColor'][2]))
 	legs = tintImage(legs, leg_colour)
 
-
-	hair_color = (int(player['hairstyleColor'][0]), int(player['hairstyleColor'][1]), int(player['hairstyleColor'][2]))
-	hair_index = int(player['hair'])
-	x = (hair_index % 8) * 16
-	y = (hair_index // 8) * 32
-	hair = ImageChops.offset(hairs, -x, -y).crop((0,0,16,32))
+	hair = cropImage('./assets/hair.png', int(player['hair']), 8, 16, 32)
+	hair_color = tuple(map(int, player['hairstyleColor']))
 	hair = tintImage(hair, hair_color)
 
-	shirt_index = int(player['shirt'])
-	x = (shirt_index % 16) * 8
-	y = (shirt_index // 16) * 8
-	shirt = ImageChops.offset(shirts, -x, -y).crop((0,0,8,8))
+	acc = cropImage('./assets/accessories.png',int(player['accessory']), 8, 16, 16) 
+	if int(player['accessory']) <= 5:
+		acc = tintImage(acc, hair_color)
 
-	base.paste(hair, (0,-1), hair)
-	base.paste(legs, (0,0), legs)
-	base.paste(shirt, (4,13), shirt)
-	base.paste(shoes, (0,2), shoes)
+	shirt = cropImage('./assets/shirts.png', int(player['shirt']), 16, 8,8)
+
+	body = base.load()
+	eyeColor = tuple(map(int, player['newEyeColor']))
+	if player['isMale']:
+		body[6,10] = eyeColor
+		body[9, 10] = eyeColor
+		body[6,11] = eyeColor
+		body[9, 11] = eyeColor
+	else:
+		body[6,11] = eyeColor
+		body[9, 11] = eyeColor
+		body[6,12] = eyeColor
+		body[9, 12] = eyeColor
+
+	base.paste(legs, (0,-1), legs)
+	base.paste(shirt, (4,14), shirt)
+	base.paste(acc, (0,1), acc)
+	base.paste(boots, (0,2), boots)
+	base.paste(hair, (0,0), hair)
 	return base
 
 def main():
 	from playerInfo import playerInfo
-	player = playerInfo('./save/Crono_116230451')
-	# player = playerInfo('./save/Sketchy_116441313')
-	generateAvatar(player)
+	# player = playerInfo('./save/Crono_116230451')
+	player = playerInfo('./save/Sketchy_116441313')
+	generateAvatar(player).save('test.png')
 
 if __name__ == '__main__':
 	main()
