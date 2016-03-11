@@ -1,8 +1,12 @@
 #
 # converts base 10 to base 62 for purpose of small URL identifiers
 #
+import sys
 
 CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+if sys.version_info > (3,):
+	long = int
 
 def dec2big(num):
 	assert type(num) in [int,long]

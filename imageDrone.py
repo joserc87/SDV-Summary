@@ -5,6 +5,7 @@ from generateAvatar import generateAvatar
 from farmInfo import generateImage
 import os
 import time
+from createdb import database_structure_dict, database_fields
 
 IMAGE_FOLDER = 'static/images'
 database = config.db
@@ -23,22 +24,20 @@ def process_queue():
 		#print tasks
 		if len(tasks) != 0:
 			for task in tasks:
-				cur.execute('SELECT id, url, pantsColor0, pantsColor1,pantsColor2, pantsColor3, hairstyleColor0, hairstyleColor1, hairstyleColor2, hairstyleColor3, hair, shirt, farm_info FROM playerinfo WHERE id=(?)',(task[2],))
-				data = cur.fetchone()
-				rowid, url = data[0:2]
-				player_info = {}
-				player_info['pantsColor'] = data[2:6]
-				player_info['hairstyleColor'] = data[6:10]
-				player_info['hair'] = data[10]
-				player_info['shirt'] = data[11]
-				farm_info = json.loads(data[12])
-				avatar = generateAvatar(player_info)
-				avatar_path = os.path.join(IMAGE_FOLDER,url+'a.png')
-				farm_path = os.path.join(IMAGE_FOLDER,url+'f.png')
+				cur.execute('SELECT '+database_fields+' FROM playerinfo WHERE id=(?)',(task[2],))
+				data = {}
+				for i, item in enumerate(cur.fetchone()):
+					data[sorted(database_structure_dict.keys())[i]] = item
+				data['pantsColor'] = [data['pantsColor0'],data['pantsColor1'],data['pantsColor2'],data['pantsColor3']]
+				data['newEyeColor'] = [data['newEyeColor0'],data['newEyeColor1'],data['newEyeColor2'],data['newEyeColor3']]
+				data['hairstyleColor'] = [data['hairstyleColor0'],data['hairstyleColor1'],data['hairstyleColor2'],data['hairstyleColor3']]
+				avatar = generateAvatar(data)
+				avatar_path = os.path.join(IMAGE_FOLDER,data['url']+'a.png')
+				farm_path = os.path.join(IMAGE_FOLDER,data['url']+'f.png')
 				avatar.save(avatar_path)
-				farm = generateImage(farm_info)
+				farm = generateImage(json.loads(data['farm_info']))
 				farm.save(farm_path)
-				cur.execute('UPDATE playerinfo SET farm_url=?, avatar_url=? WHERE id=?',(farm_path,avatar_path,rowid))
+				cur.execute('UPDATE playerinfo SET farm_url=?, avatar_url=? WHERE id=?',(farm_path,avatar_path,data['id']))
 				db.execute('DELETE FROM todo WHERE id=(?)',(task[0],))
 				db.commit()
 				records_handled += 1

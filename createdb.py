@@ -150,6 +150,11 @@ database_structure_dict = {'id':'INTEGER PRIMARY KEY AUTOINCREMENT',
 'avatar_url':'TEXT',
 'added_time':'FLOAT'}
 
+database_fields = ''
+for key in sorted(database_structure_dict.keys()):
+	database_fields+=key+','
+database_fields = database_fields[:-1]
+
 if __name__ == "__main__":
 	database_structure = ''
 	for key in sorted(database_structure_dict.keys()):

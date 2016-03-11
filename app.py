@@ -13,7 +13,7 @@ from bigbase import dec2big
 import json
 import hashlib
 from imageDrone import process_queue
-from createdb import database_structure_dict
+from createdb import database_structure_dict, database_fields
 import defusedxml
 
 UPLOAD_FOLDER = 'uploads'
@@ -23,11 +23,6 @@ app.secret_key = config.secret_key
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16*1024*1024
 app.database = config.db
-
-database_fields = ''
-for key in sorted(database_structure_dict.keys()):
-	database_fields+=key+','
-database_fields = database_fields[:-1]
 
 def md5(filename):
 	h = hashlib.md5()
@@ -47,7 +42,9 @@ def home():
 			inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 			md5_info = md5(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 			try:
+				print 'y halo dar'
 				player_info = playerInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+				print 'nevr maed it ;('
 			except defusedxml.common.EntitiesForbidden:
 				error = "I don't think that's very funny"
 				return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
@@ -140,7 +137,7 @@ def insert_info(player_info,farm_info,md5_info):
 		g.db.commit()
 		return url, None
 	except sqlite3.OperationalError:
-		g.db.execute('INSERT INTO errors (time, error) VALUES (?,?)',(time.time(),str([columns,values])))
+		g.db.execute('INSERT INTO errors (time, notes) VALUES (?,?)',(time.time(),str([columns,values])))
 		g.db.commit()
 		return False, "Save file incompatible with current database; saving for admins to review (please check back later)"
 
@@ -164,13 +161,6 @@ def display_data(url):
 		cur.execute('SELECT url, statsDaysPlayed FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND farmName=? AND id!=?',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName'],datadict['id']))
 		other_saves = cur.fetchall()
 		return render_template("profile.html", data=datadict, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
-
-
-@app.route('/upload',methods=['GET','POST'])
-def upload():
-	return 'wat'
-
-
 
 if __name__ == "__main__":
 	app.run(debug=True)
