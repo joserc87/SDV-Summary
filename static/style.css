@@ -1,0 +1,45 @@
+body {
+	background: #c0ffe4;
+	background: linear-gradient(#01366d,#c0ffe4);
+	padding-top: 20px;
+}
+
+h1, h3 {
+	font-family: 'Rock Salt', cursive;
+}
+
+.panel {
+	background: #ffd789;
+	border: solid 5px #e27a3e;
+	padding-bottom: 20px;
+	border-radius: 10px
+}
+
+p {
+	font-family: 'VT323';
+	font-size: 20pt;
+	margin: 0;
+}
+
+.playerAvatar {
+	image-rendering: pixelated;
+	background-color: #FFFFFF;
+	border: solid 2px #000000;
+	border-radius: 5px;
+	padding: 5px;
+	width: 150px;
+}
+
+.img-responsive{
+	margin: 0 auto;
+}
+
+.farmImg {
+	image-rendering: pixelated;
+	margin-top: 20px;
+	border: solid 2px #000000;
+}
+
+.subsection {
+
+}
