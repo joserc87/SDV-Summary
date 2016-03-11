@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SDV Summary</title>
+		<link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<div class="container">
+			<h1 class="text-center">Error!</h1>
+			{% if error %}
+				<p class="error"><strong>Error:</strong> {{ error }}</p>
+			{% endif %}
+			<br>
+			<div class="container lead">
+			</div>
+			<div class="text-center">
+				<p class="text-muted">Took {{ processtime }} seconds to process request | source at <a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a></p>
+			</div>
+		</div>
+	</body>
+</html>

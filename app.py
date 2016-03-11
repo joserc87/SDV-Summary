@@ -134,7 +134,9 @@ def display_data(url):
 	cur.execute('SELECT * FROM playerinfo WHERE url=?',(url,))
 	data = cur.fetchall()
 	if len(data) != 1:
-		g.db.execute('INSERT INTO errors VALUES (?,?)',(time.time(),'nonunity cur.fetchall() for url:'+str(url)))
+		error = 'There is nothing here... is this URL correct?'
+		g.db.execute('INSERT INTO errors VALUES (?,?)',(time.time(),str(len(data))+' cur.fetchall() for url:'+str(url)))
+		return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
 	else:
 		return render_template("profile.html", data=data, error=error, processtime=round(time.time()-start_time,5))
 
