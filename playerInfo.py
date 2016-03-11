@@ -1,7 +1,7 @@
 from defusedxml.ElementTree import parse
 
 def playerInfo(saveFileLocation):
-    playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel', 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina', 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin', 'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor']
+    playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel', 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina', 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin', 'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor', 'hat']
     professions = ['Rancher', 'Tiller', 'Coopmaster', 'Shepherd', 'Artisan', 'Agriculturist', 'Fisher', 'Trapper', 'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist', 'Tracker', 'Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout', 'Brute', 'Defender', 'Acrobat', 'Desperado']
 
     root = parse(saveFileLocation).getroot()
@@ -30,6 +30,13 @@ def playerInfo(saveFileLocation):
                 blue = player.find(tag).find('B').text
                 alpha = player.find(tag).find('A').text
                 s = [red, green, blue, alpha]
+            if tag == 'hat':
+                s = {}
+                s['index'] = int(player.find(tag).find('which').text)
+                if player.find(tag).find('skipHairDraw').text.lower() == 'true':
+                    s['drawHair'] = True
+                else:
+                    s['drawHair'] = False
 
         info[tag] = s
 
