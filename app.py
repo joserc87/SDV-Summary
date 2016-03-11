@@ -12,6 +12,7 @@ import sqlite3
 from bigbase import dec2big
 import json
 import hashlib
+from imageDrone import process_queue
 
 UPLOAD_FOLDER = 'uploads'
 
@@ -19,7 +20,7 @@ app = Flask(__name__)
 app.secret_key = config.secret_key
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16*1024*1024
-app.database = 'sdv.db'
+app.database = config.db
 
 def md5(filename):
 	h = hashlib.md5()
@@ -47,7 +48,7 @@ def home():
 			else:
 				farm_info = getFarmInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 				outcome, error = insert_info(player_info,farm_info,md5_info)
-				#note to self: need to have better handling for this, this is just a stop-gap!
+				process_queue()
 			g.db.close()
 			if outcome != False:
 				return redirect(url_for('display_data',url=outcome))
@@ -117,11 +118,11 @@ def insert_info(player_info,farm_info,md5_info):
 		#g.db.commit()
 		#cur.execute('SELECT id,url FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND md5 =?',(player_info['uniqueIDForThisGame'],player_info['name'],md5_info))
 		#row = cur.fetchall()[-1]
-		g.db.execute('INSERT INTO todo VALUES (?,?)',('process_image',rowid))
+		g.db.execute('INSERT INTO todo (task, playerid) VALUES (?,?)',('process_image',rowid))
 		g.db.commit()
 		return url, None
 	except sqlite3.OperationalError:
-		g.db.execute('INSERT INTO errors VALUES (?,?)',(time.time(),str([columns,values])))
+		g.db.execute('INSERT INTO errors (time, error) VALUES (?,?)',(time.time(),str([columns,values])))
 		g.db.commit()
 		return False, "Save file incompatible with current database; saving for admins to review (please check back later)"
 

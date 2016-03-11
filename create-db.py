@@ -146,12 +146,13 @@ professions7 TEXT,
 professions8 TEXT,
 professions9 TEXT,
 farm_info TEXT,
-farm_image TEXT,
+farm_url TEXT,
+avatar_url TEXT,
 added_time FLOAT'''
 
 with sqlite3.connect("sdv.db") as connection:
 	c = connection.cursor()
 	c.execute('CREATE TABLE playerinfo('+database_structure+')')
-	c.execute('CREATE TABLE errors(time BIGINT, notes TEXT)')
-	c.execute('CREATE TABLE todo(task TEXT, ID TEXT)')
+	c.execute('CREATE TABLE errors(id INTEGER PRIMARY KEY AUTOINCREMENT, time BIGINT, notes TEXT)')
+	c.execute('CREATE TABLE todo(id INTEGER PRIMARY KEY AUTOINCREMENT, task TEXT, playerid TEXT)')
 

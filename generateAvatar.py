@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 
-from playerInfo import playerInfo
 from PIL import Image, ImageChops
 from PIL.ImageOps import grayscale, colorize
 import colorsys
@@ -39,9 +38,10 @@ def generateAvatar(player):
 	base.paste(legs, (0,0), legs)
 	base.paste(shirt, (4,13), shirt)
 	base.paste(shoes, (0,2), shoes)
-	base.save('test.png')
+	return base
 
 def main():
+	from playerInfo import playerInfo
 	player = playerInfo('./save/Crono_116230451')
 	# player = playerInfo('./save/Sketchy_116441313')
 	generateAvatar(player)
