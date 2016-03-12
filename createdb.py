@@ -153,7 +153,8 @@ database_structure_dict = {'id':'INTEGER PRIMARY KEY AUTOINCREMENT',
 'farm_url':'TEXT',
 'avatar_url':'TEXT',
 'added_time':'FLOAT',
-'ip':'TEXT'}
+'ip':'TEXT',
+'del_token':'INT'}
 
 database_fields = ''
 for key in sorted(database_structure_dict.keys()):

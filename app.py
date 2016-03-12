@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, redirect, url_for, request, flash, g
+from flask import Flask, render_template, session, redirect, url_for, request, flash, g
 import time
 import config
 from werkzeug import secure_filename
@@ -16,6 +16,7 @@ from imageDrone import process_queue
 from createdb import database_structure_dict, database_fields
 import defusedxml
 import operator
+import random
 
 UPLOAD_FOLDER = 'uploads'
 
@@ -57,11 +58,11 @@ def home():
 			except AttributeError as e:
 				error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
 				return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
-
 			g.db = connect_db()
 			cur = g.db.cursor()
 			dupe = is_duplicate(md5_info,player_info)
 			if dupe != False:
+				session[dupe] = md5_info
 				return redirect(url_for('display_data',url=dupe))
 			else:
 				farm_info = getFarmInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
@@ -69,6 +70,7 @@ def home():
 				process_queue()
 			g.db.close()
 			if outcome != False:
+				session[outcome] = md5_info
 				return redirect(url_for('display_data',url=outcome))
 	g.db = connect_db()
 	cur = g.db.cursor()
@@ -122,6 +124,8 @@ def insert_info(player_info,farm_info,md5_info):
 		values.append(md5_info)
 		columns.append('ip')
 		values.append(request.environ['REMOTE_ADDR'])
+		columns.append('del_token')
+		values.append(random.randint(-(2**63)-1,(2**63)-1))
 
 	colstring = ''
 	for c in columns:
@@ -147,6 +151,7 @@ def insert_info(player_info,farm_info,md5_info):
 @app.route('/<url>')
 def display_data(url):
 	error = None
+	deletable = None
 	start_time = time.time()
 	g.db = connect_db()
 	cur = g.db.cursor()
@@ -162,10 +167,58 @@ def display_data(url):
 		for k, key in enumerate(sorted(database_structure_dict.keys())):
 			if key != 'farm_info':
 				datadict[key] = data[0][k]
+
+		if url in session:
+			cur.execute('SELECT url,md5,del_token FROM playerinfo WHERE uniqueIDForThisGame=?',(datadict['uniqueIDForThisGame'],))
+			md5_from_db = cur.fetchall()
+			if session[url] in [md5[1] for md5 in md5_from_db]:
+				deletable = True
+				for row in md5_from_db:
+					session[row[0]] = row[1]
+					session[row[0]+'del_token'] = row[2]
+
 		friendships = sorted([[friendship[11:],datadict[friendship]] for friendship in sorted(database_structure_dict.keys()) if friendship.startswith('friendships') and datadict[friendship]!=None],key=lambda x: x[1])[::-1]
+		kills = sorted([[kill[27:].replace('_',' '),datadict[kill]] for kill in sorted(database_structure_dict.keys()) if kill.startswith('statsSpecificMonstersKilled') and datadict[kill]!=None],key=lambda x: x[1])[::-1]
 		cur.execute('SELECT url, statsDaysPlayed FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND farmName=?',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName']))
 		other_saves = sorted(cur.fetchall(),key=lambda x: x[1])
-		return render_template("profile.html", data=datadict, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
+		return render_template("profile.html", deletable=deletable, data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
+
+@app.route('/<url>/<instruction>')
+def operate_on_url(url,instruction):
+	error = None
+	deletable = None
+	start_time = time.time()
+	if url in session:
+		g.db = connect_db()
+		cur = g.db.cursor()
+		cur.execute('SELECT id,md5,del_token,url FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url=?)',(url,))
+		data = cur.fetchall()
+		print data
+		if instruction == 'del':
+			for row in data:
+				if session[url] == row[1] and session[url+'del_token'] == row[2]:
+					g.db.execute('DELETE FROM playerinfo WHERE id=(?)',(row[0],))
+					g.db.commit()
+					session.pop(url,None)
+					session.pop(url+'del_token',None)
+					return redirect(url_for('home'))
+			return render_template("error.html", error="Your session validation data is wrong", processtime=round(time.time()-start_time,5))
+		elif instruction == 'delall':
+			for row in data:
+				if not (session[row[3]] == row[1] and session[url+'del_token']):
+					return render_template("error.html", error="Session validation data was wrong for at least one resource", processtime=round(time.time()-start_time,5))
+			for row in data:
+				g.db.execute('DELETE FROM playerinfo WHERE id=(?)',(row[0],))
+				session.pop(row[3],None)
+				session.pop(row[3]+'del_token',None)
+			g.db.commit()
+			return redirect(url_for('home'))
+	else:
+		return render_template("error.html", error="Unknown instruction", processtime=round(time.time()-start_time,5))
+
+
+	#db.execute('DELETE FROM todo WHERE id=(?)',(task[0],))
+
 
 if __name__ == "__main__":
 	app.run(debug=True)

@@ -20,11 +20,14 @@
 							{% if other.0 == data.url %}
 							<li><b>{{ other.1 }} days</b></li>
 							{% else %}
-							<li><a href="/{{ other.0 }}">{{ other.1 }} days</a></li>
+							<li><a href="/{{ other.0 }}" >{{ other.1 }} days</a></li>
 							{% endif %}
 						{% endfor %}
 						</ul>
 					</div>
+				{% endif %}
+				{% if deletable %}
+				<ul class="list-inline text-center"><li>Delete:</li><li><a href="{{data.url}}/del">this page</a>?</li>{% if others|length > 1 %}<li><a href="{{data.url}}/delall">all for this farm</a>?</li>{% endif %}</ul>
 				{% endif %}
 			</div>
 			<div class="row center-block">				
@@ -61,7 +64,7 @@
 					<div class="col-md-6 col-sm-6">
 								<div class="subsection">								
 									{% for friend in friendships[i*15:(i+1)*15] %}
-										<p style="margin-left: 1em;">{{ friend.0 }}: {{ friend.1 // 250 }} Hearts</p>
+										<p style="margin-left: 1em;">{{ friend.0 }}: {{ friend.1 // 250 }}/10</p>
 									{% endfor %}
 								</div>
 					</div>
@@ -71,7 +74,14 @@
 				<div class="col-md-4 col-md-offset-1 panel">
 					<h3>Statistics</h3>
 					<div id="stats">
-						<p>Stats need to be placed here. some random stats with a link to a new page?</p>
+					{% if kills %}
+					<h4>Kills</h4>
+						<ul class="list-unstyled">
+						{% for kill in kills %}
+						<li>{{ kill.0 }}: {{ kill.1 }}</li>
+						{% endfor %}
+						</ul>
+					{% endif %}
 					</div>
 				</div>
 			</div>
