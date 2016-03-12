@@ -164,7 +164,7 @@ def display_data(url):
 				datadict[key] = data[0][k]
 		friendships = sorted([[friendship[11:],datadict[friendship]] for friendship in sorted(database_structure_dict.keys()) if friendship.startswith('friendships') and datadict[friendship]!=None],key=lambda x: x[1])[::-1]
 		cur.execute('SELECT url, statsDaysPlayed FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND farmName=?',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName']))
-		other_saves = cur.fetchall()
+		other_saves = sorted(cur.fetchall(),key=lambda x: x[1])
 		return render_template("profile.html", data=datadict, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
 
 if __name__ == "__main__":
