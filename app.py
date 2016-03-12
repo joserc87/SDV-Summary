@@ -50,7 +50,7 @@ def home():
 			except IOError:
 				error = "Savegame failed sanity check"
 				g.db.connect_db()
-				g.db.execute('INSERT INTO errors (ip, time, notes) VALUES (?,?)',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str([columns,values])))
+				g.db.execute('INSERT INTO errors (ip, time, notes) VALUES (?,?,?)',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str([columns,values])))
 				g.db.commit()
 				g.db.close()
 				return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
@@ -140,7 +140,7 @@ def insert_info(player_info,farm_info,md5_info):
 		g.db.commit()
 		return url, None
 	except sqlite3.OperationalError as e:
-		g.db.execute('INSERT INTO errors (ip, time, notes) VALUES (?,?)',(request.environ['REMOTE_ADDR'], time.time(),str(e)+' '+str([columns,values])))
+		g.db.execute('INSERT INTO errors (ip, time, notes) VALUES (?,?,?)',(request.environ['REMOTE_ADDR'], time.time(),str(e)+' '+str([columns,values])))
 		g.db.commit()
 		return False, "Save file incompatible with current database; saving for admins to review (please check back later)"
 
@@ -154,7 +154,7 @@ def display_data(url):
 	data = cur.fetchall()
 	if len(data) != 1:
 		error = 'There is nothing here... is this URL correct?'
-		g.db.execute('INSERT INTO errors (ip, time, notes) VALUES (?,?)',(request.environ['REMOTE_ADDR'],time.time(),str(len(data))+' cur.fetchall() for url:'+str(url)))
+		g.db.execute('INSERT INTO errors (ip, time, notes) VALUES (?,?,?)',(request.environ['REMOTE_ADDR'],time.time(),str(len(data))+' cur.fetchall() for url:'+str(url)))
 		g.db.commit()
 		return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
 	else:
