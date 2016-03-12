@@ -54,6 +54,10 @@ def home():
 				g.db.commit()
 				g.db.close()
 				return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
+			except AttributeError as e:
+				error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
+				return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
+
 			g.db = connect_db()
 			cur = g.db.cursor()
 			dupe = is_duplicate(md5_info,player_info)
