@@ -30,7 +30,9 @@ def playerInfo(saveFileLocation):
                 blue = player.find(tag).find('B').text
                 alpha = player.find(tag).find('A').text
                 s = [red, green, blue, alpha]
-
+        if tag in ['name','farmName','favoriteThing']:
+            if len(s)>34:
+                raise IOError
         info[tag] = s
 
     # Information from elsewhere

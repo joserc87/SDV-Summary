@@ -152,7 +152,8 @@ database_structure_dict = {'id':'INTEGER PRIMARY KEY AUTOINCREMENT',
 'farm_info':'TEXT',
 'farm_url':'TEXT',
 'avatar_url':'TEXT',
-'added_time':'FLOAT'}
+'added_time':'FLOAT',
+'ip':'TEXT'}
 
 database_fields = ''
 for key in sorted(database_structure_dict.keys()):
@@ -168,6 +169,6 @@ if __name__ == "__main__":
 	with sqlite3.connect("sdv.db") as connection:
 		c = connection.cursor()
 		c.execute('CREATE TABLE playerinfo('+database_structure+')')
-		c.execute('CREATE TABLE errors(id INTEGER PRIMARY KEY AUTOINCREMENT, time BIGINT, notes TEXT)')
+		c.execute('CREATE TABLE errors(id INTEGER PRIMARY KEY AUTOINCREMENT, ip TEXT, time BIGINT, notes TEXT)')
 		c.execute('CREATE TABLE todo(id INTEGER PRIMARY KEY AUTOINCREMENT, task TEXT, playerid TEXT)')
 
