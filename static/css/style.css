@@ -1,11 +1,17 @@
 body {
 	background: #c0ffe4;
 	background: linear-gradient(#01366d,#c0ffe4);
+	background-attachment: fixed; 
 	padding-top: 20px;
 }
 
 h1, h3 {
-	font-family: 'Rock Salt', cursive;
+	font-family: 'Architects Daughter', cursive;
+	font-size: 32px;
+}
+
+h1 {
+	font-size: 56px;
 }
 
 .panel {
@@ -36,7 +42,6 @@ p {
 
 .farmImg {
 	image-rendering: pixelated;
-	margin-top: 20px;
 	border: solid 2px #000000;
 }
 
