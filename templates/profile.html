@@ -17,7 +17,11 @@
 					<div class="row center-block">
 						<ul class="list-inline text-center">
 						{% for other in others %}
+							{% if other.0 == data.url %}
+							<li><b>{{ other.1 }} days</b></li>
+							{% else %}
 							<li><a href="/{{ other.0 }}">{{ other.1 }} days</a></li>
+							{% endif %}
 						{% endfor %}
 						</ul>
 					</div>
@@ -53,7 +57,7 @@
 </div>	
 							<div class="col-md-12">
 							<div class="subsection">
-								<h3>Map of {{ data.farmName }} farm</h3>
+								<h3>{{ data.farmName }} Farm</h3>
 								<img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;margin-top: 20px;" width="700px" height="auto">
 							</div>
 						</div>
@@ -61,6 +65,13 @@
 					</div>
 				</div>
 				<div class="col-md-4 col-md-offset-1 col-sm-12 panel">
+
+											<div class="col-md-12">
+							<div class="subsection">
+								<h3>Map of {{ data.farmName }} farm</h3>
+								<img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;margin-top: 20px;" width="700px" height="auto">
+							</div>
+						</div>
 				<h3>Statistics</h3>
 
 				<p>This still needs to be sorted</p>
