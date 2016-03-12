@@ -15,6 +15,7 @@ import hashlib
 from imageDrone import process_queue
 from createdb import database_structure_dict, database_fields
 import defusedxml
+import operator
 
 UPLOAD_FOLDER = 'uploads'
 
@@ -131,8 +132,8 @@ def insert_info(player_info,farm_info,md5_info):
 		g.db.execute('INSERT INTO todo (task, playerid) VALUES (?,?)',('process_image',rowid))
 		g.db.commit()
 		return url, None
-	except sqlite3.OperationalError:
-		g.db.execute('INSERT INTO errors (time, notes) VALUES (?,?)',(time.time(),str([columns,values])))
+	except sqlite3.OperationalError as e:
+		g.db.execute('INSERT INTO errors (time, notes) VALUES (?,?)',(time.time(),str(e)+' '+str([columns,values])))
 		g.db.commit()
 		return False, "Save file incompatible with current database; saving for admins to review (please check back later)"
 
@@ -154,9 +155,10 @@ def display_data(url):
 		for k, key in enumerate(sorted(database_structure_dict.keys())):
 			if key != 'farm_info':
 				datadict[key] = data[0][k]
+		friendships = sorted([[friendship[11:],datadict[friendship]] for friendship in sorted(database_structure_dict.keys()) if friendship.startswith('friendships') and datadict[friendship]!=None],key=lambda x: x[1])[::-1]
 		cur.execute('SELECT url, statsDaysPlayed FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND farmName=? AND id!=?',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName'],datadict['id']))
 		other_saves = cur.fetchall()
-		return render_template("profile.html", data=datadict, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
+		return render_template("profile.html", data=datadict, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
 
 if __name__ == "__main__":
 	app.run(debug=True)

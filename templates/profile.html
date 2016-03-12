@@ -46,7 +46,9 @@
 							<div class="col-md-12">
 							<div class="subsection">
 								<h3>Friendships</h3>
-								<p>Abigail: {{data.friendshipsAbigail // 250}} Hearts</p>
+								{% for friend in friendships %}
+									<p>{{ friend.0 }}: {{ friend.1 // 250 }} Hearts</p>
+								{% endfor %}
 							</div>
 </div>	
 							<div class="col-md-12">
