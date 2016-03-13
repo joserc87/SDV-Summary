@@ -31,23 +31,20 @@
 				</div>
 				<div class="row" style="padding-top: 1em;">
 				<p class="text-center">Stardew Valley save files can be found under <code>%APPDATA%\StardewValley\Saves</code></p>
-			</div>
-			</div>
-			{% if error %}
+				{% if error %}
 				<p class="error"><strong>Error:</strong> {{ error }}</p>
-			{% endif %}
-			<br>
-			<div class="row center-block panel">
-			<div class="container lead">
+				{% endif %}
+			</div>
+			</div>
+			<div class="row center-block panel lead" style="padding-left: 20px; padding-right:20px;">
 			{% if recents %}
 				<h3>Recently uploaded farms</h3>
-				<ul>
+				<div class="row">
 					{% for recent in recents %}
-						<li><a href="{{ recent[0] }}">{{ recent[1] }}, {{ recent[2] }} Farm, day {{ recent[3] }}</a></li>
+						<div class="col-sm-4 text-center"><a href="{{ recent[0] }}"><div class="row"><img src="{{ recent[5] }}" class="img-responsive" width="90%"></div><div class="row"><img src="{{ recent[4] }}" class="headimg" >{{ recent[1] }}, {{ recent[2] }} Farm, day {{ recent[3] }}</div></a></div>
 					{% endfor %}
-				</ul>
+				</div>
 			{% endif %}
-			</div>
 			</div>
 			<div class="text-center">
 				<p class="text-muted">Took {{ processtime }} seconds to process request | source at <a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a></p>

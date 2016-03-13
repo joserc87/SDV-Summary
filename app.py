@@ -74,7 +74,7 @@ def home():
 				return redirect(url_for('display_data',url=outcome))
 	g.db = connect_db()
 	cur = g.db.cursor()
-	cur.execute('SELECT url, name, farmName, statsDaysPlayed FROM playerinfo ORDER BY id DESC LIMIT 5')
+	cur.execute('SELECT url, name, farmName, statsDaysPlayed, avatar_url, farm_url FROM playerinfo ORDER BY id DESC LIMIT 12')
 	recents = cur.fetchall()
 	g.db.close()
 	if len(recents)==0:

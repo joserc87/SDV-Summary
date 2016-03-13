@@ -48,3 +48,8 @@ p {
 .subsection {
 
 }
+
+.headimg {
+	image-rendering: pixelated;
+	height: 32px;
+}
