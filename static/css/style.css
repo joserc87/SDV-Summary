@@ -51,7 +51,10 @@ p {
 
 .headimg {
 	image-rendering: pixelated;
-	height: 32px;
+	height: 70%;
+	position: absolute;
+	left: 0%;
+	bottom: 6%;
 }
 
 .logo {
