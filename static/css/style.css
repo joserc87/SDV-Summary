@@ -19,6 +19,7 @@ h1 {
 	border: solid 5px #e27a3e;
 	padding-bottom: 20px;
 	border-radius: 10px;
+	overflow:hidden;
 }
 
 p, li {
@@ -79,6 +80,7 @@ p, li {
 	background-color: rgba(0,0,0,0.7);
 	padding: 0px;
 	color: #FFFFFF;
+	overflow:hidden;
 }
 
 .logo {

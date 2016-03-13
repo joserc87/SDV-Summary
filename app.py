@@ -80,7 +80,7 @@ def connect_db():
 def get_recents():
 	g.db = connect_db()
 	cur = g.db.cursor()
-	cur.execute('SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo ORDER BY id DESC LIMIT 12')
+	cur.execute('SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo ORDER BY id DESC LIMIT 6')
 	recents = cur.fetchall()
 	g.db.close()
 	if len(recents)==0:
