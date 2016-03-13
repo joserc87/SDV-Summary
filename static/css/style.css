@@ -55,7 +55,8 @@ p, li {
 }
 
 .previewbox {
-	padding: 5px;
+	padding: 0px;
+	margin: 5px;
 }
 
 .headimg {
@@ -74,9 +75,8 @@ p, li {
 	position:absolute;
 	font-family: 'VT323';
 	font-size: 20pt;
-	left:2%;
-	bottom:2%;
-	width:96%;
+	bottom:0%;
+	width: 100%;
 	background-color: rgba(0,0,0,0.7);
 	padding: 0px;
 	color: #FFFFFF;
