@@ -91,15 +91,16 @@
 
 				<div class="col-md-4 col-md-offset-1 panel">
 					<div id="subsection">
-						<h3>Statistics</h3>
+						<h3>Monster Kills</h3>
 						<div id="stats">
 						{% if kills %}
-						<h4>Kills</h4>
 							<ul class="list-unstyled">
 							{% for kill in kills %}
 							<li>{{ kill.0 }}: {{ kill.1 }}</li>
 							{% endfor %}
 							</ul>
+						{% else %}
+							<p> {{ data.name }} has not killed any monsters yet. </p>
 						{% endif %}
 						</div>
 					</div>

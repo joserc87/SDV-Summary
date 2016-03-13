@@ -21,7 +21,7 @@ h1 {
 	border-radius: 10px;
 }
 
-p {
+p, li {
 	font-family: 'VT323';
 	font-size: 20pt;
 	margin: 0;
@@ -72,6 +72,8 @@ p {
 
 .previewtext {
 	position:absolute;
+	font-family: 'VT323';
+	font-size: 20pt;
 	left:2%;
 	bottom:2%;
 	width:96%;
