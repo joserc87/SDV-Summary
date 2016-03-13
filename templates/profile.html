@@ -31,6 +31,9 @@
 					<ul class="list-inline text-center"><li>Delete:</li><li><a href="{{data.url}}/del">this page</a>?</li>{% if others|length > 1 %}<li><a href="{{data.url}}/delall">all for this farm</a>?</li>{% endif %}</ul>
 					{% endif %}
 				</div>
+			{% if error %}
+				<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+			{% endif %}
 			</div>
 			<div class="row center-block">				
 				<div class="col-md-7 col-sm-12 panel">
@@ -100,9 +103,6 @@
 				</div>
 			</div>
 			<!-- <p> {{ data }}</p> -->
-			{% if error %}
-				<p class="error"><strong>Error:</strong> {{ error }}</p>
-			{% endif %}
 			<br>
 			<div class="container lead">
 			</div>
