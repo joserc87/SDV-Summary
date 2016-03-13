@@ -1,5 +1,23 @@
 from defusedxml.ElementTree import parse
 
+def getStats(root):
+    game_stats = {}
+    stats_node = root.find('stats')
+    for statistic in stats_node:
+        stattag = statistic.tag[0].upper() + statistic.tag[1:]
+        if stattag not in game_stats.keys():
+            #check we're drawing info from the uppercase data and data not already exist
+            if statistic.text != None:
+                game_stats[stattag] = int(statistic.text)
+            elif stattag == 'SpecificMonstersKilled':
+                monsters = {}
+                for monster in statistic.iter('item'):
+                    monsterName = monster.find('key').find('string').text
+                    count = int(monster.find('value').find('int').text)
+                    monsters[monsterName] = count
+                game_stats[stattag] = monsters
+    return game_stats
+
 def playerInfo(saveFileLocation):
     playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel', 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina', 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin', 'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor']
     professions = ['Rancher', 'Tiller', 'Coopmaster', 'Shepherd', 'Artisan', 'Agriculturist', 'Fisher', 'Trapper', 'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist', 'Tracker', 'Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout', 'Brute', 'Defender', 'Acrobat', 'Desperado']
@@ -40,24 +58,7 @@ def playerInfo(saveFileLocation):
     # UID for save file
     info['uniqueIDForThisGame'] = int(root.find('uniqueIDForThisGame').text)
 
-    #Game Stats
-    game_stats = {}
-    stats_node = root.find('stats')
-    for statistic in stats_node:
-        stattag = statistic.tag[0].upper() + statistic.tag[1:]
-        if stattag not in game_stats.keys():
-            #check we're drawing info from the uppercase data and data not already exist
-            if statistic.text != None:
-                game_stats[stattag] = int(statistic.text)
-            elif stattag == 'SpecificMonstersKilled':
-                monsters = {}
-                for monster in statistic.iter('item'):
-                    monsterName = monster.find('key').find('string').text
-                    count = int(monster.find('value').find('int').text)
-                    monsters[monsterName] = count
-                game_stats[stattag] = monsters
-
-    info['stats'] = game_stats
+    info['stats'] = getStats(root)
 
     return info
 
