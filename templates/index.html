@@ -46,7 +46,10 @@
 				<h3>Recently uploaded farms</h3>
 				<div class="row">
 					{% for recent in recents %}
-						<div class="col-md-4 col-sm-6 col-xs-6 text-center"><a href="{{ recent[0] }}"><div class="row"><img src="{{ recent[5] }}" class="img-responsive farmImg" width="90%"><img src="{{ recent[4] }}" class="headimg" ></div><div class="row">{{ recent[1] }}, {{ recent[2] }} Farm, day {{ recent[3] }}</div></a></div>
+						<a href="{{ recent[0] }}">
+						<div class="col-md-4 col-sm-6 col-xs-6 text-center previewbox"><div class="previewimage"><img src="{{ recent[5] }}" class="img-responsive farmimgpreview"><img src="{{ recent[4] }}" class="headimg" ></div>
+						<div class="previewtext">{{ recent[1] }}, {{ recent[2] }} Farm, day {{ recent[3] }}</div></div>
+						</a>
 					{% endfor %}
 				</div>
 			</div>

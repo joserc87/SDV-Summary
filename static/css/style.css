@@ -49,12 +49,35 @@ p {
 
 }
 
+.farmimgpreview {
+	image-rendering: pixelated;
+	border: solid 2px #000000;
+}
+
+.previewbox {
+	padding: 5px;
+}
+
 .headimg {
 	image-rendering: pixelated;
-	height: 70%;
+	height: 85%;
 	position: absolute;
 	left: 0%;
-	bottom: 6%;
+	bottom: 0%;
+}
+
+.previewimage {
+	position:relative;	
+}
+
+.previewtext {
+	position:absolute;
+	left:2%;
+	bottom:2%;
+	width:96%;
+	background-color: rgba(0,0,0,0.7);
+	padding: 0px;
+	color: #FFFFFF;
 }
 
 .logo {
