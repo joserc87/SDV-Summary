@@ -80,7 +80,7 @@ def connect_db():
 def get_recents():
 	g.db = connect_db()
 	cur = g.db.cursor()
-	cur.execute('SELECT url, name, farmName, statsDaysPlayed, avatar_url, farm_url FROM playerinfo ORDER BY id DESC LIMIT 12')
+	cur.execute('SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo ORDER BY id DESC LIMIT 12')
 	recents = cur.fetchall()
 	g.db.close()
 	if len(recents)==0:
@@ -102,6 +102,7 @@ def is_duplicate(md5_info,player_info):
 def insert_info(player_info,farm_info,md5_info):
 	columns = []
 	values = []
+	player_info['date'] = ['Spring','Summer','Autumn','Winter'][(((player_info['stats']['DaysPlayed']%(28*4))-((player_info['stats']['DaysPlayed']%(28*4))%(28)))/28)]+' '+str((player_info['stats']['DaysPlayed']%(28*4))%(28))+', Year '+str(((player_info['stats']['DaysPlayed']-player_info['stats']['DaysPlayed']%(28*4))/(28*4))+1)
 	for key in player_info.keys():
 		if type(player_info[key]) == list:
 			for i,item in enumerate(player_info[key]):
@@ -131,6 +132,7 @@ def insert_info(player_info,farm_info,md5_info):
 		values.append(random.randint(-(2**63)-1,(2**63)-1))
 		columns.append('views')
 		values.append('0')
+
 
 	colstring = ''
 	for c in columns:
@@ -189,7 +191,7 @@ def display_data(url):
 
 		friendships = sorted([[friendship[11:],datadict[friendship]] for friendship in sorted(database_structure_dict.keys()) if friendship.startswith('friendships') and datadict[friendship]!=None],key=lambda x: x[1])[::-1]
 		kills = sorted([[kill[27:].replace('_',' '),datadict[kill]] for kill in sorted(database_structure_dict.keys()) if kill.startswith('statsSpecificMonstersKilled') and datadict[kill]!=None],key=lambda x: x[1])[::-1]
-		cur.execute('SELECT url, statsDaysPlayed FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND farmName=?',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName']))
+		cur.execute('SELECT url, date FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND farmName=?',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName']))
 		other_saves = sorted(cur.fetchall(),key=lambda x: x[1])
 		return render_template("profile.html", deletable=deletable, data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
 

@@ -30,9 +30,9 @@
 								<ul class="list-inline text-center">
 								{% for other in others %}
 									{% if other.0 == data.url %}
-									<li><b>{{ other.1 }} days</b></li>
+									<li><b>{{ other.1 }}</b></li>
 									{% else %}
-									<li><a href="/{{ other.0 }}" >{{ other.1 }} days</a></li>
+									<li><a href="/{{ other.0 }}" >{{ other.1 }}</a></li>
 									{% endif %}
 								{% endfor %}
 								</ul>
