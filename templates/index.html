@@ -41,16 +41,17 @@
 				{% endif %}
 			</div>
 			</div>
-			<div class="row center-block panel lead" style="padding-left: 20px; padding-right:20px;">
 			{% if recents %}
+			<div class="row center-block panel lead" style="padding-left: 20px; padding-right:20px;">
 				<h3>Recently uploaded farms</h3>
 				<div class="row">
 					{% for recent in recents %}
 						<div class="col-md-4 col-sm-6 col-xs-6 text-center"><a href="{{ recent[0] }}"><div class="row"><img src="{{ recent[5] }}" class="img-responsive farmImg" width="90%"></div><div class="row"><img src="{{ recent[4] }}" class="headimg" >{{ recent[1] }}, {{ recent[2] }} Farm, day {{ recent[3] }}</div></a></div>
 					{% endfor %}
 				</div>
-			{% endif %}
 			</div>
+			{% endif %}
+
 			<div class="text-center">
 				<p class="text-muted">Took {{ processtime }} seconds to process request | source at <a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a></p>
 			</div>

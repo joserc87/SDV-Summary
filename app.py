@@ -129,6 +129,8 @@ def insert_info(player_info,farm_info,md5_info):
 		values.append(request.environ['REMOTE_ADDR'])
 		columns.append('del_token')
 		values.append(random.randint(-(2**63)-1,(2**63)-1))
+		columns.append('views')
+		values.append('0')
 
 	colstring = ''
 	for c in columns:
@@ -166,6 +168,8 @@ def display_data(url):
 		g.db.commit()
 		return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
 	else:
+		cur.execute('UPDATE playerinfo SET views=views+1 WHERE url=?',(url,))
+		g.db.commit()
 		datadict = {}
 		for k, key in enumerate(sorted(database_structure_dict.keys())):
 			if key != 'farm_info':
