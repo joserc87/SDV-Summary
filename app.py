@@ -47,17 +47,17 @@ def home():
 				player_info = playerInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 			except defusedxml.common.EntitiesForbidden:
 				error = "I don't think that's very funny"
-				return render_template("index.html", error=error, recents=get_recents(), processtime=round(time.time()-start_time,5))
+				return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
 			except IOError:
-				error = "Savegame failed sanity check (if you think this is in error please let us know)"
-				g.db = connect_db()
-				g.db.execute('INSERT INTO errors (ip, time, notes) VALUES (?,?,?)',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(filename)))
+				error = "Savegame failed sanity check"
+				g.db.connect_db()
+				g.db.execute('INSERT INTO errors (ip, time, notes) VALUES (?,?,?)',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str([columns,values])))
 				g.db.commit()
 				g.db.close()
-				return render_template("index.html", error=error, recents=get_recents(), processtime=round(time.time()-start_time,5))
+				return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
 			except AttributeError as e:
 				error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
-				return render_template("index.html", error=error, recents=get_recents(), processtime=round(time.time()-start_time,5))
+				return render_template("index.html", error=error, processtime=round(time.time()-start_time,5))
 			g.db = connect_db()
 			cur = g.db.cursor()
 			dupe = is_duplicate(md5_info,player_info)
@@ -72,12 +72,6 @@ def home():
 			if outcome != False:
 				session[outcome] = md5_info
 				return redirect(url_for('display_data',url=outcome))
-	return render_template("index.html", recents=get_recents(), error=error, processtime=round(time.time()-start_time,5))
-
-def connect_db():
-	return sqlite3.connect(app.database)
-
-def get_recents():
 	g.db = connect_db()
 	cur = g.db.cursor()
 	cur.execute('SELECT url, name, farmName, statsDaysPlayed, avatar_url, farm_url FROM playerinfo ORDER BY id DESC LIMIT 12')
@@ -85,7 +79,10 @@ def get_recents():
 	g.db.close()
 	if len(recents)==0:
 		recents == None
-	return recents
+	return render_template("index.html", recents=recents, error=error, processtime=round(time.time()-start_time,5))
+
+def connect_db():
+	return sqlite3.connect(app.database)
 
 def is_duplicate(md5_info,player_info):
 	cur = g.db.cursor()
@@ -172,13 +169,16 @@ def display_data(url):
 				datadict[key] = data[0][k]
 
 		if url in session:
-			cur.execute('SELECT url,md5,del_token FROM playerinfo WHERE uniqueIDForThisGame=? AND name=? AND farmName=?',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName']))
+			cur.execute('SELECT url,md5,del_token FROM playerinfo WHERE uniqueIDForThisGame=?',(datadict['uniqueIDForThisGame'],))
 			md5_from_db = cur.fetchall()
 			if session[url] in [md5[1] for md5 in md5_from_db]:
 				deletable = True
 				for row in md5_from_db:
 					session[row[0]] = row[1]
 					session[row[0]+'del_token'] = row[2]
+
+		datadict['money'] = "{:,}".format(datadict['money'])
+		datadict['totalMoneyEarned'] = "{:,}".format(datadict['totalMoneyEarned'])
 
 		friendships = sorted([[friendship[11:],datadict[friendship]] for friendship in sorted(database_structure_dict.keys()) if friendship.startswith('friendships') and datadict[friendship]!=None],key=lambda x: x[1])[::-1]
 		kills = sorted([[kill[27:].replace('_',' '),datadict[kill]] for kill in sorted(database_structure_dict.keys()) if kill.startswith('statsSpecificMonstersKilled') and datadict[kill]!=None],key=lambda x: x[1])[::-1]
@@ -196,7 +196,7 @@ def operate_on_url(url,instruction):
 		cur = g.db.cursor()
 		cur.execute('SELECT id,md5,del_token,url FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url=?)',(url,))
 		data = cur.fetchall()
-		print data
+		# print data
 		if instruction == 'del':
 			for row in data:
 				if session[url] == row[1] and session[url+'del_token'] == row[2]:
@@ -217,7 +217,7 @@ def operate_on_url(url,instruction):
 			g.db.commit()
 			return redirect(url_for('home'))
 	else:
-		return render_template("error.html", error="Unknown instruction or insufficient credentials", processtime=round(time.time()-start_time,5))
+		return render_template("error.html", error="Unknown instruction", processtime=round(time.time()-start_time,5))
 
 
 	#db.execute('DELETE FROM todo WHERE id=(?)',(task[0],))
