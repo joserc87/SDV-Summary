@@ -12,23 +12,25 @@
 	<body>
 		<div class="container">
 			<div class="col-md-6 col-md-offset-3 col-sm-12 panel">
-				<h1 class="text-center">{{ data.farmName }} Farm</h1>
-				{% if others %}
-					<div class="row center-block">
-						<ul class="list-inline text-center">
-						{% for other in others %}
-							{% if other.0 == data.url %}
-							<li><b>{{ other.1 }} days</b></li>
-							{% else %}
-							<li><a href="/{{ other.0 }}" >{{ other.1 }} days</a></li>
-							{% endif %}
-						{% endfor %}
-						</ul>
-					</div>
-				{% endif %}
-				{% if deletable %}
-				<ul class="list-inline text-center"><li>Delete:</li><li><a href="{{data.url}}/del">this page</a>?</li>{% if others|length > 1 %}<li><a href="{{data.url}}/delall">all for this farm</a>?</li>{% endif %}</ul>
-				{% endif %}
+				<div class="subsection">
+					<h1 class="text-center">{{ data.farmName }} Farm</h1>
+					{% if others %}
+						<div class="row center-block">
+							<ul class="list-inline text-center">
+							{% for other in others %}
+								{% if other.0 == data.url %}
+								<li><b>{{ other.1 }} days</b></li>
+								{% else %}
+								<li><a href="/{{ other.0 }}" >{{ other.1 }} days</a></li>
+								{% endif %}
+							{% endfor %}
+							</ul>
+						</div>
+					{% endif %}
+					{% if deletable %}
+					<ul class="list-inline text-center"><li>Delete:</li><li><a href="{{data.url}}/del">this page</a>?</li>{% if others|length > 1 %}<li><a href="{{data.url}}/delall">all for this farm</a>?</li>{% endif %}</ul>
+					{% endif %}
+				</div>
 			</div>
 			<div class="row center-block">				
 				<div class="col-md-7 col-sm-12 panel">
@@ -48,7 +50,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4 col-md-offset-1 col-sm-12 panel">
+				<div class="col-md-4 col-md-offset-1 col-sm-12 panel"><!--col-md-offset-1-->
 						<div class="subsection">
 							<h3>Minimap</h3>
 							<a href="#mainFarm"><img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
@@ -57,41 +59,44 @@
 			</div>
 			<div class="row center-block">
 				<div class="col-md-7 col-sm-12 panel">
-					<div class="col-md-12">
-						<h3>Friendships</h3>
+					<div class="subsection">	
+						<div class="col-md-12">
+							<h3>Friendships</h3>
+						</div>
+						{% for i in range((friendships|length/2)|int) %}
+						<div class="col-md-6 col-sm-6">							
+										<p style="margin-left: 1em;">{{ friendships[2*i].0 }}: {{ friendships[2*i].1 // 250 }}/10</p>
+						</div>
+						<div class="col-md-6 col-sm-6">							
+										<p style="margin-left: 1em;">{{ friendships[2*i + 1].0 }}: {{ friendships[2*i + 1].1 // 250 }}/10</p>
+						</div>
+						{% endfor %}
 					</div>
-					{% for i in range((friendships|length/2)|int) %}
-					<div class="col-md-6 col-sm-6">
-								<div class="subsection">								
-									<p style="margin-left: 1em;">{{ friendships[2*i].0 }}: {{ friendships[2*i].1 // 250 }}/10</p>
-								</div>
-					</div>
-					<div class="col-md-6 col-sm-6">
-								<div class="subsection">								
-									<p style="margin-left: 1em;">{{ friendships[2*i + 1].0 }}: {{ friendships[2*i + 1].1 // 250 }}/10</p>
-								</div>
-					</div>
-					{% endfor %}
 				</div>
 
 				<div class="col-md-4 col-md-offset-1 panel">
-					<h3>Statistics</h3>
-					<div id="stats">
-					{% if kills %}
-					<h4>Kills</h4>
-						<ul class="list-unstyled">
-						{% for kill in kills %}
-						<li>{{ kill.0 }}: {{ kill.1 }}</li>
-						{% endfor %}
-						</ul>
-					{% endif %}
+					<div id="subsection">
+						<h3>Statistics</h3>
+						<div id="stats">
+						{% if kills %}
+						<h4>Kills</h4>
+							<ul class="list-unstyled">
+							{% for kill in kills %}
+							<li>{{ kill.0 }}: {{ kill.1 }}</li>
+							{% endfor %}
+							</ul>
+						{% endif %}
+						</div>
 					</div>
 				</div>
 			</div>
 			<div class="row center-block panel">
-				<div class="col-md-12">
-					<h3>Full Map of {{data.farmName}} Farm</h3>
-					<img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto">
+				<a name="mainFarm"></a>
+				<div class="subsection">
+					<div class="col-md-12">
+						<h3>Full Map of {{data.farmName}} Farm</h3>
+						<img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto">
+					</div>
 				</div>
 			</div>
 			<!-- <p> {{ data }}</p> -->
