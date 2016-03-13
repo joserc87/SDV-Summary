@@ -15,15 +15,10 @@
 				<div class="subsection">
 					<div class="col-md-2 col-sm-12 text-center" style="padding: 20px;">
 						<a href="/">
-							<div class="row">
 								<img src="{{url_for('static', filename='favicon.png')}}" class="logo">
-							</div>
-							<div class="row">
-								SDV Summary
-							</div>
 						</a>
 					</div>
-					<div class="col-md-10 col-sm-12">
+					<div class="col-md-8 col-sm-12">
 						<h1 class="text-center">{{ data.farmName }} Farm</h1>
 						{% if others %}
 							<div class="row center-block">
@@ -110,7 +105,7 @@
 				<a name="mainFarm"></a>
 				<div class="subsection">
 					<div class="col-md-12">
-						<h3>Full Map of {{data.farmName}} Farm</h3>
+						<h3>Map of {{data.farmName}} Farm</h3>
 						<img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto">
 					</div>
 				</div>

@@ -55,8 +55,7 @@ p, li {
 }
 
 .previewbox {
-	padding: 0px;
-	margin: 5px;
+	margin: 0px;
 }
 
 .headimg {
@@ -74,9 +73,9 @@ p, li {
 .previewtext {
 	position:absolute;
 	font-family: 'VT323';
-	font-size: 20pt;
+	font-size: 16pt;
 	bottom:0%;
-	width: 100%;
+	width: calc(100% - 30px);
 	background-color: rgba(0,0,0,0.7);
 	padding: 0px;
 	color: #FFFFFF;
@@ -84,6 +83,10 @@ p, li {
 
 .logo {
 	image-rendering: pixelated;
-	width: 96px;
+	width: 120px;
 	height: auto;
+}
+
+.col-sm-6.previewbox {
+	margin-bottom: 15px;
 }
