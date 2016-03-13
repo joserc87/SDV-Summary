@@ -11,25 +11,37 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="col-md-6 col-md-offset-3 col-sm-12 panel">
+			<div class="col-md-10 col-md-offset-1 col-sm-12 panel">
 				<div class="subsection">
-					<h1 class="text-center">{{ data.farmName }} Farm</h1>
-					{% if others %}
-						<div class="row center-block">
-							<ul class="list-inline text-center">
-							{% for other in others %}
-								{% if other.0 == data.url %}
-								<li><b>{{ other.1 }} days</b></li>
-								{% else %}
-								<li><a href="/{{ other.0 }}" >{{ other.1 }} days</a></li>
-								{% endif %}
-							{% endfor %}
-							</ul>
-						</div>
-					{% endif %}
-					{% if deletable %}
-					<ul class="list-inline text-center"><li>Delete:</li><li><a href="{{data.url}}/del">this page</a>?</li>{% if others|length > 1 %}<li><a href="{{data.url}}/delall">all for this farm</a>?</li>{% endif %}</ul>
-					{% endif %}
+					<div class="col-md-2 col-sm-12 text-center" style="padding: 20px;">
+						<a href="/">
+							<div class="row">
+								<img src="{{url_for('static', filename='favicon.png')}}" class="logo">
+							</div>
+							<div class="row">
+								SDV Summary
+							</div>
+						</a>
+					</div>
+					<div class="col-md-10 col-sm-12">
+						<h1 class="text-center">{{ data.farmName }} Farm</h1>
+						{% if others %}
+							<div class="row center-block">
+								<ul class="list-inline text-center">
+								{% for other in others %}
+									{% if other.0 == data.url %}
+									<li><b>{{ other.1 }} days</b></li>
+									{% else %}
+									<li><a href="/{{ other.0 }}" >{{ other.1 }} days</a></li>
+									{% endif %}
+								{% endfor %}
+								</ul>
+							</div>
+						{% endif %}
+						{% if deletable %}
+						<ul class="list-inline text-center"><li>Delete:</li><li><a href="{{data.url}}/del">this page</a>?</li>{% if others|length > 1 %}<li><a href="{{data.url}}/delall">all for this farm</a>?</li>{% endif %}</ul>
+						{% endif %}
+					</div>
 				</div>
 			{% if error %}
 				<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>

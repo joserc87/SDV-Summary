@@ -53,3 +53,9 @@ p {
 	image-rendering: pixelated;
 	height: 32px;
 }
+
+.logo {
+	image-rendering: pixelated;
+	width: 96px;
+	height: auto;
+}
