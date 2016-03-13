@@ -19,6 +19,8 @@ h1 {
 .panel {
 	padding:5px;
 	margin-bottom: 0px;
+	background: none;
+	box-shadow: none;
 }
 
 .interiorpanel {
