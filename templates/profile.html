@@ -11,9 +11,9 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="col-md-10 col-md-offset-1 col-sm-12 panel">
-				<div class="subsection">
-					<div class="col-md-2 col-sm-12 text-center" style="padding: 20px;">
+			<div class="col-md-12 col-sm-12 panel">
+				<div class="interiorpanel">
+					<div class="col-md-2 col-sm-12 text-center">
 						<a href="/">
 								<img src="{{url_for('static', filename='favicon.png')}}" class="logo">
 						</a>
@@ -44,12 +44,12 @@
 			</div>
 			<div class="row center-block">				
 				<div class="col-md-7 col-sm-12 panel">
-					<div class="subsection">
+					<div class="interiorpanel">
 						<h3>Player Information</h3>
 						<div class="col-sm-3">
 							<img src="{{ data.avatar_url }}" class="playerAvatar">
 						</div>
-						<div class="col-sm-8 col-sm-offset-1">
+						<div class="col-sm-8">
 							<p>Name: {{ data.name }}</p>
 							<p>Current Funds: {{ data.money }}g</p>
 							<p>Total Earnings: {{ data.totalMoneyEarned }}g</p>
@@ -60,8 +60,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4 col-md-offset-1 col-sm-12 panel"><!--col-md-offset-1-->
-						<div class="subsection">
+				<div class="col-md-5 col-sm-12 panel"><!--col-md-offset-1-->
+						<div class="interiorpanel">
 							<h3>Minimap</h3>
 							<a href="#mainFarm"><img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
 						</div>					
@@ -69,23 +69,23 @@
 			</div>
 			<div class="row center-block">
 				<div class="col-md-7 col-sm-12 panel">
-					<div class="subsection">	
+					<div class="interiorpanel">	
 						<div class="col-md-12">
 							<h3>Friendships</h3>
 						</div>
 						{% for i in range((friendships|length/2)|int) %}
 						<div class="col-md-6 col-sm-6">							
-										<p style="margin-left: 1em;">{{ friendships[2*i].0 }}: {{ friendships[2*i].1 // 250 }}/10</p>
+							<p style="margin-left: 1em;">{{ friendships[2*i].0 }}: {{ friendships[2*i].1 // 250 }}/10</p>
 						</div>
 						<div class="col-md-6 col-sm-6">							
-										<p style="margin-left: 1em;">{{ friendships[2*i + 1].0 }}: {{ friendships[2*i + 1].1 // 250 }}/10</p>
+							<p style="margin-left: 1em;">{{ friendships[2*i + 1].0 }}: {{ friendships[2*i + 1].1 // 250 }}/10</p>
 						</div>
 						{% endfor %}
 					</div>
 				</div>
 
-				<div class="col-md-4 col-md-offset-1 panel">
-					<div id="subsection">
+				<div class="col-md-5 panel">
+					<div class="interiorpanel">
 						<h3>Monster Kills</h3>
 						<div id="stats">
 						{% if kills %}
@@ -103,7 +103,7 @@
 			</div>
 			<div class="row center-block panel">
 				<a name="mainFarm"></a>
-				<div class="subsection">
+				<div class="interiorpanel">
 					<div class="col-md-12">
 						<h3>Map of {{data.farmName}} Farm</h3>
 						<img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto">

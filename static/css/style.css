@@ -1,3 +1,4 @@
+
 body {
 	background: #c0ffe4;
 	background: linear-gradient(#01366d,#c0ffe4);
@@ -8,6 +9,7 @@ body {
 h1, h3 {
 	font-family: 'Architects Daughter', cursive;
 	font-size: 32px;
+	margin-top: 0px;
 }
 
 h1 {
@@ -15,11 +17,17 @@ h1 {
 }
 
 .panel {
+	padding:5px;
+	margin-bottom: 0px;
+}
+
+.interiorpanel {
 	background: #ffd789;
 	border: solid 5px #e27a3e;
-	padding-bottom: 20px;
+	padding-bottom: 15px;
 	border-radius: 10px;
 	overflow:hidden;
+	padding: 15px;
 }
 
 p, li {
@@ -44,10 +52,6 @@ p, li {
 .farmImg {
 	image-rendering: pixelated;
 	border: solid 2px #000000;
-}
-
-.subsection {
-
 }
 
 .farmimgpreview {
