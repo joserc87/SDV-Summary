@@ -14,14 +14,14 @@
 			<div class="row center-block panel">
 			<h1 class="text-center">Stardew Valley Savefile Summary</h1>
 			</div>
-			<div class="row center-block panel" style="padding: 20px;">
-				<div class="row">
-					<p style="width: 80%; margin: 0 auto;">Maybe a small section here explaining what this is for things like uploading multiple saves collects them into one account</p>
-				</div>
-			<h3>Upload farm</h3>
+			<div class="row center-block panel" style="padding: 20px; padding-top: 0px;">
+				<!--<div class="row">
+					<p style="width: 80%; margin: 0 auto;">This site generates a profile page from your Stardew Valley savegame. It automatically links uploads from different stages.</p>
+				</div>-->
+			<h3>Upload your farm</h3>
 				<div class="row">
 				<form enctype="multipart/form-data" action="" method="post">
-					<div class="col-sm-9 col-sm-offset-1 col-xs-9 col-xs-offset-1">
+					<div class="col-sm-10 col-xs-9">
 						<input class="form-control input-lg" type="file" name="file" value="">
 					</div>
 					<div class="col-sm-1 col-xs-1">
@@ -30,7 +30,7 @@
 				</form>
 				</div>
 				<div class="row" style="padding-top: 1em;">
-				<p class="text-center">Stardew Valley save files can be found under <code>%APPDATA%\StardewValley\Saves</code></p>
+				<p class="text-center" style="width: 80%; margin: 0 auto;">Stardew Valley save files can be found under <code>%APPDATA%\StardewValley\Saves</code> and are named after your character, plus an ID number</p>
 				{% if error %}
 				<p class="error"><strong>Error:</strong> {{ error }}</p>
 				{% endif %}
@@ -41,7 +41,7 @@
 				<h3>Recently uploaded farms</h3>
 				<div class="row">
 					{% for recent in recents %}
-						<div class="col-sm-4 text-center"><a href="{{ recent[0] }}"><div class="row"><img src="{{ recent[5] }}" class="img-responsive" width="90%"></div><div class="row"><img src="{{ recent[4] }}" class="headimg" >{{ recent[1] }}, {{ recent[2] }} Farm, day {{ recent[3] }}</div></a></div>
+						<div class="col-md-4 col-sm-6 col-xs-6 text-center"><a href="{{ recent[0] }}"><div class="row"><img src="{{ recent[5] }}" class="img-responsive farmImg" width="90%"></div><div class="row"><img src="{{ recent[4] }}" class="headimg" >{{ recent[1] }}, {{ recent[2] }} Farm, day {{ recent[3] }}</div></a></div>
 					{% endfor %}
 				</div>
 			{% endif %}
