@@ -17,6 +17,7 @@ import operator
 import random
 import sqlite3
 import psycopg2
+from xml.etree.ElementTree import ParseError
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -69,6 +70,9 @@ def home():
 			except AttributeError as e:
 				error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number''+app.sqlesc+'"
 				return render_template("index.html", error=error, recents=get_recents(), processtime=round(time.time()-start_time,5))
+			except ParseError as e:
+				error = "Not well-formed xml"
+				return render_template("index.html",error=error,recents=get_recents(), processtime=round(time.time()-start_time,5))
 			g.db = connect_db()
 			cur = g.db.cursor()
 			dupe = is_duplicate(md5_info,player_info)

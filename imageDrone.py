@@ -29,7 +29,7 @@ def process_queue():
 	while True:
 		cur.execute('SELECT * FROM todo WHERE task='+sqlesc+'',('process_image',))
 		tasks = cur.fetchall()
-		print tasks
+		# print tasks
 		if len(tasks) != 0:
 			for task in tasks:
 				cur.execute('SELECT '+database_fields+' FROM playerinfo WHERE id=('+sqlesc+')',(task[2],))
