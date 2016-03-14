@@ -53,7 +53,7 @@
 							<p>Name: {{ data.name }}</p>
 							<p>Current Funds: {{ data.money }}g</p>
 							<p>Total Earnings: {{ data.totalMoneyEarned }}g</p>
-							<p>Gender: {% if data.isMale %} Male {% else %} Female {% endif %}</p>
+							<p>Gender: {% if data.isMale == 'true' %} Male {% else %} Female {% endif %}</p>
 							<p>Favorite Thing: {{ data.favoriteThing }}</p>
 							<p>Health: {{ data.maxHealth }}</p>
 							<p>Stamina: {{ data.maxStamina }}</p>

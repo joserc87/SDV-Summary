@@ -24,7 +24,7 @@ def cropImage(fileName, index, count, dim, loc = (0,0)):
 def generateAvatar(player):
 
 	gender = ''
-	if player['isMale']:
+	if player['isMale'] == 'true':
 		gender = 'male'
 	else:
 		gender = 'female'
@@ -55,7 +55,7 @@ def generateAvatar(player):
 	body = base.load()
 	eyeColor = tuple(map(int, player['newEyeColor']))
 	white = (255,255,255)
-	if player['isMale']:
+	if player['isMale'] == 'true':
 		body[6,10] = eyeColor
 		body[9, 10] = eyeColor
 		body[6,11] = eyeColor
@@ -69,10 +69,10 @@ def generateAvatar(player):
 		body[9, 11] = eyeColor
 		body[6,12] = eyeColor
 		body[9, 12] = eyeColor
-		body[5,10] = white
-		body[10, 10] = white
 		body[5,11] = white
 		body[10, 11] = white
+		body[5,12] = white
+		body[10, 12] = white
 
 	base = Image.alpha_composite(base, legs)
 	base = Image.alpha_composite(base, shirt)
