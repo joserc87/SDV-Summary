@@ -43,24 +43,30 @@
 			{% endif %}
 			</div>
 			<div class="row center-block">				
-				<div class="col-md-7 col-sm-12 panel text-center">
+				<div class="col-md-8 col-sm-12 panel text-center">
 					<div class="interiorpanel">
 						<h3 class="text-center">Player Information</h3>
 						<div class="col-sm-4">
 							<img src="{{ data.avatar_url }}" class="playerAvatar">
 						</div>
 						<div class="col-sm-8 ">
-							<p>Name: {{ data.name }}</p>
-							<p>Current Funds: {{ data.money }}g</p>
-							<p>Total Earnings: {{ data.totalMoneyEarned }}g</p>
-							<p>Gender: {% if data.isMale == 'true' %} Male {% else %} Female {% endif %}</p>
-							<p>Favorite Thing: {{ data.favoriteThing }}</p>
-							<p>Health: {{ data.maxHealth }}</p>
-							<p>Stamina: {{ data.maxStamina }}</p>
+							<dl class="dl-horizontal">
+								<dt>Name</dt><dd>{{ data.name }}</dd>
+								<dt>Current Funds</dt><dd>{{ data.money }}g</dd>
+								<dt>Total Earnings</dt><dd>{{ data.totalMoneyEarned }}g</dd>
+								<dt>Gender</dt><dd>{% if data.isMale == 'true' %} Male {% else %} Female {% endif %}</dd>
+								<dt>Companion</dt><dd>{% if data.catPerson == 'true' %} Cat {% else %} Dog {% endif %}</dd>
+								<dt>Favorite Thing</dt><dd>{{ data.favoriteThing }}</dd>
+								<dt>Health</dt><dd>{{ data.maxHealth }}</dd>
+								<dt>Stamina</dt><dd>{{ data.maxStamina }}</dd>
+								<dt>Steps Taken</dt><dd>{{ data.statsStepsTaken }}</dd>
+								<dt>Max Mine Depth</dt><dd>{{ data.deepestMineLevel }}</dd>
+								<dt>Time Played</dt><dd>{{ data.millisecondsPlayed }} hours</dd>
+							</ul>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-5 col-sm-12 panel"><!--col-md-offset-1-->
+				<div class="col-md-4 col-sm-12 panel"><!--col-md-offset-1-->
 						<div class="interiorpanel text-center">
 							<h3>Minimap</h3>
 							<a href="#mainFarm"><img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
@@ -68,7 +74,7 @@
 				</div>
 			</div>
 			<div class="row center-block">
-				<div class="col-md-7 col-sm-12 panel">
+				<div class="col-md-8 col-sm-12 panel">
 					<div class="interiorpanel">	
 						<div class="col-md-12 text-center">
 							<h3>Friendships</h3>
@@ -84,7 +90,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-5 panel">
+				<div class="col-md-4 panel">
 					<div class="interiorpanel text-center">
 						<h3>Monster Kills</h3>
 						<div id="stats">

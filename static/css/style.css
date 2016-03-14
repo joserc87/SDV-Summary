@@ -32,10 +32,16 @@ h1 {
 	padding: 15px;
 }
 
-p, li {
+p, li, dl {
+	line-height: 1;
 	font-family: 'VT323';
 	font-size: 20pt;
 	margin: 0;
+}
+
+dt, dd {
+	line-height: 1;
+	font-weight: normal;
 }
 
 .playerAvatar {
@@ -97,4 +103,8 @@ p, li {
 
 .col-sm-6.previewbox {
 	margin-bottom: 15px;
+}
+
+body {
+	line-height: 1;
 }
