@@ -1,5 +1,6 @@
 import config
 import sqlite3
+import psycopg2
 import json
 from generateAvatar import generateAvatar
 from farmInfo import generateImage
@@ -8,10 +9,17 @@ import time
 from createdb import database_structure_dict, database_fields
 
 IMAGE_FOLDER = 'static/images'
-database = config.db
 
-def connect_db():
-	return sqlite3.connect(database)
+if config.USE_SQLITE == True:
+	database = config.DB_SQLITE
+	sqlesc = '?'
+	def connect_db():
+		return sqlite3.connect(database)
+else:
+	database = 'dbname='+config.DB_NAME+' user='+config.DB_USER+' password='+config.DB_PASSWORD
+	sqlesc = '%s'
+	def connect_db():
+		return psycopg2.connect(database)
 
 def process_queue():
 	start_time = time.time()
@@ -19,12 +27,12 @@ def process_queue():
 	db = connect_db()
 	cur = db.cursor()
 	while True:
-		cur.execute('SELECT * FROM todo WHERE task="process_image"')
+		cur.execute('SELECT * FROM todo WHERE task='+sqlesc+'',('process_image',))
 		tasks = cur.fetchall()
-		#print tasks
+		print tasks
 		if len(tasks) != 0:
 			for task in tasks:
-				cur.execute('SELECT '+database_fields+' FROM playerinfo WHERE id=(?)',(task[2],))
+				cur.execute('SELECT '+database_fields+' FROM playerinfo WHERE id=('+sqlesc+')',(task[2],))
 				data = {}
 				for i, item in enumerate(cur.fetchone()):
 					data[sorted(database_structure_dict.keys())[i]] = item
@@ -37,8 +45,8 @@ def process_queue():
 				avatar.save(avatar_path)
 				farm = generateImage(json.loads(data['farm_info']))
 				farm.save(farm_path)
-				cur.execute('UPDATE playerinfo SET farm_url=?, avatar_url=? WHERE id=?',(farm_path,avatar_path,data['id']))
-				db.execute('DELETE FROM todo WHERE id=(?)',(task[0],))
+				cur.execute('UPDATE playerinfo SET farm_url='+sqlesc+', avatar_url='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,avatar_path,data['id']))
+				cur.execute('DELETE FROM todo WHERE id=('+sqlesc+')',(task[0],))
 				db.commit()
 				records_handled += 1
 		else:

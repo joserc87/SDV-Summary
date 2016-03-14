@@ -22,8 +22,6 @@ def cropImage(fileName, index, count, dim, loc = (0,0)):
 	return whole_img
 
 def generateAvatar(player):
-
-	gender = ''
 	if player['isMale'] == 'true':
 		gender = 'male'
 	else:
