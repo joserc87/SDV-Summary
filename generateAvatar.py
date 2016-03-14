@@ -74,11 +74,11 @@ def generateAvatar(player):
 		body[5,11] = white
 		body[10, 11] = white
 
-	base.paste(legs, (0,0), legs)
-	base.paste(shirt, (0,0), shirt)
-	base.paste(acc, (0,0), acc)
-	base.paste(boots, (0,0), boots)
-	base.paste(hair, (0,0), hair)
+	base = Image.alpha_composite(base, legs)
+	base = Image.alpha_composite(base, shirt)
+	base = Image.alpha_composite(base, acc)
+	base = Image.alpha_composite(base, boots)
+	base = Image.alpha_composite(base, hair)
 	return base
 
 def main():
