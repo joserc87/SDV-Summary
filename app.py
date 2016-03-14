@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, session, redirect, url_for, request, flash, g
+from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify
 import time
 from werkzeug import secure_filename
 import os
@@ -38,6 +38,10 @@ def md5(filename):
 		for chunk in iter(lambda: f.read(4096), b""):
 			h.update(chunk)
 	return h.hexdigest()
+
+@app.route('/_get_recents')
+def jsonifyRecents():
+	return jsonify(recents=get_recents())
 
 @app.route('/',methods=['GET','POST'])
 def home():
@@ -106,7 +110,7 @@ def is_duplicate(md5_info,player_info):
 def insert_info(player_info,farm_info,md5_info):
 	columns = []
 	values = []
-	player_info['date'] = ['Spring','Summer','Autumn','Winter'][(((player_info['stats']['DaysPlayed']%(28*4))-((player_info['stats']['DaysPlayed']%(28*4))%(28)))/28)]+' '+str((player_info['stats']['DaysPlayed']%(28*4))%(28))+', Year '+str(((player_info['stats']['DaysPlayed']-player_info['stats']['DaysPlayed']%(28*4))/(28*4))+1)
+	player_info['date'] = ['Spring','Summer','Autumn','Winter'][int(((player_info['stats']['DaysPlayed']%(28*4))-((player_info['stats']['DaysPlayed']%(28*4))%(28)))/28)]+' '+str((player_info['stats']['DaysPlayed']%(28*4))%(28))+', Year '+str(((player_info['stats']['DaysPlayed']-player_info['stats']['DaysPlayed']%(28*4))/(28*4))+1)
 	for key in player_info.keys():
 		if type(player_info[key]) == list:
 			for i,item in enumerate(player_info[key]):
