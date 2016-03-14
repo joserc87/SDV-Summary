@@ -11,11 +11,15 @@ def tintImage(img, tint):
 	i.putalpha(img.split()[3])
 	return i
 
-def cropImage(fileName, index, count, width, height):
+# Takes Spritesheet and returns 16x32 image of required part
+def cropImage(fileName, index, count, dim, loc = (0,0)):
 	with Image.open(fileName) as img:
-		x = (index % count) * width
-		y = (index // count) * height
-		return offset(img, -x, -y).crop((0,0,width,height))
+		x = (index % count) * dim[0]
+		y = (index // count) * dim[1]
+		part = offset(img, -x, -y).crop((0,0,dim[0],dim[1]))
+	whole_img = Image.new("RGBA", (16,32), (0,0,0,0))
+	whole_img.paste(part, loc, part)
+	return whole_img
 
 def generateAvatar(player):
 
@@ -33,17 +37,19 @@ def generateAvatar(player):
 	leg_colour = (int(player['pantsColor'][0]), int(player['pantsColor'][1]), int(player['pantsColor'][2]))
 	legs = tintImage(legs, leg_colour)
 
-	hair = cropImage('./assets/hair.png', int(player['hair']), 8, 16, 32)
+	hair = cropImage('./assets/hair.png', int(player['hair']), 8, (16, 32))
 	hair_color = tuple(map(int, player['hairstyleColor']))
 	hair = tintImage(hair, hair_color)
 
-	acc = cropImage('./assets/accessories.png',int(player['accessory']), 8, 16, 16) 
+	acc = cropImage('./assets/accessories.png',int(player['accessory']), 8, (16, 16), (0, 1)) 
 	if int(player['accessory']) <= 5:
 		acc = tintImage(acc, hair_color)
 
-	shirt = cropImage('./assets/shirts.png', int(player['shirt']), 16, 8,8)
+	shirt = cropImage('./assets/shirts.png', int(player['shirt']), 16, (8,8), (4, 14))
 
-	skin_color = cropImage('./assets/skinColors.png', int(player['skin']), 24, 1, 1).getpixel((0,0))
+	skin_x = int(player['skin']) % 24 * 1
+	skin_y = int(player['skin']) // 24 * 1
+	skin_color = Image.open('./assets/skinColors.png').getpixel((skin_x,skin_y))
 	base = tintImage(base, skin_color)
 
 	body = base.load()
@@ -68,10 +74,10 @@ def generateAvatar(player):
 		body[5,11] = white
 		body[10, 11] = white
 
-	base.paste(legs, (0,-1), legs)
-	base.paste(shirt, (4,14), shirt)
-	base.paste(acc, (0,1), acc)
-	base.paste(boots, (0,2), boots)
+	base.paste(legs, (0,0), legs)
+	base.paste(shirt, (0,0), shirt)
+	base.paste(acc, (0,0), acc)
+	base.paste(boots, (0,0), boots)
 	base.paste(hair, (0,0), hair)
 	return base
 
