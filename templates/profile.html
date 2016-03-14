@@ -46,10 +46,17 @@
 				<div class="col-md-7 col-sm-12 panel text-center">
 					<div class="interiorpanel">
 						<h3 class="text-center">Player Information</h3>
-						<div class="col-sm-4">
-							<img src="{{ data.avatar_url }}" class="playerAvatar">
+						<div class="col-sm-5">
+							<div class="avatarPanel">
+								<img src="{{ data.avatar_url }}" class="playerAvatar">
+								{% if data.catPerson == 'true' %}
+									<img src="{{ url_for('static', filename='./assets/pets/cat.png') }}" class="playerPet" />
+								{% else %}
+									<img src="{{ url_for('static', filename='./assets/pets/dog.png') }}" class="playerPet" />
+								{% endif %}
+							</div>
 						</div>
-						<div class="col-sm-8 ">
+						<div class="col-sm-7 ">
 							<p>Name: {{ data.name }}</p>
 							<p>Current Funds: {{ data.money }}g</p>
 							<p>Total Earnings: {{ data.totalMoneyEarned }}g</p>
@@ -116,6 +123,9 @@
 			<div class="text-center">
 				<p class="text-muted">Took {{ processtime }} seconds to process request | source at <a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a><br>All Stardew Valley assets copyright <a href="http://twitter.com/concernedape">Concerned Ape</a></p>
 			</div>
+			{%for d in data%}
+			<p>{{d}}: {{d.value}}</p>
+			{%endfor%}
 		</div>
 	</body>
 </html>
