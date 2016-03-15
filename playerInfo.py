@@ -69,7 +69,7 @@ def playerInfo(saveFileLocation,read_data=False):
     # Collecting pet name
     petTypes = ['Cat', 'Dog']
     for location in root.find('locations').iter('GameLocation'):
-        if location.get(ns+'type') == 'Farm':
+        if location.get(ns+'type') == 'Farm' or location.get(ns+'type') == 'FarmHouse':
             for npc in location.find('characters').iter('NPC'):
                 if npc.get(ns+'type') in petTypes:
                     info['petName'] = npc.find('name').text
@@ -78,6 +78,7 @@ def playerInfo(saveFileLocation,read_data=False):
 
 def main():
     saveFile = "./save/Sketchy_116441313"
+    saveFile = "./save/Jane_blahblah"
     print(playerInfo(saveFile))
 
 if __name__ == '__main__':
