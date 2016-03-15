@@ -45,7 +45,7 @@ dt, dd {
 	font-weight: normal;
 }
 
-.playerAvatar {
+.avatarPanel {
 	image-rendering: pixelated;
 	background-color: #FFFFFF;
 	border: solid 2px #000000;
