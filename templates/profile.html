@@ -49,7 +49,7 @@
 						<div class="col-sm-5">
 							<div class="avatarPanel">
 								<img src="{{ data.avatar_url }}" class="playerAvatar">
-								{% if data.petName == None %}
+								{% if data.petName != None %}
 									{% if data.catPerson == 'true' %}
 										<img src="{{ url_for('static', filename='./assets/pets/cat.png') }}" class="playerPetCat" />
 									{% else %}
