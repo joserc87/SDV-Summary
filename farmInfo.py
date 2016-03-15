@@ -18,7 +18,6 @@ def getFarmInfo(saveFileLocation,read_data=False):
 		root = ElementTree.fromstring(saveFileLocation)
 
 	locations = root.find('locations').findall("GameLocation")
-	# things = []
 	s = []
 	for item in locations[1].find('objects').iter("item"):
 		name = item.find('value').find('Object').find('Name').text
@@ -27,8 +26,6 @@ def getFarmInfo(saveFileLocation,read_data=False):
 		# if name not in things:
 		# 	things.append(name)
 		s.append((name, x, y))
-
-	# print(things)
 
 	farm['objects'] = s
 
@@ -73,7 +70,7 @@ def colourBox(x, y, colour, pixels, scale = 8):
 			try:
 				pixels[x*scale+ i, y*scale + j] = colour
 			except IndexError:
-				print 'IndexError making colorBox:',x,y,colour,pixels,scale
+				print('IndexError making colorBox:',x,y,colour,pixels,scale)
 	return pixels
 
 # Renders a PNG of the players farm where one 8x8 pixel square is equivalent to one in game tile.
