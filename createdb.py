@@ -155,7 +155,8 @@ database_structure_dict = {'md5':'TEXT',
 'del_token':'BIGINT',
 'views':'BIGINT',
 'date':'TEXT',
-'savefileLocation':'TEXT'}
+'savefileLocation':'TEXT',
+'petName':'TEXT'}
 
 if config.USE_SQLITE==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'

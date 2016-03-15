@@ -23,6 +23,7 @@ def playerInfo(saveFileLocation,read_data=False):
     playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel', 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina', 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin', 'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor']
     professions = ['Rancher', 'Tiller', 'Coopmaster', 'Shepherd', 'Artisan', 'Agriculturist', 'Fisher', 'Trapper', 'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist', 'Tracker', 'Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout', 'Brute', 'Defender', 'Acrobat', 'Desperado']
 
+    ns= "{http://www.w3.org/2001/XMLSchema-instance}"
     if read_data == False:
         root = parse(saveFileLocation).getroot()
     else:
@@ -62,7 +63,16 @@ def playerInfo(saveFileLocation,read_data=False):
     # UID for save file
     info['uniqueIDForThisGame'] = int(root.find('uniqueIDForThisGame').text)
 
+    # Collecting player stats
     info['stats'] = getStats(root)
+
+    # Collecting pet name
+    petTypes = ['Cat', 'Dog']
+    for location in root.find('locations').iter('GameLocation'):
+        if location.get(ns+'type') == 'Farm':
+            for npc in location.find('characters').iter('NPC'):
+                if npc.get(ns+'type') in petTypes:
+                    info['petName'] = npc.find('name').text
 
     return info
 

@@ -46,23 +46,38 @@
 				<div class="col-md-8 col-sm-12 panel text-center">
 					<div class="interiorpanel">
 						<h3 class="text-center">Player Information</h3>
-						<div class="col-sm-4">
-							<img src="{{ data.avatar_url }}" class="playerAvatar">
+						<div class="col-sm-5">
+							<div class="avatarPanel">
+								<img src="{{ data.avatar_url }}" class="playerAvatar">
+								{% if data.catPerson == 'true' %}
+									<img src="{{ url_for('static', filename='./assets/pets/cat.png') }}" class="playerPet" />
+								{% else %}
+									<img src="{{ url_for('static', filename='./assets/pets/dog.png') }}" class="playerPet" />
+								{% endif %}
+							</div>
 						</div>
-						<div class="col-sm-8 ">
+						<div class="col-sm-7 ">
 							<dl class="dl-horizontal">
 								<dt>Name</dt><dd>{{ data.name }}</dd>
 								<dt>Current Funds</dt><dd>{{ data.money }}g</dd>
 								<dt>Total Earnings</dt><dd>{{ data.totalMoneyEarned }}g</dd>
 								<dt>Gender</dt><dd>{% if data.isMale == 'true' %} Male {% else %} Female {% endif %}</dd>
 								<dt>Companion</dt><dd>{% if data.catPerson == 'true' %} Cat {% else %} Dog {% endif %}</dd>
+								<dt>Companion Name</dt>
+								<dd>
+									{%if data.petName != None %}
+										{{data.petName}}
+									{%else%}
+										Unnamed
+									{%endif%}
+								</dd>
 								<dt>Favorite Thing</dt><dd>{{ data.favoriteThing }}</dd>
 								<dt>Health</dt><dd>{{ data.maxHealth }}</dd>
 								<dt>Stamina</dt><dd>{{ data.maxStamina }}</dd>
 								<dt>Steps Taken</dt><dd>{{ data.statsStepsTaken }}</dd>
 								<dt>Max Mine Depth</dt><dd>{{ data.deepestMineLevel }}</dd>
-								<dt>Time Played</dt><dd>{{ data.millisecondsPlayed }} hours</dd>
-							</ul>
+ 								<dt>Time Played</dt><dd>{{ data.millisecondsPlayed }} hours</dd>
+ 							</ul>
 						</div>
 					</div>
 				</div>

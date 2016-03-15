@@ -4,6 +4,7 @@ body {
 	background: linear-gradient(#01366d,#c0ffe4);
 	background-attachment: fixed; 
 	padding-top: 20px;
+	line-height: 2em;
 }
 
 h1, h3 {
@@ -44,13 +45,31 @@ dt, dd {
 	font-weight: normal;
 }
 
-.playerAvatar {
+.avatarPanel {
 	image-rendering: pixelated;
 	background-color: #FFFFFF;
 	border: solid 2px #000000;
 	border-radius: 5px;
-	padding: 5px;
+	padding: 10px;
+	width: 200px;
+	margin: 0 auto;
+	height: 320px;
+}
+
+.playerAvatar {
+	image-rendering: pixelated;
+	position: relative;
+	top: 0	;
+	left: -5px;
 	width: 150px;
+}
+
+.playerPet {
+	image-rendering: pixelated;
+	width: 100px;
+	position: relative;
+	bottom: 125px;
+	right: -40px;
 }
 
 .img-responsive{
