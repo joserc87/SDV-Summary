@@ -1,4 +1,5 @@
 from defusedxml.ElementTree import parse
+from defusedxml import ElementTree
 
 def getStats(root):
     game_stats = {}
@@ -18,11 +19,14 @@ def getStats(root):
                 game_stats[stattag] = monsters
     return game_stats
 
-def playerInfo(saveFileLocation):
+def playerInfo(saveFileLocation,read_data=False):
     playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel', 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina', 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin', 'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor']
     professions = ['Rancher', 'Tiller', 'Coopmaster', 'Shepherd', 'Artisan', 'Agriculturist', 'Fisher', 'Trapper', 'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist', 'Tracker', 'Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout', 'Brute', 'Defender', 'Acrobat', 'Desperado']
 
-    root = parse(saveFileLocation).getroot()
+    if read_data == False:
+        root = parse(saveFileLocation).getroot()
+    else:
+        root = ElementTree.fromstring(saveFileLocation)
 
     player = root.find("player")
     info = {}

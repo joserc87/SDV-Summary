@@ -1,4 +1,5 @@
 from defusedxml.ElementTree import parse
+from defusedxml import ElementTree
 from PIL import Image 
 
 # This is a test method for returning the position location and the name of objects
@@ -6,12 +7,15 @@ from PIL import Image
 # 
 # returns a dict with an array of tuples of the form: (name, x, y)
 
-def getFarmInfo(saveFileLocation):
+def getFarmInfo(saveFileLocation,read_data=False):
 	ns= "{http://www.w3.org/2001/XMLSchema-instance}"
 
 	farm = {}
 
-	root = parse(saveFileLocation).getroot()
+	if read_data == False:
+		root = parse(saveFileLocation).getroot()
+	else:
+		root = ElementTree.fromstring(saveFileLocation)
 
 	locations = root.find('locations').findall("GameLocation")
 	# things = []

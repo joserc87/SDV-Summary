@@ -17,10 +17,11 @@ import operator
 import random
 import sqlite3
 import psycopg2
+import io
 from xml.etree.ElementTree import ParseError
 
 app = Flask(__name__)
-app.config.from_object('config')
+app.config.from_pyfile('config.py')
 app.secret_key = app.config['SECRET_KEY']
 if app.config['USE_SQLITE'] == True:
 	app.database = app.config['DB_SQLITE']
@@ -33,10 +34,12 @@ else:
 	def connect_db():
 		return psycopg2.connect(app.database)
 
-def md5(filename):
+def md5(md5file):
 	h = hashlib.md5()
-	with open(filename, 'rb') as f:
-		for chunk in iter(lambda: f.read(4096), b""):
+	if type(md5file) == io.BytesIO:
+		h.update(md5file.getvalue())
+	else:
+		for chunk in iter(lambda: md5file.read(4096), b""):
 			h.update(chunk)
 	return h.hexdigest()
 
@@ -51,11 +54,11 @@ def home():
 	if request.method == 'POST':
 		inputfile = request.files['file']
 		if inputfile:
-			filename = secure_filename(inputfile.filename)
-			inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-			md5_info = md5(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+			memfile = io.BytesIO()
+			inputfile.save(memfile)
+			md5_info = md5(memfile)
 			try:
-				player_info = playerInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+				player_info = playerInfo(memfile.getvalue(),True)
 			except defusedxml.common.EntitiesForbidden:
 				error = "I don't think that's very funny"
 				return render_template("index.html", error=error, recents=get_recents(), processtime=round(time.time()-start_time,5))
@@ -68,7 +71,7 @@ def home():
 				g.db.close()
 				return render_template("index.html", error=error, recents=get_recents(), processtime=round(time.time()-start_time,5))
 			except AttributeError as e:
-				error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number''+app.sqlesc+'"
+				error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
 				return render_template("index.html", error=error, recents=get_recents(), processtime=round(time.time()-start_time,5))
 			except ParseError as e:
 				error = "Not well-formed xml"
@@ -80,9 +83,16 @@ def home():
 				session[dupe] = md5_info
 				return redirect(url_for('display_data',url=dupe))
 			else:
-				farm_info = getFarmInfo(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+				farm_info = getFarmInfo(memfile.getvalue(),True)
 				outcome, error = insert_info(player_info,farm_info,md5_info)
+				if outcome != False:
+					filename = os.path.join(app.config['UPLOAD_FOLDER'],outcome)
+					with open(filename,'wb') as f:
+						f.write(memfile.getvalue())
+					cur.execute('UPDATE playerinfo SET savefileLocation='+app.sqlesc+' WHERE url='+app.sqlesc+'',(filename,outcome))
+					g.db.commit()
 				process_queue()
+			memfile.close()
 			g.db.close()
 			if outcome != False:
 				session[outcome] = md5_info
@@ -217,13 +227,15 @@ def operate_on_url(url,instruction):
 	if url in session:
 		g.db = connect_db()
 		cur = g.db.cursor()
-		cur.execute('SELECT id,md5,del_token,url FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
+		cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
 		data = cur.fetchall()
 		if instruction == 'del':
 			for row in data:
 				if session[url] == row[1] and session[url+'del_token'] == row[2]:
 					cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
 					g.db.commit()
+					for filename in row[4:7]:
+						os.remove(filename)
 					session.pop(url,None)
 					session.pop(url+'del_token',None)
 					return redirect(url_for('home'))
@@ -234,6 +246,8 @@ def operate_on_url(url,instruction):
 					return render_template("error.html", error="Session validation data was wrong for at least one resource", processtime=round(time.time()-start_time,5))
 			for row in data:
 				cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
+				for filename in row[4:7]:
+					os.remove(filename)
 				session.pop(row[3],None)
 				session.pop(row[3]+'del_token',None)
 			g.db.commit()
