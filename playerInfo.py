@@ -19,6 +19,16 @@ def getStats(root):
                 game_stats[stattag] = monsters
     return game_stats
 
+def getNPCs(root, loc, types):
+    npc_list = []
+    ns= "{http://www.w3.org/2001/XMLSchema-instance}"
+    for location in root.find('locations').iter('GameLocation'):
+        if location.get(ns+'type') in loc:
+            NPCs = location.find('characters').iter('NPC')
+            npc_list += [npc for npc in NPCs if npc.get(ns+'type') in types]
+    return npc_list
+
+
 def playerInfo(saveFileLocation,read_data=False):
     playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel', 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina', 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin', 'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor']
     professions = ['Rancher', 'Tiller', 'Coopmaster', 'Shepherd', 'Artisan', 'Agriculturist', 'Fisher', 'Trapper', 'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist', 'Tracker', 'Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout', 'Brute', 'Defender', 'Acrobat', 'Desperado']
@@ -68,11 +78,8 @@ def playerInfo(saveFileLocation,read_data=False):
 
     # Collecting pet name
     petTypes = ['Cat', 'Dog']
-    for location in root.find('locations').iter('GameLocation'):
-        if location.get(ns+'type') == 'Farm' or location.get(ns+'type') == 'FarmHouse':
-            for npc in location.find('characters').iter('NPC'):
-                if npc.get(ns+'type') in petTypes:
-                    info['petName'] = npc.find('name').text
+    petLocations = ['Farm', 'Farmhouse']
+    info['petName'] = getNPCs(root, petLocations, petTypes)[0].find('name').text
 
     return info
 
