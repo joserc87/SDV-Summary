@@ -63,6 +63,14 @@
 								<dt>Total Earnings</dt><dd>{{ data.totalMoneyEarned }}g</dd>
 								<dt>Gender</dt><dd>{% if data.isMale == 'true' %} Male {% else %} Female {% endif %}</dd>
 								<dt>Companion</dt><dd>{% if data.catPerson == 'true' %} Cat {% else %} Dog {% endif %}</dd>
+								<dt>Companion Name</dt>
+								<dd>
+									{%if data.petName != None %}
+										{{data.petName}}
+									{%else%}
+										Unnamed
+									{%endif%}
+								</dd>
 								<dt>Favorite Thing</dt><dd>{{ data.favoriteThing }}</dd>
 								<dt>Health</dt><dd>{{ data.maxHealth }}</dd>
 								<dt>Stamina</dt><dd>{{ data.maxStamina }}</dd>
