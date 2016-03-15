@@ -187,6 +187,15 @@ for key in sorted(database_structure_dict.keys()):
 	database_fields+=key+','
 database_fields = database_fields[:-1]
 
+def connect_db():
+	if config.USE_SQLITE == True:
+		import sqlite3
+		connection = sqlite3.connect(config.DB_SQLITE)
+	else:
+		import psycopg2
+		connection = psycopg2.connect('dbname='+config.DB_NAME+' user='+config.DB_USER+' password='+config.DB_PASSWORD)
+	return connection
+
 def generate_db():
 	database_structure = ''
 	for key in sorted(database_structure_dict.keys()):
@@ -196,12 +205,8 @@ def generate_db():
 	errors_structure = 'id INTEGER PRIMARY KEY AUTOINCREMENT, ip TEXT, time BIGINT, notes TEXT'
 	todo_structure = 'id INTEGER PRIMARY KEY AUTOINCREMENT, task TEXT, playerid TEXT'
 
-	if config.USE_SQLITE == True:
-		import sqlite3
-		connection = sqlite3.connect(config.DB_SQLITE)
-	else:
-		import psycopg2
-		connection = psycopg2.connect('dbname='+config.DB_NAME+' user='+config.DB_USER+' password='+config.DB_PASSWORD)
+	connection = connect_db()
+	if config.USE_SQLITE == False:
 		errors_structure = errors_structure.replace(' INTEGER PRIMARY KEY AUTOINCREMENT',' SERIAL PRIMARY KEY')
 		todo_structure = todo_structure.replace(' INTEGER PRIMARY KEY AUTOINCREMENT',' SERIAL PRIMARY KEY')
 
@@ -213,13 +218,7 @@ def generate_db():
 	connection.commit()
 
 def delete_db():
-	if config.USE_SQLITE == True:
-		import sqlite3
-		connection = sqlite3.connect(config.DB_SQLITE)
-	else:
-		import psycopg2
-		connection = psycopg2.connect('dbname='+config.DB_NAME+' user='+config.DB_USER+' password='+config.DB_PASSWORD)
-
+	connection = connect_db()
 	c = connection.cursor()
 	c.execute('DROP TABLE playerinfo')
 	c.execute('DROP TABLE errors')

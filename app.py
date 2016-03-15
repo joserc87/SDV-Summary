@@ -3,7 +3,7 @@
 
 from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify
 import time
-from werkzeug import secure_filename
+from werkzeug import secure_filename, check_password_hash
 import os
 from playerInfo import playerInfo
 from farmInfo import getFarmInfo
@@ -171,10 +171,10 @@ def insert_info(player_info,farm_info,md5_info):
 		cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('process_image',rowid))
 		g.db.commit()
 		return url, None
-	except sqlite3.OperationalError as e:
-		g.db.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'], time.time(),str(e)+' '+str([columns,values])))
+	except (sqlite3.OperationalError, psycopg2.ProgrammingError) as e:
+		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'], time.time(),str(e)+' '+str([columns,values])))
 		g.db.commit()
-		return False, "Save file incompatible with current database; saving for admins to review (please check back later)"
+		return False, "Save file incompatible with current database: error is "+str(e)
 
 @app.route('/<url>')
 def display_data(url):
@@ -186,7 +186,7 @@ def display_data(url):
 	cur.execute('SELECT '+database_fields+' FROM playerinfo WHERE url='+app.sqlesc+'',(url,))
 	data = cur.fetchall()
 	if len(data) != 1:
-		error = 'There is nothing here... is this URL correct'+app.sqlesc+''
+		error = 'There is nothing here... is this URL correct?'
 		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),str(len(data))+' cur.fetchall() for url:'+str(url)))
 		g.db.commit()
 		return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
@@ -256,8 +256,39 @@ def operate_on_url(url,instruction):
 		return render_template("error.html", error="Unknown instruction or insufficient credentials", processtime=round(time.time()-start_time,5))
 
 
-	#db.execute('DELETE FROM todo WHERE id=('+app.sqlesc+')',(task[0],))
+@app.route('/admin',methods=['GET','POST'])
+def admin_panel():
+	start_time = time.time()
+	error = None
+	if request.method == 'POST':
+		try:
+			g.db = connect_db()
+			cur = g.db.cursor()
+			cur.execute('SELECT password FROM admin WHERE username='+app.sqlesc,(request.form['username'],))
+			r = cur.fetchone()
+			if r != None:
+				if check_password_hash(r[0],request.form['password']) == True:
+					session['admin']=request.form['username']
+					return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
+				else:
+					error = 'Incorrect username or password'
+					return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))	
+			else:
+				error = 'Incorrect username or password'
+				return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
+		except:
+			return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
+	elif 'admin' in session:
+		error = 'You are logged in'
+		return render_template('admin.html',logged_in=True,error=error, processtime=round(time.time()-start_time,5))
+	else:
+		return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
 
+@app.route('/lo')
+def logout():
+	if 'admin' in session:
+		session.pop('admin',None)
+	return redirect(url_for('admin_panel'))
 
 if __name__ == "__main__":
 	app.run(debug=True)
