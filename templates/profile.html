@@ -62,14 +62,9 @@
 								<dt>Current Funds</dt><dd>{{ data.money }}g</dd>
 								<dt>Total Earnings</dt><dd>{{ data.totalMoneyEarned }}g</dd>
 								<dt>Gender</dt><dd>{% if data.isMale == 'true' %} Male {% else %} Female {% endif %}</dd>
-								<dt>Companion</dt><dd>{% if data.catPerson == 'true' %} Cat {% else %} Dog {% endif %}</dd>
-								<dt>Companion Name</dt>
-								<dd>
-									{%if data.petName != None %}
-										{{data.petName}}
-									{%else%}
-										Unnamed
-									{%endif%}
+								{%if data.petName != None %}
+								<dt>Companion</dt><dd>{% if data.catPerson == 'true' %} Cat {% else %} Dog {% endif %} named {{ data.petName }}</dd>
+								{%endif%}
 								</dd>
 								<dt>Favorite Thing</dt><dd>{{ data.favoriteThing }}</dd>
 								<dt>Health</dt><dd>{{ data.maxHealth }}</dd>
