@@ -1,6 +1,9 @@
 
 body {
 	background: #c0ffe4;
+	background: -webkit-linear-gradient(#01366d,#c0ffe4);
+       background: -o-linear-gradient(#01366d,#c0ffe4);
+       background: -moz-linear-gradient(#01366d,#c0ffe4);
 	background: linear-gradient(#01366d,#c0ffe4);
 	background-attachment: fixed; 
 	padding-top: 20px;
@@ -64,11 +67,21 @@ dt, dd {
 	width: 150px;
 }
 
-.playerPet {
+.playerPetCat, .playerPetDog {
 	image-rendering: pixelated;
 	width: 100px;
+}
+
+.playerPetCat {
 	position: relative;
 	bottom: 125px;
+	right: -40px;
+}
+
+
+.playerPetDog{
+	position: relative;
+	bottom: 145px;
 	right: -40px;
 }
 
