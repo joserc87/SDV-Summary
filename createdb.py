@@ -168,7 +168,7 @@ for key in sorted(database_structure_dict.keys()):
 	database_fields+=key+','
 database_fields = database_fields[:-1]
 
-if __name__ == "__main__":
+def generate_db():
 	database_structure = ''
 	for key in sorted(database_structure_dict.keys()):
 		database_structure += key + ' ' +database_structure_dict[key] + ',\n'
@@ -192,4 +192,22 @@ if __name__ == "__main__":
 	c.execute('CREATE TABLE errors('+errors_structure+')')
 	c.execute('CREATE TABLE todo('+todo_structure+')')
 	connection.commit()
+
+def delete_db():
+	if config.USE_SQLITE == True:
+		import sqlite3
+		connection = sqlite3.connect(config.DB_SQLITE)
+	else:
+		import psycopg2
+		connection = psycopg2.connect('dbname='+config.DB_NAME+' user='+config.DB_USER+' password='+config.DB_PASSWORD)
+
+	c = connection.cursor()
+	c.execute('DROP TABLE playerinfo')
+	c.execute('DROP TABLE errors')
+	c.execute('DROP TABLE todo')
+	connection.commit()
+	connection.close()
+
+if __name__ == "__main__":
+	generate_db()
 
