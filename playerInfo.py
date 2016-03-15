@@ -78,7 +78,6 @@ def playerInfo(saveFileLocation,read_data=False):
 
 def main():
     saveFile = "./save/Sketchy_116441313"
-    saveFile = "./save/Jane_blahblah"
     print(playerInfo(saveFile))
 
 if __name__ == '__main__':
