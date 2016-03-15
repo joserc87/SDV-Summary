@@ -70,7 +70,10 @@ def getFarmInfo(saveFileLocation,read_data=False):
 def colourBox(x, y, colour, pixels, scale = 8):
 	for i in range(scale):
 		for j in range(scale):
-			pixels[x*scale+ i, y*scale + j] = colour
+			try:
+				pixels[x*scale+ i, y*scale + j] = colour
+			except IndexError:
+				print 'IndexError making colorBox:',x,y,colour,pixels,scale
 	return pixels
 
 # Renders a PNG of the players farm where one 8x8 pixel square is equivalent to one in game tile.

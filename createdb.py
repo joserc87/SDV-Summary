@@ -44,6 +44,17 @@ database_structure_dict = {'md5':'TEXT',
 'friendshipsLinus':'BIGINT',
 'friendshipsGeorge':'BIGINT',
 'friendshipsEmily':'BIGINT',
+'friendshipsKent':'BIGINT',
+'friendshipsKrobus':'BIGINT',
+'friendshipsSandy':'BIGINT',
+'friendshipsBouncer':'BIGINT',
+'friendshipsGil':'BIGINT',
+'friendshipsGovernor':'BIGINT',
+'friendshipsGrandpa':'BIGINT',
+'friendshipsGunther':'BIGINT',
+'friendshipsMarlon':'BIGINT',
+'friendshipsMorris':'BIGINT',
+'friendshipsMr_Qi':'BIGINT',
 'farmingLevel':'BIGINT',
 'statsRocksCrushed':'BIGINT',
 'statsDaysPlayed':'BIGINT',
@@ -68,6 +79,14 @@ database_structure_dict = {'md5':'TEXT',
 'statsSpecificMonstersKilledMetal_Head':'BIGINT',
 'statsSpecificMonstersKilledShadow_Brute':'BIGINT',
 'statsSpecificMonstersKilledShadow_Shaman':'BIGINT',
+'statsSpecificMonstersKilledMummy':'BIGINT',
+'statsSpecificMonstersKilledSerpent':'BIGINT',
+'statsSpecificMonstersKilledArmored_Bug':'BIGINT',
+'statsSpecificMonstersKilledVoid_Spirit':'BIGINT',
+'statsSpecificMonstersKilledSquid_Kid':'BIGINT',
+'statsSpecificMonstersKilledPurple_Slime':'BIGINT',
+'statsSpecificMonstersKilledRed_Slime':'BIGINT',
+'statsSpecificMonstersKilledTransparent_Slime':'BIGINT',
 'statsSlimesKilled':'BIGINT',
 'statsPreservesMade':'BIGINT',
 'statsGeodesCracked':'BIGINT',
@@ -209,5 +228,9 @@ def delete_db():
 	connection.close()
 
 if __name__ == "__main__":
-	generate_db()
+	a = raw_input('Drop and regenerate database? (y/n): ')
+	if a == 'y':
+		delete_db()
+		generate_db()
+		print 'done'
 
