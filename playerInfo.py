@@ -81,8 +81,10 @@ def playerInfo(saveFileLocation,read_data=False):
     # Collecting pet name
     petTypes = ['Cat', 'Dog']
     petLocations = ['Farm', 'FarmHouse']
-    info['petName'] = getNPCs(root, petLocations, petTypes)[0].find('name').text
-
+    try:
+        info['petName'] = getNPCs(root, petLocations, petTypes)[0].find('name').text
+    except IndexError:
+        pass
     return info
 
 def main():
