@@ -1,19 +1,13 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>SDV Summary</title>
-		<link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet" media="screen">
-		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-	</head>
-	<body>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6">
+{% extends "base.html" %}
+{% block title %}Admin panel{% endblock %}
+{% block bodycontent %}
+			<div class="row panel">
+				<div class="interiorpanel">
+				<div class="col-md-8">
 					<h1>Welcome, {{ session.admin }}</h1>
+					<p class="text-left"><a href="/lo">Log out</a></p>
 				</div>
-				<div class="col-md-6 text-right">
-					<a href="/lo">Log out</a>
+				<div class="col-md-4 text-right">
 					{% if error %}
 						<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
 					{% endif %}
@@ -27,46 +21,43 @@
 						</div>
 					{% endif %}
 				{% endwith %}
+				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-6 col-sm-12">
-					<h3>Savefile access</h3>
-					<ol>
-					{% for entry in entries %}
-						<li><a href="dl/{{ entry.0 }}">download</a> <a href="{{entry.0}}">profile</a> {{entry.1}}, {{entry.2}} Farm, {{entry.3}}</li>
-					{% endfor %}
-					</ol>
+				<div class="col-md-6 col-sm-12 panel">
+					<div class="interiorpanel">
+						<h3>Savefile access</h3>
+						<ol>
+						{% for entry in entries %}
+							<li><a href="dl/{{ entry.0 }}">download</a>|<a href="{{entry.0}}">profile</a>|{{entry.1}}, {{entry.2}} Farm, {{entry.3}}</li>
+						{% endfor %}
+						</ol>
+					</div>
 				</div>
-				<div class="col-md-6 col-sm-12">
-					<h3>Add blog post</h3>
-					<form enctype="multipart/form-data" action="" method="post" id="blogform">
-						<div class="row">
-							<input class="form-control input-lg" type="text" name="blogtitle" value="{%if returned_blog_data%}{{returned_blog_data.blogtitle}}{%endif%}" placeholder="title">
-						</div>
-						<div class="row">
-							<textarea class="form-control input-lg" name="content" placeholder="content">{%if returned_blog_data%}{{returned_blog_data.content}}{%endif%}</textarea>
-						</div>
-						<div class="row">
-							<div class="col-md-8 col-sm-8">
-							  	<div class="checkbox">
-									<label>
-										<input type="checkbox" name="live" {%if returned_blog_data.checked%}checked{%endif%}> Post visible to users?
-									</label>
+				<div class="col-md-6 col-sm-12 panel">
+					<div class="interiorpanel">
+						<h3>Add blog post</h3>
+						<form enctype="multipart/form-data" action="" method="post" id="blogform">
+							<div class="row">
+								<input class="form-control input-lg" type="text" name="blogtitle" value="{%if returned_blog_data%}{{returned_blog_data.blogtitle}}{%endif%}" placeholder="title">
+							</div>
+							<div class="row">
+								<textarea class="form-control input-lg" name="content" placeholder="content">{%if returned_blog_data%}{{returned_blog_data.content}}{%endif%}</textarea>
+							</div>
+							<div class="row">
+								<div class="col-md-8 col-sm-8">
+								  	<div class="checkbox">
+										<label>
+											<input type="checkbox" name="live" {%if returned_blog_data.checked%}checked{%endif%}> Post visible to users?
+										</label>
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 text-right">
+									<input class="btn btn-primary btn-lg" type="submit" name="blog" value="Post">
 								</div>
 							</div>
-							<div class="col-md-4 col-sm-4 text-right">
-								<input class="btn btn-primary btn-lg" type="submit" name="blog" value="Post">
-							</div>
-						</div>
-					</form>
+						</form>
+					</div>
 				</div>
 			</div>
-			<br>
-			<div class="container lead">
-			</div>
-			<div class="text-center">
-				<p class="text-muted">Took {{ processtime }} seconds to process request | source at <a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a><br>All Stardew Valley assets copyright <a href="http://twitter.com/concernedape">Concerned Ape</a></p>
-			</div>
-		</div>
-	</body>
-</html>
+{% endblock %}

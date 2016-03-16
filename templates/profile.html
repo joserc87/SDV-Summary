@@ -1,22 +1,6 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>{{data.farmName}} Farm Summary - SDV Summary</title>
-		<link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
-		<link rel="stylesheet" href="{{ url_for('static', filename='./css/style.css') }}">
-		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
-		<link href='https://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
-		<link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
-		<script type="text/javascript">
-		    window.cookieconsent_options = {"message":"This website uses cookies when you upload a savegame to determine ownership","dismiss":"Okay!","learnMore":"More info","link":"","theme":"dark-bottom"};
-		</script>
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
-		<!-- End Cookie Consent plugin -->
-	</head>
-	<body>
-		<div class="container">
+{% extends "base.html" %}
+{% block title %}{{data.farmName}} Farm Summary - SDV Summary{% endblock %}
+{% block bodycontent %}
 			<div class="col-md-12 col-sm-12 panel">
 				<div class="interiorpanel">
 					<div class="col-md-2 col-sm-12 text-center">
@@ -134,12 +118,4 @@
 					</div>
 				</div>
 			</div>
-			<br>
-			<div class="container lead">
-			</div>
-			<div class="text-center">
-				<p class="text-muted">Took {{ processtime }} seconds to process request | source at <a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a><br>All Stardew Valley assets copyright <a href="http://twitter.com/concernedape">Concerned Ape</a></p>
-			</div>
-		</div>
-	</body>
-</html>
+			{% endblock %}

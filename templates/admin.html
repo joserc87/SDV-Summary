@@ -1,37 +1,40 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>SDV Summary</title>
-		<link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet" media="screen">
-		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-	</head>
-	<body>
-		<div class="container">
-			<h1>Admin Access</h1>
-			<div class="row">
-				<form enctype="multipart/form-data" action="" method="post">
-					<div class="col-md-5 col-sm-12">
-						<input class="form-control input-lg" type="text" name="username" value="" placeholder="username">
+{% extends "base.html" %}
+{% block title %}Admin login{% endblock %}
+{% block bodycontent %}
+			<div class="row panel">
+				<div class="interiorpanel">
+					<div class="col-md-8">
+						<h1>Admin Access</h1>
 					</div>
-					<div class="col-md-5 col-sm-12">
-						<input class="form-control input-lg" type="password" name="password" value="" placeholder="password">
-						
-					</div>
-					<div class="col-md-2 col-sm-2">
-						<input class="btn btn-primary btn-lg" type="submit" value="Login">
-					</div>
-				</form>
+				<div class="col-md-4 text-right">
+					{% if error %}
+						<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+					{% endif %}
+				</div>
+				{% with messages = get_flashed_messages() %}
+					{% if messages %}
+						<div class="row">
+						{% for message in messages %}
+							<p>{{ message }}</p>
+						{% endfor %}
+						</div>
+					{% endif %}
+				{% endwith %}
+				</div>
 			</div>
-			{% if error %}
-				<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
-			{% endif %}
-			<br>
-			<div class="container lead">
+			<div class="row panel">
+				<div class="interiorpanel">
+					<form action="" method="post">
+						<div class="col-md-5 col-sm-12">
+							<input class="form-control input-lg" type="text" name="username" value="" placeholder="username">
+						</div>
+						<div class="col-md-5 col-sm-12">
+							<input class="form-control input-lg" type="password" name="password" value="" placeholder="password">
+						</div>
+						<div class="col-md-2 col-sm-2">
+							<input class="btn btn-primary btn-lg" type="submit" value="Login">
+						</div>
+					</form>
+				</div>
 			</div>
-			<div class="text-center">
-				<p class="text-muted">Took {{ processtime }} seconds to process request | source at <a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a><br>All Stardew Valley assets copyright <a href="http://twitter.com/concernedape">Concerned Ape</a></p>
-			</div>
-		</div>
-	</body>
-</html>
+{% endblock %}

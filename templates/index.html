@@ -1,88 +1,67 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>SDV Summary</title>
-		<link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
-		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-		<link href='https://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
-		<link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-		<script src="{{ url_for('static', filename='js/ajaxRequest.js') }}"></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
-		<script type="text/javascript">
-		    window.cookieconsent_options = {"message":"This website uses cookies when you upload a savegame to determine ownership","dismiss":"Okay!","learnMore":"More info","link":"","theme":"dark-bottom"};
-		</script>
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
-		<!-- End Cookie Consent plugin -->
-	</head>
-	<body>
-		<div class="container">
-			<div class="row center-block panel">
-				<div class="interiorpanel">
-					<div class="col-md-2 col-sm-12 text-center">
-						<img src="{{url_for('static', filename='favicon.png')}}" class="logo">
-					</div>
-					<div class="col-md-10 col-sm-12">
-						<h1 class="text-center">Stardew Valley Summary</h1>
-					</div>
-				</div>
-			</div>
-			<div class="row center-block panel">
-				<div class="interiorpanel">
-				<!--<div class="row">
-					<p style="width: 80%; margin: 0 auto;">This site generates a profile page from your Stardew Valley savegame. It automatically links uploads from different stages.</p>
-				</div>-->
-					<h3>Upload your farm</h3>
-						<div class="row">
-						<form enctype="multipart/form-data" action="" method="post">
-							<div class="col-sm-10 col-xs-9">
-								<input class="form-control input-lg" type="file" name="file" value="">
-							</div>
-							<div class="col-sm-1 col-xs-1">
-								<input class="btn btn-primary btn-lg" type="submit" value="Process">
-							</div>
-						</form>
-						</div>
-						<div class="row" style="padding-top: 1em;">
-						<p class="text-center" style="width: 80%; margin: 0 auto;"><a href="http://stardewvalley.net">Stardew Valley</a> save files can be found under <code>%APPDATA%\StardewValley\Saves</code> and are named after your character, plus an ID number</p>
-						{% if error %}
-						<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
-						{% endif %}
-					</div>
-				</div>
-			</div>
-			{% if recents %}
-			<div class="row center-block panel lead">	
-				<div class="interiorpanel">
-					<div class="row">	
-						<div class="col-md-12">
-							<h3>Recently uploaded farms</h3>
-						</div>
-					</div>
-					<div  id="recentFarms" class="row">
-						{% for recent in recents %}
-						<div class="col-md-4 col-sm-6 text-center previewbox">
-							<a href="{{ recent[0] }}">
-								<div class="previewimage">
-									<img src="{{ recent[5] }}" class="img-responsive farmimgpreview">
-									<img src="{{ recent[4] }}" class="headimg" >
-								</div>
-								<div class="previewtext">
-									{{ recent[1] }}, {{ recent[2] }} Farm <br/>  {{ recent[3] }}
-								</div>
-							</a>
-						</div>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-			{% endif %}
+{% extends "base.html" %}
+{% block title %}SDV Summary{% endblock %}
 
-			<div class="text-center">
-				<p class="text-muted">Took {{ processtime }} seconds to process request | source at <a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a><br>All Stardew Valley assets copyright <a href="http://twitter.com/concernedape">Concerned Ape</a></p>
+{%block bodycontent %}
+<div class="row center-block panel">
+	<div class="interiorpanel">
+		<div class="col-md-2 col-sm-12 text-center">
+			<img src="{{url_for('static', filename='favicon.png')}}" class="logo">
+		</div>
+		<div class="col-md-10 col-sm-12">
+			<h1 class="text-center">Stardew Valley Summary</h1>
+		</div>
+	</div>
+</div>
+<div class="row center-block panel">
+	<div class="interiorpanel">
+		
+	<!--<div class="row">
+		<p style="width: 80%; margin: 0 auto;">This site generates a profile page from your Stardew Valley savegame. It automatically links uploads from different stages.</p>
+	</div>-->
+		<h3>Upload your farm</h3>
+			<div class="row">
+			<form enctype="multipart/form-data" action="" method="post">
+				<div class="col-sm-10 col-xs-9">
+					<input class="form-control input-lg" type="file" name="file" value="">
+				</div>
+				<div class="col-sm-1 col-xs-1">
+					<input class="btn btn-primary btn-lg" type="submit" value="Process">
+				</div>
+			</form>
+			</div>
+			<div class="row" style="padding-top: 1em;">
+			<p class="text-center" style="width: 80%; margin: 0 auto;"><a href="http://stardewvalley.net">Stardew Valley</a> save files can be found under <code>%APPDATA%\StardewValley\Saves</code> and are named after your character, plus an ID number</p>
+			{% if error %}
+			<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% if recents %}
+<div class="row center-block panel lead">	
+	<div class="interiorpanel">
+		<div class="row">	
+			<div class="col-md-12">
+				<h3>Recently uploaded farms</h3>
 			</div>
 		</div>
-	</body>
-</html>
+		<div  id="recentFarms" class="row">
+			{% for recent in recents %}
+			<div class="col-md-4 col-sm-6 text-center previewbox">
+				<a href="{{ recent[0] }}">
+					<div class="previewimage">
+						<img src="{{ recent[5] }}" class="img-responsive farmimgpreview">
+						<img src="{{ recent[4] }}" class="headimg" >
+					</div>
+					<div class="previewtext">
+						{{ recent[1] }}, {{ recent[2] }} Farm <br/>  {{ recent[3] }}
+					</div>
+				</a>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endif %}
+
+{% endblock %}

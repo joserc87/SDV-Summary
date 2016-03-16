@@ -1,29 +1,11 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>SDV Summary</title>
-		<link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet" media="screen">
-		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
-		<script type="text/javascript">
-		    window.cookieconsent_options = {"message":"This website uses cookies when you upload a savegame to determine ownership","dismiss":"Okay!","learnMore":"More info","link":"","theme":"dark-bottom"};
-		</script>
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
-		<!-- End Cookie Consent plugin -->
-	</head>
-	<body>
-		<div class="container">
-			<h1 class="text-center">Error!</h1>
-			{% if error %}
-				<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
-			{% endif %}
-			<br>
-			<div class="container lead">
+{% extends "base.html" %}
+{% block bodycontent %}
+			<div class="row panel">
+				<div class="interiorpanel">
+					<h1 class="text-center">Error!</h1>
+				{% if error %}
+					<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+				{% endif %}
+				</div>
 			</div>
-			<div class="text-center">
-				<p class="text-muted">Took {{ processtime }} seconds to process request | source at <a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a><br>All Stardew Valley assets copyright <a href="http://twitter.com/concernedape">Concerned Ape</a></p>
-			</div>
-		</div>
-	</body>
-</html>
+{% endblock %}
