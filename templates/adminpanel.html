@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 {% block title %}Admin panel{% endblock %}
+{% block header %}
+	{{ super() }}
+	<script>
+		function toggleDisplayed(id) {
+			if ((document.getElementById(id).style.display == 'none') || (document.getElementById(id).style.display == '')) {
+			document.getElementById(id).style.display='block';
+			}
+			else {
+				document.getElementById(id).style.display='none';
+			}
+		}
+	</script>
+{% endblock %}
 {% block bodycontent %}
 			<div class="row panel">
 				<div class="interiorpanel">
@@ -26,12 +39,22 @@
 			<div class="row">
 				<div class="col-md-6 col-sm-12 panel">
 					<div class="interiorpanel">
-						<h3>Savefile access</h3>
-						<ol>
-						{% for entry in entries %}
-							<li><a href="dl/{{ entry.0 }}">download</a>|<a href="{{entry.0}}">profile</a>|{{entry.1}}, {{entry.2}} Farm, {{entry.3}}</li>
-						{% endfor %}
-						</ol>
+						<div class="row">
+							<div class="col-md-11">
+								<h3>Savefile access</h3>
+							</div>
+							<div class="col-md-1 text-right">
+								<span class="caret" onclick="toggleDisplayed('entries')"></span>
+							</div>
+						</div>
+
+						<div id="entries">
+							<ol>
+							{% for entry in entries %}
+								<li><a href="dl/{{ entry.0 }}">download</a>|<a href="{{entry.0}}">profile</a>|{{entry.1}}, {{entry.2}} Farm, {{entry.3}}</li>
+							{% endfor %}
+							</ol>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-6 col-sm-12 panel">
