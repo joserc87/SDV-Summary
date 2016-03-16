@@ -70,7 +70,8 @@ def colourBox(x, y, colour, pixels, scale = 8):
 			try:
 				pixels[x*scale+ i, y*scale + j] = colour
 			except IndexError:
-				print('IndexError making colorBox:',x,y,colour,pixels,scale)
+				# print('IndexError making colorBox:',x,y,colour,pixels,scale)
+				pass
 	return pixels
 
 # Renders a PNG of the players farm where one 8x8 pixel square is equivalent to one in game tile.

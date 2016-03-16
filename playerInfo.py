@@ -32,6 +32,7 @@ def getNPCs(root, loc, types):
 def playerInfo(saveFileLocation,read_data=False):
     playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel', 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina', 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin', 'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor']
     professions = ['Rancher', 'Tiller', 'Coopmaster', 'Shepherd', 'Artisan', 'Agriculturist', 'Fisher', 'Trapper', 'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist', 'Tracker', 'Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout', 'Brute', 'Defender', 'Acrobat', 'Desperado']
+    npcs = ['Willy','Clint','Jodi','Harvey','Leah','Wizard','Jas','Abigail','Maru','Elliott','Caroline','Pam','Dwarf','Shane','Demetrius','Alex','Gus','Vincent','Sebastian','Robin','Sam','Lewis','Marnie','Penny','Haley','Pierre','Evelyn','Linus','George','Emily','Kent','Krobus','Sandy']
 
     ns= "{http://www.w3.org/2001/XMLSchema-instance}"
     if read_data == False:
@@ -55,8 +56,9 @@ def playerInfo(saveFileLocation,read_data=False):
                 fship = player.find(tag)
                 for item in fship:
                     name = item.find("key").find('string').text
-                    rating = item.find('value').find('ArrayOfInt').find('int').text
-                    s[name] = rating
+                    if name in npcs:
+                        rating = item.find('value').find('ArrayOfInt').find('int').text
+                        s[name] = rating
             if tag in ['hairstyleColor', 'pantsColor', 'newEyeColor']:
                 red = player.find(tag).find('R').text
                 green = player.find(tag).find('G').text
