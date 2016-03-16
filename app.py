@@ -269,7 +269,8 @@ def admin_panel():
 			if r != None:
 				if check_password_hash(r[0],request.form['password']) == True:
 					session['admin']=request.form['username']
-					return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
+
+					return redirect(url_for('admin_panel'))
 				else:
 					error = 'Incorrect username or password'
 					return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))	
