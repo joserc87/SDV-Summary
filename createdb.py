@@ -179,7 +179,11 @@ database_structure_dict = {'md5':'TEXT',
 
 if config.USE_SQLITE==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'
+	sqlesc = '?'
+	idcode='INTEGER PRIMARY KEY AUTOINCREMENT'
 else:
+	sqlesc = '%s'
+	idcode='SERIAL PRIMARY KEY'
 	database_structure_dict['id']='SERIAL PRIMARY KEY'
 
 database_fields = ''
@@ -202,34 +206,57 @@ def generate_db():
 		database_structure += key + ' ' +database_structure_dict[key] + ',\n'
 	database_structure = database_structure[:-2]
 
-	errors_structure = 'id INTEGER PRIMARY KEY AUTOINCREMENT, ip TEXT, time BIGINT, notes TEXT'
-	todo_structure = 'id INTEGER PRIMARY KEY AUTOINCREMENT, task TEXT, playerid TEXT'
+	errors_structure = 'id '+idcode+', ip TEXT, time BIGINT, notes TEXT'
+	todo_structure = 'id '+idcode+', task TEXT, playerid TEXT'
 
 	connection = connect_db()
-	if config.USE_SQLITE == False:
-		errors_structure = errors_structure.replace(' INTEGER PRIMARY KEY AUTOINCREMENT',' SERIAL PRIMARY KEY')
-		todo_structure = todo_structure.replace(' INTEGER PRIMARY KEY AUTOINCREMENT',' SERIAL PRIMARY KEY')
-
-
 	c = connection.cursor()
 	c.execute('CREATE TABLE playerinfo('+database_structure+')')
 	c.execute('CREATE TABLE errors('+errors_structure+')')
 	c.execute('CREATE TABLE todo('+todo_structure+')')
 	connection.commit()
+	print 'done'
 
-def delete_db():
-	connection = connect_db()
+def generate_blog():
+	connection=connect_db()
 	c = connection.cursor()
-	c.execute('DROP TABLE playerinfo')
-	c.execute('DROP TABLE errors')
-	c.execute('DROP TABLE todo')
+	statement = 'CREATE TABLE blog(id '+idcode+', time BIGINT, author TEXT, title TEXT, post TEXT, live BOOLEAN);'
+	c.execute(statement)
 	connection.commit()
 	connection.close()
+	print 'done'
+
+def delete_db():
+	import getpass
+	from werkzeug import check_password_hash
+	connection = connect_db()
+	c = connection.cursor()
+	print 'you must log in as admin to delete the database'
+	username = raw_input('username: ')
+	password = getpass.getpass('password: ')
+	c.execute('SELECT password FROM admin WHERE username='+sqlesc,(username,))
+	passhash = c.fetchone()
+	if check_password_hash(passhash[0],password) == True:
+		a = raw_input('just to double check, you REALLY want to delete everything? (y/n): ')
+		if a=='y':
+			c.execute('DROP TABLE playerinfo')
+			c.execute('DROP TABLE errors')
+			c.execute('DROP TABLE todo')
+			c.execute('DROP TABLE blog')
+			connection.commit()
+			connection.close()
+			print 'all (except admin) deleted'
+	else:
+		print 'incorrect credentials'
 
 if __name__ == "__main__":
-	a = raw_input('Drop and regenerate database? (y/n): ')
+	a = raw_input('Drop databases? (y/n): ')
 	if a == 'y':
 		delete_db()
+	a = raw_input('Generate databases? (y/n): ')
+	if a == 'y':
 		generate_db()
-		print 'done'
+	a = raw_input('Generate blog database? (y/n): ')
+	if a == 'y':
+		generate_blog()
 

@@ -260,32 +260,53 @@ def operate_on_url(url,instruction):
 def admin_panel():
 	start_time = time.time()
 	error = None
-	if request.method == 'POST':
-		try:
-			g.db = connect_db()
-			cur = g.db.cursor()
-			cur.execute('SELECT password FROM admin WHERE username='+app.sqlesc,(request.form['username'],))
-			r = cur.fetchone()
-			if r != None:
-				if check_password_hash(r[0],request.form['password']) == True:
-					session['admin']=request.form['username']
-
-					return redirect(url_for('admin_panel'))
-				else:
-					error = 'Incorrect username or password'
-					return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))	
-			else:
-				error = 'Incorrect username or password'
-				return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
-		except:
-			return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
-	elif 'admin' in session:
+	if 'admin' in session:
+		#trusted
+		returned_blog_data = None
 		g.db = connect_db()
 		cur = g.db.cursor()
+		if request.method == 'POST':
+			if request.form['blog'] == 'Post':
+				live = False
+				if 'live' in request.form:
+					if request.form['live']=='on':
+						live = True
+				if request.form['content'] == '' or request.form['blogtitle'] == '':
+					error = 'Failed to post blog entry, title or body was empty!'
+					returned_blog_data = {'blogtitle':request.form['blogtitle'],
+											'content':request.form['content'],
+											'checked': live}
+				else:
+					cur.execute('INSERT INTO blog (time, author, title, post, live) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(int(time.time()),session['admin'],request.form['blogtitle'],request.form['content'],live))
+					g.db.commit()
+					if live == True:
+						flash('Posted blog entry "'+str(request.form['blogtitle']+'"'))
+					else:
+						flash('Saved unposted blog entry "'+str(request.form['blogtitle']+'"'))	
+
 		cur.execute('SELECT url,name,farmName,date FROM playerinfo')
 		entries = cur.fetchall()
-		return render_template('adminpanel.html',entries=entries,error=error, processtime=round(time.time()-start_time,5))
+		return render_template('adminpanel.html',returned_blog_data=returned_blog_data,entries=entries,error=error, processtime=round(time.time()-start_time,5))
 	else:
+		if request.method == 'POST':
+			try:
+				g.db = connect_db()
+				cur = g.db.cursor()
+				cur.execute('SELECT password FROM admin WHERE username='+app.sqlesc,(request.form['username'],))
+				r = cur.fetchone()
+				if r != None:
+					if check_password_hash(r[0],request.form['password']) == True:
+						session['admin']=request.form['username']
+
+						return redirect(url_for('admin_panel'))
+					else:
+						error = 'Incorrect username or password'
+						return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))	
+				else:
+					error = 'Incorrect username or password'
+					return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
+			except:
+				return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
 		return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
 
 @app.route('/lo')
