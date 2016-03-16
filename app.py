@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify
+from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify, make_response
 import time
 from werkzeug import secure_filename, check_password_hash
 import os
@@ -279,8 +279,11 @@ def admin_panel():
 		except:
 			return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
 	elif 'admin' in session:
-		error = 'You are logged in'
-		return render_template('admin.html',logged_in=True,error=error, processtime=round(time.time()-start_time,5))
+		g.db = connect_db()
+		cur = g.db.cursor()
+		cur.execute('SELECT url,name,farmName,date FROM playerinfo')
+		entries = cur.fetchall()
+		return render_template('adminpanel.html',entries=entries,error=error, processtime=round(time.time()-start_time,5))
 	else:
 		return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
 
@@ -289,6 +292,26 @@ def logout():
 	if 'admin' in session:
 		session.pop('admin',None)
 	return redirect(url_for('admin_panel'))
+
+@app.route('/dl/<url>')
+def retrieve_file(url):
+	error=None
+	start_time = time.time()
+	if 'admin' in session:
+		g.db = connect_db()
+		cur = g.db.cursor()
+		cur.execute('SELECT savefileLocation,name,uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc,(url,))
+		result = cur.fetchone()
+		if result != None:
+			with open(result[0],'rb') as f:
+				response = make_response(f.read())
+			response.headers["Content-Disposition"] = "attachment; filename="+str(result[1])+'_'+str(result[2])
+			return response
+		else:
+			error = "URL does not exist"
+	else:
+		error = "Not admin, no download rights!"
+	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 
 if __name__ == "__main__":
 	app.run(debug=True)

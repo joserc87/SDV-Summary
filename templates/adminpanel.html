@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SDV Summary</title>
+		<link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet" media="screen">
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<div class="container">
+			<h1>Welcome, {{ session.admin }}</h1>
+			<div class="row">
+			<h3>Savefile access</h3>
+			<ol>
+			{% for entry in entries %}
+				<li><a href="dl/{{ entry.0 }}">download</a> <a href="{{entry.0}}">profile</a> {{entry.1}}, {{entry.2}} Farm, {{entry.3}}</li>
+			{% endfor %}
+			</ol>
+			</div>
+			{% if error %}
+				<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+			{% endif %}
+
+			<div class="row">
+				<a href="/lo">Log out</a>
+			</div>
+			<br>
+			<div class="container lead">
+			</div>
+			<div class="text-center">
+				<p class="text-muted">Took {{ processtime }} seconds to process request | source at <a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a><br>All Stardew Valley assets copyright <a href="http://twitter.com/concernedape">Concerned Ape</a></p>
+			</div>
+		</div>
+	</body>
+</html>
