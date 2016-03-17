@@ -19,6 +19,7 @@ import sqlite3
 import psycopg2
 import io
 from xml.etree.ElementTree import ParseError
+import datetime
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -319,10 +320,13 @@ def get_blogposts(n=False):
 	cur = g.db.cursor()
 	blogposts = None
 	if n==False:
-		cur.execute("SELECT id,time,author,title,post,live FROM blog ORDER BY id")
+		cur.execute("SELECT id,time,author,title,post,live FROM blog ORDER BY id DESC")
 	else:
 		cur.execute("SELECT id,time,author,title,post,live FROM blog ORDER BY id DESC LIMIT "+app.sqlesc,(n,))
-	blogposts = cur.fetchall()
+	blogposts = list(cur.fetchall())
+	for b,blogentry in enumerate(blogposts):
+		blogposts[b] = list(blogentry)
+		blogposts[b][1] = datetime.datetime.fromtimestamp(blogentry[1])
 	return blogposts
 
 @app.route('/lo')
