@@ -16,13 +16,17 @@
 			var elementid = 'sh-'.concat(id)
 			var live = document.getElementById(elementid).getElementsByTagName("sub")[0].innerHTML == 'show'
 			$.post('/admin',{blog:'update', id: id, live:live},function(result) {
-				if (live) {
-					document.getElementById(elementid).getElementsByTagName("sub")[0].innerHTML = 'hide';
-					$(document.getElementById('entry-'.concat(id))).fadeTo(400,1.0);
-				}
+				if (result=='Success') {
+					if (live) {
+						document.getElementById(elementid).getElementsByTagName("sub")[0].innerHTML = 'hide';
+						$(document.getElementById('entry-'.concat(id))).fadeTo(400,1.0);
+					}
+					else {
+						document.getElementById(elementid).getElementsByTagName("sub")[0].innerHTML = 'show';
+						$(document.getElementById('entry-'.concat(id))).fadeTo(400,0.5);
+				} }
 				else {
-					document.getElementById(elementid).getElementsByTagName("sub")[0].innerHTML = 'show';
-					$(document.getElementById('entry-'.concat(id))).fadeTo(400,0.5);
+					addError();	
 				} }
 			);
 		}
@@ -31,9 +35,18 @@
 			var response = confirm("Really delete this?")
 			if (response == true) {
 				$.post('/admin',{blog:'delete', id: id},function(result) {
-					$(document.getElementById('entry-'.concat(id))).slideUp();
-					});
+					if (result=='Success') {
+						$(document.getElementById('entry-'.concat(id))).slideUp();
+					}
+					else {
+					addError();	
+					}
+				});
 			};
+		}
+		function addError() {
+			document.getElementById('topbox').innerHTML = '<p class="text-danger text-center"><strong>Error:</strong> You are not logged in!</p>';
+			$('html, body').animate({ scrollTop: 0 }, 'fast');
 		}
 		$(document).ready(function() {
 			$(".clickable").click(function() {
@@ -57,7 +70,7 @@
 					<h1>Welcome, {{ session.admin }}</h1>
 					<p class="text-left"><a href="/lo">Log out</a></p>
 				</div>
-				<div class="col-md-4 text-right">
+				<div class="col-md-4 text-right" id="topbox">
 					{% if error %}
 						<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
 					{% endif %}

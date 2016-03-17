@@ -298,6 +298,8 @@ def admin_panel():
 		return render_template('adminpanel.html',returned_blog_data=returned_blog_data,blogposts=get_blogposts(),entries=entries,error=error, processtime=round(time.time()-start_time,5))
 	else:
 		if request.method == 'POST':
+			if 'blog' in request.form:
+				return 'Failure'
 			try:
 				g.db = connect_db()
 				cur = g.db.cursor()
@@ -334,6 +336,12 @@ def logout():
 	if 'admin' in session:
 		session.pop('admin',None)
 	return redirect(url_for('admin_panel'))
+
+@app.route('/blog')
+def blogmain():
+	error = None
+	start_time = time.time()
+	return render_template('blog.html',recents=get_recents(),blogposts=get_blogposts(),error=error, processtime=round(time.time()-start_time,5))
 
 @app.route('/dl/<url>')
 def retrieve_file(url):

@@ -1,0 +1,19 @@
+{% if blogposts %}
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Blog</h3>
+			{% for blog in blogposts %}
+				<div id="entry-{{blog.0}}" class="col-md-12">
+					<div class="row">
+						<div class="col-md-12">
+							<h4>{{blog.3}} <small>by {{blog.2}} at {{blog.1}}</small></h4>
+						</div>
+					</div>
+					<div class="row col-md-12">
+					<p class="blogpost">{{blog.4|safe}}</p>
+					</div>
+				</div>
+			{% endfor %}
+			</div>
+		</div>
+{% endif %}
