@@ -1,14 +1,14 @@
 from generateAvatar import generateAvatar
-from playerInfo import playerInfo, getPartner, getChildren
+from playerInfo import playerInfo
 from PIL import Image
-import os
+import json
 
-def generateFamilyPortrait(player_img, partner, pet, children):
+def generateFamilyPortrait(player_img, partner, cat, children, scale=4):
 	portrait = Image.new('RGBA', (48,48))
 	if partner:
 		partner_img = Image.open('./assets/partners/{0}.png'.format(partner))
 	
-	if pet == 'true':
+	if cat:
 		pet_img = Image.open('./assets/pets/cat.png')
 	else:
 		pet_img = Image.open('./assets/pets/dog.png')
@@ -19,7 +19,7 @@ def generateFamilyPortrait(player_img, partner, pet, children):
 		if child[0] == 1 and child[2] > 42:
 			gender = '_girl'
 		skin = ""
-		if child[1] == 'true':
+		if child[1]:
 			gender = '_dark'
 
 		baby = False
@@ -52,4 +52,15 @@ def generateFamilyPortrait(player_img, partner, pet, children):
 
 	portrait.paste(pet_img, (9+8,8), pet_img)
 	
+	portrait = portrait.resize((48*scale, 48*scale))
 	return portrait.crop(portrait.getbbox())
+
+def main():
+	filelocation = './saves/Sketchy_116441313'
+	player = playerInfo(filelocation)
+	player_img = generateAvatar(player)
+	portrait_info = json.loads(player['portrait_info'])
+	generateFamilyPortrait(player_img, portrait_info['partner'], portrait_info['cat'], portrait_info['children']).save('test.png')
+
+if __name__ == '__main__':
+	main()
