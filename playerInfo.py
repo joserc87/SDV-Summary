@@ -123,7 +123,7 @@ def playerInfo(saveFileLocation,read_data=False):
     return info
 
 def main():
-    saveFile = "./saves/Dubesor_116186627"
+    saveFile = "./saves/Sketchy_116441313"
     playerInfo(saveFile)
 
 if __name__ == '__main__':
