@@ -1,6 +1,33 @@
 from defusedxml.ElementTree import parse
 from defusedxml import ElementTree
 
+def getPartner(saveFileLocation, read_data=False):
+    if read_data == False:
+        root = parse(saveFileLocation).getroot()
+    else:
+        root = ElementTree.fromstring(saveFileLocation)
+
+    for location in root.find('locations').iter('GameLocation'):
+        for npc in location.iter('NPC'):
+            if int(npc.find('daysMarried').text) > 0:
+                return npc.find('name').text
+
+def getChildren(saveFileLocation, read_data=False):
+    children = []
+
+    if read_data == False:
+        root = parse(saveFileLocation).getroot()
+    else:
+        root = ElementTree.fromstring(saveFileLocation)
+
+    childType = ['Child']
+    childLocation = ['Farm', 'FarmHouse']
+    child_nodes = getNPCs(root, childLocation, childType)
+
+    return [(int(child.find('gender').text),child.find('darkSkinned').text, int(child.find('daysOld').text)) for child in child_nodes]
+
+
+
 def getStats(root):
     game_stats = {}
     stats_node = root.find('stats')
