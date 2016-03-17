@@ -283,31 +283,47 @@ def admin_panel():
 						flash('Posted blog entry "'+str(request.form['blogtitle']+'"'))
 					else:
 						flash('Saved unposted blog entry "'+str(request.form['blogtitle']+'"'))	
-
+			elif request.form['blog'] == 'update':
+				state = request.form['live'] == 'true'
+				cur.execute('UPDATE blog SET live='+app.sqlesc+' WHERE id='+app.sqlesc,(state,request.form['id']))
+				g.db.commit()
+				return 'Success'
+			elif request.form['blog'] == 'delete':
+				cur.execute('DELETE FROM blog WHERE id='+app.sqlesc,(request.form['id'],))
+				g.db.commit()
+				return 'Success'
 		cur.execute('SELECT url,name,farmName,date FROM playerinfo')
 		entries = cur.fetchall()
-		return render_template('adminpanel.html',returned_blog_data=returned_blog_data,entries=entries,error=error, processtime=round(time.time()-start_time,5))
+		return render_template('adminpanel.html',returned_blog_data=returned_blog_data,blogposts=get_blogposts(),entries=entries,error=error, processtime=round(time.time()-start_time,5))
 	else:
 		if request.method == 'POST':
 			try:
 				g.db = connect_db()
 				cur = g.db.cursor()
-				cur.execute('SELECT password FROM admin WHERE username='+app.sqlesc,(request.form['username'],))
+				cur.execute('SELECT password FROM admin WHERE username='+app.sqlesc+' ORDER BY id',(request.form['username'],))
 				r = cur.fetchone()
 				if r != None:
 					if check_password_hash(r[0],request.form['password']) == True:
 						session['admin']=request.form['username']
-
 						return redirect(url_for('admin_panel'))
 					else:
-						error = 'Incorrect username or password'
-						return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))	
+						error = 'Incorrect username or password'	
 				else:
 					error = 'Incorrect username or password'
-					return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
 			except:
-				return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
+				pass
 		return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
+
+def get_blogposts(n=False):
+	g.db = connect_db()
+	cur = g.db.cursor()
+	blogposts = None
+	if n==False:
+		cur.execute("SELECT id,time,author,title,post,live FROM blog ORDER BY id")
+	else:
+		cur.execute("SELECT id,time,author,title,post,live FROM blog ORDER BY id DESC LIMIT "+app.sqlesc,(n,))
+	blogposts = cur.fetchall()
+	return blogposts
 
 @app.route('/lo')
 def logout():

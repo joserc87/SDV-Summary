@@ -10,10 +10,18 @@ body {
 	line-height: 2em;
 }
 
-h1, h3 {
+h1, h3, h4 {
 	font-family: 'Architects Daughter', cursive;
-	font-size: 32px;
+	/*font-size: 32px;*/
 	margin-top: 0px;
+}
+
+h4 {
+	font-size:24px;
+}
+
+h3 {
+	font-size: 32px;
 }
 
 h1 {
@@ -143,4 +151,10 @@ dt, dd {
 
 body {
 	line-height: 1;
+}
+
+.blogpost {
+	font-family: arial;
+	font-size: 14px;
+	padding-bottom: 1em;
 }
