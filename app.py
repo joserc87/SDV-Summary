@@ -216,8 +216,8 @@ def display_data(url):
 		
 		friendships = sorted([[friendship[11:],datadict[friendship]] for friendship in sorted(database_structure_dict.keys()) if friendship.startswith('friendships') and datadict[friendship]!=None],key=lambda x: x[1])[::-1]
 		kills = sorted([[kill[27:].replace('_',' '),datadict[kill]] for kill in sorted(database_structure_dict.keys()) if kill.startswith('statsSpecificMonstersKilled') and datadict[kill]!=None],key=lambda x: x[1])[::-1]
-		cur.execute('SELECT url, date FROM playerinfo WHERE uniqueIDForThisGame='+app.sqlesc+' AND name='+app.sqlesc+' AND farmName='+app.sqlesc+'',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName']))
-		other_saves = sorted(cur.fetchall(),key=lambda x: x[1])
+		cur.execute('SELECT url, date FROM playerinfo WHERE uniqueIDForThisGame='+app.sqlesc+' AND name='+app.sqlesc+' AND farmName='+app.sqlesc+' ORDER BY statsDaysPlayed ASC',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName']))
+		other_saves = cur.fetchall()
 		return render_template("profile.html", deletable=deletable, data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
 
 @app.route('/<url>/<instruction>')
@@ -372,7 +372,7 @@ def blogmain():
 	blogposts = get_blogposts(num_entries,offset=offset)
 	if blogposts['total']<=offset:
 		return redirect(url_for('blogmain'))
-	return render_template('blog.html',full=True,offset=offset,recents=get_recents(),blogposts=blogposts,error=error, processtime=round(time.time()-start_time,5))
+	return render_template('blog.html',full=True,offset=offset,blogposts=blogposts,error=error, processtime=round(time.time()-start_time,5))
 
 @app.route('/blog/<id>')
 def blogindividual(id):
@@ -385,6 +385,8 @@ def blogindividual(id):
 		cur.execute("SELECT id,time,author,title,post,live FROM blog WHERE id="+app.sqlesc+" AND live='t'",(blogid,))
 		blogdata = cur.fetchone()
 		if blogdata != None:
+			blogdata = list(blogdata)
+			blogdata[1] = datetime.datetime.fromtimestamp(blogdata[1])
 			blogposts = {'posts':(blogdata,),'total':1}
 			return render_template('blog.html',full=True,offset=0,recents=get_recents(),blogposts=blogposts,error=error, processtime=round(time.time()-start_time,5))
 		else:
