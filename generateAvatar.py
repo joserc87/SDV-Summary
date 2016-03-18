@@ -27,27 +27,27 @@ def generateAvatar(player):
 	else:
 		gender = 'female'
 
-	base = Image.open('./assets/{0}_base.png'.format(gender))
-	boots = Image.open('./assets/{0}_boots.png'.format(gender))
-	legs = Image.open('./assets/{0}_legs.png'.format(gender))
-	hats = Image.open('./assets/hats.png')
+	base = Image.open('./assets/player/{0}_base.png'.format(gender))
+	boots = Image.open('./assets/player/{0}_boots.png'.format(gender))
+	legs = Image.open('./assets/player/{0}_legs.png'.format(gender))
+	hats = Image.open('./assets/player/hats.png')
 
 	leg_colour = (int(player['pantsColor'][0]), int(player['pantsColor'][1]), int(player['pantsColor'][2]))
 	legs = tintImage(legs, leg_colour)
 
-	hair = cropImage('./assets/hair.png', int(player['hair']), 8, (16, 32))
+	hair = cropImage('./assets/player/hair.png', int(player['hair']), 8, (16, 32))
 	hair_color = tuple(map(int, player['hairstyleColor']))
 	hair = tintImage(hair, hair_color)
 
-	acc = cropImage('./assets/accessories.png',int(player['accessory']), 8, (16, 16), (0, 1)) 
+	acc = cropImage('./assets/player/accessories.png',int(player['accessory']), 8, (16, 16), (0, 1)) 
 	if int(player['accessory']) <= 5:
 		acc = tintImage(acc, hair_color)
 
-	shirt = cropImage('./assets/shirts.png', int(player['shirt']), 16, (8,8), (4, 14))
+	shirt = cropImage('./assets/player/shirts.png', int(player['shirt']), 16, (8,8), (4, 14))
 
 	skin_x = int(player['skin']) % 24 * 1
 	skin_y = int(player['skin']) // 24 * 1
-	skin_color = Image.open('./assets/skinColors.png').getpixel((skin_x,skin_y))
+	skin_color = Image.open('./assets/player/skinColors.png').getpixel((skin_x,skin_y))
 	base = tintImage(base, skin_color)
 
 	body = base.load()

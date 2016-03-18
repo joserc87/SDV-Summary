@@ -34,38 +34,161 @@
 			</div>
 			<div class="row center-block">				
 				<div class="col-md-8 col-sm-12 panel text-center">
-					<div class="interiorpanel">
-						<h3 class="text-center">Player Information</h3>
-						<div class="col-sm-5">
-							<div class="avatarPanel">
-								<img src="{{ data.avatar_url }}" class="playerAvatar">
-								{% if data.petName != None %}
-									{% if data.catPerson == 'true' %}
-										<img src="{{ url_for('static', filename='./assets/pets/cat.png') }}" class="playerPetCat" />
-									{% else %}
-										<img src="{{ url_for('static', filename='./assets/pets/dog.png') }}" class="playerPetDog" />
-									{% endif %}
-								{% endif %}
+					<div class="interiorpanel tabbable">
+						<ul class="nav nav-pills nav-justified" style="margin-bottom: 15px;">
+							<li class="active"><a href="#playerInfo" data-toggle="pill">Player Information</a></li>
+							<li><a href="#familyPortrait" data-toggle="pill">Family Portrait</a></li>
+							<li><a href="#skills" data-toggle="pill">Skills</a></li>
+						</ul>
+						<div class="tab-content">
+							<div id="playerInfo" class="tab-pane active">
+								<div class="col-sm-5">
+									<div class="avatarPanel">
+										<img src="{{ data.avatar_url }}" class="playerAvatar">
+									</div>
+								</div>
+								<div class="col-sm-7 ">
+									<dl class="dl-horizontal">
+										<dt>Name</dt><dd>{{ data.name }}</dd>
+										<dt>Current Funds</dt><dd>{{ data.money }}g</dd>
+										<dt>Total Earnings</dt><dd>{{ data.totalMoneyEarned }}g</dd>
+										<dt>Gender</dt><dd>{% if data.isMale == 'true' %} Male {% else %} Female {% endif %}</dd>
+										{%if data.petName != None %}
+										<dt>Companion</dt><dd>{% if data.catPerson == 'true' %} Cat {% else %} Dog {% endif %} named {{ data.petName }}</dd>
+										{%endif%}
+										</dd>
+										<dt>Favorite Thing</dt><dd>{{ data.favoriteThing }}</dd>
+										<dt>Health</dt><dd>{{ data.maxHealth }}</dd>
+										<dt>Stamina</dt><dd>{{ data.maxStamina }}</dd>
+										<dt>Steps Taken</dt><dd>{{ data.statsStepsTaken }}</dd>
+										<dt>Max Mine Depth</dt><dd>{{ data.deepestMineLevel }}</dd>
+		 								<dt>Time Played</dt><dd>{{ data.millisecondsPlayed }} hours</dd>
+		 							</dl>
+								</div>
+							</div>
+							<div id="familyPortrait" class="tab-pane">
+								<div class="col-sm-12">
+									<div class="portraitPanel">
+										<img src="{{ data.portrait_url }}" class="playerPortrait">
+									</div>
+								</div>
+							</div>
+							<div id="skills" class="tab-pane">
+								<div class="col-sm-12">
+									<div class="row">
+									<div class="col-sm-4"><p class="text-right">Farming Level:</p></div>
+										<div class="col-sm-8 col-xs-12 text-left">
+											<p>
+												{% for level in range(data.farmingLevel) %}
+													{% if (level + 1) % 5 != 0 %}
+													<img src="{{url_for('static', filename='images/skills/point_active.png')}}" width='21px' style="image-rendering: pixelated">
+													{% else %}
+													<img src="{{url_for('static', filename='images/skills/profession_active.png')}}" width='39px' style="image-rendering: pixelated">
+													{% endif %}
+												{% endfor %}
+												{% for level in range(data.farmingLevel + 1, 11) %}
+													{% if (level) % 5 != 0 %}
+													<img src="{{url_for('static', filename='images/skills/point_inactive.png')}}" width='21px' style="image-rendering: pixelated">
+													{% else %}
+													<img src="{{url_for('static', filename='images/skills/profession_inactive.png')}}" width='39px' style="image-rendering: pixelated">
+													{% endif %}
+												{% endfor %}
+											</p>
+										</div>
+									</div>
+									<div class="row">
+									<div class="col-sm-4 col-xs-12"><p class="text-right">Mining Level:</p></div>
+										<div class="col-sm-8 col-xs-12 text-left">
+											<p>
+												{% for level in range(data.miningLevel) %}
+													{% if (level + 1) % 5 != 0 %}
+													<img src="{{url_for('static', filename='images/skills/point_active.png')}}" width='21px' style="image-rendering: pixelated">
+													{% else %}
+													<img src="{{url_for('static', filename='images/skills/profession_active.png')}}" width='39px' style="image-rendering: pixelated">
+													{% endif %}
+												{% endfor %}
+												{% for level in range(data.miningLevel + 1, 11) %}
+													{% if (level) % 5 != 0 %}
+													<img src="{{url_for('static', filename='images/skills/point_inactive.png')}}" width='21px' style="image-rendering: pixelated">
+													{% else %}
+													<img src="{{url_for('static', filename='images/skills/profession_inactive.png')}}" width='39px' style="image-rendering: pixelated">
+													{% endif %}
+												{% endfor %}
+											</p>
+										</div>
+									</div>
+									<div class="row">
+									<div class="col-sm-4 col-xs-12"><p class="text-right">Foraging Level:</p></div>
+									<div class="col-sm-8 col-xs-12 text-left">
+											<p>
+												{% for level in range(data.foragingLevel) %}
+													{% if (level + 1) % 5 != 0 %}
+													<img src="{{url_for('static', filename='images/skills/point_active.png')}}" width='21px' style="image-rendering: pixelated">
+													{% else %}
+													<img src="{{url_for('static', filename='images/skills/profession_active.png')}}" width='39px' style="image-rendering: pixelated">
+													{% endif %}
+												{% endfor %}
+												{% for level in range(data.foragingLevel + 1, 11) %}
+													{% if (level) % 5 != 0 %}
+													<img src="{{url_for('static', filename='images/skills/point_inactive.png')}}" width='21px' style="image-rendering: pixelated">
+													{% else %}
+													<img src="{{url_for('static', filename='images/skills/profession_inactive.png')}}" width='39px' style="image-rendering: pixelated">
+													{% endif %}
+												{% endfor %}
+											</p>
+										</div>
+									</div>
+									<div class="row">
+									<div class="col-sm-4 col-xs-12"><p class="text-right">Fishing Level:</p></div>
+										<div class="col-sm-8 col-xs-12 text-left">
+											<p>
+												{% for level in range(data.fishingLevel) %}
+													{% if (level + 1) % 5 != 0 %}
+													<img src="{{url_for('static', filename='images/skills/point_active.png')}}" width='21px' style="image-rendering: pixelated">
+													{% else %}
+													<img src="{{url_for('static', filename='images/skills/profession_active.png')}}" width='39px' style="image-rendering: pixelated">
+													{% endif %}
+												{% endfor %}
+												{% for level in range(data.fishingLevel + 1, 11) %}
+													{% if (level) % 5 != 0 %}
+													<img src="{{url_for('static', filename='images/skills/point_inactive.png')}}" width='21px' style="image-rendering: pixelated">
+													{% else %}
+													<img src="{{url_for('static', filename='images/skills/profession_inactive.png')}}" width='39px' style="image-rendering: pixelated">
+													{% endif %}
+												{% endfor %}
+											</p>
+										</div>
+									</div>
+									<div class="row">
+									<div class="col-sm-4 col-xs-12"><p class="text-right">Combat Level: </p></div>
+										<div class="col-sm-8 col-xs-12 text-left">
+											<p>
+												{% for level in range(data.combatLevel) %}
+													{% if (level + 1) % 5 != 0 %}
+													<img src="{{url_for('static', filename='images/skills/point_active.png')}}" width='21px' style="image-rendering: pixelated">
+													{% else %}
+													<img src="{{url_for('static', filename='images/skills/profession_active.png')}}" width='39px' style="image-rendering: pixelated">
+													{% endif %}
+												{% endfor %}
+												{% for level in range(data.combatLevel + 1, 11) %}
+													{% if (level) % 5 != 0 %}
+													<img src="{{url_for('static', filename='images/skills/point_inactive.png')}}" width='21px' style="image-rendering: pixelated">
+													{% else %}
+													<img src="{{url_for('static', filename='images/skills/profession_inactive.png')}}" width='39px' style="image-rendering: pixelated">
+													{% endif %}
+												{% endfor %}
+											</p>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class="col-sm-7 ">
-							<dl class="dl-horizontal">
-								<dt>Name</dt><dd>{{ data.name }}</dd>
-								<dt>Current Funds</dt><dd>{{ data.money }}g</dd>
-								<dt>Total Earnings</dt><dd>{{ data.totalMoneyEarned }}g</dd>
-								<dt>Gender</dt><dd>{% if data.isMale == 'true' %} Male {% else %} Female {% endif %}</dd>
-								{%if data.petName != None %}
-								<dt>Companion</dt><dd>{% if data.catPerson == 'true' %} Cat {% else %} Dog {% endif %} named {{ data.petName }}</dd>
-								{%endif%}
-								</dd>
-								<dt>Favorite Thing</dt><dd>{{ data.favoriteThing }}</dd>
-								<dt>Health</dt><dd>{{ data.maxHealth }}</dd>
-								<dt>Stamina</dt><dd>{{ data.maxStamina }}</dd>
-								<dt>Steps Taken</dt><dd>{{ data.statsStepsTaken }}</dd>
-								<dt>Max Mine Depth</dt><dd>{{ data.deepestMineLevel }}</dd>
- 								<dt>Time Played</dt><dd>{{ data.millisecondsPlayed }} hours</dd>
- 							</ul>
-						</div>
+
+						<script>
+							$(document).ready(function () {
+								$('#myTab a:last').tab('show')
+							})
+						</script>
 					</div>
 				</div>
 				<div class="col-md-4 col-sm-12 panel"><!--col-md-offset-1-->

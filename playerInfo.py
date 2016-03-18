@@ -1,5 +1,22 @@
 from defusedxml.ElementTree import parse
 from defusedxml import ElementTree
+import json
+
+def getPartners(root):
+    partners = []
+    for location in root.find('locations').iter('GameLocation'):
+        for npc in location.iter('NPC'):
+            if int(npc.find('daysMarried').text) > 0:
+                partners.append(npc)
+    return partners
+
+def getChildren(root):
+    children = []
+
+    childType = ['Child']
+    childLocation = ['Farm', 'FarmHouse']
+    child_nodes = getNPCs(root, childLocation, childType)
+    return child_nodes
 
 def getStats(root):
     game_stats = {}
@@ -28,6 +45,11 @@ def getNPCs(root, loc, types):
             npc_list += [npc for npc in NPCs if npc.get(ns+'type') in types]
     return npc_list
 
+def strToBool(x):
+    if x.lower() == 'true':
+        return True
+    else:
+        return False
 
 def playerInfo(saveFileLocation,read_data=False):
     playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel', 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina', 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin', 'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor']
@@ -59,6 +81,7 @@ def playerInfo(saveFileLocation,read_data=False):
                     if name in npcs:
                         rating = item.find('value').find('ArrayOfInt').find('int').text
                         s[name] = rating
+
             if tag in ['hairstyleColor', 'pantsColor', 'newEyeColor']:
                 red = player.find(tag).find('R').text
                 green = player.find(tag).find('G').text
@@ -70,8 +93,7 @@ def playerInfo(saveFileLocation,read_data=False):
                 raise IOError
         info[tag] = s
 
-    # Information from elsewhere
-    
+    # Information from elsewhere    
     # UID for save file
     info['uniqueIDForThisGame'] = int(root.find('uniqueIDForThisGame').text)
 
@@ -85,11 +107,24 @@ def playerInfo(saveFileLocation,read_data=False):
         info['petName'] = getNPCs(root, petLocations, petTypes)[0].find('name').text
     except IndexError:
         pass
+    
+    # Information for portrait generation
+    p = {}
+    partners = getPartners(root)
+    if partners: 
+        p['partner'] = partners[0].find('name').text
+    else:
+        p['partner'] = None
+    p['cat']=strToBool(info['catPerson'])
+    p['children'] = [(int(child.find('gender').text),strToBool(child.find('darkSkinned').text),int(child.find('daysOld').text)) for child in getChildren(root)]
+
+    info['portrait_info'] = json.dumps(p)
+
     return info
 
 def main():
-    saveFile = "./save/Sketchy_116441313"
-    print(playerInfo(saveFile))
+    saveFile = "./saves/Sketchy_116441313"
+    playerInfo(saveFile)
 
 if __name__ == '__main__':
     main()

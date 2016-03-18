@@ -175,7 +175,9 @@ database_structure_dict = {'md5':'TEXT',
 'views':'BIGINT',
 'date':'TEXT',
 'savefileLocation':'TEXT',
-'petName':'TEXT'}
+'petName':'TEXT',
+'portrait_info':'JSON',
+'portrait_url': 'TEXT'}
 
 if config.USE_SQLITE==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'
@@ -215,7 +217,7 @@ def generate_db():
 	c.execute('CREATE TABLE errors('+errors_structure+')')
 	c.execute('CREATE TABLE todo('+todo_structure+')')
 	connection.commit()
-	print 'done'
+	print('done')
 
 def generate_blog():
 	connection=connect_db()
@@ -224,20 +226,20 @@ def generate_blog():
 	c.execute(statement)
 	connection.commit()
 	connection.close()
-	print 'done'
+	print('done')
 
 def delete_db():
 	import getpass
 	from werkzeug import check_password_hash
 	connection = connect_db()
 	c = connection.cursor()
-	print 'you must log in as admin to delete the database'
-	username = raw_input('username: ')
+	print('you must log in as admin to delete the database')
+	username = input('username: ')
 	password = getpass.getpass('password: ')
 	c.execute('SELECT password FROM admin WHERE username='+sqlesc,(username,))
 	passhash = c.fetchone()
 	if check_password_hash(passhash[0],password) == True:
-		a = raw_input('just to double check, you REALLY want to delete everything? (y/n): ')
+		a = input('just to double check, you REALLY want to delete everything? (y/n): ')
 		if a=='y':
 			c.execute('DROP TABLE playerinfo')
 			c.execute('DROP TABLE errors')
@@ -245,18 +247,18 @@ def delete_db():
 			c.execute('DROP TABLE blog')
 			connection.commit()
 			connection.close()
-			print 'all (except admin) deleted'
+			print('all (except admin) deleted')
 	else:
-		print 'incorrect credentials'
+		print('incorrect credentials')
 
 if __name__ == "__main__":
-	a = raw_input('Drop databases? (y/n): ')
+	a = input('Drop databases? (y/n): ')
 	if a == 'y':
 		delete_db()
-	a = raw_input('Generate databases? (y/n): ')
+	a = input('Generate databases? (y/n): ')
 	if a == 'y':
 		generate_db()
-	a = raw_input('Generate blog database? (y/n): ')
+	a = input('Generate blog database? (y/n): ')
 	if a == 'y':
 		generate_blog()
 
