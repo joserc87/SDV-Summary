@@ -347,8 +347,9 @@ def get_blogposts(n=False,**kwargs):
 		blogposts[b][1] = datetime.datetime.fromtimestamp(blogentry[1])
 	cur.execute(metaquery)
 	metadata = cur.fetchone()
-	print metadata
-	return blogposts
+	blogdict = {'total':metadata[0],
+				'posts':blogposts}
+	return blogdict
 
 @app.route('/lo')
 def logout():
@@ -361,12 +362,37 @@ def blogmain():
 	error = None
 	start_time = time.time()
 	num_entries = 5
-	print request.args.get('p')
+	#print request.args.get('p')
 	try:
 		offset = int(request.args.get('p')) * num_entries
 	except:
 		offset = 0
-	return render_template('blog.html',recents=get_recents(),blogposts=get_blogposts(num_entries,offset=offset),error=error, processtime=round(time.time()-start_time,5))
+	if offset < 0:
+		return redirect(url_for('blogmain'))
+	blogposts = get_blogposts(num_entries,offset=offset)
+	if blogposts['total']<=offset:
+		return redirect(url_for('blogmain'))
+	return render_template('blog.html',full=True,offset=offset,recents=get_recents(),blogposts=blogposts,error=error, processtime=round(time.time()-start_time,5))
+
+@app.route('/blog/<id>')
+def blogindividual(id):
+	error = None
+	start_time = time.time()
+	try:
+		blogid = int(id)
+		g.db = connect_db()
+		cur = g.db.cursor()
+		cur.execute("SELECT id,time,author,title,post,live FROM blog WHERE id="+app.sqlesc+" AND live='t'",(blogid,))
+		blogdata = cur.fetchone()
+		if blogdata != None:
+			blogposts = {'posts':(blogdata,),'total':1}
+			return render_template('blog.html',full=True,offset=0,recents=get_recents(),blogposts=blogposts,error=error, processtime=round(time.time()-start_time,5))
+		else:
+			error = "No blog with that ID!"
+	except:
+		error = "No blog with that ID!"
+	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+
 
 @app.route('/dl/<url>')
 def retrieve_file(url):

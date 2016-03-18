@@ -139,14 +139,14 @@
 									</div>
 								</form>
 							</div>
-							<p class="text-success text-center">HTML is allowed in blog entries</p>
+							<p class="text-success text-center">HTML is allowed in blog entries.<br>Two consecutive newlines = end of preview text.</p>
 						</div>
-						{% if blogposts %}
+						{% if blogposts.posts %}
 							<div class="row">
 								<div class="col-md-12">
 									<div class="adminpanelitem">
 									<h3>Existing blog posts</h3>
-									{% for blog in blogposts %}
+									{% for blog in blogposts.posts %}
 										<div id="entry-{{blog.0}}" class="col-md-12 {%if not blog.5%}hiddenblog{%endif%}">
 											<div class="row">
 												<div class="col-md-11">
@@ -162,7 +162,11 @@
 												</div>
 											</div>
 											<div class="row col-md-12">
-											<p class="blogpost">{{blog.4|safe}}</p>
+												{% set blogcontent = (blog.4|safe).split("\r\n\r\n") %}
+													<p class="blogpost">{{blogcontent.0}}</p>
+												{% for content in blogcontent[1:] %}
+													<p class="blogpost">{{content}}</p>
+												{% endfor %}
 											</div>
 										</div>
 									{% endfor %}
