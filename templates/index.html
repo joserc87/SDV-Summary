@@ -42,25 +42,32 @@
 {% if recents %}
 <div class="row center-block panel lead">	
 	<div class="interiorpanel">
-		<div class="row">	
-			<div class="col-md-12">
-				<h3>Recently uploaded farms</h3>
+		<div class="col-md-8">
+			<div class="row">	
+				<div class="col-md-12">
+					<h3>Recently uploaded farms</h3>
+				</div>
+			</div>
+			<div id="recentFarms" class="row">
+				{% for recent in recents %}
+				<div class="col-md-4 col-sm-6 text-center previewbox">
+					<a href="{{ recent[0] }}">
+						<div class="previewimage">
+							<img src="{{ recent[5] }}" class="img-responsive farmimgpreview">
+							<img src="{{ recent[4] }}" class="headimg" >
+						</div>
+						<div class="previewtext">
+							{{ recent[1] }}, {{ recent[2] }} Farm <br/>  {{ recent[3] }}
+						</div>
+					</a>
+				</div>
+				{% endfor %}
 			</div>
 		</div>
-		<div  id="recentFarms" class="row">
-			{% for recent in recents %}
-			<div class="col-md-4 col-sm-6 text-center previewbox">
-				<a href="{{ recent[0] }}">
-					<div class="previewimage">
-						<img src="{{ recent[5] }}" class="img-responsive farmimgpreview">
-						<img src="{{ recent[4] }}" class="headimg" >
-					</div>
-					<div class="previewtext">
-						{{ recent[1] }}, {{ recent[2] }} Farm <br/>  {{ recent[3] }}
-					</div>
-				</a>
+		<div class="col-md-4">
+			<div class="adminpanelitem">
+			{% include "blogcontent.html" %}
 			</div>
-			{% endfor %}
 		</div>
 	</div>
 </div>

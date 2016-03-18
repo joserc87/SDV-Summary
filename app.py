@@ -62,7 +62,7 @@ def home():
 				player_info = playerInfo(memfile.getvalue(),True)
 			except defusedxml.common.EntitiesForbidden:
 				error = "I don't think that's very funny"
-				return render_template("index.html", error=error, recents=get_recents(), processtime=round(time.time()-start_time,5))
+				return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
 			except IOError:
 				error = "Savegame failed sanity check (if you think this is in error please let us know)"
 				g.db = connect_db()
@@ -70,13 +70,13 @@ def home():
 				cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(filename)))
 				g.db.commit()
 				g.db.close()
-				return render_template("index.html", error=error, recents=get_recents(), processtime=round(time.time()-start_time,5))
+				return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
 			except AttributeError as e:
 				error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
-				return render_template("index.html", error=error, recents=get_recents(), processtime=round(time.time()-start_time,5))
+				return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
 			except ParseError as e:
 				error = "Not well-formed xml"
-				return render_template("index.html",error=error,recents=get_recents(), processtime=round(time.time()-start_time,5))
+				return render_template("index.html",error=error,blogposts=get_blogposts(5),recents=get_recents(), processtime=round(time.time()-start_time,5))
 			g.db = connect_db()
 			cur = g.db.cursor()
 			dupe = is_duplicate(md5_info,player_info)
@@ -98,7 +98,7 @@ def home():
 			if outcome != False:
 				session[outcome] = md5_info
 				return redirect(url_for('display_data',url=outcome))
-	return render_template("index.html", recents=get_recents(), error=error, processtime=round(time.time()-start_time,5))
+	return render_template("index.html", recents=get_recents(), error=error,blogposts=get_blogposts(5), processtime=round(time.time()-start_time,5))
 
 def get_recents():
 	g.db = connect_db()
@@ -295,7 +295,7 @@ def admin_panel():
 				return 'Success'
 		cur.execute('SELECT url,name,farmName,date FROM playerinfo')
 		entries = cur.fetchall()
-		return render_template('adminpanel.html',returned_blog_data=returned_blog_data,blogposts=get_blogposts(),entries=entries,error=error, processtime=round(time.time()-start_time,5))
+		return render_template('adminpanel.html',returned_blog_data=returned_blog_data,blogposts=get_blogposts(include_hidden=True),entries=entries,error=error, processtime=round(time.time()-start_time,5))
 	else:
 		if request.method == 'POST':
 			if 'blog' in request.form:
@@ -317,18 +317,37 @@ def admin_panel():
 				pass
 		return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
 
-def get_blogposts(n=False):
+def get_blogposts(n=False,**kwargs):
 	g.db = connect_db()
 	cur = g.db.cursor()
 	blogposts = None
+	query = "SELECT id,time,author,title,post,live FROM blog"
+	metaquery = "SELECT count(*) FROM blog"
+	try:
+		if kwargs['include_hidden'] == False:
+			query += " WHERE live='t'"
+			metaquery += " WHERE live='t'"
+	except KeyError:
+		query += " WHERE live='t'"
+		metaquery += " WHERE live='t'"
+	query += " ORDER BY id DESC"
+	if n!=False:
+		query += " LIMIT "+app.sqlesc
+	offset = 0
+	if 'offset' in kwargs.keys():
+		offset = kwargs['offset']
+	query += " OFFSET "+app.sqlesc
 	if n==False:
-		cur.execute("SELECT id,time,author,title,post,live FROM blog ORDER BY id DESC")
+		cur.execute(query,(offset,))
 	else:
-		cur.execute("SELECT id,time,author,title,post,live FROM blog ORDER BY id DESC LIMIT "+app.sqlesc,(n,))
+		cur.execute(query,(n,offset))
 	blogposts = list(cur.fetchall())
 	for b,blogentry in enumerate(blogposts):
 		blogposts[b] = list(blogentry)
 		blogposts[b][1] = datetime.datetime.fromtimestamp(blogentry[1])
+	cur.execute(metaquery)
+	metadata = cur.fetchone()
+	print metadata
 	return blogposts
 
 @app.route('/lo')
@@ -341,7 +360,13 @@ def logout():
 def blogmain():
 	error = None
 	start_time = time.time()
-	return render_template('blog.html',recents=get_recents(),blogposts=get_blogposts(),error=error, processtime=round(time.time()-start_time,5))
+	num_entries = 5
+	print request.args.get('p')
+	try:
+		offset = int(request.args.get('p')) * num_entries
+	except:
+		offset = 0
+	return render_template('blog.html',recents=get_recents(),blogposts=get_blogposts(num_entries,offset=offset),error=error, processtime=round(time.time()-start_time,5))
 
 @app.route('/dl/<url>')
 def retrieve_file(url):
