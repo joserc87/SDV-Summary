@@ -42,7 +42,7 @@
 {% if recents %}
 <div class="row center-block panel lead">	
 	<div class="interiorpanel">
-		<div class="col-md-8">
+		<div class="col-md-12">
 			<div class="row">	
 				<div class="col-md-12">
 					<h3>Recently uploaded farms</h3>
@@ -64,7 +64,11 @@
 				{% endfor %}
 			</div>
 		</div>
-		<div class="col-md-4">
+	</div>
+</div>
+<div class="row center-block panel lead">	
+	<div class="interiorpanel">
+		<div class="col-md-12">
 			<div class="adminpanelitem">
 				<h3><a href="/blog">Development blog</a></h3>
 			{% include "blogcontent.html" %}
