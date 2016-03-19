@@ -174,7 +174,7 @@ body {
 }
 
 .adminpanelitem {
-	height: 400px;
+	max-height: 400px;
 	overflow-y: auto;
 	overflow-x: hidden;
 
@@ -200,7 +200,7 @@ body {
 
 .nav li a:active {
 	background-color: #550000;
-
+}
 
 .hiddenblog {
 	opacity: 0.5;
