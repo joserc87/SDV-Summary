@@ -46,7 +46,7 @@ def md5(md5file):
 
 @app.route('/_get_recents')
 def jsonifyRecents():
-	return jsonify(recents=get_recents())
+	return jsonify(recents=get_recents().posts)
 
 @app.route('/',methods=['GET','POST'])
 def home():
@@ -100,14 +100,17 @@ def home():
 				return redirect(url_for('display_data',url=outcome))
 	return render_template("index.html", recents=get_recents(), error=error,blogposts=get_blogposts(5), processtime=round(time.time()-start_time,5))
 
-def get_recents():
+def get_recents(n=6):
 	g.db = connect_db()
 	cur = g.db.cursor()
-	cur.execute('SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo ORDER BY id DESC LIMIT 6')
-	recents = cur.fetchall()
-	g.db.close()
+	recents = {}
+	cur.execute('SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo ORDER BY id DESC LIMIT '+app.sqlesc,(n,))
+	recents['posts'] = cur.fetchall()
+	cur.execute('SELECT count(*) FROM playerinfo')
+	recents['total'] = cur.fetchone()
 	if len(recents)==0:
 		recents == None
+	g.db.close()
 	return recents
 
 def is_duplicate(md5_info,player_info):
@@ -370,7 +373,7 @@ def blogmain():
 	if offset < 0:
 		return redirect(url_for('blogmain'))
 	blogposts = get_blogposts(num_entries,offset=offset)
-	if blogposts['total']<=offset:
+	if blogposts['total']<=offset and blogposts['total']>0:
 		return redirect(url_for('blogmain'))
 	return render_template('blog.html',full=True,offset=offset,blogposts=blogposts,error=error, processtime=round(time.time()-start_time,5))
 
