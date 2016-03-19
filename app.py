@@ -46,7 +46,7 @@ def md5(md5file):
 
 @app.route('/_get_recents')
 def jsonifyRecents():
-	return jsonify(recents=get_recents().posts)
+	return jsonify(recents=get_recents()['posts'])
 
 @app.route('/',methods=['GET','POST'])
 def home():
@@ -344,8 +344,6 @@ def get_blogposts(n=False,**kwargs):
 		offset = kwargs['offset']
 	query += " OFFSET "+app.sqlesc
 	if n==False:
-		print query
-		print offset
 		cur.execute(query,(offset,))
 	else:
 		cur.execute(query,(n,offset))
@@ -355,8 +353,6 @@ def get_blogposts(n=False,**kwargs):
 		blogposts[b][1] = datetime.datetime.fromtimestamp(blogentry[1])
 	cur.execute(metaquery)
 	metadata = cur.fetchone()
-	print metadata
-	print blogposts
 	blogdict = {'total':metadata[0],
 				'posts':blogposts}
 	return blogdict
