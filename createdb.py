@@ -1,5 +1,6 @@
 # creates db for SDV-Summary
 import config
+import sys
 
 database_structure_dict = {'md5':'TEXT',
 'url':'TEXT',
@@ -193,6 +194,9 @@ for key in sorted(database_structure_dict.keys()):
 	database_fields+=key+','
 database_fields = database_fields[:-1]
 
+if sys.version_info >= (3, 0):
+	raw_input = input
+
 def connect_db():
 	if config.USE_SQLITE == True:
 		import sqlite3
@@ -234,12 +238,12 @@ def delete_db():
 	connection = connect_db()
 	c = connection.cursor()
 	print('you must log in as admin to delete the database')
-	username = input('username: ')
+	username = raw_input('username: ')
 	password = getpass.getpass('password: ')
 	c.execute('SELECT password FROM admin WHERE username='+sqlesc,(username,))
 	passhash = c.fetchone()
 	if check_password_hash(passhash[0],password) == True:
-		a = input('just to double check, you REALLY want to delete everything? (y/n): ')
+		a = raw_input('just to double check, you REALLY want to delete everything? (y/n): ')
 		if a=='y':
 			c.execute('DROP TABLE playerinfo')
 			c.execute('DROP TABLE errors')
@@ -252,13 +256,13 @@ def delete_db():
 		print('incorrect credentials')
 
 if __name__ == "__main__":
-	a = input('Drop databases? (y/n): ')
+	a = raw_input('Drop databases? (y/n): ')
 	if a == 'y':
 		delete_db()
-	a = input('Generate databases? (y/n): ')
+	a = raw_input('Generate databases? (y/n): ')
 	if a == 'y':
 		generate_db()
-	a = input('Generate blog database? (y/n): ')
+	a = raw_input('Generate blog database? (y/n): ')
 	if a == 'y':
 		generate_blog()
 
