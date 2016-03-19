@@ -10,7 +10,7 @@ body {
 	line-height: 2em;
 }
 
-h1, h3, h4 {
+h1, h2, h3, h4 {
 	font-family: 'Architects Daughter', cursive;
 	/*font-size: 32px;*/
 	margin-top: 0px;
@@ -22,6 +22,10 @@ h4 {
 
 h3 {
 	font-size: 32px;
+}
+
+h2 {
+	font-size: 44px;
 }
 
 h1 {
@@ -207,9 +211,10 @@ body {
 }
 
 .titlelink {
-	color: rgb(51,51,51);
+	color: #101010;
 }
 
 .titlelink:hover {
 	text-decoration: none;
+	color: #101010;
 }
