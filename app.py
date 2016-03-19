@@ -334,6 +334,9 @@ def get_blogposts(n=False,**kwargs):
 		query += " WHERE live='t'"
 		metaquery += " WHERE live='t'"
 	query += " ORDER BY id DESC"
+	if app.config['USE_SQLITE'] == True:
+		if n==False:
+			n=-1
 	if n!=False:
 		query += " LIMIT "+app.sqlesc
 	offset = 0
@@ -341,6 +344,8 @@ def get_blogposts(n=False,**kwargs):
 		offset = kwargs['offset']
 	query += " OFFSET "+app.sqlesc
 	if n==False:
+		print query
+		print offset
 		cur.execute(query,(offset,))
 	else:
 		cur.execute(query,(n,offset))
