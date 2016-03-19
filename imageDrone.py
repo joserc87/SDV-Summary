@@ -3,6 +3,7 @@ import sqlite3
 import psycopg2
 import json
 from generateAvatar import generateAvatar
+from generateFamilyPortrait import generateFamilyPortrait
 from farmInfo import generateImage
 import os
 import time
@@ -40,12 +41,16 @@ def process_queue():
 				data['newEyeColor'] = [data['newEyeColor0'],data['newEyeColor1'],data['newEyeColor2'],data['newEyeColor3']]
 				data['hairstyleColor'] = [data['hairstyleColor0'],data['hairstyleColor1'],data['hairstyleColor2'],data['hairstyleColor3']]
 				avatar = generateAvatar(data)
+				pi = json.loads(data['portrait_info'])
+				portrait = generateFamilyPortrait(avatar, pi['partner'], pi['cat'], pi['children'])
 				avatar_path = os.path.join(IMAGE_FOLDER,data['url']+'a.png')
+				portrait_path = os.path.join(IMAGE_FOLDER,data['url']+'p.png')
 				farm_path = os.path.join(IMAGE_FOLDER,data['url']+'f.png')
 				avatar.save(avatar_path)
+				portrait.save(portrait_path)
 				farm = generateImage(json.loads(data['farm_info']))
 				farm.save(farm_path)
-				cur.execute('UPDATE playerinfo SET farm_url='+sqlesc+', avatar_url='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,avatar_path,data['id']))
+				cur.execute('UPDATE playerinfo SET farm_url='+sqlesc+', avatar_url='+sqlesc+', portrait_url='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,avatar_path,portrait_path,data['id']))
 				cur.execute('DELETE FROM todo WHERE id=('+sqlesc+')',(task[0],))
 				db.commit()
 				records_handled += 1
@@ -54,4 +59,4 @@ def process_queue():
 			return time.time()-start_time, records_handled
 
 if __name__ == "__main__":
-	print process_queue()
+	print(process_queue())
