@@ -5,16 +5,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <script src="{{ url_for('static', filename='js/ajaxRequest.js') }}"></script>{% endblock %}
 {%block bodycontent %}
-<div class="row center-block panel">
-	<div class="interiorpanel">
-		<div class="col-md-2 col-sm-12 text-center">
-			<img src="{{url_for('static', filename='favicon.png')}}" class="logo">
-		</div>
-		<div class="col-md-10 col-sm-12">
-			<h1 class="text-center">Stardew Valley Summary</h1>
-		</div>
-	</div>
-</div>
+{% include "titlebar.html" %}
 <div class="row center-block panel">
 	<div class="interiorpanel">
 		
@@ -43,11 +34,7 @@
 <div class="row center-block panel lead">	
 	<div class="interiorpanel">
 		<div class="col-md-12">
-			<div class="row">	
-				<div class="col-md-12">
-					<h3>Recently uploaded farms</h3>
-				</div>
-			</div>
+					<h3><a href="/all" class="titlelink">Recently uploaded farms</a></h3>
 			{% include "recents.html" %}
 		</div>
 	</div>
@@ -56,7 +43,7 @@
 	<div class="interiorpanel">
 		<div class="col-md-12">
 			<div class="adminpanelitem">
-				<h3><a href="/blog">Development blog</a></h3>
+				<h3><a href="/blog" class="titlelink">Development blog</a></h3>
 			{% include "blogcontent.html" %}
 			</div>
 		</div>

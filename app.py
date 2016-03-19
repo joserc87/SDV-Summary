@@ -100,14 +100,23 @@ def home():
 				return redirect(url_for('display_data',url=outcome))
 	return render_template("index.html", recents=get_recents(), error=error,blogposts=get_blogposts(5), processtime=round(time.time()-start_time,5))
 
-def get_recents(n=6):
+def get_recents(n=6,**kwargs):
 	g.db = connect_db()
 	cur = g.db.cursor()
 	recents = {}
-	cur.execute('SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo ORDER BY id DESC LIMIT '+app.sqlesc,(n,))
+	query = 'SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo ORDER BY id DESC LIMIT '+app.sqlesc
+	offset = 0
+	if 'offset' in kwargs.keys():
+		offset = kwargs['offset']
+		query += " OFFSET "+app.sqlesc
+	print query
+	if 'offset' in kwargs.keys():
+		cur.execute(query,(n,offset))
+	else:
+		cur.execute(query,(n,))
 	recents['posts'] = cur.fetchall()
 	cur.execute('SELECT count(*) FROM playerinfo')
-	recents['total'] = cur.fetchone()
+	recents['total'] = cur.fetchone()[0]
 	if len(recents)==0:
 		recents == None
 	g.db.close()
@@ -380,6 +389,24 @@ def blogmain():
 		return redirect(url_for('blogmain'))
 	return render_template('blog.html',full=True,offset=offset,blogposts=blogposts,error=error, processtime=round(time.time()-start_time,5))
 
+@app.route('/all')
+def allmain():
+	error = None
+	start_time = time.time()
+	num_entries = 18
+	#print request.args.get('p')
+	try:
+		offset = int(request.args.get('p')) * num_entries
+	except:
+		offset = 0
+	if offset < 0:
+		return redirect(url_for('allmain'))
+	recents = get_recents(num_entries,offset=offset)
+	if recents['total']<=offset and recents['total']>0:
+		return redirect(url_for('allmain'))
+	return render_template('all.html',full=True,offset=offset,recents=recents,error=error, processtime=round(time.time()-start_time,5))
+
+
 @app.route('/blog/<id>')
 def blogindividual(id):
 	error = None
@@ -400,6 +427,7 @@ def blogindividual(id):
 	except:
 		error = "No blog with that ID!"
 	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+
 
 
 @app.route('/dl/<url>')

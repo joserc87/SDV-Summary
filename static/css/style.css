@@ -205,3 +205,11 @@ body {
 .hiddenblog {
 	opacity: 0.5;
 }
+
+.titlelink {
+	color: rgb(51,51,51);
+}
+
+.titlelink:hover {
+	text-decoration: none;
+}
