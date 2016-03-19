@@ -328,11 +328,11 @@ def get_blogposts(n=False,**kwargs):
 	metaquery = "SELECT count(*) FROM blog"
 	try:
 		if kwargs['include_hidden'] == False:
-			query += " WHERE live='t'"
-			metaquery += " WHERE live='t'"
+			query += " WHERE live='1'"
+			metaquery += " WHERE live='1'"
 	except KeyError:
-		query += " WHERE live='t'"
-		metaquery += " WHERE live='t'"
+		query += " WHERE live='1'"
+		metaquery += " WHERE live='1'"
 	query += " ORDER BY id DESC"
 	if app.config['USE_SQLITE'] == True:
 		if n==False:
@@ -355,6 +355,8 @@ def get_blogposts(n=False,**kwargs):
 		blogposts[b][1] = datetime.datetime.fromtimestamp(blogentry[1])
 	cur.execute(metaquery)
 	metadata = cur.fetchone()
+	print metadata
+	print blogposts
 	blogdict = {'total':metadata[0],
 				'posts':blogposts}
 	return blogdict
@@ -390,7 +392,7 @@ def blogindividual(id):
 		blogid = int(id)
 		g.db = connect_db()
 		cur = g.db.cursor()
-		cur.execute("SELECT id,time,author,title,post,live FROM blog WHERE id="+app.sqlesc+" AND live='t'",(blogid,))
+		cur.execute("SELECT id,time,author,title,post,live FROM blog WHERE id="+app.sqlesc+" AND live='1'",(blogid,))
 		blogdata = cur.fetchone()
 		if blogdata != None:
 			blogdata = list(blogdata)
