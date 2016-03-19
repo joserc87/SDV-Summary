@@ -31,6 +31,7 @@ def generateAvatar(player):
 	boots = Image.open('./assets/player/{0}_boots.png'.format(gender))
 	legs = Image.open('./assets/player/{0}_legs.png'.format(gender))
 	hats = Image.open('./assets/player/hats.png')
+	arms = Image.open('./assets/player/{0}_arms.png'.format(gender))
 
 	leg_colour = (int(player['pantsColor'][0]), int(player['pantsColor'][1]), int(player['pantsColor'][2]))
 	legs = tintImage(legs, leg_colour)
@@ -49,6 +50,7 @@ def generateAvatar(player):
 	skin_y = int(player['skin']) // 24 * 1
 	skin_color = Image.open('./assets/player/skinColors.png').getpixel((skin_x,skin_y))
 	base = tintImage(base, skin_color)
+	arms = tintImage(arms, skin_color)
 
 	body = base.load()
 	eyeColor = tuple(map(int, player['newEyeColor']))
@@ -72,11 +74,12 @@ def generateAvatar(player):
 		body[5,12] = white
 		body[10, 12] = white
 
+	base = Image.alpha_composite(base, hair)
+	base = Image.alpha_composite(base, acc)
+	base = Image.alpha_composite(base, arms)
 	base = Image.alpha_composite(base, legs)
 	base = Image.alpha_composite(base, shirt)
-	base = Image.alpha_composite(base, acc)
 	base = Image.alpha_composite(base, boots)
-	base = Image.alpha_composite(base, hair)
 	return base
 
 def main():
