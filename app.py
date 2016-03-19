@@ -109,7 +109,6 @@ def get_recents(n=6,**kwargs):
 	if 'offset' in kwargs.keys():
 		offset = kwargs['offset']
 		query += " OFFSET "+app.sqlesc
-	print query
 	if 'offset' in kwargs.keys():
 		cur.execute(query,(n,offset))
 	else:

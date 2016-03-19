@@ -1,6 +1,8 @@
 # creates db for SDV-Summary
 import config
 import sys
+import getpass
+from werkzeug import check_password_hash
 
 database_structure_dict = {'md5':'TEXT',
 'url':'TEXT',
@@ -233,8 +235,6 @@ def generate_blog():
 	print('done')
 
 def delete_db():
-	import getpass
-	from werkzeug import check_password_hash
 	connection = connect_db()
 	c = connection.cursor()
 	print('you must log in as admin to delete the database')
@@ -255,7 +255,66 @@ def delete_db():
 	else:
 		print('incorrect credentials')
 
+def update_playerinfo():
+	if config.USE_SQLITE == True:
+		print 'This is only for Postgres databases'
+		return
+	connection = connect_db()
+	c = connection.cursor()
+	c.execute("SELECT * FROM information_schema.columns WHERE table_schema='public' AND table_name='playerinfo'")
+	returned_database_structure = {row[3].lower():row[7].upper() for row in c.fetchall()}
+	current_design_structure = {key.lower():database_structure_dict[key].upper() for key in database_structure_dict.keys()}
+	redundant = {}
+	incorrect_type = {}
+	for key in returned_database_structure.keys():
+		try:
+			if current_design_structure[key] == returned_database_structure[key]:
+				#print key,'matches'
+				pass
+			else:
+				#print key,'by design:',current_design_structure[key],'db has:',returned_database_structure[key]
+				incorrect_type[key] = {'should be':current_design_structure[key],'was':returned_database_structure[key]}
+			del current_design_structure[key]
+		except KeyError:
+			#print key,'in db but not in current design structure'
+			redundant[key] = {'redundant':returned_database_structure[key]}
+	not_implemented = current_design_structure
+	print 'not implemented in db:'
+	for key in not_implemented.keys():
+		print key,not_implemented[key]
+	print 'redundant in db:'
+	for key in redundant.keys():
+		print key,redundant[key]
+	print 'incorrect type in db:'
+	for key in incorrect_type.keys():
+		print key,incorrect_type[key]
+	a = raw_input('Alter database? (y/n): ')
+	if a == 'y':
+		print('you must log in as admin to alter the database')
+		username = raw_input('username: ')
+		password = getpass.getpass('password: ')
+		c.execute('SELECT password FROM admin WHERE username='+sqlesc,(username,))
+		passhash = c.fetchone()
+		if check_password_hash(passhash[0],password) == True:
+			print 'implementing not-implemented keys (ADDing to database)'
+			for key in not_implemented.keys():
+				a = raw_input('Add column '+str(key)+' type '+str(not_implemented[key])+' to playerinfo? (y/n): ')
+				if a == 'y':
+					c.execute('ALTER TABLE playerinfo ADD COLUMN '+str(key)+' '+str(not_implemented[key]))
+					print 'done'
+			print 'removing no-longer-necessary keys (DROPping from database)'
+			for key in redundant.keys():
+				a = raw_input('Remove column '+str(key)+' from playerinfo? (y/n): ')
+				if a == 'y':
+					c.execute('ALTER TABLE playerinfo DROP COLUMN '+str(key))
+		else:
+			print('incorrect credentials')
+	connection.commit()
+	connection.close()
+	print 'all modifications committed'
+
 if __name__ == "__main__":
+	'''
 	a = raw_input('Drop databases? (y/n): ')
 	if a == 'y':
 		delete_db()
@@ -265,4 +324,5 @@ if __name__ == "__main__":
 	a = raw_input('Generate blog database? (y/n): ')
 	if a == 'y':
 		generate_blog()
-
+	'''
+	update_playerinfo()
