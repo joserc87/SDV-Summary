@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html itemscope itemtype="http://schema.org/Article">
 	<head>
 		<title>{% block title %}SDV Summary{% endblock %}</title>
 		{% block header %}
+		
+		<!-- Load Things -->
 		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		

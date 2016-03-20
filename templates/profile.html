@@ -1,4 +1,34 @@
 {% extends "base.html" %}
+{% block header %}
+{{super()}}
+		<!-- Place this data between the <head> tags of your website -->
+		<meta name="description" content="A summary of {{data.name}}'s Stardew Valley farm: {{data.farmName}} Farm" />
+
+		<!-- Schema.org markup for Google+ -->
+		<meta itemprop="name" content="{{data.farmName}} Farm Summary - SDV Summary">
+		<meta itemprop="description" content="A summary of {{data.name}}'s Stardew Valley farm: {{data.farmName}} Farm">
+		<meta itemprop="image" content="http://sdv.robheath.me.uk/{{data.portrait_url}}">
+
+		<!-- Twitter Card data -->
+		<meta name="twitter:card" content="http://sdv.robheath.me.uk/{{data.portrait_url}}">
+		<meta name="twitter:site" content="@laukei">
+		<meta name="twitter:title" content="{{data.farmName}} Farm Summary - SDV Summary">
+		<meta name="twitter:description" content="A summary of {{data.name}}'s Stardew Valley farm: {{data.farmName}} Farm">
+		<meta name="twitter:creator" content="@laukei">
+		<!-- Twitter summary card with large image must be at least 280x150px -->
+		<meta name="twitter:image:src" content="http://sdv.robheath.me.uk/{{data.portrait_url}}">
+
+		<!-- Open Graph data -->
+		<meta property="og:title" content="{{data.farmName}} Farm Summary - SDV Summary" />
+		<meta property="og:type" content="profile" />
+		<meta property="og:url" content="http://sdv.robheath.me.uk/{{data.url}}" />
+		<meta property="og:image" content="http://sdv.robheath.me.uk/{{data.avatar_url}}" />
+		<meta property="og:image" content="http://sdv.robheath.me.uk/{{data.portrait_url}}" />
+		<meta property="og:image" content="http://sdv.robheath.me.uk/{{data.farm_url}}" />
+		<meta property="og:description" content="A summary of {{data.name}}'s Stardew Valley farm: {{data.farmName}} Farm" />
+		<meta property="og:site_name" content="Stardew Valley Summary" />
+{% endblock %}
+
 {% block title %}{{data.farmName}} Farm Summary - SDV Summary{% endblock %}
 {% block bodycontent %}
 			<div class="col-md-12 col-sm-12 panel">
