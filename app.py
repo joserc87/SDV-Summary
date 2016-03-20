@@ -67,7 +67,7 @@ def home():
 				error = "Savegame failed sanity check (if you think this is in error please let us know)"
 				g.db = connect_db()
 				cur = g.db.cursor()
-				cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(filename)))
+				cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(secure_filename(inputfile.filename))))
 				g.db.commit()
 				g.db.close()
 				return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
