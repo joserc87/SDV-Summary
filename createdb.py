@@ -179,7 +179,7 @@ database_structure_dict = {'md5':'TEXT',
 'date':'TEXT',
 'savefileLocation':'TEXT',
 'petName':'TEXT',
-'portrait_info':'JSON',
+'portrait_info':'TEXT',
 'portrait_url': 'TEXT'}
 
 if config.USE_SQLITE==True:
@@ -314,7 +314,6 @@ def update_playerinfo():
 	print 'all modifications committed'
 
 if __name__ == "__main__":
-	'''
 	a = raw_input('Drop databases? (y/n): ')
 	if a == 'y':
 		delete_db()
@@ -324,5 +323,4 @@ if __name__ == "__main__":
 	a = raw_input('Generate blog database? (y/n): ')
 	if a == 'y':
 		generate_blog()
-	'''
-	update_playerinfo()
+
