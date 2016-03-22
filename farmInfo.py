@@ -1,6 +1,7 @@
 from defusedxml.ElementTree import parse
 from defusedxml import ElementTree
 from PIL import Image 
+from collections import namedtuple
 
 # This is a test method for returning the position location and the name of objects
 # located on the players farm.
@@ -25,6 +26,8 @@ def getFarmInfo(saveFileLocation,read_data=False):
 		y = int(item.find('value').find('Object').find('tileLocation').find('Y').text)
 		l = int(item.find('value').find('Object').find('parentSheetIndex').text)
 		t = item.find('value').find('Object').find('type').text
+		if 'Fence' in name:
+			t = int(item.find('value').find('Object').find('whichType').text)
 		# if name not in things:
 		# 	things.append(name)
 		s.append((name, x, y, l, t))
@@ -34,9 +37,10 @@ def getFarmInfo(saveFileLocation,read_data=False):
 	tf = []
 
 	for item in locations[1].find('terrainFeatures').iter('item'):
+		s = None
+		loc = None
 		name = item.find('value').find('TerrainFeature').get(ns+'type')
-		t = ""
-		s = ""
+		i = namedtuple('Item', ['name', 'x', 'y', 'sheetIndex','w', 'h', 'type', 'growth'])
 		if name == 'Tree':
 			t = int(item.find('value').find('TerrainFeature').find('treeType').text)
 			s = int(item.find('value').find('TerrainFeature').find('growthStage').text)
@@ -45,7 +49,7 @@ def getFarmInfo(saveFileLocation,read_data=False):
 			s = int(item.find('value').find('TerrainFeature').find('whichView').text)
 		x = int(item.find('key').find('Vector2').find('X').text)
 		y = int(item.find('key').find('Vector2').find('Y').text)
-		tf.append((name, x, y, t, s))
+		tf.append(i(name, x, y, loc, 1, 1, t, s))
 
 	farm['terrainFeatures'] = tf
 
@@ -68,7 +72,8 @@ def getFarmInfo(saveFileLocation,read_data=False):
 		y = int(item.find('tileY').text)
 		w = int(item.find('tilesWide').text)
 		h = int(item.find('tilesHigh').text)
-		s.append((name, x, y, w, h))
+		t = item.find('buildingType').text
+		s.append((name, x, y, w, h, t))
 
 	farm['buildings'] = s
 
