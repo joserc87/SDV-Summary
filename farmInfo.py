@@ -23,21 +23,31 @@ def getFarmInfo(saveFileLocation,read_data=False):
 		name = item.find('value').find('Object').find('Name').text
 		x = int(item.find('value').find('Object').find('tileLocation').find('X').text)
 		y = int(item.find('value').find('Object').find('tileLocation').find('Y').text)
+		l = int(item.find('value').find('Object').find('parentSheetIndex').text)
+		t = item.find('value').find('Object').find('type').text
 		# if name not in things:
 		# 	things.append(name)
-		s.append((name, x, y))
+		s.append((name, x, y, l, t))
 
 	farm['objects'] = s
 
-	s = []
+	tf = []
 
 	for item in locations[1].find('terrainFeatures').iter('item'):
 		name = item.find('value').find('TerrainFeature').get(ns+'type')
+		t = ""
+		s = ""
+		if name == 'Tree':
+			t = int(item.find('value').find('TerrainFeature').find('treeType').text)
+			s = int(item.find('value').find('TerrainFeature').find('growthStage').text)
+		if name =='Flooring':
+			t = int(item.find('value').find('TerrainFeature').find('whichFloor').text)
+			s = int(item.find('value').find('TerrainFeature').find('whichView').text)
 		x = int(item.find('key').find('Vector2').find('X').text)
 		y = int(item.find('key').find('Vector2').find('Y').text)
-		s.append((name, x, y))
+		tf.append((name, x, y, t, s))
 
-	farm['terrainFeatures'] = s
+	farm['terrainFeatures'] = tf
 
 	s = []
 

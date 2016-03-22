@@ -2,6 +2,21 @@ from defusedxml.ElementTree import parse
 from defusedxml import ElementTree
 import json
 
+class player:
+    """docstring for player"""
+    def __init__(self, saveFile):
+        super(player, self).__init__()
+        self.saveFile = saveFile
+        self.eTree = parse(saveFile)
+        self.root = self.eTree.getroot()
+
+    def getPlayerInfo(self):
+        return playerInfo(self.saveFile)
+
+    def getCurrentSeason(self):
+       return self.root.find('currentSeason').text
+
+
 def getPartners(root):
     partners = []
     for location in root.find('locations').iter('GameLocation'):
@@ -124,7 +139,9 @@ def playerInfo(saveFileLocation,read_data=False):
 
 def main():
     saveFile = "./saves/Sketchy_116441313"
-    playerInfo(saveFile)
+    p = player(saveFile)
+    print(p.getPlayerInfo())
+    print(p.getCurrentSeason())
 
 if __name__ == '__main__':
     main()
