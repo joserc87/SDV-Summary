@@ -83,40 +83,40 @@ def generateFarm(player, farm):
 	print('\tRendering Trees...')
 	trees = [tree for tree in farm['terrainFeatures'] if tree[0] == 'Tree']
 	for tree in sorted(trees, key = lambda x:x[2]):
-		if tree[0] == 'Tree':
-			try:
-				with Image.open('./assets/farm/tree{0}_{1}.png'.format(tree.type, season)) as tree_img:
-					if tree.growth == 0:
-						tree_crop = cropImg(tree_img, 26)
-						offsetx = 0
-						offsety = 0
-					if tree.growth == 1:
-						tree_crop = cropImg(tree_img, 24)
-						offsetx = 0
-						offsety = 0
-					if tree.growth == 2:
-						tree_crop = cropImg(tree_img, 25)
-						offsetx = 0
-						offsety = 0
-					if tree.growth == 3 or tree.growth == 4:
-						tree_crop = cropImg(tree_img, 18, objectSize=(1,2))
-						offsetx = 0
-						offsety = 16
-					else:
-						tree_crop = cropImg(tree_img, 0, objectSize=(3, 6))
-						offsety = 5*16
-						offsetx = 1*16
-
-				farm_base.paste(tree_crop, (tree[1]*16 - offsetx, tree[2]*16 - offsety), tree_crop)
-			except Exception as e:
-				print(e)
+		try:
+			with Image.open('./assets/farm/tree{0}_{1}.png'.format(tree.type, season)) as tree_img:
+				if tree.growth == 0:
+					tree_crop = cropImg(tree_img, 26)
+					offsetx = 0
+					offsety = 0
+				if tree.growth == 1:
+					tree_crop = cropImg(tree_img, 24)
+					offsetx = 0
+					offsety = 0
+				if tree.growth == 2:
+					tree_crop = cropImg(tree_img, 25)
+					offsetx = 0
+					offsety = 0
+				if tree.growth == 3 or tree.growth == 4:
+					tree_crop = cropImg(tree_img, 18, objectSize=(1,2))
+					offsetx = 0
+					offsety = 16
+				else:
+					tree_crop = cropImg(tree_img, 0, objectSize=(3, 6))
+					offsety = 5*16
+					offsetx = 1*16
+			if tree.flipped:
+				tree_crop = tree_crop.transpose(Image.FLIP_LEFT_RIGHT)
+			farm_base.paste(tree_crop, (tree[1]*16 - offsetx, tree[2]*16 - offsety), tree_crop)
+		except Exception as e:
+			print(e)
 
 	print('\tRendering Buildings...')
 	for building in farm['buildings']:
 		try:
 			building_img = Image.open('./assets/farm/buildings/{0}.png'.format(building[5]))
 			offsety = (building[4] - 1)*16
-			farm_base.paste(building_img, (building[1]*16, building[2]*16), building_img)
+			farm_base.paste(building_img, (building[1]*16, building[2]*16 - offsety), building_img)
 		except Exception as e:
 			print(e)
 
