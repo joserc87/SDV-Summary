@@ -6,7 +6,7 @@ from farmInfo import getFarmInfo
 import os
 
 def cropImg(img, location, defaultSize=(1,1), objectSize=(1,1)):
-	row = int(img.width / 16)
+	row = int(img.width / (16*defaultSize[0]))
 	x = (location % row) * 16 * defaultSize[0]
 	y = (location // row) * 16 * defaultSize[1]
 	return offset(img, -x, -y).crop((0,0, 16*objectSize[0], 16*objectSize[1]))
@@ -25,27 +25,32 @@ def generateFarm(player, farm):
 	object_spritesheet = Image.open('./assets/farm/objects.png')
 	craftable_spritesheet = Image.open('./assets/farm/craftables.png')
 
+	print('\tRendering Flooring...')
+	if 'Flooring' in farm:
+		for tile, o in farm['Flooring']:
+			if 'flooring-'+str(tile.type) in cache:
+				floor_type = cache['flooring-'+str(tile.type)]
+			else:
+				with Image.open('./assets/farm/flooring.png') as floor_sheet:
+					floor_type = cropImg(floor_sheet, tile.type, (4, 4), (4, 4))
+					cache['flooring-'+str(tile.type)] = floor_type
+			floor_view = cropImg(floor_type, o, objectSize=(1,1))
+			farm_base.paste(floor_view, (tile.x*16, tile.y*16), floor_view)
+
+	print('\tRendering Hoe Dirt...')
+	if 'HoeDirt' in farm:
+		for tile, o in farm['HoeDirt']:
+			end  = ""
+			if season == 'winter':
+				end = "snow"
+			hoe_sheet = Image.open('./assets/farm/hoeDirt' + end + '.png')
+			hoe_tile = cropImg(hoe_sheet, o)
+			farm_base.paste(hoe_tile, (tile.x*16, tile.y*16), hoe_tile)
 
 	print('\tRendering Terrain Features...')
 	things = []
 	for tFeat in farm['terrainFeatures']:
 		if tFeat[0] not in things: things.append(tFeat[0])
-		if tFeat[0] == 'Flooring':
-			if str(tFeat.type) in cache:
-				floor_type = cache[str('flooring-'+tFeat.type)]
-			else:
-				with Image.open('./assets/farm/flooring.png') as floor_sheet:
-					floor_type = cropImg(floor_sheet, tFeat.type, (4, 4), (4, 4))
-					cache['flooring-'+str(tFeat.type)] = floor_type
-			floor_view = cropImg(floor_type, tFeat.growth, objectSize=(1,1))
-			farm_base.paste(floor_view, (tFeat.x*16, tFeat.y*16), floor_view)
-		elif tFeat[0] == 'HoeDirt':
-			end  = ""
-			if season == 'winter':
-				end = "snow"
-			hoe_sheet = Image.open('./assets/farm/hoeDirt' + end + '.png')
-			hoe_tile = cropImg(hoe_sheet, 0)
-			farm_base.paste(hoe_tile, (tFeat[1]*16, tFeat[2]*16), hoe_tile)
 	for thing in set(things):
 		print('\t\t- '+thing)
 
@@ -60,7 +65,7 @@ def generateFarm(player, farm):
 		elif 'Fence' in obj[0]:
 			fence_sheet = Image.open('./assets/farm/Fence{0}.png'.format(obj[4]))
 			obj_img = cropImg(fence_sheet, -obj[3], defaultSize=(1,2), objectSize=(1,2))
-			offset = 0
+			offset = 16
 		else:
 			if obj[0] not in other_things: other_things.append(obj[0])
 			obj_img = cropImg(object_spritesheet, obj[3])
@@ -112,7 +117,7 @@ def generateFarm(player, farm):
 			print(e)
 
 	print('\tRendering Buildings...')
-	for building in farm['buildings']:
+	for building in sorted(farm['buildings'], key=lambda x:x[2]):
 		try:
 			building_img = Image.open('./assets/farm/buildings/{0}.png'.format(building[5]))
 			offsety = (building[4] - 1)*16
