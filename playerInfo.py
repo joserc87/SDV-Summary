@@ -5,7 +5,7 @@ import json
 class player:
     """docstring for player"""
     def __init__(self, saveFile):
-        super(player, self).__init__()
+        # super(player, self).__init__()
         self.saveFile = saveFile
         self.eTree = parse(saveFile)
         self.root = self.eTree.getroot()
@@ -67,9 +67,17 @@ def strToBool(x):
         return False
 
 def playerInfo(saveFileLocation,read_data=False):
-    playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel', 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina', 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin', 'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor']
-    professions = ['Rancher', 'Tiller', 'Coopmaster', 'Shepherd', 'Artisan', 'Agriculturist', 'Fisher', 'Trapper', 'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist', 'Tracker', 'Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout', 'Brute', 'Defender', 'Acrobat', 'Desperado']
-    npcs = ['Willy','Clint','Jodi','Harvey','Leah','Wizard','Jas','Abigail','Maru','Elliott','Caroline','Pam','Dwarf','Shane','Demetrius','Alex','Gus','Vincent','Sebastian','Robin','Sam','Lewis','Marnie','Penny','Haley','Pierre','Evelyn','Linus','George','Emily','Kent','Krobus','Sandy']
+    playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel',
+                'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina',
+                'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin',
+                'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor','dateStringForSaveGame']
+    professions = ['Rancher', 'Tiller', 'Coopmaster', 'Shepherd', 'Artisan', 'Agriculturist', 'Fisher', 'Trapper',
+                'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist',
+                'Tracker','Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout',
+                'Brute', 'Defender','Acrobat', 'Desperado']
+    npcs = ['Willy','Clint','Jodi','Harvey','Leah','Wizard','Jas','Abigail','Maru','Elliott','Caroline','Pam','Dwarf',
+            'Shane','Demetrius','Alex','Gus','Vincent','Sebastian','Robin','Sam','Lewis','Marnie','Penny','Haley','Pierre',
+            'Evelyn','Linus','George','Emily','Kent','Krobus','Sandy']
 
     ns= "{http://www.w3.org/2001/XMLSchema-instance}"
     if read_data == False:
@@ -106,7 +114,10 @@ def playerInfo(saveFileLocation,read_data=False):
         if tag in ['name','farmName','favoriteThing']:
             if len(s)>34:
                 raise IOError
+        if tag == 'dateStringForSaveGame':
+            tag = 'date'
         info[tag] = s
+
 
     # Information from elsewhere    
     # UID for save file
