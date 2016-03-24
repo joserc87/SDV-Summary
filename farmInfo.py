@@ -3,6 +3,33 @@ from defusedxml import ElementTree
 from PIL import Image 
 from collections import namedtuple
 
+# Check adj. tiles for all tiles on map to determine orientation. Uses bit mask to  select correct tile from spritesheet
+def checkSurrounding(tiles):
+	floor_map = [[None for a in range(80)] for b in range(65)]
+	for tile in tiles:
+		floor_map[tile.y][tile.x] = tile
+
+	temp = []
+	m = [0, 12, 13, 9, 4, 8, 1, 5, 15, 11, 14, 10, 3, 7, 2, 6]
+
+	for y, tile_row in enumerate(floor_map):
+		for x, tile in enumerate(tile_row):
+			a = 0
+			if tile != None:
+				for dx, dy, b in [(0,-1, 1),(1,0, 2),(0,1,4),(-1,0,8)]:
+					try:
+						if floor_map[y + dy][x + dx] != None:
+							if tile.name == 'Flooring':
+								if floor_map[y + dy][x + dx].type == tile.type:
+									a += b
+							else:
+								a += b
+					except Exception as e:
+						print(e)
+				temp.append((tile, m[a]))
+	return temp
+
+
 # This is a test method for returning the position location and the name of objects
 # located on the players farm.
 # 
@@ -35,23 +62,47 @@ def getFarmInfo(saveFileLocation,read_data=False):
 	farm['objects'] = s
 
 	tf = []
+	crops = []
 
 	for item in locations[1].find('terrainFeatures').iter('item'):
 		s = None
 		loc = None
+		f = False
 		name = item.find('value').find('TerrainFeature').get(ns+'type')
-		i = namedtuple('Item', ['name', 'x', 'y', 'sheetIndex','w', 'h', 'type', 'growth'])
+		i = namedtuple('Item', ['name', 'x', 'y', 'sheetIndex','w', 'h', 'type', 'growth', 'flipped'])
 		if name == 'Tree':
 			t = int(item.find('value').find('TerrainFeature').find('treeType').text)
 			s = int(item.find('value').find('TerrainFeature').find('growthStage').text)
+			if item.find('value').find('TerrainFeature').find('flipped').text == 'true': f= True
 		if name =='Flooring':
 			t = int(item.find('value').find('TerrainFeature').find('whichFloor').text)
 			s = int(item.find('value').find('TerrainFeature').find('whichView').text)
+		if name == "HoeDirt":
+			if item.find('value').find('TerrainFeature').find('crop'):
+				crop = item.find('value').find('TerrainFeature').find('crop')
+				crop_x = int(item.find('key').find('Vector2').find('X').text)
+				crop_y = int(item.find('key').find('Vector2').find('Y').text)
+				crop_phase = int(crop.find('currentPhase').text)
+				crop_location = int(crop.find('rowInSpriteSheet').text)
+				crop_flip = False
+				if crop.find('flip').text == 'true': crop_flip = True
+				crop_dead = False
+				if crop.find('dead').text == 'true': crop_dead = True
+				crops.append((crop_x, crop_y, crop_phase, crop_location, crop_flip, crop_dead))
 		x = int(item.find('key').find('Vector2').find('X').text)
 		y = int(item.find('key').find('Vector2').find('Y').text)
-		tf.append(i(name, x, y, loc, 1, 1, t, s))
+		tf.append(i(name, x, y, loc, 1, 1, t, s, f))
+
+	d = {k[0]: [a for a in tf if a[0] == k[0]] for k in tf}
 
 	farm['terrainFeatures'] = tf
+	farm['Crops'] = crops
+
+	try:
+		farm['Flooring'] = checkSurrounding(d['Flooring'])
+		farm['HoeDirt'] = checkSurrounding(d['HoeDirt'])
+	except Exception as e:
+		print(e)
 
 	s = []
 
@@ -148,7 +199,7 @@ def generateImage(farm):
 	return image
 
 def main():
-	generateImage(getFarmInfo('./save/Crono_116230451')).save('farm.png')
+	getFarmInfo('./saves/Crono_116230451')
 
 if __name__ == '__main__':
 	main()

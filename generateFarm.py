@@ -47,6 +47,15 @@ def generateFarm(player, farm):
 			hoe_tile = cropImg(hoe_sheet, o)
 			farm_base.paste(hoe_tile, (tile.x*16, tile.y*16), hoe_tile)
 
+	print('\tRendering Crops...')
+	if 'Crops' in farm:
+		for tile in sorted(farm['Crops'], key = lambda x: x[1]):
+			crop_spritesheet = Image.open('./assets/farm/crops.png')
+			crop_sprites = cropImg(crop_spritesheet, tile[3],(7,2) ,(7,2))
+			crop_img = cropImg(crop_sprites, tile[2], (1, 2), (1,2))
+			if tile[4]: crop_img = crop_img.transpose(Image.FLIP_LEFT_RIGHT)
+			farm_base.paste(crop_img, (tile[0]*16, tile[1]*16 - 16), crop_img)
+
 	print('\tRendering Terrain Features...')
 	things = []
 	for tFeat in farm['terrainFeatures']:
