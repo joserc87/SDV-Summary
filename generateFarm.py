@@ -63,24 +63,30 @@ def generateFarm(player, farm):
 	for thing in set(things):
 		print('\t\t- '+thing)
 
+
 	print('\tRendering Objects...')
 	things = []
 	other_things = []
 	for obj in sorted(farm['objects'], key=lambda x: x[2]):
-		if obj[4] == "Crafting" and obj[0] not in craftable_blacklist:
-			if obj[0] not in things: things.append(obj[0])
-			obj_img = cropImg(craftable_spritesheet, obj[3], (1, 2), (1,2))
-			offset = 16
-		elif 'Fence' in obj[0]:
-			fence_sheet = Image.open('./assets/farm/Fence{0}.png'.format(obj[4]))
-			obj_img = cropImg(fence_sheet, -obj[3], defaultSize=(1,2), objectSize=(1,2))
+		if obj.type == "Crafting" and obj.name not in craftable_blacklist:
+			if obj.name not in things: things.append(obj.name)
+			obj_img = cropImg(craftable_spritesheet, obj.sheetIndex, (1, 2), (1,2))
 			offset = 16
 		else:
-			if obj[0] not in other_things: other_things.append(obj[0])
-			obj_img = cropImg(object_spritesheet, obj[3])
+			if obj.name not in other_things: other_things.append(obj.name)
+			obj_img = cropImg(object_spritesheet, obj.sheetIndex)
 			offset = 0
 
-		farm_base.paste(obj_img, (obj[1]*16, obj[2]*16 - offset), obj_img)
+		farm_base.paste(obj_img, (obj.x*16, obj.y*16 - offset), obj_img)
+	
+	print('\tRendering Fences...')
+	if 'Fences' in farm:
+		for fence, o in sorted(farm['Fences'], key = lambda x: x[0].y):
+			fence_sheet = Image.open('./assets/farm/Fence{0}.png'.format(fence.type))
+			fence_img = cropImg(fence_sheet, o, defaultSize=(1,2), objectSize=(1,2))
+			offset = 16
+			farm_base.paste(fence_img, (fence.x * 16, fence.y * 16 - offset), fence_img)
+
 	print('\t2x1 Things')
 	for thing in set(things):
 		print('\t\t- '+thing)

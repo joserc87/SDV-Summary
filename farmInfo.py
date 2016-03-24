@@ -10,7 +10,12 @@ def checkSurrounding(tiles):
 		floor_map[tile.y][tile.x] = tile
 
 	temp = []
-	m = [0, 12, 13, 9, 4, 8, 1, 5, 15, 11, 14, 10, 3, 7, 2, 6]
+	m = []
+
+	if tiles[0].name == 'Fence':
+		m = [5, 3, 10, 6, 5, 3, 0, 6, 9, 8, 7, 7, 2, 8, 4, 4]
+	else:
+		m = [0, 12, 13, 9, 4, 8, 1, 5, 15, 11, 14, 10, 3, 7, 2, 6]
 
 	for y, tile_row in enumerate(floor_map):
 		for x, tile in enumerate(tile_row):
@@ -25,7 +30,7 @@ def checkSurrounding(tiles):
 							else:
 								a += b
 					except Exception as e:
-						print(e)
+						print('Error: ' + str(e))
 				temp.append((tile, m[a]))
 	return temp
 
@@ -36,6 +41,8 @@ def checkSurrounding(tiles):
 # returns a dict with an array of tuples of the form: (name, x, y)
 
 def getFarmInfo(saveFileLocation,read_data=False):
+	i = namedtuple('Item', ['name', 'x', 'y', 'sheetIndex','w', 'h', 'type', 'growth', 'flipped'])
+
 	ns= "{http://www.w3.org/2001/XMLSchema-instance}"
 
 	farm = {}
@@ -54,12 +61,20 @@ def getFarmInfo(saveFileLocation,read_data=False):
 		l = int(item.find('value').find('Object').find('parentSheetIndex').text)
 		t = item.find('value').find('Object').find('type').text
 		if 'Fence' in name:
+			name = 'Fence'
 			t = int(item.find('value').find('Object').find('whichType').text)
 		# if name not in things:
 		# 	things.append(name)
-		s.append((name, x, y, l, t))
+		s.append(i(name, x, y, l, 0, 0, t, None, None))
 
-	farm['objects'] = s
+	d = {k[0]: [a for a in s if a[0] == k[0]] for k in s}
+
+	try:
+		farm['Fences'] = checkSurrounding(d['Fence'])
+	except Exception as e:
+		print('Error: ' + str(e))
+
+	farm['objects'] = [a for a in s if a.name != 'Fence']
 
 	tf = []
 	crops = []
@@ -69,7 +84,6 @@ def getFarmInfo(saveFileLocation,read_data=False):
 		loc = None
 		f = False
 		name = item.find('value').find('TerrainFeature').get(ns+'type')
-		i = namedtuple('Item', ['name', 'x', 'y', 'sheetIndex','w', 'h', 'type', 'growth', 'flipped'])
 		if name == 'Tree':
 			t = int(item.find('value').find('TerrainFeature').find('treeType').text)
 			s = int(item.find('value').find('TerrainFeature').find('growthStage').text)
@@ -102,7 +116,7 @@ def getFarmInfo(saveFileLocation,read_data=False):
 		farm['Flooring'] = checkSurrounding(d['Flooring'])
 		farm['HoeDirt'] = checkSurrounding(d['HoeDirt'])
 	except Exception as e:
-		print(e)
+		print('Error: ' + str(e))
 
 	s = []
 
