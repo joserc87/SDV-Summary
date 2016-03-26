@@ -24,7 +24,7 @@ def checkSurrounding(tiles):
 				for dx, dy, b in [(0,-1, 1),(1,0, 2),(0,1,4),(-1,0,8)]:
 					try:
 						if floor_map[y + dy][x + dx] != None:
-							if tile.name == 'Flooring':
+							if tile.name == 'Flooring' or tile.name == 'Fence':
 								if floor_map[y + dy][x + dx].type == tile.type:
 									a += b
 							else:
