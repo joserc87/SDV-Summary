@@ -148,7 +148,8 @@ def generateImage(farm):
 	return image
 
 def main():
-	generateImage(getFarmInfo('./save/Crono_116230451')).save('farm.png')
+	# generateImage(getFarmInfo('./saves/Crono_116230451')).save('farm.png')
+	getFarmInfo('./saves/Crono_116230451')
 
 if __name__ == '__main__':
 	main()
