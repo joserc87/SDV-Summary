@@ -314,7 +314,6 @@ def update_playerinfo():
 	print 'all modifications committed'
 
 if __name__ == "__main__":
-	'''
 	a = raw_input('Drop databases? (y/n): ')
 	if a == 'y':
 		delete_db()
@@ -324,5 +323,6 @@ if __name__ == "__main__":
 	a = raw_input('Generate blog database? (y/n): ')
 	if a == 'y':
 		generate_blog()
-	'''
-	update_playerinfo()
+	a = raw_input('Update playerinfo database? (y/n): ')
+	if a == 'y':
+		update_playerinfo()

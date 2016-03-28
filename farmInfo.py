@@ -211,8 +211,8 @@ def generateImage(farm):
 					colourBox(tile[1]+i, tile[2] + j, (75,75,75), pixels)
 
 	return image
-
 def main():
+	generateImage(getFarmInfo('./save/Crono_116230451')).save('farm.png')
 	getFarmInfo('./saves/Crono_116230451')
 
 if __name__ == '__main__':
