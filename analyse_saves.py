@@ -7,18 +7,21 @@ import glob
 folder = './uploads/*'
 
 files = glob.glob(folder)
+ns= "{http://www.w3.org/2001/XMLSchema-instance}"
 
 structure = {}
 
 def moveRecursivelyOverXml(element):
 	reconstructed_dict = {}
 	if element.getchildren() == []:
-		reconstructed_dict = element.text
+		reconstructed_dict = {}
 	else:
 		for child in element.getchildren():
-			if element.attrib != {}:
-				reconstructed_dict.update(element.attrib)
-			reconstructed_dict[child.tag] = moveRecursivelyOverXml(child)
+			key = child.tag
+			# if element.attrib != {}:
+				# reconstructed_dict.update(element.attrib)
+				# key = element.attrib[ns+'type']+' '+key
+			reconstructed_dict[key] = moveRecursivelyOverXml(child)
 	return reconstructed_dict
 
 def main():
@@ -32,7 +35,17 @@ def main():
 	# print structure
 	return structure
 
+def displayNestedDicts(dictionary,spaces=''):
+	try:
+		for key in dictionary.keys():
+			print spaces + key
+			displayNestedDicts(dictionary[key],spaces+'-')
+	except AttributeError:
+		return
+
+
+
 if __name__ == "__main__":
 	structure = main()
-	print structure
+	displayNestedDicts(structure)
 	
