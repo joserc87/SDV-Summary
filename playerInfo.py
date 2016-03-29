@@ -2,6 +2,9 @@ from defusedxml.ElementTree import parse
 from defusedxml import ElementTree
 import json
 
+ns= "{http://www.w3.org/2001/XMLSchema-instance}"
+animal_habitable_buildings = ['Coop','Barn']
+
 class player:
     """docstring for player"""
     def __init__(self, saveFile):
@@ -53,12 +56,28 @@ def getStats(root):
 
 def getNPCs(root, loc, types):
     npc_list = []
-    ns= "{http://www.w3.org/2001/XMLSchema-instance}"
     for location in root.find('locations').iter('GameLocation'):
         if location.get(ns+'type') in loc:
             NPCs = location.find('characters').iter('NPC')
             npc_list += [npc for npc in NPCs if npc.get(ns+'type') in types]
     return npc_list
+
+def getAnimals(root):
+    locations = root.find('locations').findall("GameLocation")
+    animals = []
+    for item in locations[1].find('buildings').iter('Building'):
+        name = item.find('buildingType').text 
+        if name in animal_habitable_buildings:
+            for animal in item.find('indoors').find('animals').iter('item'):
+                animal = animal.find('value').find('FarmAnimal')
+                an = animal.find('name').text
+                aa = int(animal.find('age').text)
+                at = animal.find('type').text
+                ah = int(animal.find('happiness').text)
+                ahx = int(animal.find('homeLocation').find('X').text)
+                ahy = int(animal.find('homeLocation').find('Y').text)
+                animals.append((at,an,aa,ah,ahx,ahy))
+    return animals
 
 def strToBool(x):
     if x.lower() == 'true':
@@ -78,8 +97,6 @@ def playerInfo(saveFileLocation,read_data=False):
     npcs = ['Willy','Clint','Jodi','Harvey','Leah','Wizard','Jas','Abigail','Maru','Elliott','Caroline','Pam','Dwarf',
             'Shane','Demetrius','Alex','Gus','Vincent','Sebastian','Robin','Sam','Lewis','Marnie','Penny','Haley','Pierre',
             'Evelyn','Linus','George','Emily','Kent','Krobus','Sandy']
-
-    ns= "{http://www.w3.org/2001/XMLSchema-instance}"
     if read_data == False:
         root = parse(saveFileLocation).getroot()
     else:
@@ -145,11 +162,12 @@ def playerInfo(saveFileLocation,read_data=False):
     p['children'] = [(int(child.find('gender').text),strToBool(child.find('darkSkinned').text),int(child.find('daysOld').text)) for child in getChildren(root)]
 
     info['portrait_info'] = json.dumps(p)
+    info['animals'] = json.dumps(getAnimals(root))
 
     return info
 
 def main():
-    saveFile = "./saves/Sketchy_116441313"
+    saveFile = "./saves/Crono_116230451"
     p = player(saveFile)
     print(p.getPlayerInfo())
     print(p.getCurrentSeason())

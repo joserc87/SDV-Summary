@@ -179,8 +179,9 @@ database_structure_dict = {'md5':'TEXT',
 'date':'TEXT',
 'savefileLocation':'TEXT',
 'petName':'TEXT',
-'portrait_info':'JSON',
-'portrait_url': 'TEXT'}
+'portrait_info':'TEXT',
+'portrait_url': 'TEXT',
+'animals':'TEXT'}
 
 if config.USE_SQLITE==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'
