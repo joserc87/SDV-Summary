@@ -78,7 +78,6 @@ def getFarmInfo(saveFileLocation,read_data=False):
 
 	tf = []
 	crops = []
-
 	for item in locations[1].find('terrainFeatures').iter('item'):
 		s = None
 		loc = None
@@ -103,6 +102,10 @@ def getFarmInfo(saveFileLocation,read_data=False):
 				crop_dead = False
 				if crop.find('dead').text == 'true': crop_dead = True
 				crops.append((crop_x, crop_y, crop_phase, crop_location, crop_flip, crop_dead))
+		if name =="FruitTree":
+			t = int(item.find('value').find('TerrainFeature').find('treeType').text)
+			s = int(item.find('value').find('TerrainFeature').find('growthStage').text)
+			if item.find('value').find('TerrainFeature').find('flipped').text == 'true': f= True
 		x = int(item.find('key').find('Vector2').find('X').text)
 		y = int(item.find('key').find('Vector2').find('Y').text)
 		tf.append(i(name, x, y, loc, 1, 1, t, s, f))

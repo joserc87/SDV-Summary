@@ -11,9 +11,9 @@ def cropImg(img, location, defaultSize=(1,1), objectSize=(1,1)):
 	y = (location // row) * 16 * defaultSize[1]
 	return offset(img, -x, -y).crop((0,0, 16*objectSize[0], 16*objectSize[1]))
 
-def loadTree(ss_tree):
+def loadTree(ss_tree, loc = 0):
 	tree = Image.new('RGBA', (3*16, 6*16))
-	body = cropImg(ss_tree, 0, objectSize=(3, 6))
+	body = cropImg(ss_tree, loc, objectSize=(3, 6))
 	stump = cropImg(ss_tree, 20, objectSize=(1,2))
 	tree.paste(stump, (1*16, 4*16), stump)
 	tree.paste(body, (0,0) , body)
@@ -139,6 +139,25 @@ def generateFarm(player, farm):
 		except Exception as e:
 			print(e)
 
+	print('\tRendering Fruit Trees...')
+	fruitTrees = [ft for ft in farm['terrainFeatures'] if ft.name == 'FruitTree']
+	for fruitTree in sorted(fruitTrees, key=lambda x:x.y):
+		seasons = {'spring': 0, 'summer': 1, 'fall': 2, 'winter': 3}
+		try:
+			with Image.open('./assets/farm/fruitTrees.png') as tree_img:
+				if fruitTree.growth <= 3:
+					print(fruitTree.growth + 9*fruitTree.type)
+					tree_crop = cropImg(tree_img, fruitTree.growth + 1+ 9*fruitTree.type,defaultSize=(3,5), objectSize=(3, 5))
+				else:
+					tree_crop = cropImg(tree_img, 4 + seasons[season] + 9*fruitTree.type, defaultSize=(3,5), objectSize=(3, 5))
+				offsety = 4*16
+				offsetx = 1*16
+				if fruitTree.flipped:
+					tree_crop = tree_crop.transpose(Image.FLIP_LEFT_RIGHT)
+				farm_base.paste(tree_crop, (fruitTree.x*16 - offsetx, fruitTree.y*16 - offsety), tree_crop)
+		except Exception as e:
+			print(e)
+
 	print('\tRendering Buildings...')
 	for building in sorted(farm['buildings'], key=lambda x:x[2]):
 		try:
@@ -152,7 +171,7 @@ def generateFarm(player, farm):
 
 
 def main():
-	# f = 'Sketchy_116441313'
+	# f = 'Crono_116230451'
 	for f in os.listdir(os.getcwd()+'/saves/'):
 		print(f)
 		p = player('./saves/'+f)
