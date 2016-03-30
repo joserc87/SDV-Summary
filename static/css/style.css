@@ -91,20 +91,40 @@ dt, dd {
 }
 
 .portraitPanel {
-	display: inline-block;
+/*	display: inline-block;
+	width: 200px;
 	border-style: solid;
 	border-width: 20px 21px 21px 20px;
 	-moz-border-image: url(frame.png) 30 32 32 31 stretch;
 	-webkit-border-image: url(frame.png) 30 32 32 31 stretch;
 	-o-border-image: url(frame.png) 30 32 32 31 stretch;
-	border-image: url(frame.png) 30 32 32 31 fill stretch;
+	border-image: url(frame.png) 30 32 32 31 fill stretch;*/
+	image-rendering: pixelated;
+	image-rendering: -moz-crisp-edges;
+	width: 200px;
+
+	border-style: solid;
+	border-width: 21px 21px 21px 21px;
+	-moz-border-image: url(frame.png) 30 30 30 30 stretch;
+	-webkit-border-image: url(frame.png) 30 30 30 30 stretch;
+	-o-border-image: url(frame.png) 30 30 30 30 stretch;
+	border-image: url(frame.png) 30 30 30 30 stretch;
+	z-index: 2;
 }
 
 .playerPortrait {
+/*	width: calc(100% - 1px);
 	z-index: 100;
 	image-rendering: pixelated;
 	padding: 20px;
-	background-color: #ffedd1;
+	background-color: #ffedd1;*/
+	width: calc(100% - 1px);
+	padding: 20px;
+	image-rendering: pixelated;
+	image-rendering: -moz-crisp-edges;
+	position: relative;
+	top: 0;
+	background-color: #ffffff;
 }
 
 .img-responsive{

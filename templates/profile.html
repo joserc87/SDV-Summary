@@ -97,10 +97,27 @@
 								</div>
 							</div>
 							<div id="familyPortrait" class="tab-pane">
-								<div class="col-sm-12">
+								<div class="col-sm-5 col-xs-12">
 									<div class="portraitPanel">
 										<img src="{{ data.portrait_url }}" class="playerPortrait">
 									</div>
+								</div>
+								<div class="col-sm-7 col-xs-12">
+									{% if data.animals %}
+									<h3>Farm Animals</h3>
+									<dl class="text-left">
+										{% for key in data.animals.keys() %}
+											<dt>{{data.animals[key]|length}} {{key}}{% if data.animals[key]|length>1 %}s{% endif %}:</dt>
+											<dd>
+												<ul class="list-unstyled">
+													{% for row in data.animals[key] %}
+														<li style="padding-left:1em;">{{row[0]}}, {{row[1]}} days old</li>
+													{% endfor %}
+												</ul>
+											</dd>
+										{% endfor %}
+									</dl>
+									{% endif %}
 								</div>
 							</div>
 							<div id="skills" class="tab-pane">
@@ -212,7 +229,7 @@
 									</div>
 								</div>
 								<div class="col-sm-12" style="margin-top: 10px;">	
-										<h3>Professions</h2>
+										<h3>Professions</h3>
 										<div class="col-sm-6">
 											{% if data.professions0 != None %}
 											<p>{{data.professions0}}</p>

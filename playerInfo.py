@@ -64,7 +64,7 @@ def getNPCs(root, loc, types):
 
 def getAnimals(root):
     locations = root.find('locations').findall("GameLocation")
-    animals = []
+    animals = {}
     for item in locations[1].find('buildings').iter('Building'):
         name = item.find('buildingType').text 
         if name in animal_habitable_buildings:
@@ -76,7 +76,11 @@ def getAnimals(root):
                 ah = int(animal.find('happiness').text)
                 ahx = int(animal.find('homeLocation').find('X').text)
                 ahy = int(animal.find('homeLocation').find('Y').text)
-                animals.append((at,an,aa,ah,ahx,ahy))
+                animaltuple = (an,aa,ah,ahx,ahy)
+                try:
+                    animals[at].append(animaltuple)
+                except KeyError:
+                    animals[at] = [animaltuple]
     return animals
 
 def strToBool(x):
