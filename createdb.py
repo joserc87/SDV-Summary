@@ -179,7 +179,7 @@ database_structure_dict = {'md5':'TEXT',
 'date':'TEXT',
 'savefileLocation':'TEXT',
 'petName':'TEXT',
-'portrait_info':'JSON',
+'portrait_info':'TEXT',
 'portrait_url': 'TEXT'}
 
 if config.USE_SQLITE==True:
@@ -323,6 +323,4 @@ if __name__ == "__main__":
 	a = raw_input('Generate blog database? (y/n): ')
 	if a == 'y':
 		generate_blog()
-	a = raw_input('Update playerinfo database? (y/n): ')
-	if a == 'y':
-		update_playerinfo()
+

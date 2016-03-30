@@ -11,6 +11,14 @@ def cropImg(img, location, defaultSize=(1,1), objectSize=(1,1)):
 	y = (location // row) * 16 * defaultSize[1]
 	return offset(img, -x, -y).crop((0,0, 16*objectSize[0], 16*objectSize[1]))
 
+def loadTree(ss_tree):
+	tree = Image.new('RGBA', (3*16, 6*16))
+	body = cropImg(ss_tree, 0, objectSize=(3, 6))
+	stump = cropImg(ss_tree, 20, objectSize=(1,2))
+	tree.paste(stump, (1*16, 4*16), stump)
+	tree.paste(body, (0,0) , body)
+	return tree
+
 def generateFarm(player, farm):
 
 	season = player.getCurrentSeason()
@@ -122,7 +130,7 @@ def generateFarm(player, farm):
 					offsetx = 0
 					offsety = 16
 				else:
-					tree_crop = cropImg(tree_img, 0, objectSize=(3, 6))
+					tree_crop = loadTree(tree_img)
 					offsety = 5*16
 					offsetx = 1*16
 			if tree.flipped:

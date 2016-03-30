@@ -4,6 +4,7 @@
 from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify, make_response
 import time
 from werkzeug import secure_filename, check_password_hash
+from werkzeug.contrib.fixers import ProxyFix
 import os
 from playerInfo import playerInfo
 from farmInfo import getFarmInfo
@@ -24,6 +25,7 @@ import datetime
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 app.secret_key = app.config['SECRET_KEY']
+app.wsgi_app = ProxyFix(app.wsgi_app)
 if app.config['USE_SQLITE'] == True:
 	app.database = app.config['DB_SQLITE']
 	app.sqlesc = '?'
@@ -67,7 +69,7 @@ def home():
 				error = "Savegame failed sanity check (if you think this is in error please let us know)"
 				g.db = connect_db()
 				cur = g.db.cursor()
-				cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(filename)))
+				cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(secure_filename(inputfile.filename))))
 				g.db.commit()
 				g.db.close()
 				return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
@@ -311,21 +313,22 @@ def admin_panel():
 		if request.method == 'POST':
 			if 'blog' in request.form:
 				return 'Failure'
-			try:
-				g.db = connect_db()
-				cur = g.db.cursor()
-				cur.execute('SELECT password FROM admin WHERE username='+app.sqlesc+' ORDER BY id',(request.form['username'],))
-				r = cur.fetchone()
-				if r != None:
-					if check_password_hash(r[0],request.form['password']) == True:
-						session['admin']=request.form['username']
-						return redirect(url_for('admin_panel'))
-					else:
-						error = 'Incorrect username or password'	
-				else:
+			else:
+				try:
+					g.db = connect_db()
+					cur = g.db.cursor()
+					cur.execute('SELECT password FROM admin WHERE username='+app.sqlesc+' ORDER BY id',(request.form['username'],))
+					r = cur.fetchone()
+					if r != None:
+						if check_password_hash(r[0],request.form['password']) == True:
+							session['admin']=request.form['username']
+							return redirect(url_for('admin_panel'))
+					cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'], time.time(),'failed login: '+request.form['username']))
+					g.db.commit()
+					g.db.close()
 					error = 'Incorrect username or password'
-			except:
-				pass
+				except:
+					pass
 		return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
 
 def get_blogposts(n=False,**kwargs):
