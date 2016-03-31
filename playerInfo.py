@@ -30,7 +30,6 @@ def getPartners(root):
 
 def getChildren(root):
     children = []
-
     childType = ['Child']
     childLocation = ['Farm', 'FarmHouse']
     child_nodes = getNPCs(root, childLocation, childType)
@@ -163,7 +162,7 @@ def playerInfo(saveFileLocation,read_data=False):
     else:
         p['partner'] = None
     p['cat']=strToBool(info['catPerson'])
-    p['children'] = [(int(child.find('gender').text),strToBool(child.find('darkSkinned').text),int(child.find('daysOld').text)) for child in getChildren(root)]
+    p['children'] = [(int(child.find('gender').text),strToBool(child.find('darkSkinned').text),int(child.find('daysOld').text),child.find('name').text) for child in getChildren(root)]
 
     info['portrait_info'] = json.dumps(p)
     info['animals'] = json.dumps(getAnimals(root))

@@ -97,12 +97,27 @@
 								</div>
 							</div>
 							<div id="familyPortrait" class="tab-pane">
+
 								<div class="col-sm-5 col-xs-12">
 									<div class="portraitPanel">
 										<img src="{{ data.portrait_url }}" class="playerPortrait">
 									</div>
 								</div>
 								<div class="col-sm-7 col-xs-12">
+									{% if data.portrait_info['partner'] != None %}
+										<p>Married to {{ data.portrait_info['partner'] }}</p>
+									{% else %}
+										<p>Unmarried</p>
+									{%endif%}
+									{% if data.portrait_info['children']|length > 0 %}
+										<p>Children: 
+										{% for child in data.portrait_info['children'] %}
+										{{ child[3] }} gender {{ child[0] }} days old: {{ child[2] }}{% endfor %}</p>
+									{% else %}
+										<p>No children</p>
+									{%endif%}
+								</div>
+								<div class="col-sm-12 col-xs-12">
 									{% if data.animals %}
 									<h3>Farm Animals</h3>
 									<dl class="text-left">
@@ -119,6 +134,14 @@
 									</dl>
 									{% endif %}
 								</div>
+							{#
+							<dl>
+							{% for pair in data|dictsort %}
+							<dt>{{pair.0}}</dt>
+							<dd>{{pair.1}}</dd>
+							<br>
+							{% endfor %}
+							</dl>#}
 							</div>
 							<div id="skills" class="tab-pane">
 								<div class="col-sm-12">
