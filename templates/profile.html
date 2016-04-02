@@ -27,6 +27,11 @@
 		<meta property="og:image" content="http://sdv.robheath.me.uk/{{data.farm_url}}" />
 		<meta property="og:description" content="A summary of {{data.name}}'s Stardew Valley farm: {{data.farmName}} Farm" />
 		<meta property="og:site_name" content="Stardew Valley Summary" />
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 {% endblock %}
 
 {% block title %}{{data.farmName}} Farm Summary - SDV Summary{% endblock %}
@@ -70,14 +75,14 @@
 							<li><a href="#familyPortrait" data-toggle="pill">Family</a></li>
 							<li><a href="#skills" data-toggle="pill">Skills</a></li>
 						</ul>
-						<div class="tab-content">
+						<div class="tab-content text-left">
 							<div id="playerInfo" class="tab-pane active">
-								<div class="col-sm-5">
+								<div class="col-md-4 col-sm-4 col-xs-12">
 									<div class="avatarPanel">
 										<img src="{{ data.avatar_url }}" class="playerAvatar">
 									</div>
 								</div>
-								<div class="col-sm-7 ">
+								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
 									<dl class="dl-horizontal">
 										<dt>Name</dt><dd>{{ data.name }}</dd>
 										<dt>Current Funds</dt><dd>{{ data.money }}g</dd>
@@ -95,12 +100,12 @@
 							</div>
 							<div id="familyPortrait" class="tab-pane">
 
-								<div class="col-sm-5 col-xs-12">
+								<div class="col-md-4 col-sm-4 col-xs-12">
 									<div class="portraitPanel">
 										<img src="{{ data.portrait_url }}" class="playerPortrait">
 									</div>
 								</div>
-								<div class="col-sm-7 col-xs-12">
+								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
 									<p>
 									{% if data.portrait_info['partner'] != None %}
 										{{data.name}} is married to {{ data.portrait_info['partner'] }}{%if data.petName!=None%},{%else%}and{%endif%}
@@ -115,25 +120,26 @@
 									{%endif%}
 									and
 									{%if data.petName != None %}
-									{#{% if data.portrait_info['partner'] != None or data.portrait_info['children']|length > 0 %}the family{%elif data.isMale=='true'%}he{%else%}she{%endif%}#} has pet {% if data.catPerson == 'true' %} cat {% else %} dog {% endif %} named {{ data.petName }}.</p>
+									{#{% if data.portrait_info['partner'] != None or data.portrait_info['children']|length > 0 %}the family{%elif data.isMale=='true'%}he{%else%}she{%endif%}#} has a pet {% if data.catPerson == 'true' %} cat {% else %} dog {% endif %} named {{ data.petName }}.</p>
 									{%endif%}
 									</p>
 								</div>
-								<div class="col-sm-12 col-xs-12">
+								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
 									{% if data.animals %}
-									<h3>Farm Animals</h3>
-									<dl class="text-left">
+										<!--<h3>Farm Animals</h3>-->
+										<br>
+										{% if data.animals['horse'] %}
+											<p>Farm horse: {{data.animals['horse']}}</p>
+										{%endif%}
 										{% for key in data.animals.keys() %}
-											<dt>{{data.animals[key]|length}} {{key}}{% if data.animals[key]|length>1 %}s{% endif %}:</dt>
-											<dd>
-												<ul class="list-unstyled">
+											{%if key != 'horse' %}
+												<p>{{data.animals[key]|length}} {{key}}{% if data.animals[key]|length>1 %}s{% endif %}:
 													{% for row in data.animals[key] %}
-														<li style="padding-left:1em;">{{row[0]}}, {{row[1]}} days old</li>
+														<span class="clickable" data-toggle="tooltip" title="{{row[1]}} days old">{{row[0]}}</span>{%if not loop.last%},{%endif%}
 													{% endfor %}
-												</ul>
-											</dd>
+												</p>
+											{%endif%}
 										{% endfor %}
-									</dl>
 									{% endif %}
 								</div>
 							{#
@@ -147,7 +153,15 @@
 							</div>
 							<div id="skills" class="tab-pane">
 								<div class="col-sm-12">
+									{% set professions = [data.professions0,data.professions1,data.professions2,data.professions3,data.professions4,data.professions5,data.professions6,data.professions7,data.professions8,data.professions9] %}
 									<!-- start -->
+									{% set profindex = {
+									'Farming':{4:('Rancher','Tiller'),9:('Coopmaster','Shepherd','Artisan','Agriculturalist')},
+									'Mining':{4:('Miner','Geologist'),9:('Blacksmith','Prospector','Excavator','Gemologist')},
+									'Foraging':{4:('Forester','Gatherer'),9:('Lumberjack','Tapper','Botanist','Tracker')},
+									'Fishing':{4:('Fisher','Trapper'),9:('Angler','Pirate','Mariner','Luremaster')},
+									'Combat':{4:('Fighter','Scout'),9:('Brute','Defender','Acrobat','Desperado')}}
+									%}
 									{% for skill in [('Farming',data.farmingLevel),('Mining',data.miningLevel),('Foraging',data.foragingLevel),('Fishing',data.fishingLevel),('Combat',data.combatLevel)] %}
 										<div class="row">
 											<div class="col-sm-4"><p>{{skill[0]}}</p></div>
@@ -157,7 +171,13 @@
 														{% if (level + 1) % 5 != 0 %}
 														<img src="{{url_for('static', filename='images/skills/point_active.png')}}">
 														{% else %}
-														<img src="{{url_for('static', filename='images/skills/profession_active.png')}}">
+														<img src="{{url_for('static', filename='images/skills/profession_active.png')}}" data-toggle="tooltip" title="
+														{% for value in profindex[skill[0]][level] %}
+															{% if value in professions %}
+															{{value}}
+															{%endif%}
+														{%endfor%}
+														">
 														{% endif %}
 													{% endfor %}
 													{% for level in range(skill[1] + 1, 11) %}
@@ -171,8 +191,9 @@
 											</div>
 										</div>
 									{% endfor %}
+									<p class="text-center">(Hover for professions)</p>
 								</div>
-								{% set professions = [data.professions0,data.professions1,data.professions2,data.professions3,data.professions4,data.professions5,data.professions6,data.professions7,data.professions8,data.professions9] %}
+								<!--
 								<div class="col-sm-12" style="margin-top: 10px;">	
 										<h3>Professions</h3>
 										{% for profession in professions %}
@@ -183,6 +204,7 @@
 											{% endif %}
 										{% endfor %}
 								</div>
+								-->
 							</div>
 						</div>
 

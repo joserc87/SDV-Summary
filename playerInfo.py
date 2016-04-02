@@ -3,7 +3,7 @@ from defusedxml import ElementTree
 import json
 
 ns= "{http://www.w3.org/2001/XMLSchema-instance}"
-animal_habitable_buildings = ['Coop','Barn']
+animal_habitable_buildings = ['Coop','Barn','SlimeHutch']
 
 class player:
     """docstring for player"""
@@ -65,8 +65,9 @@ def getAnimals(root):
     locations = root.find('locations').findall("GameLocation")
     animals = {}
     for item in locations[1].find('buildings').iter('Building'):
+        buildingtype = item.get(ns+'type')
         name = item.find('buildingType').text 
-        if name in animal_habitable_buildings:
+        if buildingtype in animal_habitable_buildings:
             for animal in item.find('indoors').find('animals').iter('item'):
                 animal = animal.find('value').find('FarmAnimal')
                 an = animal.find('name').text
@@ -75,11 +76,14 @@ def getAnimals(root):
                 ah = int(animal.find('happiness').text)
                 ahx = int(animal.find('homeLocation').find('X').text)
                 ahy = int(animal.find('homeLocation').find('Y').text)
-                animaltuple = (an,aa,ah,ahx,ahy)
+                animaltuple = (an,aa,ah,ahx,ahy,name)
                 try:
                     animals[at].append(animaltuple)
                 except KeyError:
                     animals[at] = [animaltuple]
+    horse = getNPCs(root,['Farm'],['Horse'])
+    if horse != []:
+        animals['horse']=horse[0].find('name').text
     return animals
 
 def strToBool(x):
@@ -170,10 +174,10 @@ def playerInfo(saveFileLocation,read_data=False):
     return info
 
 def main():
-    saveFile = "./saves/Crono_116230451"
+    saveFile = "./saves/Lukas_117195717"
     p = player(saveFile)
-    print(p.getPlayerInfo())
-    print(p.getCurrentSeason())
+    (p.getPlayerInfo())
+    # print(p.getCurrentSeason())
 
 if __name__ == '__main__':
     main()
