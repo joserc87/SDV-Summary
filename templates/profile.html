@@ -83,9 +83,6 @@
 										<dt>Current Funds</dt><dd>{{ data.money }}g</dd>
 										<dt>Total Earnings</dt><dd>{{ data.totalMoneyEarned }}g</dd>
 										<dt>Gender</dt><dd>{% if data.isMale == 'true' %} Male {% else %} Female {% endif %}</dd>
-										{%if data.petName != None %}
-										<dt>Companion</dt><dd>{% if data.catPerson == 'true' %} Cat {% else %} Dog {% endif %} named {{ data.petName }}</dd>
-										{%endif%}
 										</dd>
 										<dt>Favorite Thing</dt><dd>{{ data.favoriteThing }}</dd>
 										<dt>Health</dt><dd>{{ data.maxHealth }}</dd>
@@ -104,18 +101,23 @@
 									</div>
 								</div>
 								<div class="col-sm-7 col-xs-12">
+									<p>
 									{% if data.portrait_info['partner'] != None %}
-										<p>Married to {{ data.portrait_info['partner'] }}</p>
+										{{data.name}} is married to {{ data.portrait_info['partner'] }}{%if data.petName!=None%},{%else%}and{%endif%}
 									{% else %}
-										<p>Unmarried</p>
+										{{data.name}} is unmarried{%if data.petName!=None%},{%else%}and{%endif%}
 									{%endif%}
 									{% if data.portrait_info['children']|length > 0 %}
-										<p>Children: 
 										{% for child in data.portrait_info['children'] %}
-										{{ child[3] }} gender {{ child[0] }} days old: {{ child[2] }}{% endfor %}</p>
+										{%if loop.index0 == 0 %}has{%else%}and{%endif%} a {{ child[2] }} day old {% if child[0] == 0 %}son{%else%}daughter{%endif%} named {{ child[3] }}{% endfor %}{%if loop.last and data.petName!=None%},{%endif%} 
 									{% else %}
-										<p>No children</p>
+										has no children{%if data.petName!=None%},{%endif%} 
 									{%endif%}
+									and
+									{%if data.petName != None %}
+									{#{% if data.portrait_info['partner'] != None or data.portrait_info['children']|length > 0 %}the family{%elif data.isMale=='true'%}he{%else%}she{%endif%}#} has pet {% if data.catPerson == 'true' %} cat {% else %} dog {% endif %} named {{ data.petName }}.</p>
+									{%endif%}
+									</p>
 								</div>
 								<div class="col-sm-12 col-xs-12">
 									{% if data.animals %}
