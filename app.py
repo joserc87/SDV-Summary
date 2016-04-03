@@ -398,8 +398,11 @@ def allmain():
 	#print request.args.get('p')
 	try:
 		offset = int(request.args.get('p')) * num_entries
-	except:
+	except TypeError:
 		offset = 0
+	except:
+		error = "No browse with that ID!"
+		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 	if offset < 0:
 		return redirect(url_for('allmain'))
 	recents = get_recents(num_entries,offset=offset)
