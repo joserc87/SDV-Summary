@@ -22,11 +22,16 @@
 		<meta property="og:title" content="{{data.farmName}} Farm Summary - SDV Summary" />
 		<meta property="og:type" content="profile" />
 		<meta property="og:url" content="http://sdv.robheath.me.uk/{{data.url}}" />
-		<meta property="og:image" content="http://sdv.robheath.me.uk/{{data.avatar_url}}" />
 		<meta property="og:image" content="http://sdv.robheath.me.uk/{{data.portrait_url}}" />
+		<meta property="og:image" content="http://sdv.robheath.me.uk/{{data.avatar_url}}" />
 		<meta property="og:image" content="http://sdv.robheath.me.uk/{{data.farm_url}}" />
 		<meta property="og:description" content="A summary of {{data.name}}'s Stardew Valley farm: {{data.farmName}} Farm" />
 		<meta property="og:site_name" content="Stardew Valley Summary" />
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 {% endblock %}
 
 {% block title %}{{data.farmName}} Farm Summary - SDV Summary{% endblock %}
@@ -70,22 +75,19 @@
 							<li><a href="#familyPortrait" data-toggle="pill">Family</a></li>
 							<li><a href="#skills" data-toggle="pill">Skills</a></li>
 						</ul>
-						<div class="tab-content">
+						<div class="tab-content text-left">
 							<div id="playerInfo" class="tab-pane active">
-								<div class="col-sm-5">
+								<div class="col-md-4 col-sm-4 col-xs-12">
 									<div class="avatarPanel">
 										<img src="{{ data.avatar_url }}" class="playerAvatar">
 									</div>
 								</div>
-								<div class="col-sm-7 ">
+								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
 									<dl class="dl-horizontal">
 										<dt>Name</dt><dd>{{ data.name }}</dd>
 										<dt>Current Funds</dt><dd>{{ data.money }}g</dd>
 										<dt>Total Earnings</dt><dd>{{ data.totalMoneyEarned }}g</dd>
 										<dt>Gender</dt><dd>{% if data.isMale == 'true' %} Male {% else %} Female {% endif %}</dd>
-										{%if data.petName != None %}
-										<dt>Companion</dt><dd>{% if data.catPerson == 'true' %} Cat {% else %} Dog {% endif %} named {{ data.petName }}</dd>
-										{%endif%}
 										</dd>
 										<dt>Favorite Thing</dt><dd>{{ data.favoriteThing }}</dd>
 										<dt>Health</dt><dd>{{ data.maxHealth }}</dd>
@@ -97,175 +99,112 @@
 								</div>
 							</div>
 							<div id="familyPortrait" class="tab-pane">
-								<div class="col-sm-12">
+
+								<div class="col-md-4 col-sm-4 col-xs-12">
 									<div class="portraitPanel">
 										<img src="{{ data.portrait_url }}" class="playerPortrait">
 									</div>
 								</div>
+								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
+									<p>
+									{% if data.portrait_info['partner'] != None %}
+										{{data.name}} is married to {{ data.portrait_info['partner'] }}{%if data.petName!=None%},{%else%}and{%endif%}
+									{% else %}
+										{{data.name}} is unmarried{%if data.petName!=None%},{%else%}and{%endif%}
+									{%endif%}
+									{% if data.portrait_info['children']|length > 0 %}
+										{% for child in data.portrait_info['children'] %}
+										{%if loop.index0 == 0 %}has{%else%}and{%endif%} a {{ child[2] }} day old {% if child[0] == 0 %}son{%else%}daughter{%endif%} named {{ child[3] }}{% endfor %}{%if loop.last and data.petName!=None%},{%endif%} 
+									{% else %}
+										has no children{%if data.petName!=None%},{%endif%} 
+									{%endif%}
+									and
+									{%if data.petName != None %}
+									{#{% if data.portrait_info['partner'] != None or data.portrait_info['children']|length > 0 %}the family{%elif data.isMale=='true'%}he{%else%}she{%endif%}#} has a pet {% if data.catPerson == 'true' %} cat {% else %} dog {% endif %} named {{ data.petName }}.</p>
+									{%endif%}
+									</p>
+								</div>
+								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
+									{% if data.animals %}
+										<!--<h3>Farm Animals</h3>-->
+										<br>
+										{% if data.animals['horse'] %}
+											<p>Farm horse: {{data.animals['horse']}}</p>
+										{%endif%}
+										{% for key in data.animals.keys() %}
+											{%if key != 'horse' %}
+												<p>{{data.animals[key]|length}} {{key}}{% if data.animals[key]|length>1 %}s{% endif %}:
+													{% for row in data.animals[key] %}
+														<span class="clickable" data-toggle="tooltip" title="{{row[1]}} days old">{{row[0]}}</span>{%if not loop.last%},{%endif%}
+													{% endfor %}
+												</p>
+											{%endif%}
+										{% endfor %}
+									{% endif %}
+								</div>
+							{#
+							<dl>
+							{% for pair in data|dictsort %}
+							<dt>{{pair.0}}</dt>
+							<dd>{{pair.1}}</dd>
+							<br>
+							{% endfor %}
+							</dl>#}
 							</div>
 							<div id="skills" class="tab-pane">
 								<div class="col-sm-12">
-									<div class="row">
-									<div class="col-sm-4"><p>Farming</p></div>
-										<div class="col-sm-8 col-xs-12">
-											<div class="col-xs-12" style="margin: 5px 0;display:inline;">
-												{% for level in range(data.farmingLevel) %}
-													{% if (level + 1) % 5 != 0 %}
-													<img src="{{url_for('static', filename='images/skills/point_active.png')}}">
-													{% else %}
-													<img src="{{url_for('static', filename='images/skills/profession_active.png')}}">
-													{% endif %}
-												{% endfor %}
-												{% for level in range(data.farmingLevel + 1, 11) %}
-													{% if (level) % 5 != 0 %}
-													<img src="{{url_for('static', filename='images/skills/point_inactive.png')}}">
-													{% else %}
-													<img src="{{url_for('static', filename='images/skills/profession_inactive.png')}}">
-													{% endif %}
-												{% endfor %}
+									{% set professions = [data.professions0,data.professions1,data.professions2,data.professions3,data.professions4,data.professions5,data.professions6,data.professions7,data.professions8,data.professions9] %}
+									<!-- start -->
+									{% set profindex = {
+									'Farming':{4:('Rancher','Tiller'),9:('Coopmaster','Shepherd','Artisan','Agriculturist')},
+									'Mining':{4:('Miner','Geologist'),9:('Blacksmith','Prospector','Excavator','Gemologist')},
+									'Foraging':{4:('Forester','Gatherer'),9:('Lumberjack','Tapper','Botanist','Tracker')},
+									'Fishing':{4:('Fisher','Trapper'),9:('Angler','Pirate','Mariner','Luremaster')},
+									'Combat':{4:('Fighter','Scout'),9:('Brute','Defender','Acrobat','Desperado')}}
+									%}
+									{% for skill in [('Farming',data.farmingLevel),('Mining',data.miningLevel),('Foraging',data.foragingLevel),('Fishing',data.fishingLevel),('Combat',data.combatLevel)] %}
+										<div class="row">
+											<div class="col-sm-4"><p>{{skill[0]}}</p></div>
+											<div class="col-sm-8 col-xs-12">
+												<div class="col-xs-12" style="margin: 5px 0;display:inline;">
+													{% for level in range(skill[1]) %}
+														{% if (level + 1) % 5 != 0 %}
+														<img src="{{url_for('static', filename='images/skills/point_active.png')}}">
+														{% else %}
+														<img src="{{url_for('static', filename='images/skills/profession_active.png')}}" data-toggle="tooltip" title="
+														{% for value in profindex[skill[0]][level] %}
+															{% if value in professions %}
+															{{value}}
+															{%endif%}
+														{%endfor%}
+														">
+														{% endif %}
+													{% endfor %}
+													{% for level in range(skill[1] + 1, 11) %}
+														{% if (level) % 5 != 0 %}
+														<img src="{{url_for('static', filename='images/skills/point_inactive.png')}}">
+														{% else %}
+														<img src="{{url_for('static', filename='images/skills/profession_inactive.png')}}">
+														{% endif %}
+													{% endfor %}
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="row">
-									<div class="col-sm-4 col-xs-12" style="margin: 5px 0;"><p>Mining</p></div>
-										<div class="col-sm-8 col-xs-12">
-											<div class="col-xs-12" style="margin: 5px 0;display:inline;">
-												{% for level in range(data.miningLevel) %}
-													{% if (level + 1) % 5 != 0 %}
-													<img style="display:inline-block" src="{{url_for('static', filename='images/skills/point_active.png')}}">
-													{% else %}
-													<img style="display:inline-block" src="{{url_for('static', filename='images/skills/profession_active.png')}}">
-													{% endif %}
-												{% endfor %}
-												{% for level in range(data.miningLevel + 1, 11) %}
-													{% if (level) % 5 != 0 %}
-													<img style="display:inline-block" src="{{url_for('static', filename='images/skills/point_inactive.png')}}">
-													{% else %}
-													<img style="display:inline-block" src="{{url_for('static', filename='images/skills/profession_inactive.png')}}">
-													{% endif %}
-												{% endfor %}
-											</div>
-										</div>
-									</div>
-									<div class="row">
-									<div class="col-sm-4 col-xs-12" style="margin: 5px 0;"><p>Foraging</p></div>
-									<div class="col-sm-8 col-xs-12">
-											<div class="col-xs-12" style="margin: 5px 0;display:inline;">
-												{% for level in range(data.foragingLevel) %}
-													{% if (level + 1) % 5 != 0 %}
-													<img src="{{url_for('static', filename='images/skills/point_active.png')}}">
-													{% else %}
-													<img src="{{url_for('static', filename='images/skills/profession_active.png')}}">
-													{% endif %}
-												{% endfor %}
-												{% for level in range(data.foragingLevel + 1, 11) %}
-													{% if (level) % 5 != 0 %}
-													<img src="{{url_for('static', filename='images/skills/point_inactive.png')}}">
-													{% else %}
-													<img src="{{url_for('static', filename='images/skills/profession_inactive.png')}}">
-													{% endif %}
-												{% endfor %}
-											</div	>
-										</div>
-									</div>
-									<div class="row">
-									<div class="col-sm-4 col-xs-12" style="margin: 5px 0;"><p>Fishing</p></div>
-										<div class="col-sm-8 col-xs-12">
-											<div class="col-xs-12" style="margin: 5px 0;display:inline;">
-												{% for level in range(data.fishingLevel) %}
-													{% if (level + 1) % 5 != 0 %}
-													<img src="{{url_for('static', filename='images/skills/point_active.png')}}">
-													{% else %}
-													<img src="{{url_for('static', filename='images/skills/profession_active.png')}}">
-													{% endif %}
-												{% endfor %}
-												{% for level in range(data.fishingLevel + 1, 11) %}
-													{% if (level) % 5 != 0 %}
-													<img src="{{url_for('static', filename='images/skills/point_inactive.png')}}">
-													{% else %}
-													<img src="{{url_for('static', filename='images/skills/profession_inactive.png')}}">
-													{% endif %}
-												{% endfor %}
-											</div>
-										</div>
-									</div>
-									<div class="row">
-									<div class="col-sm-4 col-xs-12" style="margin: 5px 0;"><p>Combat </p></div>
-										<div class="col-sm-8 col-xs-12">
-											<div class="col-xs-12" style="margin: 5px 0;display:inline;">
-												{% for level in range(data.combatLevel) %}
-													{% if (level + 1) % 5 != 0 %}
-													<img src="{{url_for('static', filename='images/skills/point_active.png')}}">
-													{% else %}
-													<img src="{{url_for('static', filename='images/skills/profession_active.png')}}">
-													{% endif %}
-												{% endfor %}
-												{% for level in range(data.combatLevel + 1, 11) %}
-													{% if (level) % 5 != 0 %}
-													<img src="{{url_for('static', filename='images/skills/point_inactive.png')}}">
-													{% else %}
-													<img src="{{url_for('static', filename='images/skills/profession_inactive.png')}}">
-													{% endif %}
-												{% endfor %}
-											</div>
-										</div>
-									</div>
+									{% endfor %}
+									<p class="text-center">(Hover for professions)</p>
 								</div>
-								{% if data.professions0 != None %}
+								<!--
 								<div class="col-sm-12" style="margin-top: 10px;">	
-										<h3>Professions</h2>
-										<div class="col-sm-6">
-											{% if data.professions0 != None %}
-											<p>{{data.professions0}}</p>
+										<h3>Professions</h3>
+										{% for profession in professions %}
+											{% if profession != None %}
+												<div class="col-sm-6">
+													<p>{{profession}}</p>
+												</div>
 											{% endif %}
-										</div>
-										<div class="col-sm-6">
-											{% if data.professions2 != None %}
-											<p>{{data.professions2}}</p>
-											{% endif %}
-										</div>
-										<div class="col-sm-6">
-											{% if data.professions4 != None %}
-											<p>{{data.professions4}}</p>
-											{% endif %}
-										</div>
-										<div class="col-sm-6">
-											{% if data.professions6 != None %}
-											<p>{{data.professions6}}</p>
-											{% endif %}
-										</div>
-										<div class="col-sm-6">
-											{% if data.professions8 != None %}
-											<p>{{data.professions8}}</p>
-											{% endif %}
-										</div>
-										<div class="col-sm-6">
-											{% if data.professions1 != None %}
-											<p>{{data.professions1}}</p>
-											{% endif %}
-										</div>
-										<div class="col-sm-6">
-											{% if data.professions3 != None %}
-											<p>{{data.professions3}}</p>
-											{% endif %}
-										</div>
-										<div class="col-sm-6">
-											{% if data.professions5 != None %}
-											<p>{{data.professions5}}</p>
-											{% endif %}
-										</div>
-										<div class="col-sm-6">
-											{% if data.professions7 != None %}
-											<p>{{data.professions7}}</p>
-											{% endif %}
-										</div>
-										<div class="col-sm-6">
-											{% if data.professions9 != None %}
-											<p>{{data.professions9}}</p>
-											{% endif %}
-										</div>
+										{% endfor %}
 								</div>
-								{% endif %}
+								-->
 							</div>
 						</div>
 

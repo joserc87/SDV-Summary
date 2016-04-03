@@ -41,7 +41,8 @@ def process_queue():
 				data['newEyeColor'] = [data['newEyeColor0'],data['newEyeColor1'],data['newEyeColor2'],data['newEyeColor3']]
 				data['hairstyleColor'] = [data['hairstyleColor0'],data['hairstyleColor1'],data['hairstyleColor2'],data['hairstyleColor3']]
 				avatar = generateAvatar(data)
-				# if config.USE_SQLITE == True or config.POSTGRES_VERSION != 9:
+
+				# if config.USE_SQLITE == True:
 				pi = json.loads(data['portrait_info'])
 				# else:
 					# pi = data['portrait_info']

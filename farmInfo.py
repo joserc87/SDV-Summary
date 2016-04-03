@@ -1,14 +1,15 @@
 from defusedxml.ElementTree import parse
 from defusedxml import ElementTree
 from PIL import Image 
+from collections import namedtuple
 
 # This is a test method for returning the position location and the name of objects
 # located on the players farm.
 # 
 # returns a dict with an array of tuples of the form: (name, x, y)
+ns= "{http://www.w3.org/2001/XMLSchema-instance}"
 
 def getFarmInfo(saveFileLocation,read_data=False):
-	ns= "{http://www.w3.org/2001/XMLSchema-instance}"
 
 	farm = {}
 
@@ -18,49 +19,68 @@ def getFarmInfo(saveFileLocation,read_data=False):
 		root = ElementTree.fromstring(saveFileLocation)
 
 	locations = root.find('locations').findall("GameLocation")
-	s = []
+
+	farm['objects'] = []
 	for item in locations[1].find('objects').iter("item"):
 		name = item.find('value').find('Object').find('Name').text
 		x = int(item.find('value').find('Object').find('tileLocation').find('X').text)
 		y = int(item.find('value').find('Object').find('tileLocation').find('Y').text)
+		l = int(item.find('value').find('Object').find('parentSheetIndex').text)
+		t = item.find('value').find('Object').find('type').text
+		if 'Fence' in name:
+			t = int(item.find('value').find('Object').find('whichType').text)
 		# if name not in things:
 		# 	things.append(name)
-		s.append((name, x, y))
+		farm['objects'].append((name, x, y, l, t))
 
-	farm['objects'] = s
-
-	s = []
-
+	farm['terrainFeatures'] = []
 	for item in locations[1].find('terrainFeatures').iter('item'):
+		s = None
+		loc = None
 		name = item.find('value').find('TerrainFeature').get(ns+'type')
+		i = namedtuple('Item', ['name', 'x', 'y', 'sheetIndex','w', 'h', 'type', 'growth'])
+		if name == 'Tree':
+			t = int(item.find('value').find('TerrainFeature').find('treeType').text)
+			s = int(item.find('value').find('TerrainFeature').find('growthStage').text)
+		if name =='Flooring':
+			t = int(item.find('value').find('TerrainFeature').find('whichFloor').text)
+			s = int(item.find('value').find('TerrainFeature').find('whichView').text)
 		x = int(item.find('key').find('Vector2').find('X').text)
 		y = int(item.find('key').find('Vector2').find('Y').text)
-		s.append((name, x, y))
+		farm['terrainFeatures'] .append(i(name, x, y, loc, 1, 1, t, s))
 
-	farm['terrainFeatures'] = s
-
-	s = []
-
+	farm['resourceClumps'] = []
 	for item in locations[1].find('resourceClumps').iter('ResourceClump'):
 		t = int(item.find('parentSheetIndex').text)
 		x = int(item.find('tile').find('X').text)
 		y = int(item.find('tile').find('Y').text)
 		w = int(item.find('width').text)
 		h = int(item.find('height').text)
-		s.append((t,x, y, w, h))
+		farm['resourceClumps'].append((t,x, y, w, h))
 
-	farm['resourceClumps'] = s
+	animal_habitable_buildings = ['Coop','Barn']
 
-	s = []
+	farm['buildings'] = []
+	farm['animals'] = []
 	for item in locations[1].find('buildings').iter('Building'):
 		name = item.find('buildingType').text 
 		x = int(item.find('tileX').text)
 		y = int(item.find('tileY').text)
 		w = int(item.find('tilesWide').text)
 		h = int(item.find('tilesHigh').text)
-		s.append((name, x, y, w, h))
-
-	farm['buildings'] = s
+		t = item.find('buildingType').text
+		farm['buildings'].append((name, x, y, w, h, t))
+		
+		if name in animal_habitable_buildings:
+			for animal in item.find('indoors').find('animals').iter('item'):
+				animal = animal.find('value').find('FarmAnimal')
+				an = animal.find('name').text
+				aa = int(animal.find('age').text)
+				at = animal.find('type').text
+				ah = int(animal.find('happiness').text)
+				ahx = int(animal.find('homeLocation').find('X').text)
+				ahy = int(animal.find('homeLocation').find('Y').text)
+				farm['animals'].append((at,an,aa,ah,ahx,ahy))
 
 	return farm
 
@@ -133,7 +153,8 @@ def generateImage(farm):
 	return image
 
 def main():
-	generateImage(getFarmInfo('./save/Crono_116230451')).save('farm.png')
+	# generateImage(getFarmInfo('./saves/Crono_116230451')).save('farm.png')
+	getFarmInfo('./saves/Crono_116230451')
 
 if __name__ == '__main__':
 	main()

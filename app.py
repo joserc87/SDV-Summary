@@ -138,7 +138,7 @@ def is_duplicate(md5_info,player_info):
 def insert_info(player_info,farm_info,md5_info):
 	columns = []
 	values = []
-	player_info['date'] = ['Spring','Summer','Autumn','Winter'][int(((player_info['stats']['DaysPlayed']%(28*4))-((player_info['stats']['DaysPlayed']%(28*4))%(28)))/28)]+' '+str((player_info['stats']['DaysPlayed']%(28*4))%(28))+', Year '+str(((player_info['stats']['DaysPlayed']-player_info['stats']['DaysPlayed']%(28*4))/(28*4))+1)
+	# player_info['date'] = ['Spring','Summer','Autumn','Winter'][int(((player_info['stats']['DaysPlayed']%(28*4))-((player_info['stats']['DaysPlayed']%(28*4))%(28)))/28)]+' '+str((player_info['stats']['DaysPlayed']%(28*4))%(28))+', Year '+str(((player_info['stats']['DaysPlayed']-player_info['stats']['DaysPlayed']%(28*4))/(28*4))+1)
 	for key in player_info.keys():
 		if type(player_info[key]) == list:
 			for i,item in enumerate(player_info[key]):
@@ -227,6 +227,8 @@ def display_data(url):
 			else:
 				datadict[item] = "{:,}".format(datadict[item])
 		
+		datadict['animals'] = None if datadict['animals']=='{}' else json.loads(datadict['animals'])
+		datadict['portrait_info'] = json.loads(datadict['portrait_info'])
 		friendships = sorted([[friendship[11:],datadict[friendship]] for friendship in sorted(database_structure_dict.keys()) if friendship.startswith('friendships') and datadict[friendship]!=None],key=lambda x: x[1])[::-1]
 		kills = sorted([[kill[27:].replace('_',' '),datadict[kill]] for kill in sorted(database_structure_dict.keys()) if kill.startswith('statsSpecificMonstersKilled') and datadict[kill]!=None],key=lambda x: x[1])[::-1]
 		cur.execute('SELECT url, date FROM playerinfo WHERE uniqueIDForThisGame='+app.sqlesc+' AND name='+app.sqlesc+' AND farmName='+app.sqlesc+' ORDER BY statsDaysPlayed ASC',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName']))
@@ -399,8 +401,11 @@ def allmain():
 	#print request.args.get('p')
 	try:
 		offset = int(request.args.get('p')) * num_entries
-	except:
+	except TypeError:
 		offset = 0
+	except:
+		error = "No browse with that ID!"
+		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 	if offset < 0:
 		return redirect(url_for('allmain'))
 	recents = get_recents(num_entries,offset=offset)

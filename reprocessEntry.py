@@ -25,7 +25,6 @@ def processFile(filename,old_md5,rowid,url):
 		print filename,'failed md5'
 	columns = []
 	values = []
-	player_info['date'] = ['Spring','Summer','Autumn','Winter'][int(((player_info['stats']['DaysPlayed']%(28*4))-((player_info['stats']['DaysPlayed']%(28*4))%(28)))/28)]+' '+str((player_info['stats']['DaysPlayed']%(28*4))%(28))+', Year '+str(((player_info['stats']['DaysPlayed']-player_info['stats']['DaysPlayed']%(28*4))/(28*4))+1)
 	for key in player_info.keys():
 		if type(player_info[key]) == list:
 			for i,item in enumerate(player_info[key]):
