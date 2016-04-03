@@ -31,11 +31,23 @@ h1 {
 	font-size: 56px;
 }
 
-.panel, .tooltip {
+.panel, .tooltip, .popover {
 	padding:5px;
 	margin-bottom: 0px;
 	background: none;
 	box-shadow: none;
+}
+
+.popover {
+	border: none;
+	padding: 0px;
+}
+
+.popover.right>.arrow {
+	display: none;
+}
+.popover.right {
+	margin-left: 0px;
 }
 
 .tooltip.in {
@@ -43,23 +55,48 @@ h1 {
 	filter: alpha(opacity=100);
 }
 
-.interiorpanel, .tooltip-inner {
+.interiorpanel {
 	border-style: solid;
 	border-width: 21px 21px 21px 21px;
 	-moz-border-image: url(textBox.png) 30 30 30 30 stretch;
 	-webkit-border-image: url(textBox.png) 30 30 30 30 stretch;
 	-o-border-image: url(textBox.png) 30 30 30 30 stretch;
 	border-image: url(textBox.png) 30 30 30 30 fill stretch;
-
 	box-shadow: -5px 5px 10px 5px rgba(0,0,0,0.2); 
 	padding-bottom: 15px;
 	overflow:hidden;
 	padding: 15px;
-
 	border-radius: 30px;
 }
 
-p, li, dl, .tooltip-inner {
+.tooltip-inner, .popover-content, .popover-title {
+	border-style: solid;
+	border-width: 10px 10px 10px 10px;
+	-moz-border-image: url(popBox.png) 30 30 30 30 stretch;
+	-webkit-border-image: url(popBox.png) 30 30 30 30 stretch;
+	-o-border-image: url(popBox.png) 30 30 30 30 stretch;
+	border-image: url(popBox.png) 16 16 16 16 fill stretch;
+	box-shadow: -5px 5px 10px 5px rgba(0,0,0,0.2); 
+	/*padding-bottom: 15px;*/
+	overflow:hidden;
+	padding: 2px;
+	border-radius: 30px;
+}
+
+.popover-content, .tooltip-inner {
+	border-top-width: 0px;
+	padding-top: 8px;
+	-moz-border-image-source: url(textBox.png);
+	-webkit-border-image-source: url(textBox.png);
+	-o-border-image-source: url(textBox.png);
+	border-image-source: url(textBox.png);
+}
+
+.tooltip-inner {
+	border-top-width: 10px;
+}
+
+p, li, dl, .pixeltext, .tooltip-inner, .popover-content, .popover-title {
 	line-height: 1;
 	font-family: 'VT323';
 	font-size: 20pt;
