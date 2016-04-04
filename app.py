@@ -25,6 +25,8 @@ import datetime
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 app.secret_key = app.config['SECRET_KEY']
+app.jinja_env.trim_blocks = True
+app.jinja_env.lstrip_blocks = True
 app.wsgi_app = ProxyFix(app.wsgi_app)
 if app.config['USE_SQLITE'] == True:
 	app.database = app.config['DB_SQLITE']

@@ -13,7 +13,7 @@
 		<p style="width: 80%; margin: 0 auto;">This site generates a profile page from your Stardew Valley savegame. It automatically links uploads from different stages.</p>
 	</div>-->
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-12" style="padding-left:2%;padding-right:2%;">
 				<div class="form-group">
 					<form enctype="multipart/form-data" action="" method="post">
 						<label for="uploadFarm" class="sr-only">Upload your farm</label>
@@ -29,7 +29,7 @@
 			</div>
 		</div>
 		{% if error %}
-			<div class="row" style="padding-top: 1em;">
+			<div class="row">
 				<div class="col-md-12">
 					<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
 				</div>

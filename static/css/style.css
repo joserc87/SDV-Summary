@@ -71,7 +71,7 @@ h1 {
 
 .tooltip-inner, .popover-content, .popover-title {
 	border-style: solid;
-	border-width: 10px 10px 10px 10px;
+	border-width: 12px 12px 12px 12px;
 	-moz-border-image: url(popBox.png) 30 30 30 30 stretch;
 	-webkit-border-image: url(popBox.png) 30 30 30 30 stretch;
 	-o-border-image: url(popBox.png) 30 30 30 30 stretch;
@@ -79,13 +79,13 @@ h1 {
 	box-shadow: -5px 5px 10px 5px rgba(0,0,0,0.2); 
 	/*padding-bottom: 15px;*/
 	overflow:hidden;
-	padding: 2px;
+	padding: 4px;
 	border-radius: 30px;
 }
 
 .popover-content, .tooltip-inner {
 	border-top-width: 0px;
-	padding-top: 8px;
+	padding: 4px;
 	-moz-border-image-source: url(textBox.png);
 	-webkit-border-image-source: url(textBox.png);
 	-o-border-image-source: url(textBox.png);
@@ -94,6 +94,21 @@ h1 {
 
 .tooltip-inner {
 	border-top-width: 10px;
+}
+
+.pip {
+	box-shadow: -3px 3px 1px #555555;
+}
+
+.pipdiv {
+	display: inline;
+	font-size: 15px;
+}
+
+.pipdivhalf {
+	float:left;
+	padding-left:5px;
+	min-width:30px;
 }
 
 p, li, dl, .pixeltext, .tooltip-inner, .popover-content, .popover-title {
