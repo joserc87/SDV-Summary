@@ -57,11 +57,11 @@ h1 {
 
 .interiorpanel {
 	border-style: solid;
-	border-width: 21px 21px 21px 21px;
+	border-width: 12px 12px 12px 12px;
 	-moz-border-image: url(textBox.png) 30 30 30 30 stretch;
 	-webkit-border-image: url(textBox.png) 30 30 30 30 stretch;
 	-o-border-image: url(textBox.png) 30 30 30 30 stretch;
-	border-image: url(textBox.png) 30 30 30 30 fill stretch;
+	border-image: url(textBox.png) 16 16 16 16 fill stretch;
 	box-shadow: -5px 5px 10px 5px rgba(0,0,0,0.2); 
 	padding-bottom: 15px;
 	overflow:hidden;
