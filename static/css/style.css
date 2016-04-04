@@ -104,6 +104,11 @@ p, li, dl, .pixeltext, .tooltip-inner, .popover-content, .popover-title {
 	color: #333;
 }
 
+.help-block, .smallpixeltext {
+	font-family: 'VT323';
+	font-size: 16pt;
+}
+
 dt, dd {
 	line-height: 1;
 	font-weight: normal;
@@ -152,6 +157,11 @@ dt, dd {
 	-o-border-image: url(frame.png) 30 30 30 30 stretch;
 	border-image: url(frame.png) 30 30 30 30 stretch;
 	z-index: 2;
+}
+
+.container {
+	padding-left: 0px;
+	padding-right: 0px;
 }
 
 .playerPortrait {

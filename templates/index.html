@@ -12,23 +12,29 @@
 	<!--<div class="row">
 		<p style="width: 80%; margin: 0 auto;">This site generates a profile page from your Stardew Valley savegame. It automatically links uploads from different stages.</p>
 	</div>-->
-		<h3>Upload your farm</h3>
-			<div class="row">
-			<form enctype="multipart/form-data" action="" method="post">
-				<div class="col-sm-10 col-xs-9">
-					<input class="form-control input-lg" type="file" name="file" value="">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<form enctype="multipart/form-data" action="" method="post">
+						<label for="uploadFarm" class="sr-only">Upload your farm</label>
+						<div class="input-group">
+							<input class="form-control input-lg" id="uploadFarm" type="file" name="file" describedby="helpBlock">
+							<span class="input-group-btn">
+								<button class="btn btn-primary btn-lg" type="submit" describedby="helpBlock" onclick="ga('send', 'event', 'saveFile', 'upload');">Upload!</button>
+							</span>
+						</div>
+						<span id="helpBlock" class="help-block text-center"><a href="http://stardewvalley.net">Stardew Valley</a> save files can be found under <code>%APPDATA%\StardewValley\Saves</code> and are named after your character, plus an ID number</span>
+					</form>
 				</div>
-				<div class="col-sm-1 col-xs-1">
-					<input class="btn btn-primary btn-lg" type="submit" value="Process" onclick="ga('send', 'event', 'saveFile', 'upload');">
-				</div>
-			</form>
 			</div>
-			<div class="row" style="padding-top: 1em;">
-			<p class="text-center" style="width: 80%; margin: 0 auto;"><a href="http://stardewvalley.net">Stardew Valley</a> save files can be found under <code>%APPDATA%\StardewValley\Saves</code> and are named after your character, plus an ID number</p>
-			{% if error %}
-			<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
-			{% endif %}
 		</div>
+		{% if error %}
+			<div class="row" style="padding-top: 1em;">
+				<div class="col-md-12">
+					<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+				</div>
+			</div>
+		{% endif %}
 	</div>
 </div>
 <div class="row center-block panel lead">	
@@ -36,6 +42,9 @@
 		<div class="col-md-12">
 			<h3><a href="/all" class="titlelink">Recently uploaded farms</a></h3>
 			{% include "recents.html" %}
+			{% if recents.total > 6 %}
+				<div class="text-center"><p><a href="/all">more</a></p></div>
+			{% endif %}
 		</div>
 	</div>
 </div>
