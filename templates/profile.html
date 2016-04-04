@@ -41,34 +41,49 @@ $(function () {
 {% block bodycontent %}
 			<div class="col-md-12 col-sm-12 panel">
 				<div class="interiorpanel">
-					<div class="col-md-2 col-sm-12 text-center">
-						<a href="/">
-								<img src="{{url_for('static', filename='favicon.png')}}" class="logo">
-						</a>
+					<div class="col-sm-2 col-xs-12 hidden-xs text-center">
+						<a href="/"><img src="{{url_for('static', filename='favicon.png')}}" class="logo"></a>
 					</div>
-					<div class="col-md-8 col-sm-12">
-						<h1 class="text-center">{{ data.farmName }} Farm</h1>
+					<div class="col-sm-10 col-xs-12">
+						<div class="row">
+							<div class="col-md-12">
+								<h1 class="text-center" style="margin-bottom:0px;">{{ data.farmName }} Farm</h1>
+							</div>
+						</div>
 						{% if others %}
 							<div class="row center-block">
-								<ul class="list-inline text-center">
-								{% for other in others %}
-									{% if other.0 == data.url %}
-									<li><b>{{ other.1 }}</b></li>
-									{% else %}
-									<li><a href="/{{ other.0 }}" >{{ other.1 }}</a></li>
-									{% endif %}
-								{% endfor %}
-								</ul>
+								<div class="col-md-12">
+									<ul class="list-inline text-center">
+									{% for other in others %}
+										{% if other.0 == data.url %}
+										<li><b>{{ other.1 }}</b></li>
+										{% else %}
+										<li><a href="/{{ other.0 }}" >{{ other.1 }}</a></li>
+										{% endif %}
+									{% endfor %}
+									</ul>
+								</div>
 							</div>
 						{% endif %}
 						{% if deletable %}
-						<ul class="list-inline text-center"><li>Delete:</li><li><a href="{{data.url}}/del">this page</a>?</li>{% if others|length > 1 %}<li><a href="{{data.url}}/delall">all for this farm</a>?</li>{% endif %}</ul>
+							<div class="row center-block">
+								<div class="col-md-12">
+									<ul class="list-inline text-center"><li>Delete:</li><li><a href="{{data.url}}/del">this page</a>?</li>{% if others|length > 1 %}<li><a href="{{data.url}}/delall">all for this farm</a>?</li>{% endif %}</ul>
+								</div>
+							</div>
 						{% endif %}
+						{% if error %}
+							<div class="row center-block">
+								<div class="col-md-12">
+									<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+								</div>
+							</div>
+						{% endif %}
+						<div class="col-sm-2 col-xs-12 hidden-sm hidden-md hidden-lg text-center">
+							<p><a href="/">Home</a></p>
+						</div>
 					</div>
 				</div>
-			{% if error %}
-				<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
-			{% endif %}
 			</div>
 			<div class="row center-block">				
 				<div class="col-md-8 col-sm-12 panel text-center">
