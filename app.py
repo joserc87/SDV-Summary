@@ -437,8 +437,6 @@ def blogindividual(id):
 		error = "No blog with that ID!"
 	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 
-
-
 @app.route('/dl/<url>')
 def retrieve_file(url):
 	error=None
@@ -458,6 +456,12 @@ def retrieve_file(url):
 	else:
 		error = "Not admin, no download rights!"
 	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+
+@app.route('/faq')
+def faq():
+	error = None
+	start_time=time.time()
+	return render_template('faq.html',error=error,processtime=round(time.time()-start_time,5))
 
 if __name__ == "__main__":
 	app.run(debug=True)

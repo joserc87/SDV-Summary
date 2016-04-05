@@ -243,13 +243,6 @@ dt, dd {
 	overflow:hidden;
 }
 
-.logo {
-	image-rendering: pixelated;
-	image-rendering: -moz-crisp-edges;
-	width: 150px;
-	height: auto;
-}
-
 .col-sm-6.previewbox {
 	margin-bottom: 15px;
 }
@@ -304,4 +297,15 @@ body {
 .titlelink:hover {
 	text-decoration: none;
 	color: #101010;
+}
+
+.logo {
+	image-rendering: pixelated;
+	image-rendering: -moz-crisp-edges;
+	width: 150px;
+	height: auto;
+}
+
+.titleimgcontainer {
+	display:inline-block;
 }

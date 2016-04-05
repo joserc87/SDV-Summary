@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}FAQ - {{super()}}{% endblock %}
+{%block bodycontent %}
+{% include "titlebar.html" %}
+<div class="row center-block panel">
+	<div class="interiorpanel">
+		<div class="hidden-xs"><h2>Frequently Asked Questions</h2></div>
+		<div class="hidden-sm hidden-md hidden-lg"><h2>FAQ</h2></div>
+		<dl>
+		<dt><b>Question?</b></dt>
+		<dd>Answer!</dd>
+		</dl>
+	</div>
+</div>
+{% endblock %}
