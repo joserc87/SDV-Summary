@@ -68,7 +68,14 @@ $(function () {
 						{% if deletable %}
 							<div class="row center-block">
 								<div class="col-md-12">
-									<ul class="list-inline text-center"><li>Delete:</li><li><a href="{{data.url}}/del">this page</a>?</li>{% if others|length > 1 %}<li><a href="{{data.url}}/delall">all for this farm</a>?</li>{% endif %}</ul>
+									<ul class="list-inline text-center">
+									<li>Delete:</li>
+									<li><a href="#" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>only this</b> upload.<br><form action="{{data.url}}/del" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;it!</button></form>'>this page</a>?</li>
+									<li>
+									{% if others|length > 1 %}
+										<li><a href="#" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/delall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;all!</button></form>'>all for this farm</a>?</li>
+									{% endif %}
+									</ul>
 								</div>
 							</div>
 						{% endif %}

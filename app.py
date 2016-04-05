@@ -237,41 +237,45 @@ def display_data(url):
 		other_saves = cur.fetchall()
 		return render_template("profile.html", deletable=deletable, data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
 
-@app.route('/<url>/<instruction>')
+@app.route('/<url>/<instruction>',methods=['GET','POST'])
 def operate_on_url(url,instruction):
 	error = None
 	deletable = None
 	start_time = time.time()
-	if url in session:
-		g.db = connect_db()
-		cur = g.db.cursor()
-		cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
-		data = cur.fetchall()
-		if instruction == 'del':
-			for row in data:
-				if session[url] == row[1] and session[url+'del_token'] == row[2]:
+	if request.method == 'POST':
+		if url in session:
+			g.db = connect_db()
+			cur = g.db.cursor()
+			cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
+			data = cur.fetchall()
+			if instruction == 'del':
+				for row in data:
+					if session[url] == row[1] and session[url+'del_token'] == row[2]:
+						cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
+						g.db.commit()
+						for filename in row[4:7]:
+							os.remove(filename)
+						session.pop(url,None)
+						session.pop(url+'del_token',None)
+						return redirect(url_for('home'))
+				return render_template("error.html", error="Your session validation data is wrong", processtime=round(time.time()-start_time,5))
+			elif instruction == 'delall':
+				for row in data:
+					if not (session[row[3]] == row[1] and session[url+'del_token']):
+						return render_template("error.html", error="Session validation data was wrong for at least one resource", processtime=round(time.time()-start_time,5))
+				for row in data:
 					cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
-					g.db.commit()
 					for filename in row[4:7]:
 						os.remove(filename)
-					session.pop(url,None)
-					session.pop(url+'del_token',None)
-					return redirect(url_for('home'))
-			return render_template("error.html", error="Your session validation data is wrong", processtime=round(time.time()-start_time,5))
-		elif instruction == 'delall':
-			for row in data:
-				if not (session[row[3]] == row[1] and session[url+'del_token']):
-					return render_template("error.html", error="Session validation data was wrong for at least one resource", processtime=round(time.time()-start_time,5))
-			for row in data:
-				cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
-				for filename in row[4:7]:
-					os.remove(filename)
-				session.pop(row[3],None)
-				session.pop(row[3]+'del_token',None)
-			g.db.commit()
-			return redirect(url_for('home'))
+					session.pop(row[3],None)
+					session.pop(row[3]+'del_token',None)
+				g.db.commit()
+				return redirect(url_for('home'))
+		else:
+			return render_template("error.html", error="Unknown instruction or insufficient credentials", processtime=round(time.time()-start_time,5))
 	else:
-		return render_template("error.html", error="Unknown instruction or insufficient credentials", processtime=round(time.time()-start_time,5))
+		return redirect(url_for('display_data',url=url))
+
 
 
 @app.route('/admin',methods=['GET','POST'])
