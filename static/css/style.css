@@ -246,7 +246,7 @@ dt, dd {
 .logo {
 	image-rendering: pixelated;
 	image-rendering: -moz-crisp-edges;
-	width: 120px;
+	width: 150px;
 	height: auto;
 }
 

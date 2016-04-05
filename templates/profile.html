@@ -37,12 +37,12 @@ $(function () {
 </script>
 {% endblock %}
 
-{% block title %}{{data.farmName}} Farm Summary - SDV Summary{% endblock %}
+{% block title %}{{data.farmName}} Farm - {{super()}}{% endblock %}
 {% block bodycontent %}
 			<div class="col-md-12 col-sm-12 panel">
 				<div class="interiorpanel">
 					<div class="col-sm-2 col-xs-12 hidden-xs text-center">
-						<a href="/"><img src="{{url_for('static', filename='favicon.png')}}" class="logo"></a>
+						<a href="/"><img src="{{url_for('static', filename='logo.png')}}" class="logo"></a>
 					</div>
 					<div class="col-sm-10 col-xs-12">
 						<div class="row">
