@@ -133,9 +133,9 @@ $(function () {
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
 									<p>
 									{% if data.portrait_info['partner'] != None %}
-										{{data.name}} is married to {{ data.portrait_info['partner'] }}{%if data.petName!=None%},{%else%}and{%endif%}
+										{{data.name}} is married to {{ data.portrait_info['partner'] }}{%if data.petName!=None%}, {%else%}and{%endif%}
 									{% else %}
-										{{data.name}} is unmarried {%if data.petName!=None%},{%else%}and{%endif%}
+										{{data.name}} is unmarried{%if data.petName!=None%},{%else%} and{%endif%}
 									{%endif%}
 									{% if data.portrait_info['children']|length > 0 %}
 										{% for child in data.portrait_info['children'] %}

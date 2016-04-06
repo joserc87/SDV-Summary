@@ -66,24 +66,24 @@
 {% block bodycontent %}
 			<div class="row panel">
 				<div class="interiorpanel">
-				<div class="col-md-8">
-					<h1>Welcome, {{ session.admin }}</h1>
-					<p class="text-left"><a href="/lo">Log out</a></p>
-				</div>
-				<div class="col-md-4 text-right" id="topbox">
-					{% if error %}
-						<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
-					{% endif %}
-				</div>
-				{% with messages = get_flashed_messages() %}
-					{% if messages %}
-						<div class="row">
-						{% for message in messages %}
-							<p>{{ message }}</p>
-						{% endfor %}
-						</div>
-					{% endif %}
-				{% endwith %}
+					<div class="col-md-8">
+						<h1>Welcome, {{ session.admin }}</h1>
+						<p class="text-left"><a href="/">Front page</a> <a href="/lo">Log out</a></p>
+					</div>
+					<div class="col-md-4 text-right" id="topbox">
+						{% if error %}
+							<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+						{% endif %}
+					</div>
+					{% with messages = get_flashed_messages() %}
+						{% if messages %}
+							<div class="row">
+							{% for message in messages %}
+								<p>{{ message }}</p>
+							{% endfor %}
+							</div>
+						{% endif %}
+					{% endwith %}
 				</div>
 			</div>
 			<div class="row">

@@ -39,7 +39,8 @@
 <div class="row center-block panel lead">	
 	<div class="interiorpanel">
 		<div class="col-md-12">
-			<h3><a href="/all" class="titlelink">Recently uploaded farms</a></h3>
+			<div class="hidden-xs"><h3><a href="/all" class="titlelink">Recently uploaded farms</a></h3></div>
+			<div class="hidden-lg hidden-md hidden-sm"><h3><a href="/all" class="titlelink">Recent uploads</a></h3></div>
 			{% include "recents.html" %}
 			{% if recents.total > 6 %}
 				<div class="text-center"><p><a href="/all">more</a></p></div>

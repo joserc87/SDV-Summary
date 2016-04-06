@@ -309,3 +309,10 @@ body {
 .titleimgcontainer {
 	display:inline-block;
 }
+
+dl.faq dt {
+	font-weight: bold;
+}
+dl.faq dd {
+	padding-bottom: 1em;
+}
