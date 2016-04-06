@@ -2,7 +2,17 @@
 {% block header %}
 {{ super() }}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-<script src="{{ url_for('static', filename='js/ajaxRequest.js') }}"></script>{% endblock %}
+<script src="{{ url_for('static', filename='js/ajaxRequest.js') }}"></script>
+<script>
+	document.addEventListener('keydown',function(e) {
+		if (e.keyCode == 37) {
+			window.location.replace('prenis');
+		}
+		else if (e.keyCode == 39) {
+			window.location.replace('bronis')
+		}
+	});	
+</script>{% endblock %}
 {%block bodycontent %}
 {% include "titlebar.html" %}
 <div class="row center-block panel">

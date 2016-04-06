@@ -35,6 +35,26 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 </script>
+{% if others %}
+	{% for other in others %}
+		{% if other.0 == data.url %}
+			{% set center = loop.index0 %}
+			<script>
+				document.addEventListener('keydown',function(e) {
+					{% if center-1 >= 0 %}
+					if (e.keyCode == 37) {
+						window.location.replace('{{others[center-1].0}}');
+					}
+					{% endif %}
+					{% if center-1 >= 0 and others[center+1] %}else{%endif%} {%if others[center+1]%}if (e.keyCode == 39) {
+						window.location.replace('{{others[center+1].0}}')
+					}
+					{%endif%}
+				});	
+			</script>
+		{%endif%}
+	{% endfor %}
+{% endif %}
 {% endblock %}
 
 {% block title %}{{data.farmName}} Farm - {{super()}}{% endblock %}
