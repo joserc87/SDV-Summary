@@ -146,7 +146,7 @@ def generateFarm(player, farm):
 		if item.name == "Building":
 			try:
 				building_img = Image.open('./assets/farm/buildings/{0}.png'.format(item.type))
-				offsety = (item.h - 1)*16
+				offsety = building_img.height - (item.h)*16
 				farm_base.paste(building_img, (item.x*16, item.y*16 - offsety), building_img)
 			except Exception as e:
 				print(e)
