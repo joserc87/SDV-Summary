@@ -31,7 +31,7 @@ def checkSurrounding(tiles):
 								a += b
 					except Exception as e:
 						print('Error: ' + str(e))
-				temp.append((tile, m[a]))
+				temp.append(tile._replace(orientation=m[a]))
 	return temp
 
 
@@ -41,7 +41,7 @@ def checkSurrounding(tiles):
 # returns a dict with an array of tuples of the form: (name, x, y)
 
 def getFarmInfo(saveFileLocation,read_data=False):
-	i = namedtuple('Item', ['name', 'x', 'y', 'sheetIndex','w', 'h', 'type', 'growth', 'flipped'])
+	sprite = namedtuple('Sprite', ['name', 'x', 'y','w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
 
 	ns= "{http://www.w3.org/2001/XMLSchema-instance}"
 
@@ -52,29 +52,36 @@ def getFarmInfo(saveFileLocation,read_data=False):
 	else:
 		root = ElementTree.fromstring(saveFileLocation)
 
+	# Farm Objects
+
 	locations = root.find('locations').findall("GameLocation")
 	s = []
 	for item in locations[1].find('objects').iter("item"):
-		name = item.find('value').find('Object').find('Name').text
-		x = int(item.find('value').find('Object').find('tileLocation').find('X').text)
-		y = int(item.find('value').find('Object').find('tileLocation').find('Y').text)
-		l = int(item.find('value').find('Object').find('parentSheetIndex').text)
-		t = item.find('value').find('Object').find('type').text
+		f = False
+		obj = item.find('value').find('Object')
+		name = obj.find('name').text
+		x = int(obj.find('tileLocation').find('X').text)
+		y = int(obj.find('tileLocation').find('Y').text)
+		i = int(obj.find('parentSheetIndex').text)
+		t = obj.find('type').text
+		if obj.find('flipped').text == 'true': f = True
 		if 'Fence' in name:
 			name = 'Fence'
-			t = int(item.find('value').find('Object').find('whichType').text)
-		# if name not in things:
-		# 	things.append(name)
-		s.append(i(name, x, y, l, 0, 0, t, None, None))
+			t = int(obj.find('whichType').text)
+		else:
+			name = 'Object'
+		s.append(sprite(name, x, y, 0, 0, i, t, None, f, obj.find('name').text))
 
 	d = {k[0]: [a for a in s if a[0] == k[0]] for k in s}
 
 	try:
 		farm['Fences'] = checkSurrounding(d['Fence'])
 	except Exception as e:
-		print('Error: ' + str(e))
+		print('Fence Error: ' + str(e))
 
 	farm['objects'] = [a for a in s if a.name != 'Fence']
+
+	# Terrain Features
 
 	tf = []
 	crops = []
@@ -101,47 +108,50 @@ def getFarmInfo(saveFileLocation,read_data=False):
 				if crop.find('flip').text == 'true': crop_flip = True
 				crop_dead = False
 				if crop.find('dead').text == 'true': crop_dead = True
-				crops.append((crop_x, crop_y, crop_phase, crop_location, crop_flip, crop_dead))
+				crops.append(sprite('HoeDirtCrop', crop_x, crop_y, 1, 1, crop_dead, crop_location, crop_phase, crop_flip, None))
 		if name =="FruitTree":
 			t = int(item.find('value').find('TerrainFeature').find('treeType').text)
 			s = int(item.find('value').find('TerrainFeature').find('growthStage').text)
 			if item.find('value').find('TerrainFeature').find('flipped').text == 'true': f= True
 		x = int(item.find('key').find('Vector2').find('X').text)
 		y = int(item.find('key').find('Vector2').find('Y').text)
-		tf.append(i(name, x, y, loc, 1, 1, t, s, f))
+		tf.append(sprite(name, x, y, 1, 1, loc, t, s, f, None))
 
 	d = {k[0]: [a for a in tf if a[0] == k[0]] for k in tf}
-
-	farm['terrainFeatures'] = tf
+	excludes = ['Flooring', 'HoeDirt', 'Crop']
+	farm['terrainFeatures'] = [a for a in tf if a.name not in excludes]
 	farm['Crops'] = crops
 
 	try:
 		farm['Flooring'] = checkSurrounding(d['Flooring'])
 		farm['HoeDirt'] = checkSurrounding(d['HoeDirt'])
 	except Exception as e:
-		print('Error: ' + str(e))
+		print('Flooring or Hoe Error: ' + str(e))
+
+	# Resource Clumps
 
 	s = []
 
 	for item in locations[1].find('resourceClumps').iter('ResourceClump'):
+		f = False
 		t = int(item.find('parentSheetIndex').text)
 		x = int(item.find('tile').find('X').text)
 		y = int(item.find('tile').find('Y').text)
 		w = int(item.find('width').text)
 		h = int(item.find('height').text)
-		s.append((t,x, y, w, h))
+		s.append(sprite('ResourceClump', x, y, w, h, None, t, None, None, None))
 
 	farm['resourceClumps'] = s
 
 	s = []
 	for item in locations[1].find('buildings').iter('Building'):
-		name = item.find('buildingType').text 
+		name = 'Building'
 		x = int(item.find('tileX').text)
 		y = int(item.find('tileY').text)
 		w = int(item.find('tilesWide').text)
 		h = int(item.find('tilesHigh').text)
 		t = item.find('buildingType').text
-		s.append((name, x, y, w, h, t))
+		s.append(sprite(name, x, y, w, h, None, t, None, None, None))
 
 	farm['buildings'] = s
 
