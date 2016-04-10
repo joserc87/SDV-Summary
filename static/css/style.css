@@ -94,6 +94,7 @@ h1 {
 
 .tooltip-inner {
 	border-top-width: 10px;
+	max-width: 300px;
 }
 
 .pip {

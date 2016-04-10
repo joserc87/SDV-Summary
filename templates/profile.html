@@ -90,10 +90,10 @@ $(function () {
 								<div class="col-md-12">
 									<ul class="list-inline text-center">
 									<li>Delete:</li>
-									<li><a href="#" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>only this</b> upload.<br><form action="{{data.url}}/del" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;it!</button></form>'>this page</a>?</li>
+									<li><a href="#" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>only this</b> upload.<br><form action="{{data.url}}/del" method="post">{% if passworded %}<input class="input-lg" id="password" type="password" name="password" placeholder="deletion password">{%endif%}<button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;it!</button></form>'>this page</a>?</li>
 									<li>
 									{% if others|length > 1 %}
-										<li><a href="#" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/delall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;all!</button></form>'>all for this farm</a>?</li>
+										<li><a href="#" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/delall" method="post">{% if passworded %}<input class="input-lg" id="password" type="password" name="password" placeholder="deletion password">{%endif%}<button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;all!</button></form>'>all for this farm</a>?</li>
 									{% endif %}
 									</ul>
 								</div>
@@ -293,6 +293,13 @@ $(function () {
 						<div class="interiorpanel text-center">
 							<h3>Minimap</h3>
 							<a href="#mainFarm"><img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
+							{% if passworded %}
+								<p> download link goes here </p>
+							{% else %}
+								<p class="text-center">
+									<a href="#" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='To <b>enable savegame download for all</b> you must set a deletion password for this page.<br><form action="{{data.url}}/pw" method="post"><input class="input-lg" id="password" type="password" name="password" placeholder="deletion password"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Enable!</button></form>'>enable savegame download</a>?
+								</p>
+							{% endif %}
 						</div>					
 				</div>
 			</div>

@@ -181,7 +181,8 @@ database_structure_dict = {'md5':'TEXT',
 'petName':'TEXT',
 'portrait_info':'TEXT',
 'portrait_url': 'TEXT',
-'animals':'TEXT'}
+'animals':'TEXT',
+'del_password':'TEXT'}
 
 if config.USE_SQLITE==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'

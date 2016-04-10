@@ -5,6 +5,7 @@ from flask import Flask, render_template, session, redirect, url_for, request, f
 import time
 from werkzeug import secure_filename, check_password_hash
 from werkzeug.contrib.fixers import ProxyFix
+from werkzeug.security import generate_password_hash
 import os
 from playerInfo import playerInfo
 from farmInfo import getFarmInfo
@@ -89,6 +90,12 @@ def home():
 				return redirect(url_for('display_data',url=dupe))
 			else:
 				farm_info = getFarmInfo(memfile.getvalue(),True)
+				password_hash = propagate_password(player_info)
+				if password_hash == False:
+					error = 'Password hash collision!'
+					return render_template("error.html",error=error,processtime=round(time.time()-start_time,5))
+				elif password_hash != False and password_hash != None:
+					player_info['del_password']=password_hash
 				outcome, error = insert_info(player_info,farm_info,md5_info)
 				if outcome != False:
 					filename = os.path.join(app.config['UPLOAD_FOLDER'],outcome)
@@ -136,6 +143,18 @@ def is_duplicate(md5_info,player_info):
 		return False
 	else:
 		return False
+
+def propagate_password(player_info):
+	cur = g.db.cursor()
+	cur.execute('SELECT id,del_password FROM playerinfo WHERE uniqueIDForThisGame='+app.sqlesc+' AND name='+app.sqlesc+' AND farmName='+app.sqlesc+'',(player_info['uniqueIDForThisGame'],player_info['name'],player_info['farmName']))
+	matches = cur.fetchall()
+	password_hash = None
+	for match in matches:
+		if match[1] != None and password_hash == None:
+			password_hash = match[1]
+		if match[1] != password_hash:
+			return False#means multiple different password hashes in the results... this isn't ideal
+	return password_hash
 
 def insert_info(player_info,farm_info,md5_info):
 	columns = []
@@ -235,7 +254,8 @@ def display_data(url):
 		kills = sorted([[kill[27:].replace('_',' '),datadict[kill]] for kill in sorted(database_structure_dict.keys()) if kill.startswith('statsSpecificMonstersKilled') and datadict[kill]!=None],key=lambda x: x[1])[::-1]
 		cur.execute('SELECT url, date FROM playerinfo WHERE uniqueIDForThisGame='+app.sqlesc+' AND name='+app.sqlesc+' AND farmName='+app.sqlesc+' ORDER BY statsDaysPlayed ASC',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName']))
 		other_saves = cur.fetchall()
-		return render_template("profile.html", deletable=deletable, data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
+		passworded = True if datadict['del_password'] != None else False
+		return render_template("profile.html", deletable=deletable, passworded=passworded, data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
 
 @app.route('/<url>/<instruction>',methods=['GET','POST'])
 def operate_on_url(url,instruction):
@@ -246,11 +266,15 @@ def operate_on_url(url,instruction):
 		if url in session:
 			g.db = connect_db()
 			cur = g.db.cursor()
-			cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
+			cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url,del_password FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
 			data = cur.fetchall()
 			if instruction == 'del':
 				for row in data:
 					if session[url] == row[1] and session[url+'del_token'] == row[2]:
+						if row[7] != None:
+							if check_password_hash(row[7],request.form['password']) == False:
+								return render_template("error.html", error="Incorrect password!", processtime=round(time.time()-start_time,5))
+
 						cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
 						g.db.commit()
 						for filename in row[4:7]:
@@ -264,13 +288,29 @@ def operate_on_url(url,instruction):
 					if not (session[row[3]] == row[1] and session[url+'del_token']):
 						return render_template("error.html", error="Session validation data was wrong for at least one resource", processtime=round(time.time()-start_time,5))
 				for row in data:
+					if row[7] != None:
+						if check_password_hash(row[7],request.form['password']) == False:
+							return render_template("error.html", error="Password was wrong for at least one resource", processtime=round(time.time()-start_time,5))
+				for row in data:
 					cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
 					for filename in row[4:7]:
-						os.remove(filename)
+						try:
+							os.remove(filename)
+						except WindowsError:
+							print 'windowserror on',filename
 					session.pop(row[3],None)
 					session.pop(row[3]+'del_token',None)
 				g.db.commit()
 				return redirect(url_for('home'))
+			elif instruction == 'pw':
+				for row in data:
+					if not (session[row[3]] == row[1] and session[url+'del_token'] and row[7] == None):
+						return render_template("error.html", error="Session validation data was wrong for at least one resource or a password was already set", processtime=round(time.time()-start_time,5))
+				password_hash = generate_password_hash(request.form['password'])
+				for row in data:
+					cur.execute('UPDATE playerinfo SET del_password='+app.sqlesc+' WHERE id='+app.sqlesc,(password_hash,row[0]))
+				g.db.commit()
+				return redirect(url_for('display_data',url=url))
 		else:
 			return render_template("error.html", error="Unknown instruction or insufficient credentials", processtime=round(time.time()-start_time,5))
 	else:
