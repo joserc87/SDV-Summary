@@ -295,7 +295,7 @@ $(function () {
 							<a href="#mainFarm"><img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
 							{% if passworded %}
 								<p> download link goes here </p>
-							{% else %}
+							{% elif not passworded and deletable %}
 								<p class="text-center">
 									<a href="#" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='To <b>enable savegame download for all</b> you must set a deletion password for this page.<br><form action="{{data.url}}/pw" method="post"><input class="input-lg" id="password" type="password" name="password" placeholder="deletion password"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Enable!</button></form>'>enable savegame download</a>?
 								</p>
