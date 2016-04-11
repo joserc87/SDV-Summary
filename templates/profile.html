@@ -90,10 +90,10 @@ $(function () {
 								<div class="col-md-12">
 									<ul class="list-inline text-center">
 									<li>Delete:</li>
-									<li><a href="#" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>only this</b> upload.<br><form action="{{data.url}}/del" method="post">{% if passworded %}<input class="input-lg" id="password" type="password" name="password" placeholder="deletion password">{%endif%}<button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;it!</button></form>'>this page</a>?</li>
+									<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>only this</b> upload.<br><form action="{{data.url}}/del" method="post">{% if passworded %}<input class="input-lg" id="password" type="password" name="password" placeholder="ownership pass code">{%endif%}<button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;it!</button></form>'>this page</button>?</li>
 									<li>
 									{% if others|length > 1 %}
-										<li><a href="#" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/delall" method="post">{% if passworded %}<input class="input-lg" id="password" type="password" name="password" placeholder="deletion password">{%endif%}<button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;all!</button></form>'>all for this farm</a>?</li>
+										<li><<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/delall" method="post">{% if passworded %}<input class="input-lg" id="password" type="password" name="password" placeholder="ownership pass code">{%endif%}<button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;all!</button></form>'>all for this farm</button>?</li>
 									{% endif %}
 									</ul>
 								</div>
@@ -294,10 +294,10 @@ $(function () {
 							<h3>Minimap</h3>
 							<a href="#mainFarm"><img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
 							{% if passworded %}
-								<p> download link goes here </p>
+								<p class="text-center"> download link goes here </p>
 							{% elif not passworded and deletable %}
 								<p class="text-center">
-									<a href="#" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='To <b>enable savegame download for all</b> you must set a deletion password for this page.<br><form action="{{data.url}}/pw" method="post"><input class="input-lg" id="password" type="password" name="password" placeholder="deletion password"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Enable!</button></form>'>enable savegame download</a>?
+									<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='To <b>enable savegame download for all</b> you must set an ownership pass code for this page.<br><a href="/faq#savegame">See why</a><br><form action="{{data.url}}/pw" method="post"><input class="input-lg" id="password" type="password" name="password" placeholder="ownership pass code"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Enable!</button></form>'>enable savegame download</button>?
 								</p>
 							{% endif %}
 						</div>					
