@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify, make_response
+from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify, make_response, send_from_directory
 import time
 from werkzeug import secure_filename, check_password_hash
 from werkzeug.contrib.fixers import ProxyFix
@@ -10,6 +10,7 @@ import os
 from playerInfo import playerInfo
 from farmInfo import getFarmInfo
 from bigbase import dec2big
+import generateSavegame
 import json
 import hashlib
 from imageDrone import process_queue
@@ -509,11 +510,21 @@ def blogindividual(id):
 def retrieve_file(url):
 	error=None
 	start_time = time.time()
-	if 'admin' in session:
-		g.db = connect_db()
-		cur = g.db.cursor()
-		cur.execute('SELECT savefileLocation,name,uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc,(url,))
-		result = cur.fetchone()
+	g.db = connect_db()
+	cur = g.db.cursor()
+	cur.execute("SELECT savefileLocation,name,uniqueIDForThisGame,del_password,download_url,id FROM playerinfo WHERE url="+app.sqlesc,(url,))
+	result = cur.fetchone()
+	if result[3] != None:
+		print 'this url has a password set == download enabled!'
+		print 'still to add: remove savegame when deleting!'
+		if result[4] == None:
+			filename = generateSavegame.createZip(url,result[1],result[2],'static/saves',result[0])
+			cur.execute('UPDATE playerinfo SET download_url='+app.sqlesc+' WHERE id='+app.sqlesc,(filename,result[5]))
+			g.db.commit()
+			return redirect(filename)
+		else:
+			return redirect(result[4])
+	elif 'admin' in session:
 		if result != None:
 			with open(result[0],'rb') as f:
 				response = make_response(f.read())

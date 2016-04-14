@@ -182,7 +182,9 @@ database_structure_dict = {'md5':'TEXT',
 'portrait_info':'TEXT',
 'portrait_url': 'TEXT',
 'animals':'TEXT',
-'del_password':'TEXT'}
+'del_password':'TEXT',
+'pass_attempts':'TEXT',
+'download_url':'TEXT'}
 
 if config.USE_SQLITE==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'
