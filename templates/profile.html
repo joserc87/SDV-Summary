@@ -93,7 +93,7 @@ $(function () {
 									<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>only this</b> upload.<br><form action="{{data.url}}/del" method="post">{% if passworded %}<input class="input-lg" id="password" type="password" name="password" placeholder="ownership pass code">{%endif%}<button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;it!</button></form>'>this page</button>?</li>
 									<li>
 									{% if others|length > 1 %}
-										<li><<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/delall" method="post">{% if passworded %}<input class="input-lg" id="password" type="password" name="password" placeholder="ownership pass code">{%endif%}<button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;all!</button></form>'>all for this farm</button>?</li>
+										<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/delall" method="post">{% if passworded %}<input class="input-lg" id="password" type="password" name="password" placeholder="ownership pass code">{%endif%}<button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;all!</button></form>'>all for this farm</button>?</li>
 									{% endif %}
 									</ul>
 								</div>

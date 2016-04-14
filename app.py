@@ -266,15 +266,24 @@ def operate_on_url(url,instruction):
 		if url in session:
 			g.db = connect_db()
 			cur = g.db.cursor()
-			cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url,del_password FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
+			cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url,del_password,pass_attempts FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
 			data = cur.fetchall()
+
 			if instruction == 'del':
 				for row in data:
 					if session[url] == row[1] and session[url+'del_token'] == row[2]:
 						if row[7] != None:
+							if row[8] != None:
+								previous = [item for item in json.loads(row[8]) if item > time.time()-(24*3600)]
+								if len(previous) >= app.config['PASSWORD_ATTEMPTS_LIMIT']:
+									return render_template("error.html", error="Too many bad password attempts, try again later", processtime=round(time.time()-start_time,5))
+							else:
+								previous = []
 							if check_password_hash(row[7],request.form['password']) == False:
-								return render_template("error.html", error="Incorrect password!", processtime=round(time.time()-start_time,5))
-
+								previous.append(time.time())
+								cur.execute('UPDATE playerinfo SET pass_attempts='+app.sqlesc+' WHERE id='+app.sqlesc,(json.dumps(previous),row[0]))
+								g.db.commit()
+								return render_template("error.html", error="Incorrect password", processtime=round(time.time()-start_time,5))		
 						cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
 						g.db.commit()
 						for filename in row[4:7]:
@@ -283,29 +292,46 @@ def operate_on_url(url,instruction):
 						session.pop(url+'del_token',None)
 						return redirect(url_for('home'))
 				return render_template("error.html", error="Your session validation data is wrong", processtime=round(time.time()-start_time,5))
+
 			elif instruction == 'delall':
 				for row in data:
 					if not (session[row[3]] == row[1] and session[url+'del_token']):
 						return render_template("error.html", error="Session validation data was wrong for at least one resource", processtime=round(time.time()-start_time,5))
+				authstate = []
 				for row in data:
 					if row[7] != None:
+						if row[8] != None:
+							previous = [item for item in json.loads(row[8]) if item > time.time()-(24*3600)]
+							if len(previous) >= app.config['PASSWORD_ATTEMPTS_LIMIT']:
+								authstate.append(408)
+						else:
+							previous = []
 						if check_password_hash(row[7],request.form['password']) == False:
-							return render_template("error.html", error="Password was wrong for at least one resource", processtime=round(time.time()-start_time,5))
-				for row in data:
-					cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
-					for filename in row[4:7]:
-						try:
-							os.remove(filename)
-						except WindowsError:
-							print 'windowserror on',filename
-					session.pop(row[3],None)
-					session.pop(row[3]+'del_token',None)
-				g.db.commit()
-				return redirect(url_for('home'))
+							previous.append(time.time())
+							cur.execute('UPDATE playerinfo SET pass_attempts='+app.sqlesc+' WHERE id='+app.sqlesc,(json.dumps(previous),row[0]))
+							g.db.commit()
+							authstate.append(400)
+				if any([i==408 for i in authstate]):
+					return render_template("error.html", error="Too many bad password attempts, try again later", processtime=round(time.time()-start_time,5))
+				elif any([i==400 for i in authstate]):
+					return render_template("error.html", error="Password was incorrect for at least one resource", processtime=round(time.time()-start_time,5))		
+				else:
+					for row in data:
+						cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
+						for filename in row[4:7]:
+							try:
+								os.remove(filename)
+							except WindowsError:
+								print 'windowserror on',filename
+						session.pop(row[3],None)
+						session.pop(row[3]+'del_token',None)
+					g.db.commit()
+					return redirect(url_for('home'))
+
 			elif instruction == 'pw':
 				for row in data:
 					if not (session[row[3]] == row[1] and session[url+'del_token'] and row[7] == None):
-						return render_template("error.html", error="Session validation data was wrong for at least one resource or a password was already set", processtime=round(time.time()-start_time,5))
+						return render_template("error.html", error="Session validation data was wrong for at least one resource, or a password was already set", processtime=round(time.time()-start_time,5))
 				password_hash = generate_password_hash(request.form['password'])
 				for row in data:
 					cur.execute('UPDATE playerinfo SET del_password='+app.sqlesc+' WHERE id='+app.sqlesc,(password_hash,row[0]))
@@ -315,8 +341,6 @@ def operate_on_url(url,instruction):
 			return render_template("error.html", error="Unknown instruction or insufficient credentials", processtime=round(time.time()-start_time,5))
 	else:
 		return redirect(url_for('display_data',url=url))
-
-
 
 @app.route('/admin',methods=['GET','POST'])
 def admin_panel():
