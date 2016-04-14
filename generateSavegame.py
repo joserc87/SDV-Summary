@@ -27,13 +27,12 @@ def genSaveGameInfo(savegame_file):
 	return savegameinfo
 
 def createZip(url,name,uniqueidforthisgame,static_folder,savegame_file):
-	print 'this is triggering'
 	target = os.path.join(static_folder,url+'.zip')
 	folder = str(name)+'_'+str(uniqueidforthisgame)
 	zf = zipfile.ZipFile(target,'w',compression=zipfile.ZIP_DEFLATED)
 	zf.write(savegame_file,os.path.join(folder,folder),zipfile.ZIP_DEFLATED)
 	zf.writestr(os.path.join(folder,'SaveGameInfo'),genSaveGameInfo(savegame_file))
-	zf.writestr('upload.farm_instructions.txt','Downloaded from upload.farm!\n\nExtract the folder in this archive to %APPDATA%\\StardewValley\\Saves')
+	zf.writestr('upload.farm_instructions.txt','Downloaded from upload.farm/'+str(url)+'\r\n\r\nTo use, extract the folder in this archive to:\r\n%APPDATA%\\StardewValley\\Saves')
 	zf.close()
 	return target
 

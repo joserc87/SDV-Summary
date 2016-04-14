@@ -267,28 +267,29 @@ def operate_on_url(url,instruction):
 		if url in session:
 			g.db = connect_db()
 			cur = g.db.cursor()
-			cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url,del_password,pass_attempts FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
+			cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url,download_url,del_password,pass_attempts FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
 			data = cur.fetchall()
 
 			if instruction == 'del':
 				for row in data:
 					if session[url] == row[1] and session[url+'del_token'] == row[2]:
-						if row[7] != None:
-							if row[8] != None:
-								previous = [item for item in json.loads(row[8]) if item > time.time()-(24*3600)]
+						if row[8] != None:
+							if row[9] != None:
+								previous = [item for item in json.loads(row[9]) if item > time.time()-(24*3600)]
 								if len(previous) >= app.config['PASSWORD_ATTEMPTS_LIMIT']:
 									return render_template("error.html", error="Too many bad password attempts, try again later", processtime=round(time.time()-start_time,5))
 							else:
 								previous = []
-							if check_password_hash(row[7],request.form['password']) == False:
+							if check_password_hash(row[8],request.form['password']) == False:
 								previous.append(time.time())
 								cur.execute('UPDATE playerinfo SET pass_attempts='+app.sqlesc+' WHERE id='+app.sqlesc,(json.dumps(previous),row[0]))
 								g.db.commit()
 								return render_template("error.html", error="Incorrect password", processtime=round(time.time()-start_time,5))		
 						cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
 						g.db.commit()
-						for filename in row[4:7]:
-							os.remove(filename)
+						for filename in row[4:8]:
+							if filename != None:
+								os.remove(filename)
 						session.pop(url,None)
 						session.pop(url+'del_token',None)
 						return redirect(url_for('home'))
@@ -300,14 +301,14 @@ def operate_on_url(url,instruction):
 						return render_template("error.html", error="Session validation data was wrong for at least one resource", processtime=round(time.time()-start_time,5))
 				authstate = []
 				for row in data:
-					if row[7] != None:
-						if row[8] != None:
-							previous = [item for item in json.loads(row[8]) if item > time.time()-(24*3600)]
+					if row[8] != None:
+						if row[9] != None:
+							previous = [item for item in json.loads(row[9]) if item > time.time()-(24*3600)]
 							if len(previous) >= app.config['PASSWORD_ATTEMPTS_LIMIT']:
 								authstate.append(408)
 						else:
 							previous = []
-						if check_password_hash(row[7],request.form['password']) == False:
+						if check_password_hash(row[8],request.form['password']) == False:
 							previous.append(time.time())
 							cur.execute('UPDATE playerinfo SET pass_attempts='+app.sqlesc+' WHERE id='+app.sqlesc,(json.dumps(previous),row[0]))
 							g.db.commit()
@@ -319,11 +320,9 @@ def operate_on_url(url,instruction):
 				else:
 					for row in data:
 						cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
-						for filename in row[4:7]:
-							try:
+						for filename in row[4:8]:
+							if filename != None:
 								os.remove(filename)
-							except WindowsError:
-								print 'windowserror on',filename
 						session.pop(row[3],None)
 						session.pop(row[3]+'del_token',None)
 					g.db.commit()
@@ -331,8 +330,10 @@ def operate_on_url(url,instruction):
 
 			elif instruction == 'pw':
 				for row in data:
-					if not (session[row[3]] == row[1] and session[url+'del_token'] and row[7] == None):
+					if not (session[row[3]] == row[1] and session[url+'del_token'] and row[8] == None):
 						return render_template("error.html", error="Session validation data was wrong for at least one resource, or a password was already set", processtime=round(time.time()-start_time,5))
+				if len(request.form['password']) < app.config['PASSWORD_MIN_LENGTH']:
+					return render_template("error.html", error="Password too short, minimum length is "+str(app.config['PASSWORD_MIN_LENGTH']), processtime=round(time.time()-start_time,5))
 				password_hash = generate_password_hash(request.form['password'])
 				for row in data:
 					cur.execute('UPDATE playerinfo SET del_password='+app.sqlesc+' WHERE id='+app.sqlesc,(password_hash,row[0]))
@@ -515,8 +516,6 @@ def retrieve_file(url):
 	cur.execute("SELECT savefileLocation,name,uniqueIDForThisGame,del_password,download_url,id FROM playerinfo WHERE url="+app.sqlesc,(url,))
 	result = cur.fetchone()
 	if result[3] != None:
-		print 'this url has a password set == download enabled!'
-		print 'still to add: remove savegame when deleting!'
 		if result[4] == None:
 			filename = generateSavegame.createZip(url,result[1],result[2],'static/saves',result[0])
 			cur.execute('UPDATE playerinfo SET download_url='+app.sqlesc+' WHERE id='+app.sqlesc,(filename,result[5]))
@@ -533,7 +532,7 @@ def retrieve_file(url):
 		else:
 			error = "URL does not exist"
 	else:
-		error = "Not admin, no download rights!"
+		error = "You are unable to download this farm data at this time."
 	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 
 @app.route('/faq')
