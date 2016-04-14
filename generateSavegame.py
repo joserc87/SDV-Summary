@@ -3,14 +3,14 @@ from defusedxml import ElementTree as ET
 import zipfile
 import os
 
-ns= "{http://www.w3.org/2001/XMLSchema-instance}"
+required_namespaces = '<Farmer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">'
+target_namespaces = '<Farmer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
 
 def findPlayer(saveFileLocation,read_data=False):
 	if read_data == False:
 		root = ET.parse(saveFileLocation).getroot()
 	else:
 		root = ET.fromstring(saveFileLocation)
-
 	player = root.find("player")
 	return player
 
@@ -23,7 +23,8 @@ def createFarmer(player):
 
 def genSaveGameInfo(savegame_file):
 	farmer = createFarmer(findPlayer(savegame_file))
-	savegameinfo = ET.tostring(farmer, encoding='utf8', method='xml')
+	savegameinfo = ET.tostring(farmer, encoding='UTF-8', method='xml').strip('\r\n')
+	savegameinfo = savegameinfo.replace(target_namespaces,required_namespaces,1)
 	return savegameinfo
 
 def createZip(url,name,uniqueidforthisgame,static_folder,savegame_file):
@@ -38,7 +39,7 @@ def createZip(url,name,uniqueidforthisgame,static_folder,savegame_file):
 
 if __name__=="__main__":
 	static_folder = './static/saves/'
-	savegame_file = './saves/iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii_117456659'
+	savegame_file = './saves/Crono_116230451-newer'
 	import time
 	start_time= time.time()
 	print createZip('test','test','0123345678',static_folder,savegame_file)

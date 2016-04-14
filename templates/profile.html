@@ -299,7 +299,7 @@ $(function () {
 							</p>
 						{% elif not passworded and deletable %}
 							<p class="text-center">
-								<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='To <b>enable savegame download for all</b> you must set an ownership passcode for this page.<br><a href="/faq#savegame">See why</a><br><form action="{{data.url}}/pw" method="post"><input class="input-lg" pattern=".{ {{config.PASSWORD_MIN_LENGTH}},}" required title="Passcode must be at least {{config.PASSWORD_MIN_LENGTH}} characters long!" id="password" type="password" name="password" placeholder="ownership passcode"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Enable!</button></form>'>enable savegame download</button>?
+								<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='To <b>enable savegame download for all</b> you must set an ownership passcode for this page.<br><a href="/faq#savegame">See why</a><br><form action="{{data.url}}/pw" method="post"><input class="input-lg" pattern=".{{"{"}}{{config.PASSWORD_MIN_LENGTH}},}" required title="Passcode must be at least {{config.PASSWORD_MIN_LENGTH}} characters long!" id="password" type="password" name="password" placeholder="ownership passcode"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Enable!</button></form>'>enable savegame download</button>?
 							</p>
 						{% endif %}
 					</div>					
