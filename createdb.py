@@ -209,7 +209,7 @@ if sys.version_info >= (3, 0):
 	raw_input = input
 
 def connect_db():
-	if app.config['$(1)'] == True:
+	if app.config['USE_SQLITE'] == True:
 		import sqlite3
 		connection = sqlite3.connect(app.config['DB_SQLITE'])
 	else:
@@ -243,6 +243,15 @@ def generate_blog():
 	connection.close()
 	print('done')
 
+def generate_users():
+	connection=connect_db()
+	c=connection.cursor()
+	statement = 'CREATE TABLE users(id '+idcode+', email TEXT, password TEXT, imgur_json TEXT, auth_key TEXT, login_time BIGINT);'
+	c.execute(statement)
+	connection.commit()
+	connection.close()
+	print('done')
+
 def delete_db():
 	connection = connect_db()
 	c = connection.cursor()
@@ -258,6 +267,7 @@ def delete_db():
 			c.execute('DROP TABLE errors')
 			c.execute('DROP TABLE todo')
 			c.execute('DROP TABLE blog')
+			c.execute('DROP TABLE users')
 			connection.commit()
 			connection.close()
 			print('all (except admin) deleted')
@@ -332,6 +342,9 @@ if __name__ == "__main__":
 	a = raw_input('Generate blog database? (y/n): ')
 	if a == 'y':
 		generate_blog()
+	a = raw_input('Generate user database? (y/n): ')
+	if a == 'y':
+		generate_users()
 	a = raw_input('Update playerinfo database? (y/n): ')
 	if a == 'y':
 		update_playerinfo()

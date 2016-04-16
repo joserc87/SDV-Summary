@@ -23,10 +23,11 @@ import psycopg2
 import io
 from xml.etree.ElementTree import ParseError
 import datetime
+from flask_recaptcha import ReCaptcha
 
 app = Flask(__name__)
-# app.config.from_pyfile('config.py')
 app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
+recaptcha = ReCaptcha(app=app)
 app.secret_key = app.config['SECRET_KEY']
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
@@ -54,6 +55,72 @@ def md5(md5file):
 @app.route('/_get_recents')
 def jsonifyRecents():
 	return jsonify(recents=get_recents()['posts'])
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+	start_time=time.time()
+	error=None
+	if 'logged_in_user' in session:
+		return redirect(url_for('home'))
+	if request.method == 'POST':
+		if 'email' not in request.form or 'password' not in request.form or request.form['email']=='':
+			error = 'Missing email or password for login!'
+		else:
+			g.db = connect_db()
+			cur = g.db.cursor()
+			cur.execute('SELECT id,password FROM users WHERE email='+app.sqlesc,(request.form['email'],))
+			result = cur.fetchall()
+			assert len(result) <= 1
+			if len(result) == 0:
+				error = 'Username not found!'
+			else:
+				if check_password_hash(result[0][1],request.form['password']) == True:
+					auth_key = dec2big(random.randint(0,(2**128)))
+					cur.execute('UPDATE users SET auth_key='+app.sqlesc+', login_time='+app.sqlesc+' WHERE id='+app.sqlesc,(auth_key,time.time(),result[0][0]))
+					g.db.commit()
+					session['logged_in_user']=(result[0][0],auth_key)
+					return redirect(url_for('home'))
+				else:
+					error = 'Incorrect password!'
+	return render_template("login.html",error=error,processtime=round(time.time()-start_time,5))
+
+@app.route('/su',methods=['GET','POST'])
+def signup():
+	start_time = time.time()
+	error=None
+	if 'logged_in_user' in session:
+		error = 'You are already logged in!'
+	elif request.method == 'POST':
+		if 'email' not in request.form or 'password' not in request.form or request.form['email']=='':
+			error = 'Missing email or password!'
+		else:
+			if recaptcha.verify():
+				g.db = connect_db()
+				cur = g.db.cursor()
+				cur.execute('SELECT id FROM users WHERE email='+app.sqlesc,(request.form['email'],))
+				result = cur.fetchall()
+				if len(result) == 0:
+					cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+')',(request.form['email'],generate_password_hash(request.form['password'])))
+					g.db.commit()
+					flash('You have successfully registered. Now, please sign in!')
+					return redirect(url_for('login'))
+				else:
+					error = 'This email address has already registered'
+			else:
+				error = 'Captcha failed! If you are human, please try again!'
+	return render_template("signup.html",error=error,processtime=round(time.time()-start_time,5))
+
+def logged_in():
+	if 'logged_in_user' in session:
+		g.db = connect_db()
+		cur = g.db.cursor()
+		cur.execute('SELECT auth_key FROM users WHERE id='+app.sqlesc,(session['logged_in_user'][0],))
+		result = cur.fetchall()
+		if result[0][0] == session['logged_in_user'][1]:
+			return True
+	return False
+
+app.jinja_env.globals.update(logged_in=logged_in)
 
 @app.route('/',methods=['GET','POST'])
 def home():
@@ -447,7 +514,8 @@ def get_blogposts(n=False,**kwargs):
 def logout():
 	if 'admin' in session:
 		session.pop('admin',None)
-	return redirect(url_for('admin_panel'))
+	session.pop('logged_in_user',None)
+	return redirect(url_for('home'))
 
 @app.route('/blog')
 def blogmain():
