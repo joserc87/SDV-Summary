@@ -100,10 +100,13 @@ def signup():
 				cur.execute('SELECT id FROM users WHERE email='+app.sqlesc,(request.form['email'],))
 				result = cur.fetchall()
 				if len(result) == 0:
-					cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+')',(request.form['email'],generate_password_hash(request.form['password'])))
-					g.db.commit()
-					flash('You have successfully registered. Now, please sign in!')
-					return redirect(url_for('login'))
+					if len(request.form['email'].split('@')) == 2 and len(request.form['email'].split('@')[1].split('.'))> 2:
+						cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+')',(request.form['email'],generate_password_hash(request.form['password'])))
+						g.db.commit()
+						flash('You have successfully registered. Now, please sign in!')
+						return redirect(url_for('login'))
+					else:
+						error = 'Invalid email address!'
 				else:
 					error = 'This email address has already registered'
 			else:
