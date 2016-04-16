@@ -8,16 +8,20 @@ from farmInfo import generateImage
 import os
 import time
 from createdb import database_structure_dict, database_fields
+from flask import Flask
+
+app = Flask(__name__)
+app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
 
 IMAGE_FOLDER = 'static/images'
 
-if config.USE_SQLITE == True:
-	database = config.DB_SQLITE
+if app.config['USE_SQLITE'] == True:
+	database = app.config['DB_SQLITE']
 	sqlesc = '?'
 	def connect_db():
 		return sqlite3.connect(database)
 else:
-	database = 'dbname='+config.DB_NAME+' user='+config.DB_USER+' password='+config.DB_PASSWORD
+	database = 'dbname='+app.config['DB_NAME']+' user='+app.config['DB_USER']+' password='+app.config['DB_PASSWORD']
 	sqlesc = '%s'
 	def connect_db():
 		return psycopg2.connect(database)
@@ -42,7 +46,7 @@ def process_queue():
 				data['hairstyleColor'] = [data['hairstyleColor0'],data['hairstyleColor1'],data['hairstyleColor2'],data['hairstyleColor3']]
 				avatar = generateAvatar(data)
 
-				# if config.USE_SQLITE == True:
+				# if app.config['USE_SQLITE'] == True:
 				pi = json.loads(data['portrait_info'])
 				# else:
 					# pi = data['portrait_info']

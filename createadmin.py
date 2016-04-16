@@ -1,8 +1,13 @@
 # creates db for SDV-Summary
 import config
+from flask import Flask
+import os
 from werkzeug.security import generate_password_hash
 
-if config.USE_SQLITE==True:
+app = Flask(__name__)
+app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
+
+if app.config['USE_SQLITE']==True:
 	sqlesc = '?'
 	idcode='INTEGER PRIMARY KEY AUTOINCREMENT'
 else:
@@ -10,12 +15,12 @@ else:
 	idcode='SERIAL PRIMARY KEY'
 
 def connect_db():
-	if config.USE_SQLITE == True:
+	if app.config['USE_SQLITE'] == True:
 		import sqlite3
-		connection = sqlite3.connect(config.DB_SQLITE)
+		connection = sqlite3.connect(app.config['DB_SQLITE'])
 	else:
 		import psycopg2
-		connection = psycopg2.connect('dbname='+config.DB_NAME+' user='+config.DB_USER+' password='+config.DB_PASSWORD)
+		connection = psycopg2.connect('dbname='+app.config['DB_NAME']+' user='+app.config['DB_USER']+' password='+app.config['DB_PASSWORD'])
 	return connection
 
 def generate_admin():

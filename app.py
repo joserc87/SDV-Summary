@@ -25,7 +25,8 @@ from xml.etree.ElementTree import ParseError
 import datetime
 
 app = Flask(__name__)
-app.config.from_pyfile('config.py')
+# app.config.from_pyfile('config.py')
+app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
 app.secret_key = app.config['SECRET_KEY']
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
@@ -542,4 +543,4 @@ def faq():
 	return render_template('faq.html',error=error,processtime=round(time.time()-start_time,5))
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	app.run()
