@@ -113,6 +113,10 @@ def getFarmInfo(saveFileLocation,read_data=False):
 			t = int(item.find('value').find('TerrainFeature').find('treeType').text)
 			s = int(item.find('value').find('TerrainFeature').find('growthStage').text)
 			if item.find('value').find('TerrainFeature').find('flipped').text == 'true': f= True
+		if name == "Grass":
+			t = int(item.find('value').find('TerrainFeature').find('grassType').text)
+			s = int(item.find('value').find('TerrainFeature').find('numberOfWeeds').text)
+			loc = int(item.find('value').find('TerrainFeature').find('grassSourceOffset').text)
 		x = int(item.find('key').find('Vector2').find('X').text)
 		y = int(item.find('key').find('Vector2').find('Y').text)
 		tf.append(sprite(name, x, y, 1, 1, loc, t, s, f, None))
@@ -151,9 +155,28 @@ def getFarmInfo(saveFileLocation,read_data=False):
 		w = int(item.find('tilesWide').text)
 		h = int(item.find('tilesHigh').text)
 		t = item.find('buildingType').text
+		print(t)
 		s.append(sprite(name, x, y, w, h, None, t, None, None, None))
 
 	farm['buildings'] = s
+
+	house = sprite('House',
+			 58, 8, 10, 10,
+			 int(root.find('player').find('houseUpgradeLevel').text),
+			 None,
+			 None,
+			 None,
+			 None)
+
+	if root.find('player').find('hasGreenhouse').text == "true":
+		greenHouse = sprite('Greenhouse',
+					25, 6, 0, 0, 1,
+					None, None, None, None	)
+	else:
+		greenHouse = sprite('Greenhouse',
+					25, 6, 0, 0, 0,
+					None, None, None, None	)
+	farm['misc'] = [house, greenHouse]
 
 	return farm
 
