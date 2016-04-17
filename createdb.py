@@ -332,6 +332,3 @@ if __name__ == "__main__":
 	a = raw_input('Generate blog database? (y/n): ')
 	if a == 'y':
 		generate_blog()
-	a = raw_input('Update playerinfo database? (y/n): ')
-	if a == 'y':
-		update_playerinfo()
