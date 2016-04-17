@@ -93,6 +93,8 @@ def signup():
 	elif request.method == 'POST':
 		if 'email' not in request.form or 'password' not in request.form or request.form['email']=='':
 			error = 'Missing email or password!'
+		elif len(request.form['password'])<app.config['PASSWORD_MIN_LENGTH']:
+			error = 'Password too short!'
 		else:
 			if recaptcha.verify():
 				g.db = connect_db()

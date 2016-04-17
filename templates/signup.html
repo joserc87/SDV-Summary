@@ -23,7 +23,7 @@
 
 										<div class="form-group">
 											<label for="password" class="sr-only">Password</label>
-											<input class="form-control input-lg" id="password" type="password" name="password" value="" placeholder="password">
+											<input class="form-control input-lg" id="password" type="password" name="password" value="" placeholder="password"  pattern=".{{"{"}}{{config.PASSWORD_MIN_LENGTH}},}" required title="Passcode must be at least {{config.PASSWORD_MIN_LENGTH}} characters long!">
 										</div>
 
 										<div class="form-group">
