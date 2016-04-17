@@ -116,14 +116,17 @@ def signup():
 	return render_template("signup.html",error=error,processtime=round(time.time()-start_time,5))
 
 def logged_in():
-	if 'logged_in_user' in session:
-		g.db = connect_db()
-		cur = g.db.cursor()
-		cur.execute('SELECT auth_key FROM users WHERE id='+app.sqlesc,(session['logged_in_user'][0],))
-		result = cur.fetchall()
-		if result[0][0] == session['logged_in_user'][1]:
-			return True
-	return False
+	# designed to prevent repeated db requests
+	if not hasattr(g,'logged_in_user'):
+		if 'logged_in_user' in session:
+			g.db = connect_db()
+			cur = g.db.cursor()
+			cur.execute('SELECT auth_key FROM users WHERE id='+app.sqlesc,(session['logged_in_user'][0],))
+			result = cur.fetchall()
+			if result[0][0] == session['logged_in_user'][1]:
+				g.logged_in_user = True
+		g.logged_in_user = False
+	return g.logged_in_user
 
 app.jinja_env.globals.update(logged_in=logged_in)
 
