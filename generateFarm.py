@@ -31,7 +31,7 @@ def generateFarm(player, farm):
                            'Quality Sprinkler', 'Iridium Sprinkler']
 
     print('\tLoading Base...')
-    farm_base = Image.open('./bases/{0}_base.png'.format(season))
+    farm_base = Image.open('./assets/bases/{0}_base.png'.format(season))
 
     print('\tLoading Spritesheets...')
     object_spritesheet = Image.open('./assets/farm/objects.png')
@@ -102,6 +102,9 @@ def generateFarm(player, farm):
                                 defaultSize=(4, 8), objectSize=(4, 8))
             offset = 16
             farm_base.paste(fence_img, (item.x * 16, item.y * 16 - offset), fence_img)
+
+        if item.name =='Gate':
+            print('gate')
 
         if item.name == 'ResourceClump':
             obj_img = cropImg(object_spritesheet, item.type, objectSize=(8, 8))
@@ -193,7 +196,8 @@ def generateFarm(player, farm):
                 farm_base.paste(greenhouse_img, (item.x*16, item.y*16), greenhouse_img)
             except Exception as e:
                 print(e)
-
+    overlay = Image.open('./assets/bases/{0}_overlay.png'.format(season))
+    farm_base.paste(overlay, (0, 0), overlay)
     return farm_base
 
 

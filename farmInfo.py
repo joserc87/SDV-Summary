@@ -60,14 +60,17 @@ def getFarmInfo(saveFileLocation,read_data=False):
 		f = False
 		obj = item.find('value').find('Object')
 		name = obj.find('name').text
-		x = int(obj.find('tileLocation').find('X').text)
-		y = int(obj.find('tileLocation').find('Y').text)
+		x = int(item.find('key').find('Vector2').find('X').text)
+		y = int(item.find('key').find('Vector2').find('Y').text)
 		i = int(obj.find('parentSheetIndex').text)
 		t = obj.find('type').text
-		if obj.find('flipped').text == 'true': f = True
+		if obj.find('flipped').text == 'true':
+			f = True
 		if 'Fence' in name:
 			name = 'Fence'
 			t = int(obj.find('whichType').text)
+			if obj.find('isGate').text == 'true':
+				name = 'Gate'
 		else:
 			name = 'Object'
 		s.append(sprite(name, x, y, 0, 0, i, t, None, f, obj.find('name').text))
@@ -155,7 +158,6 @@ def getFarmInfo(saveFileLocation,read_data=False):
 		w = int(item.find('tilesWide').text)
 		h = int(item.find('tilesHigh').text)
 		t = item.find('buildingType').text
-		print(t)
 		s.append(sprite(name, x, y, w, h, None, t, None, None, None))
 
 	farm['buildings'] = s
