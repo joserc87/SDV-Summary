@@ -123,12 +123,46 @@ def logged_in():
 			cur = g.db.cursor()
 			cur.execute('SELECT auth_key FROM users WHERE id='+app.sqlesc,(session['logged_in_user'][0],))
 			result = cur.fetchall()
-			if result[0][0] == session['logged_in_user'][1]:
+			if len(result) == 0:
+				session.pop('logged_in_user',None)
+				g.logged_in_user = False
+			elif result[0][0] == session['logged_in_user'][1]:
 				g.logged_in_user = True
-		g.logged_in_user = False
+		else:
+			g.logged_in_user = False
 	return g.logged_in_user
 
 app.jinja_env.globals.update(logged_in=logged_in)
+
+def add_to_series(rowid,uniqueIDForThisGame,name,farmName):
+	current_auto_key = json.dumps([uniqueIDForThisGame,name,farmName])
+	db = connect_db()
+	cur = db.cursor()
+	if logged_in():
+		logged_in_userid = session['logged_in_user'][0]
+		cur.execute('SELECT id, owner, members_json FROM series WHERE auto_key_json='+app.sqlesc+' AND owner='+app.sqlesc,(current_auto_key,logged_in_userid))
+		result = cur.fetchall()
+		db.commit()
+		assert len(result)<= 1
+		if len(result)==0:
+			cur.execute('INSERT INTO series (owner, members_json, auto_key_json) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+') RETURNING id',(logged_in_userid,json.dumps([rowid]),current_auto_key))
+			series_id = cur.fetchall()[0][0]
+		elif len(result)==1:
+			series_id = result[0][0]
+			new_members_json = json.dumps(json.loads(result[0][2])+[rowid])
+			cur.execute('UPDATE series SET members_json='+app.sqlesc+' WHERE id='+app.sqlesc,(new_members_json,result[0][0]))
+	else:
+		cur.execute('INSERT INTO series (members_json, auto_key_json) VALUES ('+app.sqlesc+','+app.sqlesc+') RETURNING id',(json.dumps([rowid]),current_auto_key))
+		series_id = cur.fetchall()[0][0]
+	db.commit()
+	db.close()
+	return series_id
+
+def get_logged_in_user():
+	if logged_in():
+		return session['logged_in_user'][0]
+	else:
+		return None
 
 @app.route('/',methods=['GET','POST'])
 def home():
@@ -159,32 +193,39 @@ def home():
 			except ParseError as e:
 				error = "Not well-formed xml"
 				return render_template("index.html",error=error,blogposts=get_blogposts(5),recents=get_recents(), processtime=round(time.time()-start_time,5))
-			g.db = connect_db()
-			cur = g.db.cursor()
 			dupe = is_duplicate(md5_info,player_info)
 			if dupe != False:
-				session[dupe] = md5_info
-				return redirect(url_for('display_data',url=dupe))
+				session[dupe[0]] = md5_info
+				session[dupe[0]+'del_token'] = dupe[1]
+				return redirect(url_for('display_data',url=dupe[0]))
 			else:
 				farm_info = getFarmInfo(memfile.getvalue(),True)
+				# removed password_hash code for password ownership method
+				'''
 				password_hash = propagate_password(player_info)
 				if password_hash == False:
 					error = 'Password hash collision!'
 					return render_template("error.html",error=error,processtime=round(time.time()-start_time,5))
 				elif password_hash != False and password_hash != None:
 					player_info['del_password']=password_hash
-				outcome, error = insert_info(player_info,farm_info,md5_info)
+				'''
+				outcome, del_token, rowid, error = insert_info(player_info,farm_info,md5_info)
 				if outcome != False:
 					filename = os.path.join(app.config['UPLOAD_FOLDER'],outcome)
 					with open(filename,'wb') as f:
 						f.write(memfile.getvalue())
-					cur.execute('UPDATE playerinfo SET savefileLocation='+app.sqlesc+' WHERE url='+app.sqlesc+'',(filename,outcome))
+					series_id = add_to_series(rowid,player_info['uniqueIDForThisGame'],player_info['name'],player_info['farmName'])
+					owner_id = get_logged_in_user()
+					g.db = connect_db()
+					cur = g.db.cursor()
+					cur.execute('UPDATE playerinfo SET savefileLocation='+app.sqlesc+', series_id='+app.sqlesc+', owner_id='+app.sqlesc+' WHERE url='+app.sqlesc+';',(filename,series_id,owner_id,outcome))
 					g.db.commit()
+					g.db.close()
 				process_queue()
 			memfile.close()
-			g.db.close()
 			if outcome != False:
 				session[outcome] = md5_info
+				session[outcome+'del_token'] = del_token
 				return redirect(url_for('display_data',url=outcome))
 	return render_template("index.html", recents=get_recents(), error=error,blogposts=get_blogposts(5), processtime=round(time.time()-start_time,5))
 
@@ -210,17 +251,23 @@ def get_recents(n=6,**kwargs):
 	return recents
 
 def is_duplicate(md5_info,player_info):
-	cur = g.db.cursor()
-	cur.execute('SELECT id, md5, name, uniqueIDForThisGame, url FROM playerinfo WHERE md5='+app.sqlesc+'',(md5_info,))
+	db = connect_db()
+	cur = db.cursor()
+	cur.execute('SELECT id, md5, name, uniqueIDForThisGame, url, del_token FROM playerinfo WHERE md5='+app.sqlesc,(md5_info,))
 	matches = cur.fetchall()
 	if len(matches) > 0:
 		for match in matches:
 			if str(player_info['name'])==str(match[2]) and str(player_info['uniqueIDForThisGame'])==str(match[3]):
-				return match[4]
+				db.close()
+				return (match[4],match[5])
+		db.close()
 		return False
 	else:
+		db.close()
 		return False
 
+# removed propagate_password function
+'''
 def propagate_password(player_info):
 	cur = g.db.cursor()
 	cur.execute('SELECT id,del_password FROM playerinfo WHERE uniqueIDForThisGame='+app.sqlesc+' AND name='+app.sqlesc+' AND farmName='+app.sqlesc+'',(player_info['uniqueIDForThisGame'],player_info['name'],player_info['farmName']))
@@ -232,6 +279,7 @@ def propagate_password(player_info):
 		if match[1] != password_hash:
 			return False#means multiple different password hashes in the results... this isn't ideal
 	return password_hash
+'''
 
 def insert_info(player_info,farm_info,md5_info):
 	columns = []
@@ -263,7 +311,8 @@ def insert_info(player_info,farm_info,md5_info):
 	columns.append('ip')
 	values.append(request.environ['REMOTE_ADDR'])
 	columns.append('del_token')
-	values.append(random.randint(-(2**63)-1,(2**63)-1))
+	del_token = random.randint(-(2**63)-1,(2**63)-1)
+	values.append(del_token)
 	columns.append('views')
 	values.append('0')
 
@@ -272,8 +321,9 @@ def insert_info(player_info,farm_info,md5_info):
 		colstring += c+', '
 	colstring = colstring[:-2]
 	questionmarks = ((app.sqlesc+',')*len(values))[:-1]
+	g.db = connect_db()
+	cur = g.db.cursor()
 	try:
-		cur = g.db.cursor()
 		cur.execute('INSERT INTO playerinfo ('+colstring+') VALUES ('+questionmarks+')',tuple(values))
 		cur.execute('SELECT id,added_time FROM playerinfo WHERE uniqueIDForThisGame='+app.sqlesc+' AND name='+app.sqlesc+' AND md5 ='+app.sqlesc+'',(player_info['uniqueIDForThisGame'],player_info['name'],md5_info))
 		row = cur.fetchone()
@@ -282,11 +332,11 @@ def insert_info(player_info,farm_info,md5_info):
 		cur.execute('UPDATE playerinfo SET url='+app.sqlesc+' WHERE id='+app.sqlesc+'',(url,rowid))
 		cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('process_image',rowid))
 		g.db.commit()
-		return url, None
+		return url, del_token, rowid, None
 	except (sqlite3.OperationalError, psycopg2.ProgrammingError) as e:
 		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'], time.time(),str(e)+' '+str([columns,values])))
 		g.db.commit()
-		return False, "Save file incompatible with current database: error is "+str(e)
+		return False, del_token, False, "Save file incompatible with current database: error is "+str(e)
 
 @app.route('/<url>')
 def display_data(url):
@@ -309,7 +359,8 @@ def display_data(url):
 		for k, key in enumerate(sorted(database_structure_dict.keys())):
 			if key != 'farm_info':
 				datadict[key] = data[0][k]
-
+		'''
+		print 'this bit gives ownership cookies to ANYONE with partner cookie! need to revise!'
 		if url in session:
 			cur.execute('SELECT url,md5,del_token FROM playerinfo WHERE uniqueIDForThisGame='+app.sqlesc+' AND name='+app.sqlesc+' AND farmName='+app.sqlesc+'',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName']))
 			md5_from_db = cur.fetchall()
@@ -318,6 +369,17 @@ def display_data(url):
 				for row in md5_from_db:
 					session[row[0]] = row[1]
 					session[row[0]+'del_token'] = row[2]
+		'''
+		claimable = False
+		deletable = False
+		if datadict['owner_id'] == None:
+			if url in session and url+'del_token' in session and session[url] == datadict['md5'] and session[url+'del_token'] == datadict['del_token']:
+				if logged_in():
+					claimable = True
+				else:
+					deletable = True
+		elif logged_in() and str(datadict['owner_id']) == str(get_logged_in_user()):
+			deletable = True
 
 		for item in ['money','totalMoneyEarned','statsStepsTaken','millisecondsPlayed']:
 			if item == 'millisecondsPlayed':
@@ -329,10 +391,16 @@ def display_data(url):
 		datadict['portrait_info'] = json.loads(datadict['portrait_info'])
 		friendships = sorted([[friendship[11:],datadict[friendship]] for friendship in sorted(database_structure_dict.keys()) if friendship.startswith('friendships') and datadict[friendship]!=None],key=lambda x: x[1])[::-1]
 		kills = sorted([[kill[27:].replace('_',' '),datadict[kill]] for kill in sorted(database_structure_dict.keys()) if kill.startswith('statsSpecificMonstersKilled') and datadict[kill]!=None],key=lambda x: x[1])[::-1]
+		'''
+		print 'this bit finds other saves and need revising!'
 		cur.execute('SELECT url, date FROM playerinfo WHERE uniqueIDForThisGame='+app.sqlesc+' AND name='+app.sqlesc+' AND farmName='+app.sqlesc+' ORDER BY statsDaysPlayed ASC',(datadict['uniqueIDForThisGame'],datadict['name'],datadict['farmName']))
 		other_saves = cur.fetchall()
-		passworded = True if datadict['del_password'] != None else False
-		return render_template("profile.html", deletable=deletable, passworded=passworded, data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
+		'''
+		cur.execute('SELECT url, date FROM playerinfo WHERE series_id='+app.sqlesc,(datadict['series_id'],))
+		other_saves = cur.fetchall()
+		# passworded = True if datadict['del_password'] != None else False
+		# passworded=passworded, removed from next line
+		return render_template("profile.html", deletable=deletable, claimable=claimable, data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
 
 @app.route('/<url>/<instruction>',methods=['GET','POST'])
 def operate_on_url(url,instruction):
@@ -343,12 +411,15 @@ def operate_on_url(url,instruction):
 		if url in session:
 			g.db = connect_db()
 			cur = g.db.cursor()
-			cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url,download_url,del_password,pass_attempts FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
+			# removed del_password,pass_attempts from next line
+			print 'finds all matching shit from uniqueidforthisgame; needs to be revised for series'
+			cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url,download_url FROM playerinfo WHERE uniqueIDForThisGame=(SELECT uniqueIDForThisGame FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
 			data = cur.fetchall()
 
 			if instruction == 'del':
 				for row in data:
 					if session[url] == row[1] and session[url+'del_token'] == row[2]:
+						'''
 						if row[8] != None:
 							if row[9] != None:
 								previous = [item for item in json.loads(row[9]) if item > time.time()-(24*3600)]
@@ -361,6 +432,7 @@ def operate_on_url(url,instruction):
 								cur.execute('UPDATE playerinfo SET pass_attempts='+app.sqlesc+' WHERE id='+app.sqlesc,(json.dumps(previous),row[0]))
 								g.db.commit()
 								return render_template("error.html", error="Incorrect password", processtime=round(time.time()-start_time,5))		
+						'''
 						cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
 						g.db.commit()
 						for filename in row[4:8]:
@@ -373,8 +445,9 @@ def operate_on_url(url,instruction):
 
 			elif instruction == 'delall':
 				for row in data:
-					if not (session[row[3]] == row[1] and session[url+'del_token']):
+					if not (session[row[3]] == row[1] and url+'del_token' in session):
 						return render_template("error.html", error="Session validation data was wrong for at least one resource", processtime=round(time.time()-start_time,5))
+				'''
 				authstate = []
 				for row in data:
 					if row[8] != None:
@@ -394,16 +467,17 @@ def operate_on_url(url,instruction):
 				elif any([i==400 for i in authstate]):
 					return render_template("error.html", error="Password was incorrect for at least one resource", processtime=round(time.time()-start_time,5))		
 				else:
-					for row in data:
-						cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
-						for filename in row[4:8]:
-							if filename != None:
-								os.remove(filename)
-						session.pop(row[3],None)
-						session.pop(row[3]+'del_token',None)
-					g.db.commit()
-					return redirect(url_for('home'))
-
+				'''
+				for row in data:
+					cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(row[0],))
+					for filename in row[4:8]:
+						if filename != None:
+							os.remove(filename)
+					session.pop(row[3],None)
+					session.pop(row[3]+'del_token',None)
+				g.db.commit()
+				return redirect(url_for('home'))
+			'''
 			elif instruction == 'pw':
 				for row in data:
 					if not (session[row[3]] == row[1] and session[url+'del_token'] and row[8] == None):
@@ -415,6 +489,7 @@ def operate_on_url(url,instruction):
 					cur.execute('UPDATE playerinfo SET del_password='+app.sqlesc+' WHERE id='+app.sqlesc,(password_hash,row[0]))
 				g.db.commit()
 				return redirect(url_for('display_data',url=url))
+			'''
 		else:
 			return render_template("error.html", error="Unknown instruction or insufficient credentials", processtime=round(time.time()-start_time,5))
 	else:
@@ -590,9 +665,9 @@ def retrieve_file(url):
 	start_time = time.time()
 	g.db = connect_db()
 	cur = g.db.cursor()
-	cur.execute("SELECT savefileLocation,name,uniqueIDForThisGame,del_password,download_url,id FROM playerinfo WHERE url="+app.sqlesc,(url,))
+	cur.execute("SELECT savefileLocation,name,uniqueIDForThisGame,download_enabled,download_url,id FROM playerinfo WHERE url="+app.sqlesc,(url,))
 	result = cur.fetchone()
-	if result[3] != None:
+	if result[3] == True:
 		if result[4] == None:
 			filename = generateSavegame.createZip(url,result[1],result[2],'static/saves',result[0])
 			cur.execute('UPDATE playerinfo SET download_url='+app.sqlesc+' WHERE id='+app.sqlesc,(filename,result[5]))

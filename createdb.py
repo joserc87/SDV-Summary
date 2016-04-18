@@ -187,9 +187,10 @@ database_structure_dict = {'md5':'TEXT',
 'portrait_info':'TEXT',
 'portrait_url': 'TEXT',
 'animals':'TEXT',
-'del_password':'TEXT',
-'pass_attempts':'TEXT',
-'download_url':'TEXT'}
+'download_enabled':'BOOLEAN',
+'download_url':'TEXT',
+'owner_id':'BIGINT',
+'series_id':'BIGINT'}
 
 if app.config['USE_SQLITE']==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'
@@ -252,6 +253,15 @@ def generate_users():
 	connection.close()
 	print('done')
 
+def generate_serial():
+	connection=connect_db()
+	c=connection.cursor()
+	statement = 'CREATE TABLE series(id '+idcode+', owner INT, members_json TEXT, auto_key_json TEXT);'
+	c.execute(statement)
+	connection.commit()
+	connection.close()
+	print('done')
+
 def delete_db():
 	connection = connect_db()
 	c = connection.cursor()
@@ -268,6 +278,7 @@ def delete_db():
 			c.execute('DROP TABLE todo')
 			c.execute('DROP TABLE blog')
 			c.execute('DROP TABLE users')
+			c.execute('DROP TABLE series')
 			connection.commit()
 			connection.close()
 			print('all (except admin) deleted')
@@ -345,6 +356,9 @@ if __name__ == "__main__":
 	a = raw_input('Generate user database? (y/n): ')
 	if a == 'y':
 		generate_users()
+	a = raw_input('Generate serial database? (y/n): ')
+	if a == 'y':
+		generate_serial()
 	a = raw_input('Update playerinfo database? (y/n): ')
 	if a == 'y':
 		update_playerinfo()
