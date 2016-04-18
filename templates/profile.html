@@ -92,8 +92,8 @@ $(function () {
 									<li>Claim:</li>
 									<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will claim <b>only this</b> upload.<br><form action="{{data.url}}/claim" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim&nbsp;it!</button></form>'>this page</button>?</li>
 									<li>
-									{% if others|length > 1 %}
-										<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will claim <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/claimall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim&nbsp;all!</button></form>'>all for this farm</button>?</li>
+									{% if claimables|length > 1 %}
+										<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will claim <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/claimall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim&nbsp;all!</button></form>'>all claimable</button>?</li>
 									{% endif %}
 									</ul>
 								</div>
@@ -310,13 +310,18 @@ $(function () {
 							<p class="text-center">
 								<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='You use the contents of this zip at your own risk!<br><a href="/dl/{{data.url}}">I understand, download!</a>'>download savegame</button>
 							</p>
+							{% if deletable %}
+							<h5 class="text-center">
+								<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='Disables download of the savegame you uploaded. Can be turned back on any time!<br><form action="{{data.url}}/disable-dl" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Disable!</button></form>'>disable downloads</button>
+							</h5>
+							{%endif%}
 						{% elif logged_in() and data.download_enabled != True and deletable %}
 							<p class="text-center">
-								<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='Really <b>enable savegame download for all</b>?<br><form action="{{data.url}}/pw" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Enable!</button></form>'>enable savegame download</button>?
+								<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='Enables download of the savegame you uploaded by <b>all</b> users. Can be turned off any time!<br><form action="{{data.url}}/enable-dl" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Enable!</button></form>'>enable savegame download</button>
 							</p>
 						{% elif claimable or deletable %}
 							<p class="text-center">
-								To enable savegame download please {%if not logged_in()%}<a href="{{url_for('signup')}}">sign up</a> or <a href="{{url_for('login')}}">sign in</a>, then{%endif%} claim this page.
+								To enable savegame download please first{%if not logged_in()%} <a href="{{url_for('signup')}}">sign up</a> or <a href="{{url_for('login')}}">sign in</a>, then{%endif%} claim this page.
 							</p>
 						{% endif %}
 					</div>					
