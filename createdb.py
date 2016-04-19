@@ -225,16 +225,29 @@ def generate_db():
 	for key in sorted(database_structure_dict.keys()):
 		database_structure += key + ' ' +database_structure_dict[key] + ',\n'
 	database_structure = database_structure[:-2]
-
-	errors_structure = 'id '+idcode+', ip TEXT, time BIGINT, notes TEXT'
-	todo_structure = 'id '+idcode+', task TEXT, playerid TEXT, currently_processing BOOLEAN'
-
+	errors_structure = ''
 	connection = connect_db()
 	c = connection.cursor()
 	c.execute('CREATE TABLE playerinfo('+database_structure+')')
-	c.execute('CREATE TABLE errors('+errors_structure+')')
-	c.execute('CREATE TABLE todo('+todo_structure+')')
 	connection.commit()
+	print('done')
+
+def generate_errors():
+	connection=connect_db()
+	c = connection.cursor()
+	statement = 'CREATE TABLE todo (id '+idcode+', ip TEXT, time BIGINT, notes TEXT);'
+	c.execute(statement)
+	connection.commit()
+	connection.close()
+	print('done')
+
+def generate_todo():
+	connection=connect_db()
+	c = connection.cursor()
+	statement = 'CREATE TABLE todo (id '+idcode+', task TEXT, playerid TEXT, currently_processing BOOLEAN);'
+	c.execute(statement)
+	connection.commit()
+	connection.close()
 	print('done')
 
 def generate_blog():
@@ -346,12 +359,18 @@ def update_playerinfo():
 	print 'all modifications committed'
 
 if __name__ == "__main__":
-	a = raw_input('Drop databases? (y/n): ')
+	a = raw_input('Drop all non-admin databases? (y/n): ')
 	if a == 'y':
 		delete_db()
-	a = raw_input('Generate databases? (y/n): ')
+	a = raw_input('Generate playerinfo database? (y/n): ')
 	if a == 'y':
 		generate_db()
+	a = raw_input('Generate todo database? (y/n): ')
+	if a == 'y':
+		generate_todo()
+	a = raw_input('Generate errors database? (y/n): ')
+	if a == 'y':
+		generate_errors()
 	a = raw_input('Generate blog database? (y/n): ')
 	if a == 'y':
 		generate_blog()

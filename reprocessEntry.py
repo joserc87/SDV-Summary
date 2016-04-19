@@ -78,6 +78,7 @@ def getEntries(where=None):
 if __name__ == "__main__":
 	entries = getEntries()
 	for eno, entry in enumerate(entries):
+		print entry
 		success = processFile(entry[3],entry[1],entry[0],entry[2])
 		print eno+1,'of',len(entries)
 		if not success:
