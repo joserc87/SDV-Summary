@@ -68,16 +68,19 @@ def login():
 		else:
 			g.db = connect_db()
 			cur = g.db.cursor()
-			cur.execute('SELECT id,password FROM users WHERE email='+app.sqlesc,(request.form['email'],))
+			cur.execute('SELECT id,password,auth_key FROM users WHERE email='+app.sqlesc,(request.form['email'],))
 			result = cur.fetchall()
 			assert len(result) <= 1
 			if len(result) == 0:
 				error = 'Username not found!'
 			else:
 				if check_password_hash(result[0][1],request.form['password']) == True:
-					auth_key = dec2big(random.randint(0,(2**128)))
-					cur.execute('UPDATE users SET auth_key='+app.sqlesc+', login_time='+app.sqlesc+' WHERE id='+app.sqlesc,(auth_key,time.time(),result[0][0]))
-					g.db.commit()
+					if result[0][2] == None:
+						auth_key = dec2big(random.randint(0,(2**128)))
+						cur.execute('UPDATE users SET auth_key='+app.sqlesc+', login_time='+app.sqlesc+' WHERE id='+app.sqlesc,(auth_key,time.time(),result[0][0]))
+						g.db.commit()
+					else:
+						auth_key = result[0][2]
 					session['logged_in_user']=(result[0][0],auth_key)
 					return redirect(url_for('home'))
 				else:
@@ -102,7 +105,7 @@ def signup():
 				cur.execute('SELECT id FROM users WHERE email='+app.sqlesc,(request.form['email'],))
 				result = cur.fetchall()
 				if len(result) == 0:
-					if len(request.form['email'].split('@')) == 2 and len(request.form['email'].split('@')[1].split('.'))> 2:
+					if len(request.form['email'].split('@')) == 2 and len(request.form['email'].split('@')[1].split('.'))>= 2:
 						cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+')',(request.form['email'],generate_password_hash(request.form['password'])))
 						g.db.commit()
 						flash('You have successfully registered. Now, please sign in!')
@@ -128,6 +131,9 @@ def logged_in():
 				g.logged_in_user = False
 			elif result[0][0] == session['logged_in_user'][1]:
 				g.logged_in_user = True
+			else:
+				session.pop('logged_in_user',None)
+				g.logged_in_user = False
 		else:
 			g.logged_in_user = False
 	return g.logged_in_user
@@ -373,27 +379,37 @@ def find_claimables():
 			except ValueError:
 				pass
 		urls = tuple([key for key in sessionids if not key.endswith('del_token')])
-		db = connect_db()
-		cur = db.cursor()
-		cur.execute('SELECT id, md5, del_token, url FROM playerinfo WHERE owner_id IS NULL AND url IN '+app.sqlesc,(urls,))
-		result = cur.fetchall()
-		checked_results = []
-		for row in result:
-			if row[1] == session[row[3]] and row[2] == session[row[3]+'del_token']:
-				checked_results.append((row[0],row[3]))
-		g.claimables = checked_results
-		db.close()
+		if len(urls) > 0:
+			db = connect_db()
+			cur = db.cursor()
+			cur.execute('SELECT id, md5, del_token, url FROM playerinfo WHERE owner_id IS NULL AND url IN '+app.sqlesc,(urls,))
+			result = cur.fetchall()
+			checked_results = []
+			for row in result:
+				if row[1] == session[row[3]] and row[2] == session[row[3]+'del_token']:
+					checked_results.append((row[0],row[3]))
+			g.claimables = checked_results
+			db.close()
+		else:
+			g.claimables = []
 	return g.claimables
 
 @app.route('/<url>/<instruction>',methods=['GET','POST'])
 def operate_on_url(url,instruction):
 	error = None
-	deletable = None
 	start_time = time.time()
 	if request.method == 'POST':
-		if url in session and url+'del_token' in session:
+		if (url in session and url+'del_token' in session) or logged_in():
 			g.db = connect_db()
 			cur = g.db.cursor()
+			if logged_in():
+				cur.execute('SELECT url,md5,del_token FROM playerinfo WHERE owner_id='+app.sqlesc,(get_logged_in_user(),))
+				result = cur.fetchall()
+				for row in result:
+					if not row[0] in session:
+						session[row[0]]=row[1]
+					if not row[0]+'del_token' in session:
+						session[row[0]+'del_token']=row[2]
 			if instruction == 'del':
 				cur.execute('SELECT owner_id FROM playerinfo WHERE url='+app.sqlesc,(url,))
 				data = cur.fetchone()
@@ -416,7 +432,7 @@ def operate_on_url(url,instruction):
 						return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
 				# verified logged_in_user owns all farms
 				for row in data:
-					outcome = delete_playerinfo_entry(url,session[url],session[url+'del_token'])
+					outcome = delete_playerinfo_entry(row[0],session[row[0]],session[row[0]+'del_token'])
 					if outcome != True:
 						error = outcome
 						return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
@@ -434,8 +450,8 @@ def operate_on_url(url,instruction):
 				return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
 
 			elif instruction == 'claimall':
-				for rowid, url in find_claimables():
-					outcome = claim_playerinfo_entry(url,session[url],session[url+'del_token'])
+				for rowid, claim_url in find_claimables():
+					outcome = claim_playerinfo_entry(claim_url,session[claim_url],session[claim_url+'del_token'])
 					if outcome != True:
 						error = 'You do not have sufficient credentials to claim one of these pages'
 				return redirect(url_for('display_data',url=url))
@@ -473,7 +489,7 @@ def delete_playerinfo_entry(url,md5,del_token):
 	if not hasattr(g,'db'):
 		g.db = connect_db()
 	cur = g.db.cursor()
-	cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url,download_url,owner_id,series_id FROM playerinfo WHERE url=',(url,))
+	cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url,download_url,owner_id,series_id FROM playerinfo WHERE url='+app.sqlesc,(url,))
 	result = cur.fetchone()
 	if result[1] == md5 and result[2] == del_token and str(result[8]) == str(get_logged_in_user()):
 		if remove_series_link(result[0],result[9]) == False:
