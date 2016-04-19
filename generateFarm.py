@@ -24,8 +24,7 @@ def loadTree(ss_tree, loc=0):
     return tree
 
 
-def generateFarm(player, farm):
-    season = player.getCurrentSeason()
+def generateFarm(season, farm):
     cache = {}
     craftable_blacklist = ['Twig', 'Torch', 'Sprinkler',
                            'Quality Sprinkler', 'Iridium Sprinkler']
@@ -198,15 +197,21 @@ def generateFarm(player, farm):
                 print(e)
     overlay = Image.open('./assets/bases/{0}_overlay.png'.format(season))
     farm_base.paste(overlay, (0, 0), overlay)
+    farm_base = farm_base.convert('RGBA').convert('P',palette=Image.ADAPTIVE, colors=255)
     return farm_base
 
 
 def main():
     # f = 'Crono_116230451'
+    import time
     for f in os.listdir(os.getcwd()+'/saves/'):
         print(f)
-        p = player('./saves/'+f)
-        generateFarm(p, getFarmInfo('./saves/'+f)).save('./farmRenders/' + f + '.png')
+        p = player('./saves/'+f).getPlayerInfo()['currentSeason']
+        start_time = time.time()
+        im = generateFarm(p, getFarmInfo('./saves/'+f))
+        print '\timage generation took',time.time()-start_time
+        im.save('./farmRenders/' + f + '.png',compress_level=9)
+        print '\ttotal time was',time.time()-start_time
 
 if __name__ == '__main__':
     main()

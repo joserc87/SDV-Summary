@@ -190,7 +190,9 @@ database_structure_dict = {'md5':'TEXT',
 'download_enabled':'BOOLEAN',
 'download_url':'TEXT',
 'owner_id':'BIGINT',
-'series_id':'BIGINT'}
+'series_id':'BIGINT',
+'map_url':'TEXT',
+'currentSeason':'TEXT'}
 
 if app.config['USE_SQLITE']==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'
@@ -225,7 +227,7 @@ def generate_db():
 	database_structure = database_structure[:-2]
 
 	errors_structure = 'id '+idcode+', ip TEXT, time BIGINT, notes TEXT'
-	todo_structure = 'id '+idcode+', task TEXT, playerid TEXT'
+	todo_structure = 'id '+idcode+', task TEXT, playerid TEXT, currently_processing BOOLEAN'
 
 	connection = connect_db()
 	c = connection.cursor()

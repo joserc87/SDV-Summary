@@ -16,9 +16,6 @@ class player:
     def getPlayerInfo(self):
         return playerInfo(self.saveFile)
 
-    def getCurrentSeason(self):
-       return self.root.find('currentSeason').text
-
 
 def getPartners(root):
     partners = []
@@ -146,7 +143,7 @@ def playerInfo(saveFileLocation,read_data=False):
     # Information from elsewhere    
     # UID for save file
     info['uniqueIDForThisGame'] = int(root.find('uniqueIDForThisGame').text)
-
+    info['currentSeason'] = root.find('currentSeason').text
     # Collecting player stats
     info['stats'] = getStats(root)
 

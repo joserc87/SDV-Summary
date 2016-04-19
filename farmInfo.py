@@ -30,7 +30,8 @@ def checkSurrounding(tiles):
                             else:
                                 a += b
                     except Exception as e:
-                        print('Error: ' + str(e))
+                    	pass
+                        #print('Error: ' + str(e))
                 temp.append(tile._replace(orientation=m[a]))
     return temp
 
@@ -80,7 +81,8 @@ def getFarmInfo(saveFileLocation,read_data=False):
     try:
         farm['Fences'] = checkSurrounding(d['Fence'])
     except Exception as e:
-        print('Fence Error: ' + str(e))
+    	pass
+        #print('Fence Error: ' + str(e))
 
     farm['objects'] = [a for a in s if a.name != 'Fence']
 
@@ -101,7 +103,7 @@ def getFarmInfo(saveFileLocation,read_data=False):
             t = int(item.find('value').find('TerrainFeature').find('whichFloor').text)
             s = int(item.find('value').find('TerrainFeature').find('whichView').text)
         if name == "HoeDirt":
-            if item.find('value').find('TerrainFeature').find('crop'):
+            if item.find('value').find('TerrainFeature').find('crop') is not None:
                 crop = item.find('value').find('TerrainFeature').find('crop')
                 crop_x = int(item.find('key').find('Vector2').find('X').text)
                 crop_y = int(item.find('key').find('Vector2').find('Y').text)
@@ -133,7 +135,8 @@ def getFarmInfo(saveFileLocation,read_data=False):
         farm['Flooring'] = checkSurrounding(d['Flooring'])
         farm['HoeDirt'] = checkSurrounding(d['HoeDirt'])
     except Exception as e:
-        print('Flooring or Hoe Error: ' + str(e))
+    	pass
+        #print('Flooring or Hoe Error: ' + str(e))
 
     # Resource Clumps
 
@@ -203,7 +206,7 @@ def colourBox(x, y, colour, pixels, scale = 8):
 #       Blue - Water
 #       Off Tan - Tilled Soil
 def generateImage(farm):
-    image = Image.open(".//data//img//base.png")
+    image = Image.open("./assets/bases/minimap_base.png")
     pixels = image.load()
 
     pixels[1, 1] = (255, 255, 255)
@@ -214,8 +217,9 @@ def generateImage(farm):
                 colourBox(building[1] + i, building[2] + j, (255, 150, 150), pixels)
 
     for tile in farm['terrainFeatures']:
+    	#print tile
         name = tile.name
-        print(name)
+        #print(name)
         if name == "Tree":
             colourBox(tile.x, tile.y, (0, 175, 0), pixels)
         elif name == "Grass":
@@ -236,7 +240,7 @@ def generateImage(farm):
 
     for tile in farm['objects']:
         name = tile.orientation
-        print(name)
+        #print(name)
         if name == "Weeds":
             colourBox(tile.x, tile.y, (0, 255, 0), pixels)
         elif name == "Stone":
@@ -257,6 +261,14 @@ def generateImage(farm):
                     colourBox(tile.x+i, tile.y + j, (75, 75, 75), pixels)
 
     return image
+
+def regenerateFarmInfo(json_from_db):
+    sprite = namedtuple('Sprite', ['name', 'x', 'y','w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
+
+    for key in json_from_db.keys():
+    	for i, item in enumerate(json_from_db[key]):
+    		json_from_db[key][i] = sprite(*item)
+    return json_from_db
 
 
 def main():

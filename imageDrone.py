@@ -4,11 +4,12 @@ import psycopg2
 import json
 from generateAvatar import generateAvatar
 from generateFamilyPortrait import generateFamilyPortrait
-from farmInfo import generateImage
+from farmInfo import generateImage, regenerateFarmInfo
 import os
 import time
 from createdb import database_structure_dict, database_fields
 from flask import Flask
+from generateFarm import generateFarm
 
 app = Flask(__name__)
 app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
@@ -32,8 +33,10 @@ def process_queue():
 	db = connect_db()
 	cur = db.cursor()
 	while True:
-		cur.execute('SELECT * FROM todo WHERE task='+sqlesc+'',('process_image',))
+		#cur.execute('SELECT * FROM todo WHERE task='+sqlesc+' AND currently_processing NOT TRUE',('process_image',))
+		cur.execute('UPDATE todo SET currently_processing='+sqlesc+' WHERE id=(SELECT id FROM todo WHERE task='+sqlesc+' AND currently_processing IS NOT TRUE LIMIT 1) RETURNING *',(True,'process_image',))
 		tasks = cur.fetchall()
+		db.commit()
 		# print tasks
 		if len(tasks) != 0:
 			for task in tasks:
@@ -54,11 +57,15 @@ def process_queue():
 				avatar_path = os.path.join(IMAGE_FOLDER,data['url']+'a.png')
 				portrait_path = os.path.join(IMAGE_FOLDER,data['url']+'p.png')
 				farm_path = os.path.join(IMAGE_FOLDER,data['url']+'f.png')
+				map_path = os.path.join(IMAGE_FOLDER,data['url']+'m.png')
 				avatar.save(avatar_path)
 				portrait.save(portrait_path)
-				farm = generateImage(json.loads(data['farm_info']))
+				farm_data = regenerateFarmInfo(json.loads(data['farm_info']))
+				farm = generateImage(farm_data)
 				farm.save(farm_path)
-				cur.execute('UPDATE playerinfo SET farm_url='+sqlesc+', avatar_url='+sqlesc+', portrait_url='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,avatar_path,portrait_path,data['id']))
+				map_image = generateFarm(data['currentSeason'],farm_data)
+				map_image.save(map_path,compress_level=9)
+				cur.execute('UPDATE playerinfo SET farm_url='+sqlesc+', avatar_url='+sqlesc+', portrait_url='+sqlesc+', map_url='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,avatar_path,portrait_path,map_path,data['id']))
 				cur.execute('DELETE FROM todo WHERE id=('+sqlesc+')',(task[0],))
 				db.commit()
 				records_handled += 1

@@ -219,7 +219,7 @@ def home():
 					g.db.commit()
 					g.db.close()
 				process_queue()
-			memfile.close()
+				memfile.close()
 			if outcome != False:
 				session[outcome] = md5_info
 				session[outcome+'del_token'] = del_token
