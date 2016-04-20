@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify, make_response, send_from_directory
+from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify, make_response, send_from_directory, abort
 import time
 from werkzeug import secure_filename, check_password_hash
 from werkzeug.contrib.fixers import ProxyFix
@@ -170,6 +170,61 @@ def get_logged_in_user():
 	else:
 		return None
 
+def file_uploaded(inputfile):
+	memfile = io.BytesIO()
+	inputfile.save(memfile)
+	md5_info = md5(memfile)
+	try:
+		player_info = playerInfo(memfile.getvalue(),True)
+	except defusedxml.common.EntitiesForbidden:
+		error = "I don't think that's very funny"
+		return {'type':'render','target':'index.html','parameters':{"error":error}}
+		return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
+	except IOError:
+		error = "Savegame failed sanity check (if you think this is in error please let us know)"
+		g.db = connect_db()
+		cur = g.db.cursor()
+		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(secure_filename(inputfile.filename))))
+		g.db.commit()
+		g.db.close()
+		return {'type':'render','target':'index.html','parameters':{"error":error}}
+		return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
+	except AttributeError as e:
+		error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
+		return {'type':'render','target':'index.html','parameters':{"error":error}}
+		return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
+	except ParseError as e:
+		error = "Not well-formed xml"
+		return {'type':'render','target':'index.html','parameters':{"error":error}}
+		return render_template("index.html", error=error,blogposts=get_blogposts(5),recents=get_recents(), processtime=round(time.time()-start_time,5))
+	dupe = is_duplicate(md5_info,player_info)
+	if dupe != False:
+		session[dupe[0]] = md5_info
+		session[dupe[0]+'del_token'] = dupe[1]
+		return {'type':'redirect','target':'display_data','parameters':{"url":dupe[0]}}
+		return redirect(url_for('display_data',url=dupe[0]))
+	else:
+		farm_info = getFarmInfo(memfile.getvalue(),True)
+		outcome, del_token, rowid, error = insert_info(player_info,farm_info,md5_info)
+		if outcome != False:
+			filename = os.path.join(app.config['UPLOAD_FOLDER'],outcome)
+			with open(filename,'wb') as f:
+				f.write(memfile.getvalue())
+			series_id = add_to_series(rowid,player_info['uniqueIDForThisGame'],player_info['name'],player_info['farmName'])
+			owner_id = get_logged_in_user()
+			g.db = connect_db()
+			cur = g.db.cursor()
+			cur.execute('UPDATE playerinfo SET savefileLocation='+app.sqlesc+', series_id='+app.sqlesc+', owner_id='+app.sqlesc+' WHERE url='+app.sqlesc+';',(filename,series_id,owner_id,outcome))
+			g.db.commit()
+			g.db.close()
+		process_queue()
+		memfile.close()
+	if outcome != False:
+		session[outcome] = md5_info
+		session[outcome+'del_token'] = del_token
+		return {'type':'redirect','target':'display_data','parameters':{"url":outcome}}
+		return redirect(url_for('display_data',url=outcome))
+
 @app.route('/',methods=['GET','POST'])
 def home():
 	start_time = time.time()
@@ -177,54 +232,92 @@ def home():
 	if request.method == 'POST':
 		inputfile = request.files['file']
 		if inputfile:
-			memfile = io.BytesIO()
-			inputfile.save(memfile)
-			md5_info = md5(memfile)
-			try:
-				player_info = playerInfo(memfile.getvalue(),True)
-			except defusedxml.common.EntitiesForbidden:
-				error = "I don't think that's very funny"
-				return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
-			except IOError:
-				error = "Savegame failed sanity check (if you think this is in error please let us know)"
-				g.db = connect_db()
-				cur = g.db.cursor()
-				cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(secure_filename(inputfile.filename))))
-				g.db.commit()
-				g.db.close()
-				return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
-			except AttributeError as e:
-				error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
-				return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
-			except ParseError as e:
-				error = "Not well-formed xml"
-				return render_template("index.html",error=error,blogposts=get_blogposts(5),recents=get_recents(), processtime=round(time.time()-start_time,5))
-			dupe = is_duplicate(md5_info,player_info)
-			if dupe != False:
-				session[dupe[0]] = md5_info
-				session[dupe[0]+'del_token'] = dupe[1]
-				return redirect(url_for('display_data',url=dupe[0]))
-			else:
-				farm_info = getFarmInfo(memfile.getvalue(),True)
-				outcome, del_token, rowid, error = insert_info(player_info,farm_info,md5_info)
-				if outcome != False:
-					filename = os.path.join(app.config['UPLOAD_FOLDER'],outcome)
-					with open(filename,'wb') as f:
-						f.write(memfile.getvalue())
-					series_id = add_to_series(rowid,player_info['uniqueIDForThisGame'],player_info['name'],player_info['farmName'])
-					owner_id = get_logged_in_user()
-					g.db = connect_db()
-					cur = g.db.cursor()
-					cur.execute('UPDATE playerinfo SET savefileLocation='+app.sqlesc+', series_id='+app.sqlesc+', owner_id='+app.sqlesc+' WHERE url='+app.sqlesc+';',(filename,series_id,owner_id,outcome))
-					g.db.commit()
-					g.db.close()
-				process_queue()
-				memfile.close()
-			if outcome != False:
-				session[outcome] = md5_info
-				session[outcome+'del_token'] = del_token
-				return redirect(url_for('display_data',url=outcome))
+			result = file_uploaded(inputfile)
+			if result['type'] == 'redirect':
+				return redirect(url_for(result['target'],**result['parameters']))
+			elif 'render' in result:
+				params = {'error':error,'blogposts':get_blogposts(5),'recents':get_recents(),'processtime':round(time.time()-start_time,5)}
+				if 'parameters' in result:
+					for key in result['parameters'].keys():
+						params[key] = result['parameters'][key]
+				return render_template(result['target'], **params)
+
 	return render_template("index.html", recents=get_recents(), error=error,blogposts=get_blogposts(5), processtime=round(time.time()-start_time,5))
+
+@app.route('/_uploader',methods=['GET','POST'])
+def api_upload():
+	if request.method=='POST':
+		if verify_api_auth(request.form):
+			inputfile = request.files['file']
+			result = file_uploaded(inputfile)
+			return jsonify(result)
+		else:
+			return abort(401)
+
+def verify_api_auth(form):
+	print 'this needs to use API stuff, NOT password checking! *very* insecure...'
+	if 'api_key' not in form or 'api_secret' not in form or form['api_key']=='':
+		return False
+	else:
+		g.db = connect_db()
+		cur = g.db.cursor()
+		cur.execute('SELECT id,api_secret,auth_key FROM users WHERE api_key='+app.sqlesc,(form['api_key'],))
+		result = cur.fetchall()
+		try:
+			assert len(result) == 1
+		except AssertionError:
+			return False
+		#if check_password_hash(result[0][1],form['api_secret']) == True:
+		print 'need to do proper storage of api keys (in another db table)...'
+		if check_password_hash(form['api_secret'],result[0][1]) == True:
+			if result[0][2] == None:
+				auth_key = dec2big(random.randint(0,(2**128)))
+				cur.execute('UPDATE users SET auth_key='+app.sqlesc+', login_time='+app.sqlesc+' WHERE id='+app.sqlesc,(auth_key,time.time(),result[0][0]))
+				g.db.commit()
+			else:
+				auth_key = result[0][2]
+			session['logged_in_user']=(result[0][0],auth_key)
+			print 'returning true'
+			return True
+		else:
+			return False
+
+@app.route('/_register-api',methods=['GET','POST'])
+def api_register():
+	if request.method=='POST':
+		api_data = login_to_api(request.form)
+		if api_data != False:
+			return api_data
+		else:
+			return abort(401)
+
+def login_to_api(form):
+	# takes username password, verifies they're in the db, if so, returns api key and hashed and salted password
+	# either from db if exists, or generates them if not
+	if 'email' not in form or 'password' not in form or form['email']=='':
+		return False
+	else:
+		g.db = connect_db()
+		cur = g.db.cursor()
+		cur.execute('SELECT id,password,api_key,api_secret FROM users WHERE email='+app.sqlesc,(form['email'],))
+		result = cur.fetchall()
+		try:
+			assert len(result) == 1
+		except AssertionError:
+			return False
+		#if check_password_hash(result[0][1],form['api_secret']) == True:
+		if check_password_hash(result[0][1],form['password']) == True:
+			if result[0][2] == None or result[0][3] == None:
+				api_key = dec2big(random.randint(0,(2**128)))
+				api_secret = dec2big(random.randint(0,(2**128)))
+				cur.execute('UPDATE users SET api_key='+app.sqlesc+', api_secret='+app.sqlesc+' WHERE id='+app.sqlesc,(api_key,api_secret,result[0][0]))
+				g.db.commit()
+			else:
+				api_key = result[0][2]
+				api_secret = result[0][3]
+			return jsonify({'api_key':api_key,'api_secret':generate_password_hash(api_secret)})
+		else:
+			return False
 
 def get_recents(n=6,**kwargs):
 	g.db = connect_db()

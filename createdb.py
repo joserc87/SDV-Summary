@@ -203,6 +203,15 @@ else:
 	idcode='SERIAL PRIMARY KEY'
 	database_structure_dict['id']='SERIAL PRIMARY KEY'
 
+users_structure_dict = {'id':idcode,
+'email':'TEXT',
+'password':'TEXT',
+'imgur_json':'TEXT',
+'auth_key':'TEXT',
+'login_time':'BIGINT',
+'api_key':'TEXT',
+'api_secret':'TEXT'}
+
 database_fields = ''
 for key in sorted(database_structure_dict.keys()):
 	database_fields+=key+','
@@ -225,7 +234,6 @@ def generate_db():
 	for key in sorted(database_structure_dict.keys()):
 		database_structure += key + ' ' +database_structure_dict[key] + ',\n'
 	database_structure = database_structure[:-2]
-	errors_structure = ''
 	connection = connect_db()
 	c = connection.cursor()
 	c.execute('CREATE TABLE playerinfo('+database_structure+')')
@@ -235,7 +243,7 @@ def generate_db():
 def generate_errors():
 	connection=connect_db()
 	c = connection.cursor()
-	statement = 'CREATE TABLE todo (id '+idcode+', ip TEXT, time BIGINT, notes TEXT);'
+	statement = 'CREATE TABLE errors (id '+idcode+', ip TEXT, time BIGINT, notes TEXT);'
 	c.execute(statement)
 	connection.commit()
 	connection.close()
@@ -260,10 +268,13 @@ def generate_blog():
 	print('done')
 
 def generate_users():
+	users_structure = ''
+	for key in sorted(users_structure_dict.keys()):
+		users_structure += key + ' ' +users_structure_dict[key] + ',\n'
+	users_structure = users_structure[:-2]
 	connection=connect_db()
 	c=connection.cursor()
-	statement = 'CREATE TABLE users(id '+idcode+', email TEXT, password TEXT, imgur_json TEXT, auth_key TEXT, login_time BIGINT);'
-	c.execute(statement)
+	c.execute('CREATE TABLE users('+database_structure+')')
 	connection.commit()
 	connection.close()
 	print('done')
@@ -358,10 +369,70 @@ def update_playerinfo():
 	connection.close()
 	print 'all modifications committed'
 
+def update_users():
+	if app.config['USE_SQLITE'] == True:
+		print 'This is only for Postgres databases'
+		return
+	connection = connect_db()
+	c = connection.cursor()
+	c.execute("SELECT * FROM information_schema.columns WHERE table_schema='public' AND table_name='users'")
+	returned_database_structure = {row[3].lower():row[7].upper() for row in c.fetchall()}
+	current_design_structure = {key.lower():users_structure_dict[key].upper() for key in users_structure_dict.keys()}
+	redundant = {}
+	incorrect_type = {}
+	for key in returned_database_structure.keys():
+		try:
+			if current_design_structure[key] == returned_database_structure[key]:
+				#print key,'matches'
+				pass
+			else:
+				#print key,'by design:',current_design_structure[key],'db has:',returned_database_structure[key]
+				incorrect_type[key] = {'should be':current_design_structure[key],'was':returned_database_structure[key]}
+			del current_design_structure[key]
+		except KeyError:
+			#print key,'in db but not in current design structure'
+			redundant[key] = {'redundant':returned_database_structure[key]}
+	not_implemented = current_design_structure
+	print 'not implemented in db:'
+	for key in not_implemented.keys():
+		print key,not_implemented[key]
+	print 'redundant in db:'
+	for key in redundant.keys():
+		print key,redundant[key]
+	print 'incorrect type in db:'
+	for key in incorrect_type.keys():
+		print key,incorrect_type[key]
+	a = raw_input('Alter database? (y/n): ')
+	if a == 'y':
+		print('you must log in as admin to alter the database')
+		username = raw_input('username: ')
+		password = getpass.getpass('password: ')
+		c.execute('SELECT password FROM admin WHERE username='+sqlesc,(username,))
+		passhash = c.fetchone()
+		if check_password_hash(passhash[0],password) == True:
+			print 'implementing not-implemented keys (ADDing to database)'
+			for key in not_implemented.keys():
+				a = raw_input('Add column '+str(key)+' type '+str(not_implemented[key])+' to users? (y/n): ')
+				if a == 'y':
+					c.execute('ALTER TABLE users ADD COLUMN '+str(key)+' '+str(not_implemented[key]))
+					print 'done'
+			print 'removing no-longer-necessary keys (DROPping from database)'
+			for key in redundant.keys():
+				a = raw_input('Remove column '+str(key)+' from users? (y/n): ')
+				if a == 'y':
+					c.execute('ALTER TABLE users DROP COLUMN '+str(key))
+		else:
+			print('incorrect credentials')
+	connection.commit()
+	connection.close()
+	print 'all modifications committed'
+
+
 if __name__ == "__main__":
 	a = raw_input('Drop all non-admin databases? (y/n): ')
 	if a == 'y':
 		delete_db()
+	print '---------'
 	a = raw_input('Generate playerinfo database? (y/n): ')
 	if a == 'y':
 		generate_db()
@@ -380,6 +451,10 @@ if __name__ == "__main__":
 	a = raw_input('Generate serial database? (y/n): ')
 	if a == 'y':
 		generate_serial()
+	print '--------'
 	a = raw_input('Update playerinfo database? (y/n): ')
 	if a == 'y':
 		update_playerinfo()
+	a = raw_input('Update users database? (y/n): ')
+	if a == 'y':
+		update_users()
