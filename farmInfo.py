@@ -194,6 +194,11 @@ def getFarmInfo(saveFileLocation, read_data=False):
             if cats[0].text == 'true':
                 hasGreenhouse = True
 
+    # Check for letter to confirm player has unlocked greenhouse, thanks /u/BumbleBHE
+    for letter in root.find('player').find('mailReceived').iter('string'):
+        if letter.text == "ccPantry":
+            hasGreenhouse = True
+
     if hasGreenhouse:
         greenHouse = sprite('Greenhouse',
                             25, 6, 0, 0, 1,

@@ -48,8 +48,14 @@ def generateFarm(season, farm):
     print('\tLoading Spritesheets...')
     object_spritesheet = Image.open('./assets/farm/objects.png')
     craftable_spritesheet = Image.open('./assets/farm/craftables.png')
-    farm['overlays'] = [sprite('overlay', 0, 14, 0, 0, 0, 1, 0, 0, 0), sprite('overlay', 0, 23, 0, 0, 0, 2, 0, 0, 0),
-                                sprite('overlay', 0, 63, 0, 0, 0, 3, 0, 0, 0)]
+
+    farm['overlays'] = [
+                        sprite('overlay', 0, 14, 0, 0, 0, 0, 0, 0, 0),
+                        sprite('overlay', 0, 16, 0, 0, 0, 1, 0, 0, 0),
+                        sprite('overlay', 0, 23, 0, 0, 0, 2, 0, 0, 0),
+                        sprite('overlay', 0, 63, 0, 0, 0, 3, 0, 0, 0)
+                        ]
+
     farm = sorted(chain.from_iterable(farm.values()), key=lambda x: x.y)
     floor_types = ['Flooring', 'HoeDirt']
     floor = [i for i in farm if i.name in floor_types]
@@ -150,15 +156,15 @@ def generateFarm(season, farm):
                         tree_crop = cropImg(tree_img, 26)
                         offsetx = 0
                         offsety = 0
-                    if item.growth == 1:
+                    elif item.growth == 1:
                         tree_crop = cropImg(tree_img, 24)
                         offsetx = 0
                         offsety = 0
-                    if item.growth == 2:
+                    elif item.growth == 2:
                         tree_crop = cropImg(tree_img, 25)
                         offsetx = 0
                         offsety = 0
-                    if item.growth == 3 or item.growth == 4:
+                    elif item.growth == 3 or item.growth == 4:
                         tree_crop = cropImg(tree_img, 18, objectSize=(4, 8))
                         offsetx = 0
                         offsety = 16
