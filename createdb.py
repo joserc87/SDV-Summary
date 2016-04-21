@@ -192,7 +192,8 @@ database_structure_dict = {'md5':'TEXT',
 'owner_id':'BIGINT',
 'series_id':'BIGINT',
 'map_url':'TEXT',
-'currentSeason':'TEXT'}
+'currentSeason':'TEXT',
+'failed_processing':'BOOLEAN'}
 
 if app.config['USE_SQLITE']==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'

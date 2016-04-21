@@ -366,7 +366,11 @@ def get_recents(n=6,**kwargs):
 	g.db = connect_db()
 	cur = g.db.cursor()
 	recents = {}
-	query = 'SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo ORDER BY id DESC LIMIT '+app.sqlesc
+	where = 'WHERE failed_processing IS NOT TRUE '
+	if 'include_failed' in kwargs.keys():
+		if kwargs['include_failed']==True:
+			where = ''
+	query = 'SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo '+where+'ORDER BY id DESC LIMIT '+app.sqlesc
 	offset = 0
 	if 'offset' in kwargs.keys():
 		offset = kwargs['offset']
@@ -433,6 +437,13 @@ def insert_info(player_info,farm_info,md5_info):
 	values.append(del_token)
 	columns.append('views')
 	values.append('0')
+	default_images = [['avatar_url','static/placeholders/avatar.png'],
+					  ['farm_url','static/placeholders/minimap.png'],
+					  ['map_url','static/placeholders/'+str(player_info['currentSeason'])+'.png'],
+					  ['portrait_url','static/placeholders/portrait.png']]
+	for default in default_images:
+		columns.append(default[0])
+		values.append(default[1])
 
 	colstring = ''
 	for c in columns:
@@ -817,7 +828,7 @@ def allmain():
 		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 	if offset < 0:
 		return redirect(url_for('allmain'))
-	recents = get_recents(num_entries,offset=offset)
+	recents = get_recents(num_entries,offset=offset,include_failed=True)
 	if recents['total']<=offset and recents['total']>0:
 		return redirect(url_for('allmain'))
 	return render_template('all.html',full=True,offset=offset,recents=recents,error=error, processtime=round(time.time()-start_time,5))
