@@ -26,14 +26,30 @@ def loadTree(ss_tree, loc=0):
     return tree
 
 
-def getPlant(img, location, colour, defaultSize=(4, 4), objectSize=(4, 4)):
-    if location < 5:
+def getPlant(img, location, colour, days, T, defaultSize=(4, 4), objectSize=(4, 4)):
+    if location < 4:
         return cropImg(img, location, defaultSize, objectSize)
     else:
-        plant_body = cropImg(img, 5, defaultSize, objectSize)
-        plant_head = cropImg(img, 6, defaultSize, objectSize)
-        plant_head = tintImage(plant_head, colour)
-        plant_body.paste(plant_head, (0, 0), plant_head)
+        bloomed = False
+        if T == 26 and days > 1:
+            bloomed = True
+        if T == 27 and days > 2:
+            bloomed = True
+        if T == 28 and days > 2:
+            bloomed = True
+        if T == 29 and days > 2:
+            bloomed = True
+        if T == 31 and days > 3:
+            bloomed = True
+
+        if bloomed:
+            plant_body = cropImg(img, 5, defaultSize, objectSize)
+            plant_head = cropImg(img, 6, defaultSize, objectSize)
+            plant_head = tintImage(plant_head, colour)
+            plant_body.paste(plant_head, (0, 0), plant_head)
+        else:
+            plant_body = cropImg(img, 4, defaultSize, objectSize)
+
         return plant_body
 
 
@@ -104,7 +120,7 @@ def generateFarm(season, farm):
                 crop_img = cropImg(crop_sprites, item.growth,
                                    (4, 8), (4, 8))
             else:
-                crop_img = getPlant(crop_sprites, item.growth, item.orientation, (4, 8), (4, 8))
+                crop_img = getPlant(crop_sprites, item.growth, item.orientation[0], item.orientation[1], item.type, (4, 8), (4, 8))
             if item.flipped:
                 crop_img = crop_img.transpose(Image.FLIP_LEFT_RIGHT)
             farm_base.paste(crop_img, (item.x*16, item.y*16 - 16), crop_img)

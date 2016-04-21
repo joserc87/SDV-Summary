@@ -120,7 +120,8 @@ def getFarmInfo(saveFileLocation, read_data=False):
                     r = int(crop.find('tintColor').find('R').text)
                     g = int(crop.find('tintColor').find('G').text)
                     b = int(crop.find('tintColor').find('B').text)
-                    o = (r, g, b)
+                    days = int(crop.find('dayOfCurrentPhase').text)
+                    o = ((r, g, b), days)
                 else:
                     o = None
                 crop_flip = False
