@@ -24,6 +24,8 @@ import io
 from xml.etree.ElementTree import ParseError
 import datetime
 from flask_recaptcha import ReCaptcha
+import uuid
+from google_measurement_protocol import Event, report
 
 app = Flask(__name__)
 app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
@@ -285,12 +287,17 @@ def api_upload():
 		if verify_api_auth(request.form):
 			inputfile = request.files['file']
 			result = file_uploaded(inputfile)
+			analyticsEvent(uuid.uuid4(),'upload','automaticFileUpload')
 			return jsonify(result)
 		else:
 			return abort(401)
 
+def analyticsEvent(userid, category, action):
+	event = Event(category,action)
+	r = report(app.config['ANALYTICS_ID'],userid,event)
+	return r
+
 def verify_api_auth(form):
-	print 'this needs to use API stuff, NOT password checking! *very* insecure...'
 	if 'api_key' not in form or 'api_secret' not in form or form['api_key']=='':
 		return False
 	else:
@@ -322,6 +329,7 @@ def api_register():
 	if request.method=='POST':
 		api_data = login_to_api(request.form)
 		if api_data != False:
+			analyticsEvent(uuid.uuid4(),'login','apiLogin')
 			return api_data
 		else:
 			return abort(401)
