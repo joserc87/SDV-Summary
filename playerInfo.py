@@ -2,8 +2,9 @@ from defusedxml.ElementTree import parse
 from defusedxml import ElementTree
 import json
 
-ns= "{http://www.w3.org/2001/XMLSchema-instance}"
-animal_habitable_buildings = ['Coop','Barn','SlimeHutch']
+ns = "{http://www.w3.org/2001/XMLSchema-instance}"
+animal_habitable_buildings = ['Coop', 'Barn', 'SlimeHutch']
+
 
 class player:
     """docstring for player"""
@@ -16,6 +17,10 @@ class player:
     def getPlayerInfo(self):
         return playerInfo(self.saveFile)
 
+    def getAchievements(self):
+        achievements = [int(achievement.text) for achievement in self.root.find('player').find('achievements').iter('int')]
+        print(achievements)
+
 
 def getPartners(root):
     partners = []
@@ -25,6 +30,7 @@ def getPartners(root):
                 partners.append(npc)
     return partners
 
+
 def getChildren(root):
     children = []
     childType = ['Child']
@@ -32,13 +38,14 @@ def getChildren(root):
     child_nodes = getNPCs(root, childLocation, childType)
     return child_nodes
 
+
 def getStats(root):
     game_stats = {}
     stats_node = root.find('stats')
     for statistic in stats_node:
         stattag = statistic.tag[0].upper() + statistic.tag[1:]
         if stattag not in game_stats.keys():
-            #check we're drawing info from the uppercase data and data not already exist
+            # check we're drawing info from the uppercase data and data not already exist
             if statistic.text != None:
                 game_stats[stattag] = int(statistic.text)
             elif stattag == 'SpecificMonstersKilled':
@@ -50,6 +57,7 @@ def getStats(root):
                 game_stats[stattag] = monsters
     return game_stats
 
+
 def getNPCs(root, loc, types):
     npc_list = []
     for location in root.find('locations').iter('GameLocation'):
@@ -57,6 +65,7 @@ def getNPCs(root, loc, types):
             NPCs = location.find('characters').iter('NPC')
             npc_list += [npc for npc in NPCs if npc.get(ns+'type') in types]
     return npc_list
+
 
 def getAnimals(root):
     locations = root.find('locations').findall("GameLocation")
@@ -83,11 +92,13 @@ def getAnimals(root):
         animals['horse']=horse[0].find('name').text
     return animals
 
+
 def strToBool(x):
     if x.lower() == 'true':
         return True
     else:
         return False
+
 
 def playerInfo(saveFileLocation,read_data=False):
     playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel',

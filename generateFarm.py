@@ -1,8 +1,10 @@
 from PIL import Image
 from PIL.ImageChops import offset
+from generateAvatar import tintImage
 from playerInfo import player
 from farmInfo import getFarmInfo
 from itertools import chain
+from collections import namedtuple
 
 import os
 import random
@@ -24,11 +26,22 @@ def loadTree(ss_tree, loc=0):
     return tree
 
 
+def getPlant(img, location, colour, defaultSize=(4, 4), objectSize=(4, 4)):
+    if location < 5:
+        return cropImg(img, location, defaultSize, objectSize)
+    else:
+        plant_body = cropImg(img, 5, defaultSize, objectSize)
+        plant_head = cropImg(img, 6, defaultSize, objectSize)
+        plant_head = tintImage(plant_head, colour)
+        plant_body.paste(plant_head, (0, 0), plant_head)
+        return plant_body
+
+
 def generateFarm(season, farm):
+    sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
     cache = {}
     craftable_blacklist = ['Twig', 'Torch', 'Sprinkler',
                            'Quality Sprinkler', 'Iridium Sprinkler']
-
     print('\tLoading Base...')
     farm_base = Image.open('./assets/bases/{0}_base.png'.format(season))
 
@@ -36,9 +49,17 @@ def generateFarm(season, farm):
     object_spritesheet = Image.open('./assets/farm/objects.png')
     craftable_spritesheet = Image.open('./assets/farm/craftables.png')
 
+    farm['overlays'] = [
+                        sprite('overlay', 0, 14, 0, 0, 0, 0, 0, 0, 0),
+                        sprite('overlay', 0, 16, 0, 0, 0, 1, 0, 0, 0),
+                        sprite('overlay', 0, 23, 0, 0, 0, 2, 0, 0, 0),
+                        sprite('overlay', 0, 63, 0, 0, 0, 3, 0, 0, 0)
+                        ]
+
     farm = sorted(chain.from_iterable(farm.values()), key=lambda x: x.y)
     floor_types = ['Flooring', 'HoeDirt']
     floor = [i for i in farm if i.name in floor_types]
+    gates = []
     other_things = [i for i in farm if i not in floor]
 
     print('\tRendering Sprites...')
@@ -78,9 +99,12 @@ def generateFarm(season, farm):
         if 'Crop' in item.name:
             crop_spritesheet = Image.open('./assets/farm/crops.png')
             crop_sprites = cropImg(crop_spritesheet, item.type,
-                                   (28, 8), (28, 8))
-            crop_img = cropImg(crop_sprites, item.growth,
-                               (4, 8), (4, 8))
+                                   (32, 8), (32, 8))
+            if item.orientation is None:
+                crop_img = cropImg(crop_sprites, item.growth,
+                                   (4, 8), (4, 8))
+            else:
+                crop_img = getPlant(crop_sprites, item.growth, item.orientation, (4, 8), (4, 8))
             if item.flipped:
                 crop_img = crop_img.transpose(Image.FLIP_LEFT_RIGHT)
             farm_base.paste(crop_img, (item.x*16, item.y*16 - 16), crop_img)
@@ -96,14 +120,25 @@ def generateFarm(season, farm):
             farm_base.paste(obj_img, (item.x*16, item.y*16 - offset), obj_img)
 
         if item.name == 'Fence':
-            fence_sheet = Image.open('./assets/farm/Fence{0}.png'.format(item.type))
-            fence_img = cropImg(fence_sheet, item.orientation,
-                                defaultSize=(4, 8), objectSize=(4, 8))
-            offset = 16
-            farm_base.paste(fence_img, (item.x * 16, item.y * 16 - offset), fence_img)
-
-        if item.name =='Gate':
-            print('gate')
+            try:
+                offsetx = 0
+                offsety = 0
+                fence_sheet = Image.open('./assets/farm/Fence{0}.png'.format(item.type))
+                if item.orientation == 12 and item.growth:
+                    gates.append(item)
+                    continue
+                elif item.orientation == 15 and item.growth:
+                    fence_img = cropImg(fence_sheet, item.orientation,
+                                        defaultSize=(4, 8), objectSize=(2, 8))
+                    offsetx = 5
+                    offsety = 22
+                else:
+                    fence_img = cropImg(fence_sheet, item.orientation,
+                                        defaultSize=(4, 8), objectSize=(4, 8))
+                offsety = 16
+                farm_base.paste(fence_img, (item.x * 16 + offsetx, item.y * 16 - offsety), fence_img)
+            except Exception as e:
+                print(e)
 
         if item.name == 'ResourceClump':
             obj_img = cropImg(object_spritesheet, item.type, objectSize=(8, 8))
@@ -111,20 +146,25 @@ def generateFarm(season, farm):
 
         if item.name == 'Tree':
             try:
-                with Image.open('./assets/farm/tree{0}_{1}.png'.format(item.type, season)) as tree_img:
+                if item.type == 7:
+                    filename = "mushroom_tree"
+                else:
+                    filename = "tree{0}_{1}".format(item.type, season)
+
+                with Image.open('./assets/farm/trees/{0}.png'.format(filename)) as tree_img:
                     if item.growth == 0:
                         tree_crop = cropImg(tree_img, 26)
                         offsetx = 0
                         offsety = 0
-                    if item.growth == 1:
+                    elif item.growth == 1:
                         tree_crop = cropImg(tree_img, 24)
                         offsetx = 0
                         offsety = 0
-                    if item.growth == 2:
+                    elif item.growth == 2:
                         tree_crop = cropImg(tree_img, 25)
                         offsetx = 0
                         offsety = 0
-                    if item.growth == 3 or item.growth == 4:
+                    elif item.growth == 3 or item.growth == 4:
                         tree_crop = cropImg(tree_img, 18, objectSize=(4, 8))
                         offsetx = 0
                         offsety = 16
@@ -191,27 +231,46 @@ def generateFarm(season, farm):
             try:
                 greenhouse_ss = Image.open('./assets/farm/buildings/greenhouse.png')
                 greenhouse_img = cropImg(greenhouse_ss, item.index,
-                                    defaultSize=(28, 40), objectSize=(28, 40))
+                                         defaultSize=(28, 40), objectSize=(28, 40))
                 farm_base.paste(greenhouse_img, (item.x*16, item.y*16), greenhouse_img)
             except Exception as e:
                 print(e)
-    overlay = Image.open('./assets/bases/{0}_overlay.png'.format(season))
-    farm_base.paste(overlay, (0, 0), overlay)
-    farm_base = farm_base.convert('RGBA').convert('P',palette=Image.ADAPTIVE, colors=255)
+
+        if item.name == 'overlay':
+            try:
+                overlay_img = Image.open('./assets/bases/{0}_overlay_{1}.png'.format(season, item.type))
+                farm_base.paste(overlay_img, (0, 0), overlay_img)
+            except Exception as e:
+                print(e)
+
+    for item in gates:
+        try:
+                offsetx = 0
+                offsety = 0
+                fence_sheet = Image.open('./assets/farm/Fence{0}.png'.format(item.type))
+                fence_img = cropImg(fence_sheet, item.orientation,
+                                    defaultSize=(4, 8), objectSize=(6, 8))
+                offsetx = -4
+                offsety = 16
+                farm_base.paste(fence_img, (item.x * 16 + offsetx, item.y * 16 - offsety), fence_img)
+        except Exception as e:
+                print(e)
+
+    farm_base = farm_base.convert('RGBA').convert('P', palette=Image.ADAPTIVE, colors=255)
     return farm_base
 
 
 def main():
-    # f = 'Crono_116230451'
+    f = 'Vejur_118036516'
     import time
-    for f in os.listdir(os.getcwd()+'/saves/'):
-        print(f)
-        p = player('./saves/'+f).getPlayerInfo()['currentSeason']
-        start_time = time.time()
-        im = generateFarm(p, getFarmInfo('./saves/'+f))
-        print '\timage generation took',time.time()-start_time
-        im.save('./farmRenders/' + f + '.png',compress_level=9)
-        print '\ttotal time was',time.time()-start_time
+    # for f in os.listdir(os.getcwd()+'/saves/'):
+    print(f)
+    p = player('./saves/'+f).getPlayerInfo()['currentSeason']
+    start_time = time.time()
+    im = generateFarm(p, getFarmInfo('./saves/'+f))
+    print('\timage generation took', time.time()-start_time)
+    im.save('./farmRenders/' + f + '.png', compress_level=9)
+    print('\ttotal time was', time.time()-start_time)
 
 if __name__ == '__main__':
     main()
