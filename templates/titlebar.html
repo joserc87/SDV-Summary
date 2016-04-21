@@ -19,7 +19,8 @@
 				<li><a href="/all">Browse</a></li>
 				<li><a href="/blog">Blog</a></li>
 				<li><a href="/faq">FAQ</a></li>
-				{% if logged_in() %}<li><a href="/lo">Logout</a></li>{% else %}
+				{% if logged_in() %}<li><a href="/acc">Account</a></li>
+				<li><a href="/lo">Logout</a></li>{% else %}
 				<li><a href="/login">Sign in</a></li>
 				<li><a href="{{url_for('signup')}}">Sign up</a></li>{%endif%}
 			</ul>

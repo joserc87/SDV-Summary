@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block header %}
+{{ super() }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='js/ajaxRequest.js') }}"></script>{% endblock %}
+{% block title %}Account - {{super()}}{% endblock %}
+{%block bodycontent %}
+{% include "titlebar.html" %}
+<div class="row center-block panel">
+	<div class="col-md-4 col-sm-12 panel">
+		<div class="interiorpanel">
+			<div class="row">
+				<div class="col-md-12" style="padding-left:2%;padding-right:2%;">
+					<h3>Account info</h3>
+					<p>Email: {{acc_info[0]}}</p>
+				</div>
+			</div>
+			{% if error %}
+				<div class="row">
+					<div class="col-md-12">
+						<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+	<div class="col-md-8 col-sm-12 panel">
+		<div class="interiorpanel">
+			<div class="row">
+				<div class="col-md-12" style="padding-left:2%;padding-right:2%;">
+					{% if claimable.keys()|length > 0 %}
+						<h3>Claimable farms</h3>
+						<p>The following farms are not associated with your user account, but were probably uploaded from it:</p>
+						<ul>
+						{% for key in claimable.keys() %}
+							<li>
+								<form action="/{{claimable[key]['data'][0]}}/claim" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim</button>| <a href="/{{claimable[key]['data'][0]}}">{{claimable[key]['auto_key_json'][1]}}, {{claimable[key]['auto_key_json'][2]}} Farm, {{claimable[key]['data'][1]}}</a></form>
+							</li>
+						{% endfor %}
+						</ul>
+						<ul class="list-inline text-center"><li><form action="/{{claimable[claimable.keys()[0]]['data'][0]}}/claimall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Or, claim all</button></form></li></ul>
+					{% endif %}
+					{% if claimed.keys()|length > 0 %}
+						<h3>Your farm series</h3>
+						<p>Linked series of farms you have uploaded:</p>
+						<ul>
+						{% for key in claimed.keys() %}
+							<li>
+								{{claimed[key]['auto_key_json'][1]}}, {{claimed[key]['auto_key_json'][2]}} Farm:
+								<ul>
+									{% for item in claimed[key]['data'] %}
+										<li>
+											<a href="/{{item[0]}}">{{item[1]}}</a>
+										</li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endfor %}
+						</ul>
+					{%endif%}
+				</div>
+			</div>
+			{% if error %}
+				<div class="row">
+					<div class="col-md-12">
+						<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+{% endblock %}

@@ -118,6 +118,41 @@ def signup():
 				error = 'Captcha failed! If you are human, please try again!'
 	return render_template("signup.html",error=error,processtime=round(time.time()-start_time,5))
 
+@app.route('/acc',methods=['GET','POST'])
+def account_page():
+	start_time=time.time()
+	error = None
+	if not logged_in():
+		error = 'You must be signed in to view your profile!'
+		return render_template("login.html",error=error,processtime=round(time.time()-start_time,5))
+	else:
+		user = get_logged_in_user()
+		claimables = find_claimables()
+		g.db = connect_db()
+		c = g.db.cursor()
+		c.execute('SELECT id,auto_key_json FROM series WHERE owner='+app.sqlesc,(user,))
+		r = c.fetchall()
+		claimed_ids = {}
+		for row in r:
+			c.execute('SELECT url,date FROM playerinfo WHERE series_id='+app.sqlesc+' AND owner_id='+app.sqlesc,(row[0],user))
+			s = c.fetchall()
+			claimed_ids[row[0]] = {'auto_key_json':json.loads(row[1]),'data':s}
+		claimable_ids = {}
+		for row in claimables:
+			c.execute('SELECT date FROM playerinfo WHERE id='+app.sqlesc,(row[0],))
+			d = c.fetchone()[0]
+			c.execute('SELECT auto_key_json FROM series WHERE id=(SELECT series_id FROM playerinfo WHERE id='+app.sqlesc+')',(row[0],))
+			a = json.loads(c.fetchone()[0])
+			claimable_ids[row[0]] = {'auto_key_json':a,'data':(row[1],d)}
+		c.execute('SELECT email FROM users WHERE id='+app.sqlesc,(user,))
+		e = c.fetchall()
+		g.db.close()
+		assert len(e)==1
+		acc_info = e[0]
+		return render_template('account.html',error=error,claimed=claimed_ids,claimable=claimable_ids, acc_info=acc_info,processtime=round(time.time()-start_time,5))
+
+
+
 def logged_in():
 	# designed to prevent repeated db requests
 	if not hasattr(g,'logged_in_user'):
