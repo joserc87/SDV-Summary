@@ -240,15 +240,16 @@ def generateFarm(season, farm):
                 house_ss = Image.open('./assets/farm/buildings/houses.png')
                 house_img = cropImg(house_ss, item.index,
                                     defaultSize=(40, 36), objectSize=(40, 36))
-                farm_base.paste(house_img, (item.x*16, item.y*16), house_img)
+                farm_base.paste(house_img, (item.x*16, item.y*16 - 16 * item.h), house_img)
             except Exception as e:
                 print(e)
+
         if item.name == "Greenhouse":
             try:
                 greenhouse_ss = Image.open('./assets/farm/buildings/greenhouse.png')
                 greenhouse_img = cropImg(greenhouse_ss, item.index,
                                          defaultSize=(28, 40), objectSize=(28, 40))
-                farm_base.paste(greenhouse_img, (item.x*16, item.y*16), greenhouse_img)
+                farm_base.paste(greenhouse_img, (item.x*16, item.y*16 - 16 * item.h), greenhouse_img)
             except Exception as e:
                 print(e)
 
@@ -277,7 +278,7 @@ def generateFarm(season, farm):
 
 
 def main():
-    f = 'Vejur_118036516'
+    f = 'Lordy_118962284'
     import time
     # for f in os.listdir(os.getcwd()+'/saves/'):
     print(f)

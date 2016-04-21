@@ -181,7 +181,7 @@ def getFarmInfo(saveFileLocation, read_data=False):
     farm['buildings'] = s
 
     house = sprite('House',
-                   58, 8, 10, 10,
+                   58, 14, 10, 6,
                    int(root.find('player').find('houseUpgradeLevel').text),
                    None,
                    None,
@@ -202,11 +202,11 @@ def getFarmInfo(saveFileLocation, read_data=False):
 
     if hasGreenhouse:
         greenHouse = sprite('Greenhouse',
-                            25, 6, 0, 0, 1,
+                            25, 12, 0, 6, 1,
                             None, None, None, None)
     else:
         greenHouse = sprite('Greenhouse',
-                            25, 6, 0, 0, 0,
+                            25, 12, 0, 6, 0,
                             None, None, None, None)
     farm['misc'] = [house, greenHouse]
 
