@@ -112,10 +112,15 @@ $(function () {
 								</div>
 							</div>
 						{% endif %}
-						{% if error %}
+						{% if error or data.failed_processing %}
 							<div class="row center-block">
 								<div class="col-md-12">
+									{% if error %}
 									<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+									{% endif %}
+									{% if data.failed_processing %}
+									<p class="text-danger text-center"><strong>Warning:</strong> <button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This farm failed image processing, which means the savegame had unexpected contents. It might be modded, or malicious. Be aware if downloading the savegame.'>This farm failed image processing!</button></p>
+									{%endif%}
 								</div>
 							</div>
 						{% endif %}
