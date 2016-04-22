@@ -27,6 +27,10 @@ from flask_recaptcha import ReCaptcha
 import uuid
 from google_measurement_protocol import Event, report
 
+str = unicode
+psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
+psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
+
 app = Flask(__name__)
 app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
 recaptcha = ReCaptcha(app=app)

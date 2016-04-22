@@ -275,7 +275,7 @@ def generate_users():
 	users_structure = users_structure[:-2]
 	connection=connect_db()
 	c=connection.cursor()
-	c.execute('CREATE TABLE users('+database_structure+')')
+	c.execute('CREATE TABLE users('+users_structure+')')
 	connection.commit()
 	connection.close()
 	print('done')

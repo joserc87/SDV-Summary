@@ -177,7 +177,7 @@ $(function () {
 									{%endif%}
 									{% if data.portrait_info['children']|length > 0 %}
 										{% for child in data.portrait_info['children'] %}
-										{%if loop.index0 == 0 %}has{%else%}and{%endif%} a {{ child[2] }} day old {% if child[0] == 0 %}son{%else%}daughter{%endif%} named {{ child[3] }}{% endfor %}{%if loop.last and data.petName!=None%},{%endif%} 
+										{%if loop.index0 == 0 %}has{%else%}and{%endif%} a {{ child[2] }} day old {% if child[0] == 0 %}son{%else%}daughter{%endif%} named {{ child[3] }}{%if not loop.last %} {%endif%}{% endfor %}{%if loop.last and data.petName!=None%},{%endif%} 
 									{% else %}
 										has no children{%if data.petName!=None%},{%else%}.{%endif%} 
 									{%endif%}
