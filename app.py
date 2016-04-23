@@ -26,6 +26,7 @@ import datetime
 from flask_recaptcha import ReCaptcha
 import uuid
 from google_measurement_protocol import Event, report
+import imgur
 
 str = unicode
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
@@ -72,6 +73,7 @@ def login():
 		if 'email' not in request.form or 'password' not in request.form or request.form['email']=='':
 			error = 'Missing email or password for login!'
 		else:
+			time.sleep(0.2)
 			g.db = connect_db()
 			cur = g.db.cursor()
 			cur.execute('SELECT id,password,auth_key FROM users WHERE email='+app.sqlesc,(request.form['email'],))
@@ -630,6 +632,21 @@ def operate_on_url(url,instruction):
 				else:
 					error = 'You do not have sufficient credentials to perform this action'
 					return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+
+			elif instruction == 'imgur':
+				if logged_in():
+					if imgur.checkApiAccess(get_logged_in_user()):
+						result = imgur.uploadToImgur(get_logged_in_user(),url)
+						if result != False:
+							return redirect(result)
+						else:
+							print 'need better error'
+							return 'there was an error'
+					else:
+						return redirect(imgur.getAuthUrl(get_logged_in_user()))
+				else:
+					print 'need a better outcome here...'
+					return 'You are not logged in'
 		else:
 			return render_template("error.html", error="Unknown instruction or insufficient credentials", processtime=round(time.time()-start_time,5))
 	else:
@@ -892,6 +909,19 @@ def faq():
 	error = None
 	start_time=time.time()
 	return render_template('faq.html',error=error,processtime=round(time.time()-start_time,5))
+
+@app.route('/imgur')
+def get_imgur_auth_code():
+	start_time = time.time()
+	error = None
+	if logged_in():
+		imgur.swapCodeForTokens(request.args)
+		print 'need better response here'
+		return 'imgur authorized! try again'
+	else:
+		print 'need better error here'
+		return 'Not logged in!'
+
 
 if __name__ == "__main__":
 	app.run()
