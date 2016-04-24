@@ -4,28 +4,24 @@ from app import app, connect_db
 from flask import url_for
 import uuid
 import json
+import time
 
 def checkApiAccess(userid):
 	# something that checks whether we have api keys and whether they work;
 	# if not, return False
-	print 'checkApiAccess needs not to have this silly userid==test thing...'
-	if userid == 'test':
-		access_token = app.config['IMGUR_ACCESS_TOKEN']
-		refresh_token = app.config['IMGUR_REFRESH_TOKEN']
-	else:
-		db = connect_db()
-		c = db.cursor()
-		c.execute('SELECT imgur_json FROM users WHERE id='+app.sqlesc,(userid,))
-		r = c.fetchone()
-		if len(r) > 0:
-			try:
-				r = json.loads(r[0])
-				access_token = r['access_token']
-				refresh_token = r['refresh_token']
-			except TypeError:
-				return False
-		else:
+	db = connect_db()
+	c = db.cursor()
+	c.execute('SELECT imgur_json FROM users WHERE id='+app.sqlesc,(userid,))
+	r = c.fetchone()
+	if len(r) > 0:
+		try:
+			r = json.loads(r[0])
+			access_token = r['access_token']
+			refresh_token = r['refresh_token']
+		except TypeError:
 			return False
+	else:
+		return False
 	client = ImgurClient(app.config['IMGUR_CLIENTID'],app.config['IMGUR_SECRET'])
 	client.set_user_auth(access_token,refresh_token)
 	try:
@@ -35,11 +31,12 @@ def checkApiAccess(userid):
 	except ImgurClientError:
 		return False
 
-def getAuthUrl(userid):
+def getAuthUrl(userid,target=None):
 	db = connect_db()
 	c = db.cursor()
-	imgur_id = unicode(uuid.uuid4())
-	c.execute('UPDATE users SET imgur_id='+app.sqlesc+' WHERE id='+app.sqlesc,(imgur_id,userid))
+	iuid = unicode(uuid.uuid4())
+	imgur_id = json.dumps({'id':iuid,'redir':target})
+	c.execute('UPDATE users SET imgur_id='+app.sqlesc+' WHERE id='+app.sqlesc,(iuid,userid))
 	db.commit()
 	db.close()
 	client = ImgurClient(app.config['IMGUR_CLIENTID'],app.config['IMGUR_SECRET'])
@@ -50,10 +47,13 @@ def swapCodeForTokens(response):
 	# takes dict of response parameters as input, like {'error':'blah blah'} or {'code':'blah blah','state':'blah blah'}
 	db = connect_db()
 	c=db.cursor()
+	state = json.loads(response['state'])
+	user_identifier = state['id']
+	redir = state['redir']
 	if 'error' in response:
-		c.execute('UPDATE users SET imgur_json=NULL WHERE imgur_id='+app.sqlesc,(response['state'],))
+		c.execute('UPDATE users SET imgur_json=NULL WHERE imgur_id='+app.sqlesc,(user_identifier,))
 		db.commit()
-		return False
+		return {'success':False}
 	# called at the server redirect when imgur returns the code
 	client = ImgurClient(app.config['IMGUR_CLIENTID'],app.config['IMGUR_SECRET'])
 	credentials = client.authorize(response['code'],'authorization_code')
@@ -61,20 +61,27 @@ def swapCodeForTokens(response):
 	if 'access_token' in credentials.keys() and 'refresh_token' in credentials.keys():
 		db = connect_db()
 		c = db.cursor()
-		c.execute('UPDATE users SET imgur_json='+app.sqlesc+' WHERE imgur_id='+app.sqlesc,(json.dumps(credentials),response['state']))
+		c.execute('UPDATE users SET imgur_json='+app.sqlesc+' WHERE imgur_id='+app.sqlesc,(json.dumps(credentials),user_identifier))
 		db.commit()
 		db.close()
-		return True
+		return {'success':True,'redir':redir}
 	else:
-		c.execute('UPDATE users SET imgur_json=NULL WHERE imgur_id='+app.sqlesc,(response['state'],))
+		c.execute('UPDATE users SET imgur_json=NULL WHERE imgur_id='+app.sqlesc,(user_identifier,))
 		db.commit()
-		return False
+		return {'success':False}
 
 def uploadToImgur(userid,url):
 	db = connect_db()
 	c = db.cursor()
-	c.execute('SELECT map_url FROM playerinfo WHERE url='+app.sqlesc,(url,))
-	map_url = c.fetchone()[0]
+	c.execute('SELECT map_url,name,farmname,date,imgur_json FROM playerinfo WHERE url='+app.sqlesc,(url,))
+	result = c.fetchone()
+	if result[4] != None:
+		previous_upload_properties = json.loads(result[4])
+		if time.time() < previous_upload_properties['upload_time']+(2*3600):
+			return {'error':'too_soon','link':previous_upload_properties['imgur_url']}
+	map_url = result[0]
+	titlestring = u"{} Farm, {} by {}".format(result[2],result[3],result[1])
+	descriptionstring = u"Stardew Valley game progress, full summary at http://upload.farm/{}".format(url)
 	# try:
 	c.execute('SELECT imgur_json FROM users WHERE id='+app.sqlesc,(userid,))
 	r = json.loads(c.fetchone()[0])
@@ -85,12 +92,19 @@ def uploadToImgur(userid,url):
 	# file = url_for('home',filename=map_url,_external=True)
 	# print 'uploaded to',file
 	# client.upload_from_url(file,config={'title':'uploaded from','description':'upload.farm'},anon=False)
-	result = client.upload_from_path(map_url,config={'title':'uploaded from','description':'upload.farm'},anon=False)
+	if app.config['IMGUR_DIRECT_UPLOAD'] == True:
+		result = client.upload_from_path(map_url,config={'title':titlestring,'description':descriptionstring},anon=False)
+	else:
+		map_url = u"http://upload.farm/{}".format(map_url)
+		result = client.upload_from_url(map_url,config={'title':titlestring,'description':descriptionstring},anon=False)
 	print result
+	imgur_json = json.dumps({'imgur_url':result['link'],'upload_time':time.time()})
+	c.execute('UPDATE playerinfo SET imgur_json='+app.sqlesc+' WHERE url='+app.sqlesc,(imgur_json,url))
+	db.commit()
 	try:
-		return result['link']
+		return {'success':None,'link':result['link']}
 	except:
-		return False
+		return {'error':'upload_issue','link':None}
 
 
 if __name__ == '__main__':
@@ -98,7 +112,7 @@ if __name__ == '__main__':
 	state = ''
 	if code == '':
 		user_id = 1
-		print 'this should be a token, not a raw db entry'
+		print('this should be a token, not a raw db entry')
 		check_auth = checkApiAccess(user_id)
 		if check_auth == False:
 			print getAuthUrl(user_id)

@@ -35,5 +35,5 @@ def big2dec(num):
 
 
 if __name__ == "__main__":
-	print dec2big(9999999999999999999999999999999999999999999999999999999)
-	print big2dec('gUFRx61gTwUoLRUcYcoUr2SbzgUyBQz')
+	print(dec2big(9999999999999999999999999999999999999999999999999999999))
+	print(big2dec('gUFRx61gTwUoLRUcYcoUr2SbzgUyBQz'))

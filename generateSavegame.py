@@ -42,5 +42,5 @@ if __name__=="__main__":
 	savegame_file = './saves/Crono_116230451-newer'
 	import time
 	start_time= time.time()
-	print createZip('test','test','0123345678',static_folder,savegame_file)
-	print time.time()-start_time
+	print(createZip('test','test','0123345678',static_folder,savegame_file))
+	print(time.time()-start_time)

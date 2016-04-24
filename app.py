@@ -316,7 +316,7 @@ def verify_api_auth(form):
 		except AssertionError:
 			return False
 		#if check_password_hash(result[0][1],form['api_secret']) == True:
-		print 'need to do proper storage of api keys (in another db table)...'
+		print('need to do proper storage of api keys (in another db table)...')
 		if check_password_hash(form['api_secret'],result[0][1]) == True:
 			if result[0][2] == None:
 				auth_key = dec2big(random.randint(0,(2**128)))
@@ -325,7 +325,7 @@ def verify_api_auth(form):
 			else:
 				auth_key = result[0][2]
 			session['logged_in_user']=(result[0][0],auth_key)
-			print 'returning true'
+			print('returning true')
 			return True
 		else:
 			return False
@@ -518,6 +518,8 @@ def display_data(url):
 		cur.execute('SELECT url, date FROM playerinfo WHERE series_id='+app.sqlesc,(datadict['series_id'],))
 		other_saves = cur.fetchall()
 		find_claimables()
+		if datadict['imgur_json']!=None:
+			datadict['imgur_json'] = json.loads(datadict['imgur_json'])
 		# passworded = True if datadict['del_password'] != None else False
 		# passworded=passworded, removed from next line
 		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=find_claimables(), data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
@@ -634,19 +636,27 @@ def operate_on_url(url,instruction):
 					return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
 
 			elif instruction == 'imgur':
+				print 'here'
 				if logged_in():
 					if imgur.checkApiAccess(get_logged_in_user()):
+						print 'do we...'
 						result = imgur.uploadToImgur(get_logged_in_user(),url)
-						if result != False:
-							return redirect(result)
+						if 'success' in result:
+							return redirect(result['link'])
+						elif 'error' in result:
+							if result['error'] == 'too_soon':
+								error = 'You have uploaded this page to imgur in the last 2 hours: please wait to upload again'
+							elif result['error'] == 'upload_issue':
+								error = 'There was an issue with uploading the file to imgur. Please try again later!'
 						else:
-							print 'need better error'
-							return 'there was an error'
+							error = 'There was an unknown error!'
+						return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
 					else:
-						return redirect(imgur.getAuthUrl(get_logged_in_user()))
+						print 'we do not'
+						return redirect(imgur.getAuthUrl(get_logged_in_user(),target=request.path))
 				else:
-					print 'need a better outcome here...'
-					return 'You are not logged in'
+					error = "You must be logged in to post your farm to imgur!"
+					return render_template("signup.html", error=error, processtime=round(time.time()-start_time,5))
 		else:
 			return render_template("error.html", error="Unknown instruction or insufficient credentials", processtime=round(time.time()-start_time,5))
 	else:
@@ -822,7 +832,7 @@ def blogmain():
 	error = None
 	start_time = time.time()
 	num_entries = 5
-	#print request.args.get('p')
+	#print(request.args.get('p'))
 	try:
 		offset = int(request.args.get('p')) * num_entries
 	except:
@@ -839,7 +849,7 @@ def allmain():
 	error = None
 	start_time = time.time()
 	num_entries = 18
-	#print request.args.get('p')
+	#print(request.args.get('p'))
 	try:
 		offset = int(request.args.get('p')) * num_entries
 	except TypeError:
@@ -914,13 +924,17 @@ def faq():
 def get_imgur_auth_code():
 	start_time = time.time()
 	error = None
+	print 'I am here again...'
 	if logged_in():
-		imgur.swapCodeForTokens(request.args)
-		print 'need better response here'
-		return 'imgur authorized! try again'
+		result = imgur.swapCodeForTokens(request.args)
+		if result['success']==True:
+			return redirect(result['redir'])
+		else:
+			error = "Problem authenticating at imgur!"
+			return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 	else:
-		print 'need better error here'
-		return 'Not logged in!'
+		error = "Cannot complete authentication if not logged in!"
+		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 
 
 if __name__ == "__main__":

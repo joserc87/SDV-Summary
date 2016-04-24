@@ -370,8 +370,31 @@ $(function () {
 				<a name="mainFarm"></a>
 				<div class="interiorpanel">
 					<div class="col-md-12 text-center">
-						<h3>Map of {{data.farmName}} Farm</h3>{%if logged_in() %}<form action="/{{data.url}}/imgur" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">upload to <img src="{{url_for('static',filename='imgur/pixellogo.png')}}"></button></form>{%endif%}
-						<a href="{{data.map_url}}" target="_blank"><img src="{{ data.map_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
+						<h3>Map of {{data.farmName}} Farm</h3>
+
+						<div class="previewbox">
+							<div class="previewimage">
+								<a href="{{data.map_url}}" target="_blank"><img src="{{ data.map_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
+							</div>
+							<div class="maptextbase">
+								{% if data['imgur_json'] != None %}
+									<div class="maptextinsert">
+										<span class="buttoncompensation"><a class="btn-link" href="{{data['imgur_json']['imgur_url']}}">view on imgur</a></span>
+									</div>
+								{% endif %}
+								{%if logged_in() and session['logged_in_user'][0] == data.owner_id %}
+									<div class="maptextinsert">
+										<form action="/{{data.url}}/imgur" method="post">
+											<button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link disabled">
+												{% if data['imgur_json'] != None %}re{%endif%}upload to imgur
+											</button>
+										</form>
+									</div>
+								{%endif%}
+							</div>
+						</div>
+
+						
 					</div>
 				</div>
 			</div>
