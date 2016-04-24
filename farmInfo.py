@@ -158,13 +158,15 @@ def getFarmInfo(saveFileLocation, read_data=False):
     s = []
 
     for item in locations[1].find('resourceClumps').iter('ResourceClump'):
-        f = False
+        name = item.get(ns+'type')
+        if name is None:
+            name = 'ResourceClump'
         t = int(item.find('parentSheetIndex').text)
         x = int(item.find('tile').find('X').text)
         y = int(item.find('tile').find('Y').text)
         w = int(item.find('width').text)
         h = int(item.find('height').text)
-        s.append(sprite('ResourceClump', x, y, w, h, None, t, None, None, None))
+        s.append(sprite(name, x, y, w, h, None, t, None, None, None))
 
     farm['resourceClumps'] = s
 
@@ -288,7 +290,6 @@ def generateImage(farm):
                 for i in range(tile[3]):
                     for j in range(tile[3]):
                         colourBox(tile.x+i, tile.y + j, (75, 75, 75), pixels)
-
     return image
 
 

@@ -114,13 +114,21 @@ def generateFarm(season, farm):
 
         if 'Crop' in item.name:
             crop_spritesheet = Image.open('./assets/farm/crops.png')
-            crop_sprites = cropImg(crop_spritesheet, item.type,
-                                   (32, 8), (32, 8))
-            if item.orientation is None:
-                crop_img = cropImg(crop_sprites, item.growth,
-                                   (4, 8), (4, 8))
+            if item.name != "GiantCrop":
+                crop_sprites = cropImg(crop_spritesheet, item.type,
+                                       (32, 8), (32, 8))
+                if item.orientation is None:
+                    crop_img = cropImg(crop_sprites, item.growth,
+                                       (4, 8), (4, 8))
+                else:
+                    crop_img = getPlant(crop_sprites, item.growth, item.orientation[0], item.orientation[1], item.type, (4, 8), (4, 8))
             else:
-                crop_img = getPlant(crop_sprites, item.growth, item.orientation[0], item.orientation[1], item.type, (4, 8), (4, 8))
+                if item.type == 190:
+                    crop_img = cropImg(crop_spritesheet, 263, objectSize=(12, 16), defaultSize=(4, 8))
+                if item.type == 254:
+                    crop_img = cropImg(crop_spritesheet, 266, objectSize=(12, 16), defaultSize=(4, 8))
+                if item.type == 276:
+                    crop_img = cropImg(crop_spritesheet, 269, objectSize=(12, 16), defaultSize=(4, 8))
             if item.flipped:
                 crop_img = crop_img.transpose(Image.FLIP_LEFT_RIGHT)
             farm_base.paste(crop_img, (item.x*16, item.y*16 - 16), crop_img)
@@ -278,7 +286,7 @@ def generateFarm(season, farm):
 
 
 def main():
-    f = 'Lordy_118962284'
+    f = 'Fyn_117290262'
     import time
     # for f in os.listdir(os.getcwd()+'/saves/'):
     print(f)
