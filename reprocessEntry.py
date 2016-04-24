@@ -44,6 +44,8 @@ def processFile(filename,old_md5,rowid,url):
 			values.append(str(player_info[key]))
 	columns.append('farm_info')
 	values.append(json.dumps(farm_info))
+	columns.append('failed_processing')
+	values.append(None)
 
 	colstring = ''
 	for c in columns:
