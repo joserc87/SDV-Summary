@@ -156,7 +156,13 @@ $(function () {
 										<dt>Health</dt><dd>{{ data.maxHealth }}</dd>
 										<dt>Stamina</dt><dd>{{ data.maxStamina }}</dd>
 										<dt>Steps Taken</dt><dd>{{ data.statsStepsTaken }}</dd>
-										<dt>Max Mine Depth</dt><dd>{{ data.deepestMineLevel }}</dd>
+										<dt><b>Max Depth</b><dd></dd></dt>
+										{% if data.deepestMineLevel > 120 %}
+											<dt>Mines</dt><dd>120 Levels</dd>
+											<dt>Skull Cavern</dt><dd>{{ data.deepestMineLevel - 120}} Level{% if (data.deepestMineLevel - 120) > 1 %}s{% endif %}</dd>
+										{% else %}
+											<dt>Max Depth in The Mines</dt><dd>{{ data.deepestMineLevel }} Level{% if data.deepestMineLevel > 1 %}s{% endif %}</dd>
+										{% endif %}
 		 								<dt>Time Played</dt><dd>{{ data.millisecondsPlayed }} hours</dd>
 		 							</dl>
 								</div>
@@ -338,12 +344,9 @@ $(function () {
 						<div class="col-md-12 text-center">
 							<h3>Friendships</h3>
 						</div>
-						{% for i in range((friendships|length/2)|int) %}
-						<div class="col-md-6 col-sm-12 col-xs-12 text-center">							
-							<p style="margin-left: 1em;">{{ friendships[2*i].0 }}: {{ friendships[2*i].1 // 250 }}/10</p>
-						</div>
-						<div class="col-md-6 col-sm-12 col-xs-12 text-center">							
-							<p style="margin-left: 1em;">{{ friendships[2*i + 1].0 }}: {{ friendships[2*i + 1].1 // 250 }}/10</p>
+						{% for i in friendships %}
+						<div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 text-center">							
+							<p style="margin-left: 1em;">{{ i.0 }}: {{ i.1 // 250 }}/10</p>
 						</div>
 						{% endfor %}
 					</div>
