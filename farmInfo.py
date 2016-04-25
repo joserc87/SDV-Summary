@@ -25,7 +25,7 @@ def checkSurrounding(tiles):
             if tile is not None:
                 for dx, dy, b in [(0, -1, 1), (1, 0, 2), (0, 1, 4), (-1, 0, 8)]:
                     try:
-                        if floor_map[y + dy][x + dx] != None:
+                        if floor_map[y + dy][x + dx] is not None:
                             if tile.name == 'Flooring' or (tile.name == 'Fence' and not tile.growth):
                                 if floor_map[y + dy][x + dx].type == tile.type:
                                     a += b
@@ -150,8 +150,12 @@ def getFarmInfo(saveFileLocation, read_data=False):
 
     try:
         farm['Flooring'] = checkSurrounding(d['Flooring'])
-        farm['HoeDirt'] = checkSurrounding(d['HoeDirt'])
     except Exception as e:
+        pass
+
+    try:
+        farm['HoeDirt'] = (checkSurrounding(d['HoeDirt']))
+    except:
         pass
 
     # Resource Clumps
