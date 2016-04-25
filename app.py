@@ -149,8 +149,10 @@ def account_page():
 		r = c.fetchall()
 		claimed_ids = {}
 		for row in r:
-			c.execute('SELECT url,date FROM playerinfo WHERE series_id='+app.sqlesc+' AND owner_id='+app.sqlesc,(row[0],user))
+			c.execute('SELECT url,date,imgur_json FROM playerinfo WHERE series_id='+app.sqlesc+' AND owner_id='+app.sqlesc,(row[0],user))
 			s = c.fetchall()
+			print s
+			s = [list(part[:2])+[json.loads(part[2]) if part[2] != None else None] + list(part[3:]) for part in s]
 			claimed_ids[row[0]] = {'auto_key_json':json.loads(row[1]),'data':s}
 		claimable_ids = {}
 		for row in claimables:
@@ -159,11 +161,10 @@ def account_page():
 			c.execute('SELECT auto_key_json FROM series WHERE id=(SELECT series_id FROM playerinfo WHERE id='+app.sqlesc+')',(row[0],))
 			a = json.loads(c.fetchone()[0])
 			claimable_ids[row[0]] = {'auto_key_json':a,'data':(row[1],d)}
-		c.execute('SELECT email FROM users WHERE id='+app.sqlesc,(user,))
-		e = c.fetchall()
+		c.execute('SELECT email,imgur_json FROM users WHERE id='+app.sqlesc,(user,))
+		e = c.fetchone()
 		g.db.close()
-		assert len(e)==1
-		acc_info = e[0]
+		acc_info = {'email':e[0],'imgur':json.loads(e[1]) if e[1] != None else None}
 		return render_template('account.html',error=error,claimed=claimed_ids,claimable=claimable_ids, acc_info=acc_info,processtime=round(time.time()-start_time,5))
 
 
@@ -643,7 +644,8 @@ def operate_on_url(url,instruction):
 
 			elif instruction == 'imgur':
 				if logged_in():
-					if imgur.checkApiAccess(get_logged_in_user()):
+					check_access = imgur.checkApiAccess(get_logged_in_user())
+					if check_access == True:
 						result = imgur.uploadToImgur(get_logged_in_user(),url)
 						if 'success' in result:
 							return redirect(result['link'])
@@ -655,8 +657,11 @@ def operate_on_url(url,instruction):
 						else:
 							error = 'There was an unknown error!'
 						return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
-					else:
+					elif check_access == False:
 						return redirect(imgur.getAuthUrl(get_logged_in_user(),target=request.path))
+					elif check_access == None:
+						error = 'Either you or upload.farm are out of imgur credits for the day! Sorry :( Try again tomorrow'
+						return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
 				else:
 					error = "You must be logged in to post your farm to imgur!"
 					return render_template("signup.html", error=error, processtime=round(time.time()-start_time,5))
@@ -928,14 +933,17 @@ def get_imgur_auth_code():
 	start_time = time.time()
 	error = None
 	if logged_in():
-		result = imgur.swapCodeForTokens(request.args)
-		if result['success']==True:
-			return redirect(result['redir'])
+		if len(request.args)==0:
+			return redirect(imgur.getAuthUrl(get_logged_in_user(),target=url_for('account_page')))
 		else:
-			error = "Problem authenticating at imgur!"
-			return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+			result = imgur.swapCodeForTokens(request.args)
+			if result['success']==True:
+				return redirect(result['redir'])
+			else:
+				error = "Problem authenticating at imgur!"
+				return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 	else:
-		error = "Cannot complete authentication if not logged in!"
+		error = "Cannot connect to imgur if not logged in!"
 		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 
 

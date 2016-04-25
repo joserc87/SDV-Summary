@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% block header %}
 {{ super() }}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-<script src="{{ url_for('static', filename='js/ajaxRequest.js') }}"></script>{% endblock %}
+{% endblock %}
 {% block title %}Account - {{super()}}{% endblock %}
 {%block bodycontent %}
 {% include "titlebar.html" %}
@@ -12,7 +11,8 @@
 			<div class="row">
 				<div class="col-md-12" style="padding-left:2%;padding-right:2%;">
 					<h3>Account info</h3>
-					<p>Email: {{acc_info[0]}}</p>
+					<p>Email: {{acc_info.email}}</p>
+					<p>Imgur: {%if acc_info.imgur %}Logged in as <a href="http://{{acc_info.imgur.account_username}}.imgur.com">{{acc_info.imgur.account_username}}</a>{%else%}<a href="{{url_for('get_imgur_auth_code')}}">connect to imgur</a>{%endif%}</p>
 				</div>
 			</div>
 			{% if error %}
@@ -30,7 +30,7 @@
 				<div class="col-md-12" style="padding-left:2%;padding-right:2%;">
 					{% if claimable.keys()|length > 0 %}
 						<h3>Claimable farms</h3>
-						<p>The following farms are not associated with your user account, but were probably uploaded from it:</p>
+						<p>The following farms are not associated with your user account, but were uploaded from your computer:</p>
 						<ul>
 						{% for key in claimable.keys() %}
 							<li>
@@ -50,7 +50,7 @@
 								<ul>
 									{% for item in claimed[key]['data'] %}
 										<li>
-											<a href="/{{item[0]}}">{{item[1]}}</a>
+											<a href="/{{item[0]}}">{{item[1]}}</a>{%if item[2]%} | <a href="{{item[2].imgur_url}}">imgur</a>{%endif%}
 										</li>
 									{% endfor %}
 								</ul>
