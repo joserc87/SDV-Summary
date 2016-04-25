@@ -7,6 +7,7 @@ from werkzeug import secure_filename, check_password_hash
 from werkzeug.contrib.fixers import ProxyFix
 from werkzeug.security import generate_password_hash
 import os
+import sys
 from playerInfo import playerInfo
 from farmInfo import getFarmInfo
 from bigbase import dec2big
@@ -28,9 +29,15 @@ import uuid
 from google_measurement_protocol import Event, report
 import imgur
 
-str = unicode
+if sys.version_info >= (3,0):
+	unicode = str
+else:
+	str = unicode
+
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
+
+
 
 app = Flask(__name__)
 app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
@@ -459,8 +466,7 @@ def insert_info(player_info,farm_info,md5_info):
 	g.db = connect_db()
 	cur = g.db.cursor()
 	try:
-		cur.execute('INSERT INTO playerinfo ('+colstring+') VALUES ('+questionmarks+')',tuple(values))
-		cur.execute('SELECT id,added_time FROM playerinfo WHERE uniqueIDForThisGame='+app.sqlesc+' AND name='+app.sqlesc+' AND md5 ='+app.sqlesc+'',(player_info['uniqueIDForThisGame'],player_info['name'],md5_info))
+		cur.execute('INSERT INTO playerinfo ('+colstring+') VALUES ('+questionmarks+') RETURNING id,added_time',tuple(values))
 		row = cur.fetchone()
 		url = dec2big(int(row[0])+int(row[1]))
 		rowid = row[0]
@@ -526,7 +532,7 @@ def display_data(url):
 
 def find_claimables():
 	if not hasattr(g,'claimables'):
-		sessionids = session.keys()
+		sessionids = list(session.keys())
 		removals = ['admin','logged_in_user']
 		for key in removals:
 			try:
@@ -636,10 +642,8 @@ def operate_on_url(url,instruction):
 					return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
 
 			elif instruction == 'imgur':
-				print 'here'
 				if logged_in():
 					if imgur.checkApiAccess(get_logged_in_user()):
-						print 'do we...'
 						result = imgur.uploadToImgur(get_logged_in_user(),url)
 						if 'success' in result:
 							return redirect(result['link'])
@@ -652,7 +656,6 @@ def operate_on_url(url,instruction):
 							error = 'There was an unknown error!'
 						return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
 					else:
-						print 'we do not'
 						return redirect(imgur.getAuthUrl(get_logged_in_user(),target=request.path))
 				else:
 					error = "You must be logged in to post your farm to imgur!"
@@ -924,7 +927,6 @@ def faq():
 def get_imgur_auth_code():
 	start_time = time.time()
 	error = None
-	print 'I am here again...'
 	if logged_in():
 		result = imgur.swapCodeForTokens(request.args)
 		if result['success']==True:
