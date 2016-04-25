@@ -2,10 +2,14 @@
 import config
 from flask import Flask
 import os
+import sys
 from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
+
+if sys.version_info >= (3, 0):
+	raw_input = input
 
 if app.config['USE_SQLITE']==True:
 	sqlesc = '?'
@@ -33,7 +37,7 @@ if __name__ == "__main__":
 	a = raw_input('Generate database? (y/n): ')
 	if a == 'y':
 		generate_admin()
-		print 'done'
+		print('done')
 	b = raw_input('Add user? (y/n): ')
 	if b == 'y':
 		connection = connect_db()

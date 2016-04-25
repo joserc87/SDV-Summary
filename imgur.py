@@ -25,8 +25,8 @@ def checkApiAccess(userid):
 	client = ImgurClient(app.config['IMGUR_CLIENTID'],app.config['IMGUR_SECRET'])
 	client.set_user_auth(access_token,refresh_token)
 	try:
-		print client.get_account('me').url
-		print client.credits
+		print(client.get_account('me').url)
+		print(client.credits)
 		return True
 	except ImgurClientError:
 		return False
@@ -97,7 +97,7 @@ def uploadToImgur(userid,url):
 	else:
 		map_url = u"http://upload.farm/{}".format(map_url)
 		result = client.upload_from_url(map_url,config={'title':titlestring,'description':descriptionstring},anon=False)
-	print result
+	print(result)
 	imgur_json = json.dumps({'imgur_url':result['link'],'upload_time':time.time()})
 	c.execute('UPDATE playerinfo SET imgur_json='+app.sqlesc+' WHERE url='+app.sqlesc,(imgur_json,url))
 	db.commit()
@@ -115,9 +115,9 @@ if __name__ == '__main__':
 		print('this should be a token, not a raw db entry')
 		check_auth = checkApiAccess(user_id)
 		if check_auth == False:
-			print getAuthUrl(user_id)
+			print(getAuthUrl(user_id))
 		else:
-			print check_auth
+			print(check_auth)
 	else:
 		codedict = {'code':code,'state':state}
 		swapCodeForTokens(codedict)
@@ -126,7 +126,7 @@ if __name__ == '__main__':
 	file = './static/images/1AFQF1p.png'
 	# print client.upload_from_path(file,config={'title':'uploaded from','description':'python'},anon=False)
 
-	print client.get_account('me').id
+	print(client.get_account('me').id)
 
 	response_looks_like = {u'datetime': 1460205330, u'bandwidth': 0, u'nsfw': None,
 	u'vote': None, u'id': u'68htuuP', u'account_id': 33971158, u'in_gallery': False,
