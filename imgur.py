@@ -25,9 +25,13 @@ def checkApiAccess(userid):
 	client = ImgurClient(app.config['IMGUR_CLIENTID'],app.config['IMGUR_SECRET'])
 	client.set_user_auth(access_token,refresh_token)
 	try:
-		print(client.get_account('me').url)
-		print(client.credits)
-		return True
+		client.get_account('me').url
+		credits = client.credits
+		# print(credits)
+		if credits['ClientRemaining'] > 10 and credits['UserRemaining'] > 10:
+			return True
+		else:
+			return None
 	except ImgurClientError:
 		return False
 
@@ -109,11 +113,10 @@ def uploadToImgur(userid,url):
 
 if __name__ == '__main__':
 	code = ''
-	state = ''
 	if code == '':
 		user_id = 1
-		print('this should be a token, not a raw db entry')
 		check_auth = checkApiAccess(user_id)
+		exit()
 		if check_auth == False:
 			print(getAuthUrl(user_id))
 		else:

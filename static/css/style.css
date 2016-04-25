@@ -296,6 +296,7 @@ dt, dd {
 
 body {
 	line-height: 1;
+	padding-top:0px;
 }
 
 .blogpost {
