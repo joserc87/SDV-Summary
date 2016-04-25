@@ -205,13 +205,13 @@ dt, dd {
 }
 
 .farmimgpreview {
-	image-rendering: pixelated;
+	/*image-rendering: pixelated;*/
 	border-style: solid;
 	border-width: 20px 21px 21px 20px;
-	-moz-border-image: url(frame.png) 30 32 32 31 stretch;
-	-webkit-border-image: url(frame.png) 30 32 32 31 stretch;
-	-o-border-image: url(frame.png) 30 32 32 31 stretch;
-	border-image: url(frame.png) 30 32 32 31 fill stretch;
+	-moz-border-image: url(frame.png) 28 32 28 32 stretch;
+	-webkit-border-image: url(frame.png) 28 32 28 32 stretch;
+	-o-border-image: url(frame.png) 28 32 28 32 stretch;
+	border-image: url(frame.png) 28 32 28 32 fill stretch;
 }
 
 .previewbox {
@@ -229,13 +229,14 @@ dt, dd {
 
 .previewimage {
 	position:relative;	
+	overflow: hidden;
 }
 
 .previewtext {
 	position:absolute;
 	font-family: 'VT323';
 	font-size: 16pt;
-	bottom:18px;
+	bottom:21px;
 	left: 35px;
 	width: calc(100% - 30px - 41px);
 	background-color: rgba(0,0,0,0.7);
@@ -296,6 +297,7 @@ dt, dd {
 
 body {
 	line-height: 1;
+	padding-top:0px;
 }
 
 .blogpost {
@@ -366,4 +368,14 @@ dl.faq dt {
 }
 dl.faq dd {
 	padding-bottom: 1em;
+}
+
+code {
+	white-space: pre;
+	word-break: normal;
+	word-wrap: normal;
+}
+p .cc_message {
+	color: #ffffff !important;
+	font-family: sans-serif;
 }
