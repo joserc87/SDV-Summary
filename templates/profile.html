@@ -388,9 +388,16 @@ $(document).ready(function() {
 							<h3>Friendships</h3>
 						</div>
 						{% for i in friendships %}
-						<div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 text-center">							
-							<p style="margin-left: 1em;">{{ i.0 }}: {{ i.1 // 250 }}/10</p>
-						</div>
+							<div class="npc-container text-center">
+								<button type="button" class="btn-link npc-button" data-toggle="tooltip" data-container="body" data-placement="top" data-html="true" title='{{i.0}}'>
+									<div class="npc-profile">						
+										<img class="img-responsive" src="{{url_for('static',filename='assets/npcs/'+i.0+'.png')}}">
+									</div>
+									<div class="npc-relationship  npc-{{i.1//250}}">
+										{{ i.1 // 250 }}
+									</div>
+								</button>
+							</div>
 						{% endfor %}
 					</div>
 				</div>

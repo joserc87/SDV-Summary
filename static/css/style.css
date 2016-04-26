@@ -299,8 +299,98 @@ dt, dd {
 	margin-right: 10px;
 }
 
+.npc-container {
+	float:left;
+	display:inline;
+	position: relative;
+}
+
+.npc-profile {
+	width:96px;
+	border-style: solid;
+	background-color: #ffffff;
+	border-width: 2px;
+	border-color: #000000;
+	margin: 2px;
+}
+
+.npc-relationship {
+	position:absolute;
+	font-family: 'VT323';
+	font-size: 96px;
+	top: 0px;
+	height:100%;
+	left: -3px;
+	width: 100%;
+	background-color: rgba(0,0,0,0.0);
+	padding: 2%;
+	color: #ffffff;
+	overflow:hidden;
+	text-shadow: -2px 2px #000000;
+}
+
+ .npc-button {
+ 	padding: 0px;
+ }
+
+.npc-0 {
+	color: #ffffff;
+}
+
+.npc-1 {
+	color: #fffcfc;
+}
+
+.npc-2 {
+	color: #ffe7e7;
+}
+
+.npc-3 {
+	color: #ffd2d2;
+}
+
+.npc-4 {
+	color: #ffbdbd;
+}
+
+.npc-5 {
+	color: #ffa8a8;
+}
+
+.npc-6 {
+	color: #ff9393;
+}
+
+.npc-7 {
+	color: #ff7e7e;
+}
+
+.npc-8 {
+	color: #ff6969;
+}
+
+.npc-9 {
+	color: #ff5454;
+}
+
+.npc-10 {
+	color: #ff3f3f;
+}
+
+.npc-11 {
+	color: #ff2a2a;
+}
+
+.npc-12 {
+	color: #ff1515;
+}
+
+.npc-13 {
+	color: #ff0000;
+}
+
 .maptextinsert a {
-	color:#FFFFFF;;
+	color:#FFFFFF;
 }
 
 .maptextinsert button {
