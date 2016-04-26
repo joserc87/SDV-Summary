@@ -38,7 +38,7 @@
 							</li>
 						{% endfor %}
 						</ul>
-						<ul class="list-inline text-center"><li><form action="/{{claimable[claimable.keys()[0]]['data'][0]}}/claimall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Or, claim all</button></form></li></ul>
+						<ul class="list-inline text-center"><li><form action="/{{claimable[list(claimable.keys())[0]]['data'][0]}}/claimall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Or, claim all</button></form></li></ul>
 					{% endif %}
 					{% if claimed.keys()|length > 0 %}
 						<h3>Your farm series</h3>

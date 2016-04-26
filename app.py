@@ -151,7 +151,7 @@ def account_page():
 		for row in r:
 			c.execute('SELECT url,date,imgur_json FROM playerinfo WHERE series_id='+app.sqlesc+' AND owner_id='+app.sqlesc,(row[0],user))
 			s = c.fetchall()
-			print s
+			# print s
 			s = [list(part[:2])+[json.loads(part[2]) if part[2] != None else None] + list(part[3:]) for part in s]
 			claimed_ids[row[0]] = {'auto_key_json':json.loads(row[1]),'data':s}
 		claimable_ids = {}
@@ -190,6 +190,7 @@ def logged_in():
 	return g.logged_in_user
 
 app.jinja_env.globals.update(logged_in=logged_in)
+app.jinja_env.globals.update(list=list)
 
 def add_to_series(rowid,uniqueIDForThisGame,name,farmName):
 	current_auto_key = json.dumps([uniqueIDForThisGame,name,farmName])
@@ -682,7 +683,7 @@ def delete_playerinfo_entry(url,md5,del_token):
 			return 'Problem removing series link!'
 		cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(result[0],))
 		for filename in result[4:8]:
-			if filename != None:
+			if filename != None and not os.path.samefile('static/placeholders',os.path.split(filename)):
 				os.remove(filename)
 		g.db.commit()
 		session.pop(url,None)
@@ -697,10 +698,11 @@ def remove_series_link(rowid, series_id):
 		g.db = connect_db()
 	cur = g.db.cursor()
 	cur.execute('SELECT members_json FROM series WHERE id='+app.sqlesc,(series_id,))
-	result = json.loads(cur.fetchone()[0])
+	a = cur.fetchone()
+	result = json.loads(a[0]) if a != None else None
 	try:
 		result.remove(int(rowid))
-	except ValueError:
+	except (ValueError,AttributeError):
 		return False
 	if len(result) == 0:
 		cur.execute('DELETE FROM series WHERE id='+app.sqlesc,(series_id,))

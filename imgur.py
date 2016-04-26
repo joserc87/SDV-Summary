@@ -5,6 +5,12 @@ from flask import url_for
 import uuid
 import json
 import time
+import sys
+
+if sys.version_info >= (3,0):
+	unicode = str
+else:
+	str = unicode
 
 def checkApiAccess(userid):
 	# something that checks whether we have api keys and whether they work;

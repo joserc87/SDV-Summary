@@ -85,7 +85,7 @@ def generateAvatar(player):
 def main():
 	from playerInfo import playerInfo
 	# player = playerInfo('./save/Crono_116230451')
-	player = playerInfo('./save/Sketchy_116441313')
+	player = playerInfo('./saves/Sketchy_116441313')
 	generateAvatar(player).save('test.png')
 
 if __name__ == '__main__':
