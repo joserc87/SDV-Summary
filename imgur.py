@@ -108,7 +108,7 @@ def uploadToImgur(userid,url):
 		map_url = u"http://upload.farm/{}".format(map_url)
 		result = client.upload_from_url(map_url,config={'title':titlestring,'description':descriptionstring},anon=False)
 	print(result)
-	imgur_json = json.dumps({'imgur_url':result['link'],'upload_time':time.time()})
+	imgur_json = json.dumps({'imgur_url':'http://imgur.com/'+result['id'],'upload_time':time.time()})
 	c.execute('UPDATE playerinfo SET imgur_json='+app.sqlesc+' WHERE url='+app.sqlesc,(imgur_json,url))
 	db.commit()
 	try:
