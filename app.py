@@ -525,12 +525,16 @@ def display_data(url):
 		kills = sorted([[kill[27:].replace('_',' '),datadict[kill]] for kill in sorted(database_structure_dict.keys()) if kill.startswith('statsSpecificMonstersKilled') and datadict[kill]!=None],key=lambda x: x[1])[::-1]
 		cur.execute('SELECT url, date FROM playerinfo WHERE series_id='+app.sqlesc,(datadict['series_id'],))
 		other_saves = cur.fetchall()
-		find_claimables()
 		if datadict['imgur_json']!=None:
 			datadict['imgur_json'] = json.loads(datadict['imgur_json'])
 		# passworded = True if datadict['del_password'] != None else False
 		# passworded=passworded, removed from next line
-		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=find_claimables(), data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
+		claimables = find_claimables()
+		print request.cookies
+		print request.cookies.get('no_signup')
+		if logged_in() == False and len(claimables) > 1 and request.cookies.get('no_signup')!='true':
+			flash({'message':"<p>It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!</p>".format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
+		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
 
 def find_claimables():
 	if not hasattr(g,'claimables'):

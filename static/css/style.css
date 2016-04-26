@@ -58,9 +58,9 @@ h1 {
 .interiorpanel {
 	border-style: solid;
 	border-width: 12px 12px 12px 12px;
-	-moz-border-image: url(textBox.png) 30 30 30 30 stretch;
-	-webkit-border-image: url(textBox.png) 30 30 30 30 stretch;
-	-o-border-image: url(textBox.png) 30 30 30 30 stretch;
+	-moz-border-image: url(textBox.png) 16 16 16 16 stretch;
+	-webkit-border-image: url(textBox.png) 16 16 16 16 stretch;
+	-o-border-image: url(textBox.png) 16 16 16 16 stretch;
 	border-image: url(textBox.png) 16 16 16 16 fill stretch;
 	box-shadow: -5px 5px 10px 5px rgba(0,0,0,0.2); 
 	padding-bottom: 15px;
@@ -69,12 +69,39 @@ h1 {
 	border-radius: 30px;
 }
 
+.bulletinpanel {
+	border-style: solid;
+	border-width: 16px 16px 16px 16px;
+	-moz-border-image: url(bulletin/paper.png) 30 30 30 30 stretch;
+	-webkit-border-image: url(bulletin/paper.png) 30 30 30 30 stretch;
+	-o-border-image: url(bulletin/paper.png) 30 30 30 30 stretch;
+	border-image: url(bulletin/paper.png) 32 32 32 32 fill stretch;
+	/*box-shadow: -5px 5px 10px 5px rgba(0,0,0,0.2); */
+	padding-bottom: 15px;
+	overflow:hidden;
+	padding: 0px;
+	/*border-radius: 30px;*/
+}
+
+.bulletinclose {
+	position:absolute;
+	top: 5px;
+	height:auto;
+	right: 0px;
+	width: 2em;
+	height: 2em;
+	background-color: rgba(0,0,0,0.0);
+	padding: 0px;
+	color: #FFFFFF;
+	overflow:hidden;
+}
+
 .tooltip-inner, .popover-content, .popover-title {
 	border-style: solid;
 	border-width: 12px 12px 12px 12px;
-	-moz-border-image: url(popBox.png) 30 30 30 30 stretch;
-	-webkit-border-image: url(popBox.png) 30 30 30 30 stretch;
-	-o-border-image: url(popBox.png) 30 30 30 30 stretch;
+	-moz-border-image: url(popBox.png) 16 16 16 16 stretch;
+	-webkit-border-image: url(popBox.png) 16 16 16 16 stretch;
+	-o-border-image: url(popBox.png) 16 16 16 16 stretch;
 	border-image: url(popBox.png) 16 16 16 16 fill stretch;
 	box-shadow: -5px 5px 10px 5px rgba(0,0,0,0.2); 
 	/*padding-bottom: 15px;*/
