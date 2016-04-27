@@ -389,7 +389,7 @@ $(document).ready(function() {
 						</div>
 						{% for i in friendships %}
 							<div class="npc-container text-center">
-								<button type="button" class="btn-link npc-button" data-toggle="tooltip" data-container="body" data-placement="top" data-html="true" title='<img src="{{url_for('static',filename='assets/npcs/'+i.0+'.png')}}"><br>{{i.0}}: {{ i.1 // 250 }}/10'>
+								<button type="button" class="btn-link npc-button" data-animation="false" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title='<img src="{{url_for('static',filename='assets/npcs/'+i.0+'.png')}}"><br>{{i.0}}: {{ i.1 // 250 }}/10'>
 									<div class="npc-profile npc-{{i.1//250}}">						
 										<img class="img-responsive" src="{{url_for('static',filename='assets/npc_icon/'+i.0+'.png')}}">
 									</div>
@@ -434,7 +434,7 @@ $(document).ready(function() {
 						{% if kills %}
 							{% for kill in kills %}
 							<div class="monster-container text-center">
-								<button type="button" class="btn-link monster-button" data-toggle="tooltip" data-container="body" data-placement="top" data-html="true" title='{{monster_dict[kill.0][0]}}: {{ kill.1 }}'>
+								<button type="button" class="btn-link monster-button" data-animation="false" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title='{{monster_dict[kill.0][0]}}: {{ kill.1 }}'>
 									<div class="monster-profile">						
 										<img class="img-responsive" src="{{url_for('static',filename='assets/monsters/'+monster_dict[kill.0][1])}}">
 									</div>
