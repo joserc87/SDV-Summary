@@ -306,21 +306,21 @@ dt, dd {
 }
 
 .npc-profile {
-	width:96px;
+	width:64px;
 	border-style: solid;
 	background-color: #ffffff;
 	border-width: 2px;
 	border-color: #000000;
-	margin: 2px;
+	margin: 1px;
 }
 
 .npc-relationship {
 	position:absolute;
 	font-family: 'VT323';
-	font-size: 96px;
+	font-size: 64px;
 	top: 0px;
 	height:100%;
-	left: -3px;
+	left: 0px;
 	width: 100%;
 	background-color: rgba(0,0,0,0.0);
 	padding: 2%;
@@ -329,65 +329,114 @@ dt, dd {
 	text-shadow: -2px 2px #000000;
 }
 
+.npc-profile img {
+	width: 100%;
+	image-rendering: pixelated;
+	image-rendering: -moz-crisp-edges;
+}
+
  .npc-button {
  	padding: 0px;
  }
 
 .npc-0 {
-	color: #ffffff;
+	background-color: #ffffff;
 }
 
 .npc-1 {
-	color: #fffcfc;
+	background-color: #fffcfc;
 }
 
 .npc-2 {
-	color: #ffe7e7;
+	background-color: #ffe7e7;
 }
 
 .npc-3 {
-	color: #ffd2d2;
+	background-color: #ffd2d2;
 }
 
 .npc-4 {
-	color: #ffbdbd;
+	background-color: #ffbdbd;
 }
 
 .npc-5 {
-	color: #ffa8a8;
+	background-color: #ffa8a8;
 }
 
 .npc-6 {
-	color: #ff9393;
+	background-color: #ff9393;
 }
 
 .npc-7 {
-	color: #ff7e7e;
+	background-color: #ff7e7e;
 }
 
 .npc-8 {
-	color: #ff6969;
+	background-color: #ff6969;
 }
 
 .npc-9 {
-	color: #ff5454;
+	background-color: #ff5454;
 }
 
 .npc-10 {
-	color: #ff3f3f;
+	background-color: #ff3f3f;
 }
 
 .npc-11 {
-	color: #ff2a2a;
+	background-color: #ff2a2a;
 }
 
 .npc-12 {
-	color: #ff1515;
+	background-color: #ff1515;
 }
 
 .npc-13 {
-	color: #ff0000;
+	background-color: #ff0000;
 }
+
+.monster-container {
+	float:left;
+	display:inline;
+	position: relative;
+}
+
+.monster-profile {
+	width:64px;
+	height:64px;
+	border-style: solid;
+	background-color: #ffffff;
+	border-width: 2px;
+	border-color: #000000;
+	margin: 2px;
+	overflow: hidden;
+	padding: 2px;
+}
+
+.monster-text {
+	position:absolute;
+	font-family: 'VT323';
+	font-size: 64px;
+	top: 0px;
+	height:100%;
+	left: 0px;
+	width: 100%;
+	background-color: rgba(0,0,0,0.0);
+	padding: 2%;
+	color: #ffffff;
+	overflow:hidden;
+	text-shadow: -2px 2px #000000;
+}
+
+.monster-profile img {
+	width: 100%;
+	image-rendering: pixelated;
+	image-rendering: -moz-crisp-edges;
+}
+
+ .monster-button {
+ 	padding: 0px;
+ }
 
 .maptextinsert a {
 	color:#FFFFFF;

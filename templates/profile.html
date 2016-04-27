@@ -389,12 +389,9 @@ $(document).ready(function() {
 						</div>
 						{% for i in friendships %}
 							<div class="npc-container text-center">
-								<button type="button" class="btn-link npc-button" data-toggle="tooltip" data-container="body" data-placement="top" data-html="true" title='{{i.0}}'>
-									<div class="npc-profile">						
-										<img class="img-responsive" src="{{url_for('static',filename='assets/npcs/'+i.0+'.png')}}">
-									</div>
-									<div class="npc-relationship  npc-{{i.1//250}}">
-										{{ i.1 // 250 }}
+								<button type="button" class="btn-link npc-button" data-toggle="tooltip" data-container="body" data-placement="top" data-html="true" title='<img src="{{url_for('static',filename='assets/npcs/'+i.0+'.png')}}"><br>{{i.0}}: {{ i.1 // 250 }}/10'>
+									<div class="npc-profile npc-{{i.1//250}}">						
+										<img class="img-responsive" src="{{url_for('static',filename='assets/npc_icon/'+i.0+'.png')}}">
 									</div>
 								</button>
 							</div>
@@ -402,16 +399,48 @@ $(document).ready(function() {
 					</div>
 				</div>
 
+				{% set monster_dict = {'Armored Bug':['Armored Bug','armored_bug.png'],
+										'Bat':['Bat','bat.png'],
+										'Big Slime':['Big Slime','big_slime.png'],
+										'Bug':['Bug','bug.png'],
+										'Duggy':['Duggy','duggy.png'],
+										'Dust Spirit':['Dust Sprite','dust_spirit.png'],
+										'Fly':['Fly','fly.png'],
+										'Frost Bat':['Frost Bat','frost_bat.png'],
+										'Frost Jelly':['Frost Jelly','frost_jelly.png'],
+										'Ghost':['Ghost','ghost.png'],
+										'Green Slime':['Green Slime','green_slime.png'],
+										'Grub':['Grub','grub.png'],
+										'Lava Bat':['Lava Bat','lava_bat.png'],
+										'Lava Crab':['Lava Crab','lava_crab.png'],
+										'Metal Head':['Metal Head','metal_head.png'],
+										'Mummy':['Mummy','mummy.png'],
+										'Purple Slime':['Purple Slime','purple_slime.png'],
+										'Red Slime':['Sludge','red_slime.png'],
+										'Rock Crab':['Rock Crab','rock_crab.png'],
+										'Serpent':['Serpent','serpent.png'],
+										'Shadow Brute':['Shadow Brute','shadow_brute.png'],
+										'Skeleton':['Skeleton','skeleton.png'],
+										'Squid Kid':['Squid Kid','squid_kid.png'],
+										'Stone Golem':['Stone Golem','stone_golem.png'],
+										'Transparent Slime':['Transparent Slime','transparent_slime.png'],
+										'Shadow Shaman':['Void Spirit','void_spirit.png'],
+										'Sludge':['Yellow Slime','yellow_slime.png']} %}
+
 				<div class="col-md-4 panel">
 					<div class="interiorpanel text-center">
 						<h3>Monster Kills</h3>
 						<div id="stats">
 						{% if kills %}
-							<ul class="list-unstyled">
 							{% for kill in kills %}
-							<li>{{ kill.0 }}: {{ kill.1 }}</li>
+							<div class="monster-container text-center">
+								<button type="button" class="btn-link monster-button" data-toggle="tooltip" data-container="body" data-placement="top" data-html="true" title='{{monster_dict[kill.0][0]}}: {{ kill.1 }}'>
+									<div class="monster-profile">						
+										<img class="img-responsive" src="{{url_for('static',filename='assets/monsters/'+monster_dict[kill.0][1])}}">
+									</div>
+								</button>
+							</div>
 							{% endfor %}
-							</ul>
 						{% else %}
 							<p> {{ data.name }} has not killed any monsters yet. </p>
 						{% endif %}
