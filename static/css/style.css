@@ -200,12 +200,11 @@ dt, dd {
 }
 
 .farmImg {
-	image-rendering: pixelated;
 	border: solid 2px #000000;
 }
 
 .farmimgpreview {
-	/*image-rendering: pixelated;*/
+	image-rendering: pixelated;
 	border-style: solid;
 	border-width: 20px 21px 21px 20px;
 	-moz-border-image: url(frame.png) 28 32 28 32 stretch;
