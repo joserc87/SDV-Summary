@@ -525,12 +525,14 @@ def display_data(url):
 		kills = sorted([[kill[27:].replace('_',' '),datadict[kill]] for kill in sorted(database_structure_dict.keys()) if kill.startswith('statsSpecificMonstersKilled') and datadict[kill]!=None],key=lambda x: x[1])[::-1]
 		cur.execute('SELECT url, date FROM playerinfo WHERE series_id='+app.sqlesc,(datadict['series_id'],))
 		other_saves = cur.fetchall()
-		find_claimables()
 		if datadict['imgur_json']!=None:
 			datadict['imgur_json'] = json.loads(datadict['imgur_json'])
 		# passworded = True if datadict['del_password'] != None else False
 		# passworded=passworded, removed from next line
-		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=find_claimables(), data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
+		claimables = find_claimables()
+		if logged_in() == False and len(claimables) > 1 and request.cookies.get('no_signup')!='true':
+			flash({'message':"<p>It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!</p>".format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
+		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
 
 def find_claimables():
 	if not hasattr(g,'claimables'):
@@ -673,17 +675,16 @@ def operate_on_url(url,instruction):
 
 def delete_playerinfo_entry(url,md5,del_token):
 	# takes url, md5, and del_token (from session); if verified, deletes
-	if not hasattr(g,'db'):
-		g.db = connect_db()
+	g.db = connect_db()
 	cur = g.db.cursor()
 	cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url,download_url,owner_id,series_id FROM playerinfo WHERE url='+app.sqlesc,(url,))
 	result = cur.fetchone()
 	if result[1] == md5 and result[2] == del_token and str(result[8]) == str(get_logged_in_user()):
 		if remove_series_link(result[0],result[9]) == False:
-			return 'Problem removing series link!'
+			pass #return 'Problem removing series link!'
 		cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(result[0],))
 		for filename in result[4:8]:
-			if filename != None and not os.path.samefile('static/placeholders',os.path.split(filename)):
+			if filename != None and not os.path.samefile('static/placeholders',os.path.split(filename)[0]):
 				os.remove(filename)
 		g.db.commit()
 		session.pop(url,None)

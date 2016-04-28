@@ -34,6 +34,28 @@ $(function () {
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
+function flashed_close(id) {
+	$(document.getElementById(id)).slideUp(400);
+}
+$(document).ready(function() {
+	$(".clickable").click(function() {
+		var splitstr = $(this).attr('id').split('-')
+		if ( splitstr[1] == 'scafc' ) {
+			var now = new Date();
+			var time = now.getTime();
+			var expireTime = time + 30000*36000;
+			now.setTime(expireTime);
+			document.cookie = splitstr[2]+'=true;expires='+now.toGMTString()+';path=/';
+			flashed_close(splitstr[0]+'-container');
+
+		}
+		else if ( splitstr[1] == 'fc' ) {
+			flashed_close(splitstr[0]+'-container');
+		}
+		else {
+		};
+	});
+})
 </script>
 {% if others %}
 	{% for other in others %}
@@ -59,77 +81,98 @@ $(function () {
 
 {% block title %}{{data.farmName}} Farm - {{super()}}{% endblock %}
 {% block bodycontent %}
-			<div class="col-md-12 col-sm-12 panel">
-				<div class="interiorpanel">
-					<div class="col-sm-2 hidden-xs text-center">
-						<a href="/"><img src="{{url_for('static', filename='logo.png')}}" class="logo"></a>
-					</div>
-					<div class="col-sm-10 col-xs-12">
-						<div class="row">
-							<div class="col-md-12">
-								<h1 class="text-center" style="margin-bottom:0px;">{{ data.farmName }} Farm</h1>
-							</div>
+			<div class="row center-block">
+				<div class="col-md-12 col-sm-12 panel">
+					<div class="interiorpanel">
+						<div class="col-sm-2 hidden-xs text-center">
+							<a href="/"><img src="{{url_for('static', filename='logo.png')}}" class="logo"></a>
 						</div>
-						{% if others %}
-							<div class="row center-block">
+						<div class="col-sm-10 col-xs-12">
+							<div class="row">
 								<div class="col-md-12">
-									<ul class="list-inline text-center">
-									{% for other in others %}
-										{% if other.0 == data.url %}
-										<li><b>{{ other.1 }}</b></li>
-										{% else %}
-										<li><a href="/{{ other.0 }}" >{{ other.1 }}</a></li>
+									<h1 class="text-center" style="margin-bottom:0px;">{{ data.farmName }} Farm</h1>
+								</div>
+							</div>
+							{% if others %}
+								<div class="row center-block">
+									<div class="col-md-12">
+										<ul class="list-inline text-center">
+										{% for other in others %}
+											{% if other.0 == data.url %}
+											<li><b>{{ other.1 }}</b></li>
+											{% else %}
+											<li><a href="/{{ other.0 }}" >{{ other.1 }}</a></li>
+											{% endif %}
+										{% endfor %}
+										</ul>
+									</div>
+								</div>
+							{% endif %}
+							{% if claimable %}
+								<div class="row center-block">
+									<div class="col-md-12">
+										<ul class="list-inline text-center">
+										<li>Claim:</li>
+										<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will claim <b>only this</b> upload.<br><form action="{{data.url}}/claim" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim&nbsp;it!</button></form>'>this page</button>?</li>
+										{% if claimables|length > 1 %}
+											<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will claim <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/claimall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim&nbsp;all!</button></form>'>all claimable</button>?</li>
 										{% endif %}
-									{% endfor %}
-									</ul>
+										</ul>
+									</div>
 								</div>
-							</div>
-						{% endif %}
-						{% if claimable %}
-							<div class="row center-block">
-								<div class="col-md-12">
-									<ul class="list-inline text-center">
-									<li>Claim:</li>
-									<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will claim <b>only this</b> upload.<br><form action="{{data.url}}/claim" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim&nbsp;it!</button></form>'>this page</button>?</li>
-									<li>
-									{% if claimables|length > 1 %}
-										<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will claim <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/claimall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim&nbsp;all!</button></form>'>all claimable</button>?</li>
-									{% endif %}
-									</ul>
+							{% elif deletable %}
+								<div class="row center-block">
+									<div class="col-md-12">
+										<ul class="list-inline text-center">
+										<li>Delete:</li>
+										<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>only this</b> upload.<br><form action="{{data.url}}/del" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;it!</button></form>'>this page</button>?</li>
+										<li>
+										{% if others|length > 1 %}
+											<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/delall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;all!</button></form>'>all for this farm</button>?</li>
+										{% endif %}
+										</ul>
+									</div>
 								</div>
-							</div>
-						{% elif deletable %}
-							<div class="row center-block">
-								<div class="col-md-12">
-									<ul class="list-inline text-center">
-									<li>Delete:</li>
-									<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>only this</b> upload.<br><form action="{{data.url}}/del" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;it!</button></form>'>this page</button>?</li>
-									<li>
-									{% if others|length > 1 %}
-										<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/delall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;all!</button></form>'>all for this farm</button>?</li>
-									{% endif %}
-									</ul>
+							{% endif %}
+							{% if error or data.failed_processing %}
+								<div class="row center-block">
+									<div class="col-md-12">
+										{% if error %}
+										<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+										{% endif %}
+										{% if data.failed_processing %}
+										<p class="text-danger text-center"><strong>Warning:</strong> <button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This farm failed image processing, which means the savegame had unexpected contents. It might be modded, or malicious. Be aware if downloading the savegame.'>This farm failed image processing!</button></p>
+										{%endif%}
+									</div>
 								</div>
+							{% endif %}
+							<div class="col-xs-12 hidden-sm hidden-md hidden-lg text-center">
+								<p><a href="/">Go back Home</a></p>
 							</div>
-						{% endif %}
-						{% if error or data.failed_processing %}
-							<div class="row center-block">
-								<div class="col-md-12">
-									{% if error %}
-									<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
-									{% endif %}
-									{% if data.failed_processing %}
-									<p class="text-danger text-center"><strong>Warning:</strong> <button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This farm failed image processing, which means the savegame had unexpected contents. It might be modded, or malicious. Be aware if downloading the savegame.'>This farm failed image processing!</button></p>
-									{%endif%}
-								</div>
-							</div>
-						{% endif %}
-						<div class="col-xs-12 hidden-sm hidden-md hidden-lg text-center">
-							<p><a href="/">Go back Home</a></p>
 						</div>
 					</div>
 				</div>
 			</div>
+			{% with messages = get_flashed_messages() %}
+				{% if messages %}
+					{% for message in messages %}
+						<div class="row center-block" id="{{loop.index0}}-container">
+							<div class="col-md-12 panel text-center">
+								<div class="bulletinpanel">
+									<div class="bulletinclose">
+										<span id="{{loop.index0}}-{%if 'cookie_controlled' in message.keys()%}scafc-{{message.cookie_controlled}}{%else%}fc{%endif%}" class="clickable"><img class="img-responsive" src="{{url_for('static',filename='css/bulletin/cross.png')}}"></span>
+									</div>
+									<div class="row center-block">
+										<div class="col-md-12">
+											{{message.message|safe}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
 			<div class="row center-block">				
 				<div class="col-md-8 col-sm-12 panel text-center">
 					<div class="interiorpanel tabbable">
@@ -156,12 +199,12 @@ $(function () {
 										<dt>Health</dt><dd>{{ data.maxHealth }}</dd>
 										<dt>Stamina</dt><dd>{{ data.maxStamina }}</dd>
 										<dt>Steps Taken</dt><dd>{{ data.statsStepsTaken }}</dd>
-										<dt><b>Max Depth</b><dd></dd></dt>
 										{% if data.deepestMineLevel > 120 %}
-											<dt>Mines</dt><dd>120 Levels</dd>
-											<dt>Skull Cavern</dt><dd>{{ data.deepestMineLevel - 120}} Level{% if (data.deepestMineLevel - 120) > 1 %}s{% endif %}</dd>
+											<dt><b>Max Depth:</b><dd></dd></dt>
+											<dt>The Mines</dt><dd>level 120</dd>
+											<dt>Skull Cavern</dt><dd>level {{ data.deepestMineLevel - 120}}</dd>
 										{% else %}
-											<dt>Max Depth in The Mines</dt><dd>{{ data.deepestMineLevel }} Level{% if data.deepestMineLevel > 1 %}s{% endif %}</dd>
+											<dt>Max Mine Depth</dt><dd>level {{ data.deepestMineLevel }}</dd>
 										{% endif %}
 		 								<dt>Time Played</dt><dd>{{ data.millisecondsPlayed }} hours</dd>
 		 							</dl>
@@ -345,23 +388,59 @@ $(function () {
 							<h3>Friendships</h3>
 						</div>
 						{% for i in friendships %}
-						<div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 text-center">							
-							<p style="margin-left: 1em;">{{ i.0 }}: {{ i.1 // 250 }}/10</p>
-						</div>
+							<div class="npc-container text-center">
+								<button type="button" class="btn-link npc-button" data-animation="false" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title='<img src="{{url_for('static',filename='assets/npcs/'+i.0+'.png')}}"><br>{{i.0}}: {{ i.1 // 250 }}/10'>
+									<div class="npc-profile npc-{{i.1//250}}">						
+										<img class="img-responsive" src="{{url_for('static',filename='assets/npc_icon/'+i.0+'.png')}}">
+									</div>
+								</button>
+							</div>
 						{% endfor %}
 					</div>
 				</div>
+
+				{% set monster_dict = {'Armored Bug':['Armored Bug','armored_bug.png'],
+										'Bat':['Bat','bat.png'],
+										'Big Slime':['Big Slime','big_slime.png'],
+										'Bug':['Bug','bug.png'],
+										'Duggy':['Duggy','duggy.png'],
+										'Dust Spirit':['Dust Sprite','dust_spirit.png'],
+										'Fly':['Fly','fly.png'],
+										'Frost Bat':['Frost Bat','frost_bat.png'],
+										'Frost Jelly':['Frost Jelly','frost_jelly.png'],
+										'Ghost':['Ghost','ghost.png'],
+										'Green Slime':['Green Slime','green_slime.png'],
+										'Grub':['Grub','grub.png'],
+										'Lava Bat':['Lava Bat','lava_bat.png'],
+										'Lava Crab':['Lava Crab','lava_crab.png'],
+										'Metal Head':['Metal Head','metal_head.png'],
+										'Mummy':['Mummy','mummy.png'],
+										'Purple Slime':['Purple Slime','purple_slime.png'],
+										'Red Slime':['Sludge','red_slime.png'],
+										'Rock Crab':['Rock Crab','rock_crab.png'],
+										'Serpent':['Serpent','serpent.png'],
+										'Shadow Brute':['Shadow Brute','shadow_brute.png'],
+										'Skeleton':['Skeleton','skeleton.png'],
+										'Squid Kid':['Squid Kid','squid_kid.png'],
+										'Stone Golem':['Stone Golem','stone_golem.png'],
+										'Transparent Slime':['Transparent Slime','transparent_slime.png'],
+										'Shadow Shaman':['Void Spirit','void_spirit.png'],
+										'Sludge':['Yellow Slime','yellow_slime.png']} %}
 
 				<div class="col-md-4 panel">
 					<div class="interiorpanel text-center">
 						<h3>Monster Kills</h3>
 						<div id="stats">
 						{% if kills %}
-							<ul class="list-unstyled">
 							{% for kill in kills %}
-							<li>{{ kill.0 }}: {{ kill.1 }}</li>
+							<div class="monster-container text-center">
+								<button type="button" class="btn-link monster-button" data-animation="false" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title='{{monster_dict[kill.0][0]}}: {{ kill.1 }}'>
+									<div class="monster-profile">						
+										<img class="img-responsive" src="{{url_for('static',filename='assets/monsters/'+monster_dict[kill.0][1])}}">
+									</div>
+								</button>
+							</div>
 							{% endfor %}
-							</ul>
 						{% else %}
 							<p> {{ data.name }} has not killed any monsters yet. </p>
 						{% endif %}
