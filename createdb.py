@@ -1,5 +1,4 @@
 # creates db for SDV-Summary
-import config
 from flask import Flask
 import os
 import sys
