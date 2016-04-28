@@ -231,7 +231,6 @@ def file_uploaded(inputfile):
 	except defusedxml.common.EntitiesForbidden:
 		error = "I don't think that's very funny"
 		return {'type':'render','target':'index.html','parameters':{"error":error}}
-		return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
 	except IOError:
 		error = "Savegame failed sanity check (if you think this is in error please let us know)"
 		g.db = connect_db()
@@ -240,15 +239,12 @@ def file_uploaded(inputfile):
 		g.db.commit()
 		g.db.close()
 		return {'type':'render','target':'index.html','parameters':{"error":error}}
-		return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
 	except AttributeError as e:
 		error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
 		return {'type':'render','target':'index.html','parameters':{"error":error}}
-		return render_template("index.html", error=error,blogposts=get_blogposts(5), recents=get_recents(), processtime=round(time.time()-start_time,5))
 	except ParseError as e:
 		error = "Not well-formed xml"
 		return {'type':'render','target':'index.html','parameters':{"error":error}}
-		return render_template("index.html", error=error,blogposts=get_blogposts(5),recents=get_recents(), processtime=round(time.time()-start_time,5))
 	dupe = is_duplicate(md5_info,player_info)
 	if dupe != False:
 		session[dupe[0]] = md5_info
@@ -269,13 +265,16 @@ def file_uploaded(inputfile):
 			cur.execute('UPDATE playerinfo SET savefileLocation='+app.sqlesc+', series_id='+app.sqlesc+', owner_id='+app.sqlesc+' WHERE url='+app.sqlesc+';',(filename,series_id,owner_id,outcome))
 			g.db.commit()
 			g.db.close()
+		else:
+			if error == None:
+				error = "Error occurred inserting information into the database!"
+			return {'type':'render','target':'index.html','parameters':{"error":error}}
 		process_queue()
 		memfile.close()
 	if outcome != False:
 		session[outcome] = md5_info
 		session[outcome+'del_token'] = del_token
 		return {'type':'redirect','target':'display_data','parameters':{"url":outcome}}
-		return redirect(url_for('display_data',url=outcome))
 
 @app.route('/',methods=['GET','POST'])
 def home():
@@ -285,15 +284,15 @@ def home():
 		inputfile = request.files['file']
 		if inputfile:
 			result = file_uploaded(inputfile)
+			print result
 			if result['type'] == 'redirect':
 				return redirect(url_for(result['target'],**result['parameters']))
-			elif 'render' in result:
+			elif result['type'] == 'render':
 				params = {'error':error,'blogposts':get_blogposts(5),'recents':get_recents(),'processtime':round(time.time()-start_time,5)}
 				if 'parameters' in result:
 					for key in result['parameters'].keys():
 						params[key] = result['parameters'][key]
 				return render_template(result['target'], **params)
-
 	return render_template("index.html", recents=get_recents(), error=error,blogposts=get_blogposts(5), processtime=round(time.time()-start_time,5))
 
 @app.route('/_uploader',methods=['GET','POST'])
@@ -477,7 +476,8 @@ def insert_info(player_info,farm_info,md5_info):
 		g.db.commit()
 		return url, del_token, rowid, None
 	except (sqlite3.OperationalError, psycopg2.ProgrammingError) as e:
-		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'], time.time(),str(e)+' '+str([columns,values])))
+		g.db.rollback()
+		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'], time.time(),str(e)+' '+json.dumps([columns,values])))
 		g.db.commit()
 		return False, del_token, False, "Save file incompatible with current database: error is "+str(e)
 
