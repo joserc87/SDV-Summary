@@ -379,7 +379,11 @@ def main():
         im = generateFarm(p, getFarmInfo('./saves/'+f), assets)
         end_time_image = time.time()
         start_time_save = end_time_image
-        im.save('./farmRenders/' + f + '.png', compress_level=9)
+        # im.save('./farmRenders/' + f + '.png', compress_level=9)
+        for scale in range(20,105,5):
+            sub_im = im.resize((int(im.width*scale/100.0),int(im.height*scale/100.0)),Image.LANCZOS)
+            sub_im.save('./farmRenders/'+f+' '+str(scale)+'.png',compress_level=9)
+
         end_time_save = time.time()
         print('\timage generation took', end_time_image-start_time_image)
         print('\tsaving took', end_time_save-start_time_save)
