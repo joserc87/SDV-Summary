@@ -1,4 +1,3 @@
-import config
 import sqlite3
 import psycopg2
 import json
