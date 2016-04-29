@@ -74,6 +74,7 @@ def jsonifyRecents():
 def login():
 	start_time=time.time()
 	error=None
+	session.permanent = True
 	if 'logged_in_user' in session:
 		return redirect(url_for('home'))
 	if request.method == 'POST':
@@ -272,6 +273,7 @@ def file_uploaded(inputfile):
 		process_queue()
 		memfile.close()
 	if outcome != False:
+		session.permanent = True
 		session[outcome] = md5_info
 		session[outcome+'del_token'] = del_token
 		return {'type':'redirect','target':'display_data','parameters':{"url":outcome}}
@@ -284,7 +286,6 @@ def home():
 		inputfile = request.files['file']
 		if inputfile:
 			result = file_uploaded(inputfile)
-			print result
 			if result['type'] == 'redirect':
 				return redirect(url_for(result['target'],**result['parameters']))
 			elif result['type'] == 'render':
