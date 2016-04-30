@@ -382,15 +382,15 @@ def get_recents(n=6,**kwargs):
 	cur = g.db.cursor()
 	recents = {}
 	where = 'WHERE failed_processing IS NOT TRUE '
-	if 'include_failed' in kwargs.keys():
+	if 'include_failed' in kwargs:
 		if kwargs['include_failed']==True:
 			where = ''
 	query = 'SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo '+where+'ORDER BY id DESC LIMIT '+app.sqlesc
 	offset = 0
-	if 'offset' in kwargs.keys():
+	if 'offset' in kwargs:
 		offset = kwargs['offset']
 		query += " OFFSET "+app.sqlesc
-	if 'offset' in kwargs.keys():
+	if 'offset' in kwargs:
 		cur.execute(query,(n,offset))
 	else:
 		cur.execute(query,(n,))
@@ -815,7 +815,7 @@ def get_blogposts(n=False,**kwargs):
 	if n!=False:
 		query += " LIMIT "+app.sqlesc
 	offset = 0
-	if 'offset' in kwargs.keys():
+	if 'offset' in kwargs:
 		offset = kwargs['offset']
 	query += " OFFSET "+app.sqlesc
 	if n==False:
@@ -950,6 +950,43 @@ def get_imgur_auth_code():
 		error = "Cannot connect to imgur if not logged in!"
 		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 
+@app.route('/_vote',methods=['POST'])
+def submit_vote():
+	if logged_in():
+		if request.method == 'POST':
+			if 'vote' in request.form:
+				return json.dumps(handle_vote(get_logged_in_user(),request.form))
+	else:
+		return 'not logged in'
+
+def handle_vote(logged_in_user,vote_info):
+	# 1: check whether user has voted previously
+	g.db = connect_db()
+	cur = g.db.cursor()
+	vote = json.loads(request.form['vote'])
+	cur.execute('SELECT votes FROM users WHERE id='+app.sqlesc,(logged_in_user,))
+	votes = cur.fetchone()[0]
+	votes = json.loads(votes) if votes != None else {}
+	# 2: if voted previously, modify user vote info to new vote, else add vote info to user vote
+	previous = votes[request.form['url']] if request.form['url'] in votes else None
+	if vote == previous:
+		return True
+	else:
+		# subtract previous vote
+		if previous != None:
+			prev_col = 'positive_votes' if previous == True else 'negative_votes'
+			cur.execute('UPDATE playerinfo SET '+prev_col+'='+prev_col+'-1 WHERE url='+app.sqlesc,(request.form['url'],))
+			votes[request.form['url']] = None
+		# 3: add vote to correct column in playerinfo
+		if vote != None:
+			vote_col = 'positive_votes' if vote == True else 'negative_votes'
+			cur.execute('UPDATE playerinfo SET '+vote_col+'='+vote_col+'+1 WHERE url='+app.sqlesc,(request.form['url'],))
+			votes[request.form['url']] = vote
+		votes = json.dumps(votes)
+		cur.execute('UPDATE users SET votes='+app.sqlesc+' WHERE id='+app.sqlesc,(votes,logged_in_user))
+		g.db.commit()
+		return True		
+		# 4: commit, return
 
 if __name__ == "__main__":
 	app.run()

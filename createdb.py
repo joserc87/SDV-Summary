@@ -193,7 +193,9 @@ database_structure_dict = {'md5':'TEXT',
 'map_url':'TEXT',
 'currentSeason':'TEXT',
 'failed_processing':'BOOLEAN',
-'imgur_json':'TEXT'}
+'imgur_json':'TEXT',
+'positive_votes':'BIGINT DEFAULT 0',
+'negative_votes':'BIGINT DEFAULT 0'}
 
 if app.config['USE_SQLITE']==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'
@@ -212,7 +214,8 @@ users_structure_dict = {'id':idcode,
 'auth_key':'TEXT',
 'login_time':'BIGINT',
 'api_key':'TEXT',
-'api_secret':'TEXT'}
+'api_secret':'TEXT',
+'votes':'TEXT'}
 
 database_fields = ''
 for key in sorted(database_structure_dict.keys()):

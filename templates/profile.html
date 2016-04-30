@@ -37,6 +37,19 @@ $(function () {
 function flashed_close(id) {
 	$(document.getElementById(id)).slideUp(400);
 }
+function post_vote(type,url) {
+	if (type=='ng') {
+		var vote = false
+	}
+	else if (type=='ps') {
+		var vote = true
+	}
+	$.post('/_vote',{'vote':vote, url: url},function(result) {
+		if ( result != 'true') {
+			window.alert(result);
+		}
+	});
+}
 $(document).ready(function() {
 	$(".clickable").click(function() {
 		var splitstr = $(this).attr('id').split('-')
@@ -47,10 +60,12 @@ $(document).ready(function() {
 			now.setTime(expireTime);
 			document.cookie = splitstr[2]+'=true;expires='+now.toGMTString()+';path=/';
 			flashed_close(splitstr[0]+'-container');
-
 		}
 		else if ( splitstr[1] == 'fc' ) {
 			flashed_close(splitstr[0]+'-container');
+		}
+		else if ( splitstr[0] == 'vote' ) {
+			post_vote(splitstr[1],'{{data.url}}');
 		}
 		else {
 		};
@@ -148,6 +163,16 @@ $(document).ready(function() {
 							{% endif %}
 							<div class="col-xs-12 hidden-sm hidden-md hidden-lg text-center">
 								<p><a href="/">Go back Home</a></p>
+							</div>
+							<div class="row center-block">
+								<div class="col-md-12 text-center">
+									<span class="clickable" id="vote-ps">
+										<sub>upvote</sub>
+									</span>	
+									<span class="clickable" id="vote-ng">
+										<sub>downvote</sub>
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -475,8 +500,6 @@ $(document).ready(function() {
 								{%endif%}
 							</div>
 						</div>
-
-						
 					</div>
 				</div>
 			</div>
