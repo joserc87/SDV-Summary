@@ -11,7 +11,7 @@ def tintImage(img, tint):
 
 
 # Crops sprite from Spritesheet
-def cropImg(img, location, defaultSize=(16, 16), objectSize=(16, 16), resize=False):
+def cropImg(img, location, defaultSize=(16, 16), objectSize=(16, 16), resize=False, displacement=(0, 0)):
     row = int(img.width / (defaultSize[0]))
     x = (location % row) * defaultSize[0]
     y = (location // row) * defaultSize[1]
@@ -19,7 +19,7 @@ def cropImg(img, location, defaultSize=(16, 16), objectSize=(16, 16), resize=Fal
 
     if resize:
         base = Image.new("RGBA", (16, 32), (0, 0, 0, 0))
-        base.paste(image, (0, 0), image)
+        base.paste(image, displacement, image)
         image = base
     return image
 

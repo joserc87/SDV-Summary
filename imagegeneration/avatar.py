@@ -45,15 +45,15 @@ def generateAvatar(player, assets=None):
     leg_colour = (int(player['pantsColor'][0]), int(player['pantsColor'][1]), int(player['pantsColor'][2]))
     legs = tintImage(assets['legs'][gender], leg_colour)
 
-    hair = cropImg(assets['hair'], int(player['hair']), defaultSize=(16, 32), objectSize=(16,32), resize=True)
+    hair = cropImg(assets['hair'], int(player['hair']), defaultSize=(16, 32), objectSize=(16, 32), resize=True, displacement=(0, 0))
     hair_color = tuple(map(int, player['hairstyleColor']))
     hair = tintImage(hair, hair_color)
 
-    acc = cropImg(assets['accessories'], int(player['accessory']), resize=True)
+    acc = cropImg(assets['accessories'], int(player['accessory']), resize=True, displacement=(0, 1))
     if int(player['accessory']) <= 5:
         acc = tintImage(acc, hair_color)
 
-    shirt = cropImg(assets['shirts'], int(player['shirt']), defaultSize=(8, 8), objectSize=(8, 8), resize=True)
+    shirt = cropImg(assets['shirts'], int(player['shirt']), defaultSize=(8, 8), objectSize=(8, 8), resize=True, displacement=(4, 14))
 
     skin_x = int(player['skin']) % 24 * 1
     skin_y = int(player['skin']) // 24 * 1
@@ -84,10 +84,10 @@ def generateAvatar(player, assets=None):
         body[10, 12] = white
 
     base = Image.alpha_composite(base, hair)
-    base = Image.alpha_composite(base, acc)
     base = Image.alpha_composite(base, arms)
     base = Image.alpha_composite(base, legs)
     base = Image.alpha_composite(base, shirt)
+    base = Image.alpha_composite(base, acc)
     base = Image.alpha_composite(base, assets['boots'][gender])
     return base
 

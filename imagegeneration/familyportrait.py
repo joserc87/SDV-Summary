@@ -2,7 +2,6 @@ from PIL import Image
 
 
 def generateFamilyPortrait(player_img, information, scale=4):
-    player_img.show()
     portrait = Image.new('RGBA', (48, 48))
     if information['partner']:
         partner_img = Image.open('./assets/partners/{0}.png'.format(information['partner']))
