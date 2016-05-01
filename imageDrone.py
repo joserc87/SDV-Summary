@@ -9,6 +9,7 @@ from farmInfo import regenerateFarmInfo
 from imagegeneration.avatar import generateAvatar
 from imagegeneration.familyportrait import generateFamilyPortrait
 from imagegeneration.farm import generateFarm, generateMinimap
+from PIL import Image
 
 app = Flask(__name__)
 app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
@@ -66,7 +67,11 @@ def process_queue():
 				generateMinimap(farm_data).save(farm_path, compress_level=9)
 				
 				map_path = os.path.join(base_path, 'map.png')
-				generateFarm(data['currentSeason'], farm_data).save(map_path, compress_level=9)
+				thumb_path = os.path.join(base_path, 'thumb.png')
+				farm = generateFarm(data['currentSeason'], farm_data)
+				th = farm.resize((int(farm.width/4), int(farm.height/4)), Image.ANTIALIAS)
+				th.save(thumb_path)
+				farm.save(map_path, compress_level=9)
 
 				cur.execute('UPDATE playerinfo SET farm_url='+sqlesc+', avatar_url='+sqlesc+', portrait_url='+sqlesc+', map_url='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,avatar_path,portrait_path,map_path,data['id']))
 				db.commit()

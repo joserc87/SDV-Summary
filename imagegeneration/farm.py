@@ -306,7 +306,7 @@ def generateFarm(season, farm, assets=None):
                 s = {'spring': 0, 'summer': 4, 'fall': 8}
                 for i in range(item.growth):
                     grass_img = cropImg(assets['grass'], s[season] + random.randint(0, 2),
-                                        (4, 5), (4, 5))
+                                        (16, 20), (16, 20))
                     offsety = 8 + (ymask & i)*4 - 16 + random.randint(-2, 2)
                     offsetx = 12 + (xmask & i)*8 - 16 + random.randint(-2, 2)
                     farm_base.paste(grass_img, (item.x*16 + offsetx, item.y*16 + offsety), grass_img)
