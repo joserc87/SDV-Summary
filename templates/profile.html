@@ -37,19 +37,58 @@ $(function () {
 function flashed_close(id) {
 	$(document.getElementById(id)).slideUp(400);
 }
+var votestate = {% if vote == True%}true{%elif vote == False %}false{%else%}null{%endif%};
+var upvotecontents = 'upvote';
+var downvotecontents = 'downvote';
+var unupvotecontents = 'remove upvote';
+var undownvotecontents = 'remove downvote';
 function post_vote(type,url) {
 	if (type=='ng') {
-		var vote = false
+		if (votestate == false) {
+			var vote = null
+		}
+		else {
+			var vote = false
+		}
 	}
 	else if (type=='ps') {
-		var vote = true
+		if (votestate == true) {
+			var vote = null
+		}
+		else {
+			var vote = true
+		}
 	}
 	$.post('/_vote',{'vote':vote, url: url},function(result) {
 		if ( result != 'true') {
 			window.alert(result);
 		}
+		else {
+			votestate = vote;
+			toggle_vote();
+		}
 	});
 }
+
+function toggle_vote() {
+	if (votestate == null) {
+			$("#vote-ps").html(upvotecontents);
+			$("#vote-ng").html(downvotecontents);
+		}
+		else if (votestate == true) {
+			$("#vote-ps").html(unupvotecontents);
+			$("#vote-ng").html(downvotecontents);
+		}
+		else if (votestate == false) {
+			$("#vote-ps").html(upvotecontents);
+			$("#vote-ng").html(undownvotecontents);
+	}
+}
+
+$(document).ready(function() {
+	toggle_vote()
+})
+
 $(document).ready(function() {
 	$(".clickable").click(function() {
 		var splitstr = $(this).attr('id').split('-')
@@ -164,16 +203,16 @@ $(document).ready(function() {
 							<div class="col-xs-12 hidden-sm hidden-md hidden-lg text-center">
 								<p><a href="/">Go back Home</a></p>
 							</div>
+							{% if logged_in() %}
 							<div class="row center-block">
 								<div class="col-md-12 text-center">
-									<span class="clickable" id="vote-ps">
-										<sub>upvote</sub>
-									</span>	
-									<span class="clickable" id="vote-ng">
-										<sub>downvote</sub>
-									</span>
+									<ul class="list-inline">
+									<li><span class="clickable" id="vote-ps"></span></li>
+									<li><span class="clickable" id="vote-ng"></span></li>
+									</ul>
 								</div>
 							</div>
+							{% endif %}
 						</div>
 					</div>
 				</div>

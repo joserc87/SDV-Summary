@@ -531,9 +531,10 @@ def display_data(url):
 		# passworded = True if datadict['del_password'] != None else False
 		# passworded=passworded, removed from next line
 		claimables = find_claimables()
+		vote = get_votes(url)
 		if logged_in() == False and len(claimables) > 1 and request.cookies.get('no_signup')!='true':
 			flash({'message':"<p>It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!</p>".format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
-		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
+		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote,data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
 
 def find_claimables():
 	if not hasattr(g,'claimables'):
@@ -961,18 +962,16 @@ def submit_vote():
 
 def handle_vote(logged_in_user,vote_info):
 	# 1: check whether user has voted previously
-	g.db = connect_db()
-	cur = g.db.cursor()
-	vote = json.loads(request.form['vote'])
-	cur.execute('SELECT votes FROM users WHERE id='+app.sqlesc,(logged_in_user,))
-	votes = cur.fetchone()[0]
-	votes = json.loads(votes) if votes != None else {}
+	votes = has_votes(logged_in_user)
+	vote = json.loads(request.form['vote']) if request.form['vote'] != '' else None
 	# 2: if voted previously, modify user vote info to new vote, else add vote info to user vote
 	previous = votes[request.form['url']] if request.form['url'] in votes else None
 	if vote == previous:
 		return True
 	else:
 		# subtract previous vote
+		g.db = connect_db()
+		cur = g.db.cursor()
 		if previous != None:
 			prev_col = 'positive_votes' if previous == True else 'negative_votes'
 			cur.execute('UPDATE playerinfo SET '+prev_col+'='+prev_col+'-1 WHERE url='+app.sqlesc,(request.form['url'],))
@@ -987,6 +986,21 @@ def handle_vote(logged_in_user,vote_info):
 		g.db.commit()
 		return True		
 		# 4: commit, return
+
+def has_votes(logged_in_user):
+	g.db = connect_db()
+	cur = g.db.cursor()
+	cur.execute('SELECT votes FROM users WHERE id='+app.sqlesc,(logged_in_user,))
+	votes = cur.fetchone()[0]
+	votes = json.loads(votes) if votes != None else {}
+	return votes
+
+def get_votes(url):
+	if logged_in():
+		result = has_votes(get_logged_in_user())
+		return result[url] if url in result else None
+	else:
+		return None
 
 if __name__ == "__main__":
 	app.run()
