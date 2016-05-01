@@ -28,6 +28,7 @@ from flask_recaptcha import ReCaptcha
 import uuid
 from google_measurement_protocol import Event, report
 import imgur
+import shutil
 
 if sys.version_info >= (3,0):
 	unicode = str
@@ -223,12 +224,13 @@ def get_logged_in_user():
 	else:
 		return None
 
+
 def file_uploaded(inputfile):
 	memfile = io.BytesIO()
 	inputfile.save(memfile)
 	md5_info = md5(memfile)
 	try:
-		player_info = playerInfo(memfile.getvalue(),True)
+		player_info = playerInfo(memfile.getvalue(), True)
 	except defusedxml.common.EntitiesForbidden:
 		error = "I don't think that's very funny"
 		return {'type':'render','target':'index.html','parameters':{"error":error}}
@@ -239,10 +241,11 @@ def file_uploaded(inputfile):
 		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(secure_filename(inputfile.filename))))
 		g.db.commit()
 		g.db.close()
-		return {'type':'render','target':'index.html','parameters':{"error":error}}
+		return {'type': 'render', 'target': 'index.html', 'parameters': {"error": error}}
 	except AttributeError as e:
 		error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
-		return {'type':'render','target':'index.html','parameters':{"error":error}}
+		print(e)
+		return {'type': 'render', 'target': 'index.html', 'parameters': {"error": error}}
 	except ParseError as e:
 		error = "Not well-formed xml"
 		return {'type':'render','target':'index.html','parameters':{"error":error}}
@@ -674,22 +677,20 @@ def operate_on_url(url,instruction):
 	else:
 		return redirect(url_for('display_data',url=url))
 
-def delete_playerinfo_entry(url,md5,del_token):
+def delete_playerinfo_entry(url, md5, del_token):
 	# takes url, md5, and del_token (from session); if verified, deletes
 	g.db = connect_db()
 	cur = g.db.cursor()
 	cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url,download_url,owner_id,series_id FROM playerinfo WHERE url='+app.sqlesc,(url,))
 	result = cur.fetchone()
 	if result[1] == md5 and result[2] == del_token and str(result[8]) == str(get_logged_in_user()):
-		if remove_series_link(result[0],result[9]) == False:
-			pass #return 'Problem removing series link!'
-		cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(result[0],))
-		for filename in result[4:8]:
-			if filename != None and not os.path.samefile('static/placeholders',os.path.split(filename)[0]):
-				os.remove(filename)
+		if remove_series_link(result[0], result[9]) is False:
+			pass  # return 'Problem removing series link!'
+		cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')', (result[0],))
+		shutil.rmtree(os.path.join(app.config.get('IMAGE_FOLDER'), result[3]))
 		g.db.commit()
-		session.pop(url,None)
-		session.pop(url+'del_token',None)
+		session.pop(url, None)
+		session.pop(url+'del_token', None)
 		return True
 	else:
 		return 'You do not have the correct session information to perform this action!'

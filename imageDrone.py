@@ -1,19 +1,17 @@
+import os
+import time
 import sqlite3
 import psycopg2
 import json
-from generateAvatar import generateAvatar
-from generateFamilyPortrait import generateFamilyPortrait
-from farmInfo import generateImage, regenerateFarmInfo
-import os
-import time
-from createdb import database_structure_dict, database_fields
 from flask import Flask
-from generateFarm import generateFarm
+from createdb import database_structure_dict, database_fields
+from farmInfo import regenerateFarmInfo
+from imagegeneration.avatar import generateAvatar
+from imagegeneration.familyportrait import generateFamilyPortrait
+from imagegeneration.farm import generateFarm, generateMinimap
 
 app = Flask(__name__)
 app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
-
-IMAGE_FOLDER = 'static/images'
 
 if app.config['USE_SQLITE'] == True:
 	database = app.config['DB_SQLITE']
@@ -48,25 +46,28 @@ def process_queue():
 				data['newEyeColor'] = [data['newEyeColor0'],data['newEyeColor1'],data['newEyeColor2'],data['newEyeColor3']]
 				data['hairstyleColor'] = [data['hairstyleColor0'],data['hairstyleColor1'],data['hairstyleColor2'],data['hairstyleColor3']]
 
-				# try:
+				base_path = file_path = os.path.join(app.config.get('IMAGE_FOLDER'), data['url'])
+				try:
+					os.mkdir(base_path)
+				except OSError:
+					pass
+
+				avatar_path = os.path.join(base_path, 'avatar.png')
 				avatar = generateAvatar(data)
 
-				# if app.config['USE_SQLITE'] == True:
 				pi = json.loads(data['portrait_info'])
-				# else:
-					# pi = data['portrait_info']
-				portrait = generateFamilyPortrait(avatar, pi['partner'], pi['cat'], pi['children'])
-				avatar_path = os.path.join(IMAGE_FOLDER,data['url']+'a.png')
-				portrait_path = os.path.join(IMAGE_FOLDER,data['url']+'p.png')
-				farm_path = os.path.join(IMAGE_FOLDER,data['url']+'f.png')
-				map_path = os.path.join(IMAGE_FOLDER,data['url']+'m.png')
-				avatar.save(avatar_path)
-				portrait.save(portrait_path)
+				portrait_path = os.path.join(base_path, 'portrait.png')
+				generateFamilyPortrait(avatar, pi).save(portrait_path, compress_level=9)
+
+				avatar.resize((avatar.width*4, avatar.height*4)).save(avatar_path, compress_level=9)
+				
 				farm_data = regenerateFarmInfo(json.loads(data['farm_info']))
-				farm = generateImage(farm_data)
-				farm.save(farm_path)
-				map_image = generateFarm(data['currentSeason'],farm_data)
-				map_image.save(map_path,compress_level=9)
+				farm_path = os.path.join(base_path, 'minimap.png')
+				generateMinimap(farm_data).save(farm_path, compress_level=9)
+				
+				map_path = os.path.join(base_path, 'map.png')
+				generateFarm(data['currentSeason'], farm_data).save(map_path, compress_level=9)
+
 				cur.execute('UPDATE playerinfo SET farm_url='+sqlesc+', avatar_url='+sqlesc+', portrait_url='+sqlesc+', map_url='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,avatar_path,portrait_path,map_path,data['id']))
 				db.commit()
 				# except:
