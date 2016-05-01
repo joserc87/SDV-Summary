@@ -1,32 +1,23 @@
-from PIL import Image
-from PIL.ImageChops import offset
-from generateAvatar import tintImage
-from playerInfo import player
-from farmInfo import getFarmInfo
-from itertools import chain
-from collections import namedtuple
-
 import os
 import random
 
-
-def cropImg(img, location, defaultSize=(4, 4), objectSize=(4, 4)):
-    row = int(img.width / (4*defaultSize[0]))
-    x = (location % row) * 4 * defaultSize[0]
-    y = (location // row) * 4 * defaultSize[1]
-    return offset(img, -x, -y).crop((0, 0, 4*objectSize[0], 4*objectSize[1]))
+from PIL import Image
+from playerInfo import player
+from itertools import chain
+from collections import namedtuple
+from imagegeneration.tools import colourBox, tintImage, cropImg
 
 
 def loadTree(ss_tree, loc=0):
     tree = Image.new('RGBA', (3*16, 6*16))
-    body = cropImg(ss_tree, loc, objectSize=(12, 24))
-    stump = cropImg(ss_tree, 20, objectSize=(4, 8))
+    body = cropImg(ss_tree, loc, objectSize=(48, 96))
+    stump = cropImg(ss_tree, 20, objectSize=(16, 32))
     tree.paste(stump, (1*16, 4*16), stump)
     tree.paste(body, (0, 0), body)
     return tree
 
 
-def getPlant(img, location, colour, days, T, defaultSize=(4, 4), objectSize=(4, 4)):
+def getPlant(img, location, colour, days, T, defaultSize=(16, 16), objectSize=(16, 16)):
     if location < 4:
         return cropImg(img, location, defaultSize, objectSize)
     else:
@@ -171,7 +162,7 @@ def generateFarm(season, farm, assets=None):
     for item in floor:
         if item.name == 'Flooring':
             floor_type = cropImg(assets['flooring'], item.type,
-                                 (16, 16), (16, 16))
+                                 (64, 64), (64, 64))
             floor_view = cropImg(floor_type, item.orientation)
             farm_base.paste(floor_view, (item.x*16, item.y*16), floor_view)
 
@@ -187,19 +178,19 @@ def generateFarm(season, farm, assets=None):
         if 'Crop' in item.name:
             if item.name != "GiantCrop":
                 crop_sprites = cropImg(assets['crops'], item.type,
-                                       (32, 8), (32, 8))
+                                       (128, 32), (128, 32))
                 if item.orientation is None:
                     crop_img = cropImg(crop_sprites, item.growth,
-                                       (4, 8), (4, 8))
+                                       (16, 32), (16, 32))
                 else:
                     crop_img = getPlant(crop_sprites, item.growth, item.orientation[0], item.orientation[1], item.type, (4, 8), (4, 8))
             else:
                 if item.type == 190:
-                    crop_img = cropImg(assets['crops'], 263, objectSize=(12, 16), defaultSize=(4, 8))
+                    crop_img = cropImg(assets['crops'], 263, objectSize=(48, 64), defaultSize=(16, 32))
                 if item.type == 254:
-                    crop_img = cropImg(assets['crops'], 266, objectSize=(12, 16), defaultSize=(4, 8))
+                    crop_img = cropImg(assets['crops'], 266, objectSize=(48, 64), defaultSize=(16, 32))
                 if item.type == 276:
-                    crop_img = cropImg(assets['crops'], 269, objectSize=(12, 16), defaultSize=(4, 8))
+                    crop_img = cropImg(assets['crops'], 269, objectSize=(48, 64), defaultSize=(16, 32))
             if item.flipped:
                 crop_img = crop_img.transpose(Image.FLIP_LEFT_RIGHT)
             farm_base.paste(crop_img, (item.x*16, item.y*16 - 16), crop_img)
@@ -207,7 +198,7 @@ def generateFarm(season, farm, assets=None):
         if item.name == 'Object':
             if item.type == "Crafting" and item.orientation not in craftable_blacklist:
                 obj_img = cropImg(assets['craftables'], item.index,
-                                  (4, 8), (4, 8))
+                                  (16, 32), (16, 32))
                 offset = 16
             else:
                 obj_img = cropImg(assets['objects'], item.index)
@@ -232,19 +223,19 @@ def generateFarm(season, farm, assets=None):
                     continue
                 elif item.orientation == 15 and item.growth:
                     fence_img = cropImg(assets['fences'][material], item.orientation,
-                                        defaultSize=(4, 8), objectSize=(2, 8))
+                                        defaultSize=(16, 32), objectSize=(8, 16))
                     offsetx = 5
                     offsety = 22
                 else:
                     fence_img = cropImg(assets['fences'][material], item.orientation,
-                                        defaultSize=(4, 8), objectSize=(4, 8))
+                                        defaultSize=(16, 32), objectSize=(16, 32))
                 offsety = 16
                 farm_base.paste(fence_img, (item.x * 16 + offsetx, item.y * 16 - offsety), fence_img)
             except Exception as e:
                 print(e)
 
         if item.name == 'ResourceClump':
-            obj_img = cropImg(assets['objects'], item.type, objectSize=(8, 8))
+            obj_img = cropImg(assets['objects'], item.type, objectSize=(32, 32))
             farm_base.paste(obj_img, (item.x*16, item.y*16), obj_img)
 
         if item.name == 'Tree':
@@ -271,7 +262,7 @@ def generateFarm(season, farm, assets=None):
                     offsetx = 0
                     offsety = 0
                 elif item.growth == 3 or item.growth == 4:
-                    tree_crop = cropImg(tree_img, 18, objectSize=(4, 8))
+                    tree_crop = cropImg(tree_img, 18, objectSize=(16, 32))
                     offsetx = 0
                     offsety = 16
                 else:
@@ -289,10 +280,10 @@ def generateFarm(season, farm, assets=None):
             try:
                     if item.growth <= 3:
                         tree_crop = cropImg(assets['trees']['fruit'], item.growth + 1+9*item.type,
-                                            defaultSize=(12, 0), objectSize=(12, 20))
+                                            defaultSize=(48, 80), objectSize=(48, 80))
                     else:
                         tree_crop = cropImg(assets['trees']['fruit'], 4 + seasons[season] + 9*item.type,
-                                            defaultSize=(12, 20), objectSize=(12, 20))
+                                            defaultSize=(48, 80), objectSize=(48, 80))
                     offsety = 4*16
                     offsetx = 1*16
                     if item.flipped:
@@ -325,7 +316,7 @@ def generateFarm(season, farm, assets=None):
         if item.name == "House":
             try:
                 house_img = cropImg(assets['buildings']['house'], item.index,
-                                    defaultSize=(40, 36), objectSize=(40, 36))
+                                    defaultSize=(160, 144), objectSize=(160, 144))
                 farm_base.paste(house_img, (item.x*16, item.y*16 - 16 * item.h), house_img)
             except Exception as e:
                 print(e)
@@ -333,7 +324,7 @@ def generateFarm(season, farm, assets=None):
         if item.name == "Greenhouse":
             try:
                 greenhouse_img = cropImg(assets['buildings']['greenhouse'], item.index,
-                                         defaultSize=(28, 40), objectSize=(28, 40))
+                                         defaultSize=(112, 160), objectSize=(112, 160))
                 farm_base.paste(greenhouse_img, (item.x*16, item.y*16 - 16 * item.h), greenhouse_img)
             except Exception as e:
                 print(e)
@@ -357,7 +348,7 @@ def generateFarm(season, farm, assets=None):
                 elif item.type == 1:
                     material = 'hardwood'
                 gate_img = cropImg(assets['fences'][material], item.orientation,
-                                    defaultSize=(4, 8), objectSize=(6, 8))
+                                    defaultSize=(16, 32), objectSize=(24, 32))
                 offsetx = -4
                 offsety = 16
                 farm_base.paste(gate_img, (item.x * 16 + offsetx, item.y * 16 - offsety), gate_img)
@@ -366,6 +357,74 @@ def generateFarm(season, farm, assets=None):
 
     farm_base = farm_base.convert('RGBA').convert('P', palette=Image.ADAPTIVE, colors=255)
     return farm_base
+
+
+# Renders a PNG of the players farm where one 8x8 pixel square is equivalent to one in game tile.
+# Legend:   Shades of green - Trees, Weeds, Grass
+#      Shades of brown - Twigs, Logs
+#      Shades of grey - Stones, Boulders, Fences
+#      Dark red - Static buildings
+#      Light red - Player placed objects (Scarecrows, etc)
+#      Blue - Water
+#      Off Tan - Tilled Soil
+def generateMinimap(farm):
+    image = Image.open("./assets/bases/minimap_base.png")
+    pixels = image.load()
+
+    pixels[1, 1] = (255, 255, 255)
+
+    for building in farm['buildings']:
+        for i in range(building[3]):
+            for j in range(building[4]):
+                colourBox(building[1] + i, building[2] + j, (255, 150, 150), pixels)
+
+    if 'terrainFeatures' in farm:
+        for tile in farm['terrainFeatures']:
+            name = tile.name
+            if name == "Tree":
+                colourBox(tile.x, tile.y, (0, 175, 0), pixels)
+            elif name == "Grass":
+                colourBox(tile.x, tile.y, (0, 125, 0), pixels)
+            elif name == "Flooring":
+                colourBox(tile.x, tile.y, (50, 50, 50), pixels)
+            else:
+                colourBox(tile.x, tile.y, (0, 0, 0), pixels)
+
+    if 'HoeDirt' in farm:
+        for tile in farm['HoeDirt']:
+            colourBox(tile.x, tile.y, (196, 196, 38), pixels)
+
+    if 'Flooring' in farm:
+        for tile in farm['Flooring']:
+            colourBox(tile.x, tile.y, (50, 50, 50), pixels)
+
+    if 'Fences' in farm:
+        for tile in farm['Fences']:
+            colourBox(tile.x, tile.y, (200, 200, 200), pixels)
+
+    if 'objects' in farm:
+        for tile in farm['objects']:
+            name = tile.orientation
+            if name == "Weeds":
+                colourBox(tile.x, tile.y, (0, 255, 0), pixels)
+            elif name == "Stone":
+                colourBox(tile.x, tile.y, (125, 125, 125), pixels)
+            elif name == "Twig":
+                colourBox(tile.x, tile.y, (153, 102, 51), pixels)
+            else:
+                colourBox(tile.x, tile.y, (255, 0, 0), pixels)
+
+    if 'resourceClumps' in farm:
+        for tile in farm['resourceClumps']:
+            if tile.type == 672:
+                for i in range(tile[3]):
+                    for j in range(tile[3]):
+                        colourBox(tile.x + i, tile.y + j, (102, 51, 0), pixels)
+            elif tile.type == 600:
+                for i in range(tile[3]):
+                    for j in range(tile[3]):
+                        colourBox(tile.x+i, tile.y + j, (75, 75, 75), pixels)
+    return image
 
 
 def main():
@@ -388,5 +447,7 @@ def main():
         print('\timage generation took', end_time_image-start_time_image)
         print('\tsaving took', end_time_save-start_time_save)
         print('\ttotal time taken: ', end_time_save - start_time_image)
+
+
 if __name__ == '__main__':
     main()
