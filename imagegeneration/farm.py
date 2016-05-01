@@ -108,8 +108,8 @@ def loadAssets():
                             'pine': {
                                         'spring': Image.open('./assets/farm/trees/tree3_spring.png'),
                                         'summer': Image.open('./assets/farm/trees/tree3_summer.png'),
-                                        'fall': Image.open('./assets/farm/trees/tree3_spring.png'),
-                                        'winter': Image.open('./assets/farm/trees/tree3_spring.png')
+                                        'fall': Image.open('./assets/farm/trees/tree3_fall.png'),
+                                        'winter': Image.open('./assets/farm/trees/tree3_winter.png')
                                      },
                             'mushroom': Image.open('./assets/farm/trees/mushroom_tree.png'),
                             'fruit': Image.open('./assets/farm/fruitTrees.png')
