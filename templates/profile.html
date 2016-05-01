@@ -249,7 +249,7 @@ $(document).ready(function() {
 							<div id="playerInfo" class="tab-pane active">
 								<div class="col-md-4 col-sm-4 col-xs-12">
 									<div class="avatarPanel">
-										<img src="{{ data.avatar_url }}" class="playerAvatar">
+										<img src="{{ url_for('static', filename='images/'+data.url+'/avatar.png') }}" class="playerAvatar">
 									</div>
 								</div>
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
@@ -278,7 +278,7 @@ $(document).ready(function() {
 
 								<div class="col-md-4 col-sm-4 col-xs-12">
 									<div class="portraitPanel">
-										<img src="{{ data.portrait_url }}" class="playerPortrait">
+										<img src="{{ url_for('static', filename='images/'+data.url+'/portrait.png') }}" class="playerPortrait">
 									</div>
 								</div>
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
@@ -423,7 +423,7 @@ $(document).ready(function() {
 				<div class="col-md-4 col-sm-12 panel"><!--col-md-offset-1-->
 					<div class="interiorpanel text-center">
 						<h3>Minimap</h3>
-						<a href="#mainFarm"><img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
+						<a href="#mainFarm"><img src="{{ url_for('static', filename='images/'+data.url+'/minimap.png') }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
 						{% if data.download_enabled == True %}
 							<p class="text-center">
 								<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='You use the contents of this zip at your own risk!<br><a href="/dl/{{data.url}}">I understand, download!</a>'>download savegame</button>
@@ -520,7 +520,7 @@ $(document).ready(function() {
 
 						<div class="previewbox">
 							<div class="previewimage">
-								<a href="{{data.map_url}}" target="_blank"><img src="{{ data.map_url }}" class="img-responsive farmImg" height="auto"></a>
+								<a href="{{ url_for('static', filename='images/'+data.url+'/map.png') }}" target="_blank"><img src="{{ url_for('static', filename='images/'+data.url+'/map.png') }}" class="img-responsive farmImg" height="auto"></a>
 							</div>
 							<div class="maptextbase">
 								{% if data['imgur_json'] != None %}

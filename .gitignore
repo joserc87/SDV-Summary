@@ -63,10 +63,19 @@ target/
 
 #specifics for sdv-summary
 config.py
+saves/
 save/
+tools/
 assets/
 uploads/
 static/assets/
 static/images/
 sdv.db
 templates/analytics.html
+
+# Batch
+*.bat
+# Zips
+*.zip
+# Images
+*.png
