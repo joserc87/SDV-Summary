@@ -2,7 +2,6 @@ import os
 import random
 
 from PIL import Image
-from playerInfo import player
 from itertools import chain
 from collections import namedtuple
 from imagegeneration.tools import colourBox, tintImage, cropImg
@@ -425,29 +424,3 @@ def generateMinimap(farm):
                     for j in range(tile[3]):
                         colourBox(tile.x+i, tile.y + j, (75, 75, 75), pixels)
     return image
-
-
-def main():
-    # f = 'Ash_116894979'
-    import time
-    assets = loadAssets()
-    for f in os.listdir(os.getcwd()+'/saves/'):
-        print(f)
-        p = player('./saves/'+f).getPlayerInfo()['currentSeason']
-        start_time_image = time.time()
-        im = generateFarm(p, getFarmInfo('./saves/'+f), assets)
-        end_time_image = time.time()
-        start_time_save = end_time_image
-        # im.save('./farmRenders/' + f + '.png', compress_level=9)
-        for scale in range(20,105,5):
-            sub_im = im.resize((int(im.width*scale/100.0),int(im.height*scale/100.0)),Image.LANCZOS)
-            sub_im.save('./farmRenders/'+f+' '+str(scale)+'.png',compress_level=9)
-
-        end_time_save = time.time()
-        print('\timage generation took', end_time_image-start_time_image)
-        print('\tsaving took', end_time_save-start_time_save)
-        print('\ttotal time taken: ', end_time_save - start_time_image)
-
-
-if __name__ == '__main__':
-    main()

@@ -15,7 +15,7 @@ def checkSurrounding(tiles):
         m = [5, 3, 10, 6, 5, 3, 0, 6, 9, 8, 7, 7, 2, 8, 4, 4]
         m_gate = [17, 17, 17, 17, 17, 15, 17, 17, 17, 17, 12, 17, 17, 17, 17, 17]
     else:
-        m = [0, 12, 13, 9, 4, 8, 1, 5, 15, 11, 14, 10, 3, 7, 2, 6]
+        m = [0, 24, 25, 17, 8, 16, 1, 9, 27, 19, 26, 18, 3, 11, 2, 10]
 
     for y, tile_row in enumerate(floor_map):
         for x, tile in enumerate(tile_row):
