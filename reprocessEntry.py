@@ -6,7 +6,6 @@ import json
 import hashlib
 from imageDrone import process_queue
 from createdb import database_structure_dict, database_fields
-import defusedxml
 import io
 from xml.etree.ElementTree import ParseError
 from app import connect_db, md5, app
