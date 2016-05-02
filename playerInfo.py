@@ -1,5 +1,3 @@
-from defusedxml.ElementTree import parse
-from defusedxml import ElementTree
 import json
 
 ns = "{http://www.w3.org/2001/XMLSchema-instance}"
@@ -11,8 +9,7 @@ class player:
     def __init__(self, saveFile):
         # super(player, self).__init__()
         self.saveFile = saveFile
-        self.eTree = parse(saveFile)
-        self.root = self.eTree.getroot()
+        self.root = self.saveFile.getRoot()
 
     def getPlayerInfo(self):
         return playerInfo(self.saveFile)
@@ -100,7 +97,7 @@ def strToBool(x):
         return False
 
 
-def playerInfo(saveFileLocation,read_data=False):
+def playerInfo(saveFile):
     playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel',
                 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina',
                 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin',
@@ -112,10 +109,7 @@ def playerInfo(saveFileLocation,read_data=False):
     npcs = ['Willy','Clint','Jodi','Harvey','Leah','Wizard','Jas','Abigail','Maru','Elliott','Caroline','Pam','Dwarf',
             'Shane','Demetrius','Alex','Gus','Vincent','Sebastian','Robin','Sam','Lewis','Marnie','Penny','Haley','Pierre',
             'Evelyn','Linus','George','Emily','Kent','Krobus','Sandy']
-    if read_data == False:
-        root = parse(saveFileLocation).getroot()
-    else:
-        root = ElementTree.fromstring(saveFileLocation)
+    root = saveFile.getRoot()
 
     player = root.find("player")
     info = {}

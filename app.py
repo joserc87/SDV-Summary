@@ -29,6 +29,7 @@ import uuid
 from google_measurement_protocol import Event, report
 import imgur
 import shutil
+from savefile import savefile
 
 if sys.version_info >= (3,0):
 	unicode = str
@@ -224,13 +225,13 @@ def get_logged_in_user():
 	else:
 		return None
 
-
 def file_uploaded(inputfile):
 	memfile = io.BytesIO()
 	inputfile.save(memfile)
 	md5_info = md5(memfile)
 	try:
-		player_info = playerInfo(memfile.getvalue(), True)
+		save = savefile(memfile.getvalue(), True)
+		player_info = playerInfo(save)
 	except defusedxml.common.EntitiesForbidden:
 		error = "I don't think that's very funny"
 		return {'type':'render','target':'index.html','parameters':{"error":error}}
@@ -256,7 +257,7 @@ def file_uploaded(inputfile):
 		return {'type':'redirect','target':'display_data','parameters':{"url":dupe[0]}}
 		return redirect(url_for('display_data',url=dupe[0]))
 	else:
-		farm_info = getFarmInfo(memfile.getvalue(),True)
+		farm_info = getFarmInfo(save)
 		outcome, del_token, rowid, error = insert_info(player_info,farm_info,md5_info)
 		if outcome != False:
 			filename = os.path.join(app.config['UPLOAD_FOLDER'],outcome)

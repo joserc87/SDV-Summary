@@ -1,5 +1,3 @@
-from defusedxml.ElementTree import parse
-from defusedxml import ElementTree
 from PIL import Image
 from collections import namedtuple
 
@@ -47,17 +45,15 @@ def checkSurrounding(tiles):
 # located on the players farm.
 # returns a dict with an array of tuples of the form: (name, x, y)
 
-def getFarmInfo(saveFileLocation, read_data=False):
+def getFarmInfo(saveFile):
     sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
 
     ns = "{http://www.w3.org/2001/XMLSchema-instance}"
 
     farm = {}
 
-    if read_data is False:
-        root = parse(saveFileLocation).getroot()
-    else:
-        root = ElementTree.fromstring(saveFileLocation)
+    root = saveFile.getRoot()
+
 
     # Farm Objects
 
