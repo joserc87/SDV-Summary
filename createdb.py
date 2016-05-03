@@ -195,7 +195,9 @@ database_structure_dict = {'md5':'TEXT',
 'failed_processing':'BOOLEAN',
 'imgur_json':'TEXT',
 'positive_votes':'BIGINT DEFAULT 0',
-'negative_votes':'BIGINT DEFAULT 0'}
+'negative_votes':'BIGINT DEFAULT 0',
+'base_path':'TEXT',
+'thumb_url':'TEXT'}
 
 if app.config['USE_SQLITE']==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'

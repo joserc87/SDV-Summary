@@ -53,27 +53,27 @@ def process_queue():
 				except OSError:
 					pass
 
-				avatar_path = os.path.join(base_path, 'avatar.png')
+				avatar_path = os.path.join(base_path, data['url']+'-a.png')
 				avatar = generateAvatar(data)
 
 				pi = json.loads(data['portrait_info'])
-				portrait_path = os.path.join(base_path, 'portrait.png')
+				portrait_path = os.path.join(base_path, data['url']+'-p.png')
 				generateFamilyPortrait(avatar, pi).save(portrait_path, compress_level=9)
 
 				avatar.resize((avatar.width*4, avatar.height*4)).save(avatar_path, compress_level=9)
 				
 				farm_data = regenerateFarmInfo(json.loads(data['farm_info']))
-				farm_path = os.path.join(base_path, 'minimap.png')
+				farm_path = os.path.join(base_path, data['url']+'-f.png')
 				generateMinimap(farm_data).save(farm_path, compress_level=9)
 				
-				map_path = os.path.join(base_path, 'map.png')
-				thumb_path = os.path.join(base_path, 'thumb.png')
+				map_path = os.path.join(base_path, data['url']+'-m.png')
+				thumb_path = os.path.join(base_path, data['url']+'-t.png')
 				farm = generateFarm(data['currentSeason'], farm_data)
 				th = farm.resize((int(farm.width/4), int(farm.height/4)), Image.ANTIALIAS)
 				th.save(thumb_path)
 				farm.save(map_path, compress_level=9)
 
-				cur.execute('UPDATE playerinfo SET farm_url='+sqlesc+', avatar_url='+sqlesc+', portrait_url='+sqlesc+', map_url='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,avatar_path,portrait_path,map_path,data['id']))
+				cur.execute('UPDATE playerinfo SET farm_url='+sqlesc+', avatar_url='+sqlesc+', portrait_url='+sqlesc+', map_url='+sqlesc+', thumb_url='+sqlesc+', base_path='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,avatar_path,portrait_path,map_path,thumb_path,base_path,data['id']))
 				db.commit()
 				# except:
 					# cur.execute('UPDATE playerinfo SET failed_processing='+sqlesc+' WHERE id='+sqlesc,(True,data['id']))
