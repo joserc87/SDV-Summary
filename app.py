@@ -28,7 +28,6 @@ from flask_recaptcha import ReCaptcha
 import uuid
 from google_measurement_protocol import Event, report
 import imgur
-import shutil
 from savefile import savefile
 
 if sys.version_info >= (3,0):
@@ -679,17 +678,27 @@ def operate_on_url(url,instruction):
 	else:
 		return redirect(url_for('display_data',url=url))
 
-def delete_playerinfo_entry(url, md5, del_token):
+def delete_playerinfo_entry(url,md5,del_token):
 	# takes url, md5, and del_token (from session); if verified, deletes
 	g.db = connect_db()
 	cur = g.db.cursor()
-	cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,farm_url,download_url,owner_id,series_id FROM playerinfo WHERE url='+app.sqlesc,(url,))
+	cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,portrait_url,map_url,farm_url,download_url,thumb_url,base_path,owner_id,series_id FROM playerinfo WHERE url='+app.sqlesc,(url,))
 	result = cur.fetchone()
-	if result[1] == md5 and result[2] == del_token and str(result[8]) == str(get_logged_in_user()):
-		if remove_series_link(result[0], result[9]) is False:
-			pass  # return 'Problem removing series link!'
-		cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')', (result[0],))
-		shutil.rmtree(os.path.join(app.config.get('IMAGE_FOLDER'), result[3]))
+	if result[1] == md5 and result[2] == del_token and str(result[12]) == str(get_logged_in_user()):
+		if remove_series_link(result[0],result[13]) == False:
+			pass #return 'Problem removing series link!'
+		cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(result[0],))
+		for filename in result[4:11]:
+			if filename != None and os.path.split(os.path.split(filename)[0])[1] == result[3]:
+				# second condition ensures you're in a folder named after the URL which prevents accidentally deleting placeholders
+				try:
+					os.remove(filename)
+				except:
+					pass
+		try:
+			os.rmdir(result[11])
+		except:
+			pass
 		g.db.commit()
 		session.pop(url, None)
 		session.pop(url+'del_token', None)
