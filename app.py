@@ -38,8 +38,6 @@ else:
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
 
-
-
 app = Flask(__name__)
 app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
 recaptcha = ReCaptcha(app=app)
@@ -193,6 +191,7 @@ def logged_in():
 
 app.jinja_env.globals.update(logged_in=logged_in)
 app.jinja_env.globals.update(list=list)
+app.jinja_env.add_extension('jinja2.ext.do')
 
 def add_to_series(rowid,uniqueIDForThisGame,name,farmName):
 	current_auto_key = json.dumps([uniqueIDForThisGame,name,farmName])
@@ -405,6 +404,7 @@ def get_recents(n=6,**kwargs):
 	g.db.close()
 	return recents
 
+
 def is_duplicate(md5_info,player_info):
 	db = connect_db()
 	cur = db.cursor()
@@ -420,6 +420,7 @@ def is_duplicate(md5_info,player_info):
 	else:
 		db.close()
 		return False
+
 
 def insert_info(player_info,farm_info,md5_info):
 	columns = []
@@ -485,6 +486,7 @@ def insert_info(player_info,farm_info,md5_info):
 		g.db.commit()
 		return False, del_token, False, "Save file incompatible with current database: error is "+str(e)
 
+
 @app.route('/<url>')
 def display_data(url):
 	error = None
@@ -539,6 +541,7 @@ def display_data(url):
 			flash({'message':"<p>It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!</p>".format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
 		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote,data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
 
+
 def find_claimables():
 	if not hasattr(g,'claimables'):
 		sessionids = list(session.keys())
@@ -563,6 +566,7 @@ def find_claimables():
 		else:
 			g.claimables = []
 	return g.claimables
+
 
 @app.route('/<url>/<instruction>',methods=['GET','POST'])
 def operate_on_url(url,instruction):
@@ -678,6 +682,7 @@ def operate_on_url(url,instruction):
 	else:
 		return redirect(url_for('display_data',url=url))
 
+
 def delete_playerinfo_entry(url,md5,del_token):
 	# takes url, md5, and del_token (from session); if verified, deletes
 	g.db = connect_db()
@@ -706,6 +711,7 @@ def delete_playerinfo_entry(url,md5,del_token):
 	else:
 		return 'You do not have the correct session information to perform this action!'
 
+
 def remove_series_link(rowid, series_id):
 	# removes a link to playerinfo id (rowid) from id in series (series_id)
 	if not hasattr(g,'db'):
@@ -727,6 +733,7 @@ def remove_series_link(rowid, series_id):
 	g.db.commit()
 	return True
 
+
 def claim_playerinfo_entry(url,md5,del_token):
 	# verify ability to be owner, then remove_series_link (checking ownership!), then add_to_series
 	if logged_in():
@@ -745,6 +752,7 @@ def claim_playerinfo_entry(url,md5,del_token):
 			return 'Problem authenticating!'
 	else:
 		return 'You are not logged in!'
+
 
 @app.route('/admin',methods=['GET','POST'])
 def admin_panel():
@@ -807,6 +815,7 @@ def admin_panel():
 					pass
 		return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
 
+
 def get_blogposts(n=False,**kwargs):
 	g.db = connect_db()
 	cur = g.db.cursor()
@@ -844,12 +853,14 @@ def get_blogposts(n=False,**kwargs):
 				'posts':blogposts}
 	return blogdict
 
+
 @app.route('/lo')
 def logout():
 	if 'admin' in session:
 		session.pop('admin',None)
 	session.pop('logged_in_user',None)
 	return redirect(url_for('home'))
+
 
 @app.route('/blog')
 def blogmain():
@@ -868,11 +879,12 @@ def blogmain():
 		return redirect(url_for('blogmain'))
 	return render_template('blog.html',full=True,offset=offset,blogposts=blogposts,error=error, processtime=round(time.time()-start_time,5))
 
+
 @app.route('/all')
 def allmain():
 	error = None
 	start_time = time.time()
-	num_entries = 18
+	num_entries = 1
 	#print(request.args.get('p'))
 	try:
 		offset = int(request.args.get('p')) * num_entries
@@ -883,10 +895,62 @@ def allmain():
 		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 	if offset < 0:
 		return redirect(url_for('allmain'))
-	recents = get_recents(num_entries,offset=offset,include_failed=True)
-	if recents['total']<=offset and recents['total']>0:
+	#adapt get_recents() to take a kwarg for sort type; sort type can be GET value: /all&sort=popular
+	sort_by = request.args.get('sort') if request.args.get('sort') != None else 'recent'
+	try:
+		entries = get_entries(num_entries,offset=offset,include_failed=True, sort_by=sort_by)
+	except:
+		error = 'Malformed request for entries!'
+		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+	if entries['total']<=offset and entries['total']>0:
 		return redirect(url_for('allmain'))
-	return render_template('all.html',full=True,offset=offset,recents=recents,error=error, processtime=round(time.time()-start_time,5))
+	return render_template('all.html',full=True,offset=offset,recents=entries,error=error, processtime=round(time.time()-start_time,5))
+
+
+def get_entries(n=6,**kwargs):
+	'''
+	Returns n entries; has kwargs:
+		include_failed	bool	if True includes uploads which failed image generation
+		search_terms	text	search string; !! NOT YET IMPLEMENTED !!
+		offset 			int 	to allow for pagination
+		sort_by			text	'rating', 'views', 'recent'; 'rating' defined according to snippet from http://www.evanmiller.org/how-not-to-sort-by-average-rating.html
+	'''
+	order_types = {'rating':'ORDER BY ((positive_votes + 1.9208) / (positive_votes + negative_votes) - 1.96 * SQRT((positive_votes*negative_votes)/(positive_votes+negative_votes)+0.9604) / (positive_votes+negative_votes)) / ( 1 + 3.8416 / (positive_votes + negative_votes)) ',
+					'views':'ORDER BY views ',
+					'recent':'ORDER BY id '}
+	if 'search_terms' in kwargs:
+		print('search_terms is not yet implemented!')
+	g.db = connect_db()
+	cur = g.db.cursor()
+	where_contents = []
+	if 'include_failed' not in kwargs or 'include_failed' in kwargs and kwargs['include_failed'] == False:
+		where_contents.append('failed_processing IS NOT TRUE')
+	if 'sort_by' in kwargs and kwargs['sort_by'] == 'rating':
+		where_contents.append('positive_votes + negative_votes > 0')
+	where = ''
+	for c,contents in enumerate(where_contents):
+		if c == 0:
+			where+='WHERE '+contents+' '
+		if c != 0:
+			where+='AND '+contents+' '
+	order = 'ORDER BY id ' if 'sort_by' not in kwargs else order_types[kwargs['sort_by']]
+	query = 'SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo '+where+order+'DESC LIMIT '+app.sqlesc
+	offset = 0
+	if 'offset' in kwargs:
+		offset = kwargs['offset']
+		query += " OFFSET "+app.sqlesc
+	if 'offset' in kwargs:
+		cur.execute(query,(n,offset))
+	else:
+		cur.execute(query,(n,))
+	entries = {}
+	entries['posts'] = cur.fetchall()
+	cur.execute('SELECT count(*) FROM playerinfo '+where)
+	entries['total'] = cur.fetchone()[0]
+	if len(entries)==0:
+		entries == None
+	g.db.close()
+	return entries
 
 
 @app.route('/blog/<id>')

@@ -2,22 +2,59 @@
 {% block title %}Browse - {{super()}}{% endblock %}
 {%block bodycontent %}
 {% include "titlebar.html" %}
+{% set url_args = dict(request.args) %}
 <div class="row center-block panel">
 	<div class="interiorpanel">
-		<h2><a href="/all" class="titlelink">All farms</a></h2>
+		<div class="row" style="padding-bottom:1em;">
+			<div class="col-md-12" style="padding-left:2%;padding-right:2%;">
+				<div class="form-group">
+					<form enctype="multipart/form-data" action="" method="post">
+						<label for="searchControl"><h2><a class="titlelink mainTitle" href="/all">Browse</a></h2></label>
+						<div class="input-group">
+							<input class="form-control input-lg" id="searchControl" type="text" name="criteria" describedby="helpBlock">
+							<span class="input-group-btn">
+								<button class="btn btn-primary btn-lg" type="submit" describedby="helpBlock">Search</button>
+							</span>
+						</div>
+						<span id="helpBlock" class="help-block sr-only">Search for farms by user or farm name, or change sort type</span>
+					</form>
+				</div>
+				<div class="text-center">
+					<p class="pull-left">Sorting results by 
+						<div class="btn-group pull-left dropdown">
+							<button class="btn btn-primary dropdown-toggle btn-link" type="button" data-toggle="dropdown">{%if request.args.get('sort')!=None%}{{request.args.get('sort')}}{%else%}recent{%endif%}<span class="caret"></span></button>
+							<ul class="dropdown-menu">
+								<li><a href="{{url_for('allmain',sort='rating')}}">rating</a></li>
+								<li><a href="{{url_for('allmain',sort='views')}}">views</a></li>
+								<li><a href="{{url_for('allmain',sort='recent')}}">recent</a></li>
+							</ul>
+						</div>
+					</p>
+				</div>
+			</div>
+		</div>
+		{% if error %}
+			<div class="row">
+				<div class="col-md-12">
+					<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+				</div>
+			</div>
+		{% endif %}
 		{% include "recents.html" %}
 		<div class="row">
 			<div class="col-md-12 text-center">
 				<p>
 				{% if request.args.get('p')!=None and request.args.get('p')|int>1 %}
-				<a href="/all?p=0">newest</a>
+					{% do url_args.update({'p':0}) %}
+					<a href="{{url_for('allmain',**url_args)}}">newest</a>
 				{% else %}
-				<span class="text-muted">newest</span>
+					<span class="text-muted">newest</span>
 				{% endif %}
 				{% if request.args.get('p')!=None and request.args.get('p')|int>0 %}
-				<a href="/all?p={{request.args.get('p')|int-1}}">previous</a>
+					{% do url_args.update({'p':request.args.get('p')|int-1}) %}
+					<a href="{{url_for('allmain',**url_args)}}">previous</a>
 				{% else %}
-				<span class="text-muted">previous</span>
+					<span class="text-muted">previous</span>
 				{% endif %}
 				{% if request.args.get('p')!=None %}
 					{{request.args.get('p')}}
@@ -25,14 +62,20 @@
 					0
 				{%endif%}
 				{% if offset + recents.posts|length < recents.total %}
-				<a href="/all?p={%if request.args.get('p')!= None%}{{request.args.get('p')|int+1}}{%else%}{{1}}{%endif%}">next</a>
+					{%if request.args.get('p')!= None%}
+						{% do url_args.update({'p':request.args.get('p')|int+1}) %}
+					{%else%}
+						{% do url_args.update({'p':1}) %}
+					{%endif%}
+					<a href="{{url_for('allmain',**url_args)}}">next</a>
 				{% else %}
-				<span class="text-muted">next</span>
+					<span class="text-muted">next</span>
 				{% endif %}
 				{% if offset + (recents.posts|length * 2) < recents.total %}
-				<a href="/all?p={{(recents.total/recents.posts|length)|round(0,'ceil')|int - 1}}">oldest</a>
+					{% do url_args.update({'p':(recents.total/recents.posts|length)|round(0,'ceil')|int - 1 }) %}
+					<a href="{{url_for('allmain',**url_args)}}">oldest</a>
 				{% else %}
-				<span class="text-muted">oldest</span>
+					<span class="text-muted">oldest</span>
 				{% endif %}
 				</p>
 			</div>
