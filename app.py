@@ -884,7 +884,7 @@ def blogmain():
 def allmain():
 	error = None
 	start_time = time.time()
-	num_entries = 1
+	num_entries = 18
 	#print(request.args.get('p'))
 	try:
 		offset = int(request.args.get('p')) * num_entries
