@@ -2,20 +2,20 @@
 {% block title %}Browse - {{super()}}{% endblock %}
 {%block bodycontent %}
 {% include "titlebar.html" %}
-{% set url_args = dict(request.args) %}
 <div class="row center-block panel">
-	<div class="interiorpanel">
+	<div class="interiorpanel"  style="overflow:visible;">
 		<div class="row" style="padding-bottom:1em;">
 			<div class="col-md-12" style="padding-left:2%;padding-right:2%;">
 				<div class="form-group">
-					<form enctype="multipart/form-data" action="" method="post">
+					<form enctype="multipart/form-data" action="" method="get">
 						<label for="searchControl"><h2><a class="titlelink mainTitle" href="/all">Browse</a></h2></label>
 						<div class="input-group">
-							<input class="form-control input-lg" id="searchControl" type="text" name="criteria" describedby="helpBlock">
+							<input class="form-control input-lg" id="searchControl" type="text" name="search" describedby="helpBlock" value="{%if request.args.get('search')%}{{request.args.get('search') }}{%endif%}">
 							<span class="input-group-btn">
 								<button class="btn btn-primary btn-lg" type="submit" describedby="helpBlock">Search</button>
 							</span>
 						</div>
+						{%if request.args.get('sort') %}<input type="hidden" type="text"name="sort" value="{{request.args.get('sort')}}"></form>{%endif%}
 						<span id="helpBlock" class="help-block sr-only">Search for farms by user or farm name, or change sort type</span>
 					</form>
 				</div>
@@ -24,9 +24,13 @@
 						<div class="btn-group pull-left dropdown">
 							<button class="btn btn-primary dropdown-toggle btn-link" type="button" data-toggle="dropdown">{%if request.args.get('sort')!=None%}{{request.args.get('sort')}}{%else%}recent{%endif%}<span class="caret"></span></button>
 							<ul class="dropdown-menu">
-								<li><a href="{{url_for('allmain',sort='rating')}}">rating</a></li>
-								<li><a href="{{url_for('allmain',sort='views')}}">views</a></li>
-								<li><a href="{{url_for('allmain',sort='recent')}}">recent</a></li>
+							{% set url_args = dict(request.args) %}
+								{% do url_args.update({'sort':'rating'}) %}
+								<li><a href="{{url_for('allmain',**url_args)}}">rating</a></li>
+								{% do url_args.update({'sort':'views'}) %}
+								<li><a href="{{url_for('allmain',**url_args)}}">views</a></li>
+								{% do url_args.update({'sort':'recent'}) %}
+								<li><a href="{{url_for('allmain',**url_args)}}">recent</a></li>
 							</ul>
 						</div>
 					</p>
@@ -43,6 +47,7 @@
 		{% include "recents.html" %}
 		<div class="row">
 			<div class="col-md-12 text-center">
+				{% set url_args = dict(request.args) %}
 				<p>
 				{% if request.args.get('p')!=None and request.args.get('p')|int>1 %}
 					{% do url_args.update({'p':0}) %}

@@ -194,8 +194,8 @@ database_structure_dict = {'md5':'TEXT',
 'currentSeason':'TEXT',
 'failed_processing':'BOOLEAN',
 'imgur_json':'TEXT',
-'positive_votes':'BIGINT DEFAULT 0',
-'negative_votes':'BIGINT DEFAULT 0',
+'positive_votes':'BIGINT DEFAULT 1',
+'negative_votes':'BIGINT DEFAULT 1',
 'base_path':'TEXT',
 'thumb_url':'TEXT'}
 

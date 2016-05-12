@@ -151,7 +151,6 @@ def account_page():
 		for row in r:
 			c.execute('SELECT url,date,imgur_json FROM playerinfo WHERE series_id='+app.sqlesc+' AND owner_id='+app.sqlesc,(row[0],user))
 			s = c.fetchall()
-			# print s
 			s = [list(part[:2])+[json.loads(part[2]) if part[2] != None else None] + list(part[3:]) for part in s]
 			claimed_ids[row[0]] = {'auto_key_json':json.loads(row[1]),'data':s}
 		claimable_ids = {}
@@ -886,25 +885,28 @@ def allmain():
 	start_time = time.time()
 	num_entries = 18
 	#print(request.args.get('p'))
+	arguments = {'include_failed':True}
 	try:
-		offset = int(request.args.get('p')) * num_entries
+		arguments['offset'] = int(request.args.get('p')) * num_entries
 	except TypeError:
-		offset = 0
+		arguments['offset'] = 0
 	except:
 		error = "No browse with that ID!"
 		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
-	if offset < 0:
+	if arguments['offset'] < 0:
 		return redirect(url_for('allmain'))
 	#adapt get_recents() to take a kwarg for sort type; sort type can be GET value: /all&sort=popular
-	sort_by = request.args.get('sort') if request.args.get('sort') != None else 'recent'
+	arguments['sort_by'] = request.args.get('sort') if request.args.get('sort') != None else 'recent'
+	if 'search' in request.args:
+		arguments['search_terms']= [ item.encode('utf-8') for item in request.args.get('search').split(' ')[:10]]
 	try:
-		entries = get_entries(num_entries,offset=offset,include_failed=True, sort_by=sort_by)
+		entries = get_entries(num_entries,**arguments)
 	except:
-		error = 'Malformed request for entries!'
-		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
-	if entries['total']<=offset and entries['total']>0:
+	 	error = 'Malformed request for entries!'
+	 	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+	if entries['total']<=arguments['offset'] and entries['total']>0:
 		return redirect(url_for('allmain'))
-	return render_template('all.html',full=True,offset=offset,recents=entries,error=error, processtime=round(time.time()-start_time,5))
+	return render_template('all.html',full=True,offset=arguments['offset'],recents=entries,error=error, processtime=round(time.time()-start_time,5))
 
 
 def get_entries(n=6,**kwargs):
@@ -918,8 +920,7 @@ def get_entries(n=6,**kwargs):
 	order_types = {'rating':'ORDER BY ((positive_votes + 1.9208) / (positive_votes + negative_votes) - 1.96 * SQRT((positive_votes*negative_votes)/(positive_votes+negative_votes)+0.9604) / (positive_votes+negative_votes)) / ( 1 + 3.8416 / (positive_votes + negative_votes)) ',
 					'views':'ORDER BY views ',
 					'recent':'ORDER BY id '}
-	if 'search_terms' in kwargs:
-		print('search_terms is not yet implemented!')
+	search_fields = ('name','farmName')
 	g.db = connect_db()
 	cur = g.db.cursor()
 	where_contents = []
@@ -927,6 +928,24 @@ def get_entries(n=6,**kwargs):
 		where_contents.append('failed_processing IS NOT TRUE')
 	if 'sort_by' in kwargs and kwargs['sort_by'] == 'rating':
 		where_contents.append('positive_votes + negative_votes > 0')
+	if 'search_terms' in kwargs and len(kwargs['search_terms'])>0:
+		search = ''
+		for i, item in enumerate(kwargs['search_terms']):
+			if i == 0:
+				search+='('
+			else:
+				search+='AND '
+			for f, field in enumerate(search_fields):
+				if f == 0:
+					search+='('
+				else:
+					search+='OR '
+				search+=cur.mogrify(field +' ILIKE '+app.sqlesc+' ',('%%'+item+'%%',)).decode('utf-8')
+				if f == len(search_fields)-1:
+					search+=')'
+			if i == len(kwargs['search_terms'])-1:
+				search+=')'
+		where_contents.append(search)
 	where = ''
 	for c,contents in enumerate(where_contents):
 		if c == 0:
@@ -936,6 +955,7 @@ def get_entries(n=6,**kwargs):
 	order = 'ORDER BY id ' if 'sort_by' not in kwargs else order_types[kwargs['sort_by']]
 	query = 'SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo '+where+order+'DESC LIMIT '+app.sqlesc
 	offset = 0
+	# print(query)
 	if 'offset' in kwargs:
 		offset = kwargs['offset']
 		query += " OFFSET "+app.sqlesc
