@@ -29,6 +29,7 @@ import uuid
 from google_measurement_protocol import Event, report
 import imgur
 from savefile import savefile
+from zipuploads import zopen, zwrite
 
 if sys.version_info >= (3,0):
 	unicode = str
@@ -258,8 +259,10 @@ def file_uploaded(inputfile):
 		outcome, del_token, rowid, error = insert_info(player_info,farm_info,md5_info)
 		if outcome != False:
 			filename = os.path.join(app.config['UPLOAD_FOLDER'],outcome)
-			with open(filename,'wb') as f:
-				f.write(memfile.getvalue())
+			# with open(filename,'wb') as f:
+			# 	f.write(memfile.getvalue())
+			# REPLACED WITH ZIPUPLOADS
+			zwrite(memfile.getvalue(),filename)
 			series_id = add_to_series(rowid,player_info['uniqueIDForThisGame'],player_info['name'],player_info['farmName'])
 			owner_id = get_logged_in_user()
 			g.db = connect_db()

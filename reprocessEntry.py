@@ -9,15 +9,25 @@ from createdb import database_structure_dict, database_fields
 import io
 from xml.etree.ElementTree import ParseError
 from app import connect_db, md5, app
+from zipuploads import zopen
+from savefile import savefile
 
 sqlesc = app.sqlesc
 
 def processFile(filename,old_md5,rowid,url):
-	with open(filename,'rb') as f:
-		md5_info = md5(f)
-	player_info = playerInfo(filename)
-	farm_info = getFarmInfo(filename)
+	# with open(filename,'rb') as f:
+	# 	md5_info = md5(f)
+	# replaced by zipuploads method
+	zfile = zopen(filename)
+	memfile = io.BytesIO()
+	memfile.write(zfile.read())
+	zfile.close()
+	md5_info = md5(memfile)
+	save = savefile(memfile.getvalue(), True)
+	player_info = playerInfo(save)
+	farm_info = getFarmInfo(save)
 	try:
+		print md5_info,old_md5
 		assert md5_info == old_md5
 	except AssertionError:
 		return False
@@ -27,8 +37,8 @@ def processFile(filename,old_md5,rowid,url):
 	for key in player_info.keys():
 		if type(player_info[key]) == list:
 			for i,item in enumerate(player_info[key]):
-				columns.append(key.replace(' ','_') + str(i))
-				values.append(str(item))
+				columns.append(key.replace(' ','_') + unicode(i))
+				values.append(unicode(item))
 		elif type(player_info[key]) == dict:
 			for subkey in player_info[key]:
 				if type(player_info[key][subkey]) == dict:
@@ -37,10 +47,10 @@ def processFile(filename,old_md5,rowid,url):
 						values.append((player_info[key][subkey][subsubkey]))
 				else:
 					columns.append((key + subkey).replace(' ','_'))
-					values.append(str(player_info[key][subkey]))
+					values.append(unicode(player_info[key][subkey]))
 		else:
 			columns.append(key)
-			values.append(str(player_info[key]))
+			values.append(unicode(player_info[key]))
 	columns.append('farm_info')
 	values.append(json.dumps(farm_info))
 	columns.append('failed_processing')
@@ -60,7 +70,7 @@ def processFile(filename,old_md5,rowid,url):
 		connection.close()
 		return True
 	except (sqlite3.OperationalError, psycopg2.ProgrammingError) as e:
-		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+sqlesc+','+sqlesc+','+sqlesc+')',('reprocessEntry.py', time.time(),str(e)+' '+str([columns,values])))
+		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+sqlesc+','+sqlesc+','+sqlesc+')',('reprocessEntry.py', time.time(),unicode(e)+' '+unicode([columns,values])))
 		connection.commit()
 		return False
 
