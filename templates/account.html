@@ -46,7 +46,7 @@
 						<ul>
 						{% for key in claimed.keys() %}
 							<li>
-								{{claimed[key]['auto_key_json'][1]}}, {{claimed[key]['auto_key_json'][2]}} Farm:
+								<a href="{{url_for('allmain',series=claimed[key]['data'][0][0])}}">{{claimed[key]['auto_key_json'][1]}}, {{claimed[key]['auto_key_json'][2]}} Farm</a>:
 								<ul>
 									{% for item in claimed[key]['data'] %}
 										<li>

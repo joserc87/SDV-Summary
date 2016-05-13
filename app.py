@@ -897,13 +897,15 @@ def allmain():
 		return redirect(url_for('allmain'))
 	#adapt get_recents() to take a kwarg for sort type; sort type can be GET value: /all&sort=popular
 	arguments['sort_by'] = request.args.get('sort') if request.args.get('sort') != None else 'recent'
+	if 'series' in request.args:
+		arguments['series'] = request.args.get('series')
 	if 'search' in request.args:
 		arguments['search_terms']= [ item.encode('utf-8') for item in request.args.get('search').split(' ')[:10]]
-	try:
-		entries = get_entries(num_entries,**arguments)
-	except:
-	 	error = 'Malformed request for entries!'
-	 	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+	# try:
+	entries = get_entries(num_entries,**arguments)
+	# except:
+	#  	error = 'Malformed request for entries!'
+	#  	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 	if entries['total']<=arguments['offset'] and entries['total']>0:
 		return redirect(url_for('allmain'))
 	return render_template('all.html',full=True,offset=arguments['offset'],recents=entries,error=error, processtime=round(time.time()-start_time,5))
@@ -913,7 +915,8 @@ def get_entries(n=6,**kwargs):
 	'''
 	Returns n entries; has kwargs:
 		include_failed	bool	if True includes uploads which failed image generation
-		search_terms	text	search string; !! NOT YET IMPLEMENTED !!
+		search_terms	text	search string
+		series 			text	takes 'url' as key; finds all matching in series 	
 		offset 			int 	to allow for pagination
 		sort_by			text	'rating', 'views', 'recent'; 'rating' defined according to snippet from http://www.evanmiller.org/how-not-to-sort-by-average-rating.html
 	'''
@@ -940,12 +943,15 @@ def get_entries(n=6,**kwargs):
 					search+='('
 				else:
 					search+='OR '
-				search+=cur.mogrify(field +' ILIKE '+app.sqlesc+' ',('%%'+item+'%%',)).decode('utf-8')
+				print('testing...')
+				search+=cur.mogrify(field +' ILIKE '+app.sqlesc+' ',('%%'+item.decode('utf-8')+'%%',)).decode('utf-8')
 				if f == len(search_fields)-1:
 					search+=')'
 			if i == len(kwargs['search_terms'])-1:
 				search+=')'
 		where_contents.append(search)
+	if 'series' in kwargs and kwargs['series']!=None:
+		where_contents.append(cur.mogrify('series_id=(SELECT series_id FROM playerinfo WHERE url='+app.sqlesc+')',(kwargs['series'],)).decode('utf-8'))
 	where = ''
 	for c,contents in enumerate(where_contents):
 		if c == 0:
@@ -954,6 +960,7 @@ def get_entries(n=6,**kwargs):
 			where+='AND '+contents+' '
 	order = 'ORDER BY id ' if 'sort_by' not in kwargs else order_types[kwargs['sort_by']]
 	query = 'SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo '+where+order+'DESC LIMIT '+app.sqlesc
+	print('query:',query)
 	offset = 0
 	# print(query)
 	if 'offset' in kwargs:
