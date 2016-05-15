@@ -538,7 +538,8 @@ def display_data(url):
 		# passworded = True if datadict['del_password'] != None else False
 		# passworded=passworded, removed from next line
 		claimables = find_claimables()
-		vote = get_votes(url)
+		vote = json.dumps({url:get_votes(url)})
+		print vote
 		if logged_in() == False and len(claimables) > 1 and request.cookies.get('no_signup')!='true':
 			flash({'message':"<p>It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!</p>".format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
 		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote,data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
@@ -1093,12 +1094,13 @@ def handle_vote(logged_in_user,vote_info):
 		# 4: commit, return
 
 def has_votes(logged_in_user):
-	g.db = connect_db()
-	cur = g.db.cursor()
-	cur.execute('SELECT votes FROM users WHERE id='+app.sqlesc,(logged_in_user,))
-	votes = cur.fetchone()[0]
-	votes = json.loads(votes) if votes != None else {}
-	return votes
+	if not hasattr(g,'logged_in_users_votes'):
+		g.db = connect_db()
+		cur = g.db.cursor()
+		cur.execute('SELECT votes FROM users WHERE id='+app.sqlesc,(logged_in_user,))
+		votes = cur.fetchone()[0]
+		g.logged_in_users_votes = json.loads(votes) if votes != None else {}
+	return g.logged_in_users_votes
 
 def get_votes(url):
 	if logged_in():

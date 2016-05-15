@@ -37,57 +37,6 @@ $(function () {
 function flashed_close(id) {
 	$(document.getElementById(id)).slideUp(400);
 }
-var votestate = {% if vote == True%}true{%elif vote == False %}false{%else%}null{%endif%};
-var upvotecontents = 'upvote';
-var downvotecontents = 'downvote';
-var unupvotecontents = 'remove upvote';
-var undownvotecontents = 'remove downvote';
-function post_vote(type,url) {
-	if (type=='ng') {
-		if (votestate == false) {
-			var vote = null
-		}
-		else {
-			var vote = false
-		}
-	}
-	else if (type=='ps') {
-		if (votestate == true) {
-			var vote = null
-		}
-		else {
-			var vote = true
-		}
-	}
-	$.post('/_vote',{'vote':vote, url: url},function(result) {
-		if ( result != 'true') {
-			window.alert(result);
-		}
-		else {
-			votestate = vote;
-			toggle_vote();
-		}
-	});
-}
-
-function toggle_vote() {
-	if (votestate == null) {
-			$("#vote-ps").html(upvotecontents);
-			$("#vote-ng").html(downvotecontents);
-		}
-		else if (votestate == true) {
-			$("#vote-ps").html(unupvotecontents);
-			$("#vote-ng").html(downvotecontents);
-		}
-		else if (votestate == false) {
-			$("#vote-ps").html(upvotecontents);
-			$("#vote-ng").html(undownvotecontents);
-	}
-}
-
-$(document).ready(function() {
-	toggle_vote()
-})
 
 $(document).ready(function() {
 	$(".clickable").click(function() {
@@ -103,14 +52,23 @@ $(document).ready(function() {
 		else if ( splitstr[1] == 'fc' ) {
 			flashed_close(splitstr[0]+'-container');
 		}
-		else if ( splitstr[0] == 'vote' ) {
-			post_vote(splitstr[1],'{{data.url}}');
-		}
 		else {
 		};
 	});
-})
+});
+
+/*Voting state setup*/
+var votestate = {{vote|safe}};
+
+var upvotecontents = '{{url_for('static',filename='css/voting/upvote.png')}}';
+var downvotecontents = '{{url_for('static',filename='css/voting/downvote.png')}}';
+var unupvotecontents = '{{url_for('static',filename='css/voting/upvoted.png')}}';
+var undownvotecontents = '{{url_for('static',filename='css/voting/downvoted.png')}}';
+var upvotehovercontents = '{{url_for('static',filename='css/voting/upvote-hover.png')}}';
+var downvotehovercontents = '{{url_for('static',filename='css/voting/downvote-hover.png')}}';
+/*end voting logic*/
 </script>
+<script src="{{ url_for('static', filename='js/voting.js') }}"></script>
 {% if others %}
 	{% for other in others %}
 		{% if other.0 == data.url %}
@@ -144,7 +102,17 @@ $(document).ready(function() {
 						<div class="col-sm-10 col-xs-12">
 							<div class="row">
 								<div class="col-md-12">
-									<h1 class="text-center" style="margin-bottom:0px;">{{ data.farmName }} Farm</h1>
+									<div class="title-container">
+										{% if logged_in() %}
+											<div class="title-vote">
+												<div class="clickable vote-ps" style="border-bottom: 0px;" id="vote-ps-{{data.url}}" data-url="{{data.url}}"></div>
+												<div class="clickable vote-ng" style="border-bottom: 0px;" id="vote-ng-{{data.url}}" data-url="{{data.url}}"></div>
+											</div>
+										{% endif %}
+										<div class="title-title">
+											<h1 class="text-center" style="margin-bottom:0px;">{{ data.farmName }} Farm</h1>
+										</div>
+									</div>
 								</div>
 							</div>
 							{% if others %}
@@ -203,16 +171,6 @@ $(document).ready(function() {
 							<div class="col-xs-12 hidden-sm hidden-md hidden-lg text-center">
 								<p><a href="/">Go back Home</a></p>
 							</div>
-							{% if logged_in() %}
-							<div class="row center-block">
-								<div class="col-md-12 text-center">
-									<ul class="list-inline">
-									<li><span class="clickable" id="vote-ps"></span></li>
-									<li><span class="clickable" id="vote-ng"></span></li>
-									</ul>
-								</div>
-							</div>
-							{% endif %}
 						</div>
 					</div>
 				</div>
@@ -376,10 +334,10 @@ $(document).ready(function() {
 														{% for level in range(skill[1]) %}
 															<div class="pipdiv">
 																{% if (level + 1) % 5 != 0 %}
-																<img class="pip" src="{{url_for('static', filename='images/skills/point_active.png')}}">
+																<img class="pip" src="{{url_for('static', filename='assets/skills/point_active.png')}}">
 																{% else %}
 																<a style="text-decoration: none;" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-container="body" data-html="true" {% for value in profindex[skill[0]][level] %}{% if value in professions %}title="<img src='{{url_for('static', filename='assets/professions/'+value+'.png')}}'>{{value}}" data-content="{{blurbs[value]}}"{%endif%}{%endfor%}>
-																<img class="pip" src="{{url_for('static', filename='images/skills/profession_active.png')}}">
+																<img class="pip" src="{{url_for('static', filename='assets/skills/profession_active.png')}}">
 																</a>
 																{% endif %}
 															</div>
@@ -391,9 +349,9 @@ $(document).ready(function() {
 													{% for level in range(skill[1] + 1, 11) %}
 														<div class="pipdiv">
 															{% if (level) % 5 != 0 %}
-															<img class="pip" src="{{url_for('static', filename='images/skills/point_inactive.png')}}">
+															<img class="pip" src="{{url_for('static', filename='assets/skills/point_inactive.png')}}">
 															{% else %}
-															<img class="pip" src="{{url_for('static', filename='images/skills/profession_inactive.png')}}">
+															<img class="pip" src="{{url_for('static', filename='assets/skills/profession_inactive.png')}}">
 															{% endif %}
 														</div>
 														{% if level == 4 %}

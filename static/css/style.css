@@ -545,3 +545,21 @@ p .cc_message {
 	color: #ffffff !important;
 	font-family: sans-serif;
 }
+
+.voteimg {
+	width:32px;
+}
+
+.title-container {
+	text-align: center;
+	margin: 0px auto;
+	width: 100%;
+}
+
+.title-title {
+	display:inline-block;
+}
+
+.title-vote {
+	display:inline-block;
+}
