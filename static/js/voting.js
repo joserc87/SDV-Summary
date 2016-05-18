@@ -28,8 +28,8 @@ This should then work.
 
 var upvoteclass = 'upvoteimg';
 var downvoteclass = 'downvoteimg';
-var upvotestructure = '<img class="voteimg '+upvoteclass+'" src="">';
-var downvotestructure = '<img class="voteimg '+downvoteclass+'" src="">';
+var upvotestructure = '<img class="voteimg '+upvoteclass+'" title="Upvote this farm" src="">';
+var downvotestructure = '<img class="voteimg '+downvoteclass+'" title="Downvote this farm" src="">';
 
 function post_vote(type,url) {
 	if (type=='ng') {
@@ -76,7 +76,7 @@ function toggle_vote() {
 	}
 }
 
-$(document).ready(function() {
+function voting_setup() {
 	$(".vote-ps").html(upvotestructure);
 	$(".vote-ng").html(downvotestructure);
 	toggle_vote();
@@ -98,4 +98,8 @@ $(document).ready(function() {
 	},function() {
 		toggle_vote()
 	});
+}
+
+$(document).ready(function() {
+	voting_setup();
 });

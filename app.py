@@ -68,7 +68,13 @@ def md5(md5file):
 
 @app.route('/_get_recents')
 def jsonifyRecents():
-	return jsonify(recents=get_recents()['posts'])
+	recents = get_recents()['posts']
+	votes = None
+	if logged_in():
+		votes = {}
+		for recent in recents:
+			votes[recent[0]] = get_votes(recent[0])
+	return jsonify(recents=recents,votes=votes)
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -299,7 +305,9 @@ def home():
 					for key in result['parameters'].keys():
 						params[key] = result['parameters'][key]
 				return render_template(result['target'], **params)
-	return render_template("index.html", recents=get_recents(), error=error,blogposts=get_blogposts(5), processtime=round(time.time()-start_time,5))
+	recents = get_recents()
+	vote = json.dumps({entry[0]:get_votes(entry[0]) for entry in recents['posts']})
+	return render_template("index.html", recents=recents,error=error, vote=vote, blogposts=get_blogposts(5), processtime=round(time.time()-start_time,5))
 
 @app.route('/_uploader',methods=['GET','POST'])
 def api_upload():
@@ -383,30 +391,8 @@ def login_to_api(form):
 			return False
 
 def get_recents(n=6,**kwargs):
-	g.db = connect_db()
-	cur = g.db.cursor()
-	recents = {}
-	where = 'WHERE failed_processing IS NOT TRUE '
-	if 'include_failed' in kwargs:
-		if kwargs['include_failed']==True:
-			where = ''
-	query = 'SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo '+where+'ORDER BY id DESC LIMIT '+app.sqlesc
-	offset = 0
-	if 'offset' in kwargs:
-		offset = kwargs['offset']
-		query += " OFFSET "+app.sqlesc
-	if 'offset' in kwargs:
-		cur.execute(query,(n,offset))
-	else:
-		cur.execute(query,(n,))
-	recents['posts'] = cur.fetchall()
-	cur.execute('SELECT count(*) FROM playerinfo')
-	recents['total'] = cur.fetchone()[0]
-	if len(recents)==0:
-		recents == None
-	g.db.close()
+	recents = get_entries(n,**kwargs)
 	return recents
-
 
 def is_duplicate(md5_info,player_info):
 	db = connect_db()
@@ -907,6 +893,10 @@ def allmain():
 		arguments['series'] = request.args.get('series')
 	if 'liked' in request.args:
 		arguments['liked'] = True if request.args.get('liked')=='True' else False
+	if 'dl' in request.args:
+		arguments['dl'] = True if request.args.get('dl')=='True' else False
+	if 'full_thumbnail' in request.args:
+		arguments['full_thumbnail'] = True if request.args.get('full_thumbnail')=='True' else False
 	try:
 		entries = get_entries(num_entries,**arguments)
 	except:
@@ -926,6 +916,8 @@ def get_entries(n=6,**kwargs):
 		series 			text	takes 'url' as key; finds all matching in series 	
 		liked 			bool	if True only show results user has upvoted
 		offset 			int 	to allow for pagination
+		dl 				bool	if True only show results with downloads enabled
+		full_thumbnail	bool	if True, return *full* thumbnails, not maps
 		sort_by			text	'rating', 'views', 'recent'; 'rating' defined according to snippet from http://www.evanmiller.org/how-not-to-sort-by-average-rating.html
 	'''
 	order_types = {'rating':'ORDER BY ((positive_votes + 1.9208) / (positive_votes + negative_votes) - 1.96 * SQRT((positive_votes*negative_votes)/(positive_votes+negative_votes)+0.9604) / (positive_votes+negative_votes)) / ( 1 + 3.8416 / (positive_votes + negative_votes)) ',
@@ -966,6 +958,8 @@ def get_entries(n=6,**kwargs):
 			where_contents.append(cur.mogrify('url=ANY('+app.sqlesc+')',(likes,)).decode('utf-8'))
 		else:
 			where_contents.append('url=ANY(ARRAY[])')
+	if 'dl' in kwargs and kwargs['dl']==True:
+		where_contents.append('download_enabled=TRUE')
 	where = ''
 	for c,contents in enumerate(where_contents):
 		if c == 0:
@@ -973,7 +967,8 @@ def get_entries(n=6,**kwargs):
 		if c != 0:
 			where+='AND '+contents+' '
 	order = 'ORDER BY id ' if 'sort_by' not in kwargs else order_types[kwargs['sort_by']]
-	query = 'SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo '+where+order+'DESC LIMIT '+app.sqlesc
+	thumbtype = 'thumb_url' if 'full_thumbnail' in kwargs and kwargs['full_thumbnail']==True else 'farm_url'
+	query = 'SELECT url, name, farmName, date, avatar_url, '+thumbtype+', download_enabled FROM playerinfo '+where+order+'DESC LIMIT '+app.sqlesc
 	# print('query:',query)
 	offset = 0
 	if 'offset' in kwargs:

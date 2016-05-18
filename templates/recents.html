@@ -11,6 +11,11 @@
 				{{ recent[1] }}, {{ recent[2] }} Farm <br/>  {{ recent[3] }}
 			</div>
 		</a>
+		{% if recent[6] %}
+			<div class="previewdl">
+				<img title="This farm has a downloadable savegame available" src="{{url_for('static',filename='css/dl32.png')}}">
+			</div>
+		{%endif%}
 		{%if logged_in() and vote != None %}
 			<div class="previewvote">
 				<div class="clickable vote-ps" style="border-bottom: 0px;" id="vote-ps-{{recent[0]}}" data-url="{{recent[0]}}"></div>
