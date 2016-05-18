@@ -8,7 +8,7 @@ from imageDrone import process_queue
 from createdb import database_structure_dict, database_fields
 import io
 from xml.etree.ElementTree import ParseError
-from app import connect_db, md5, app
+from app import connect_db, md5, app, unicode
 from zipuploads import zopen
 from savefile import savefile
 
@@ -27,11 +27,11 @@ def processFile(filename,old_md5,rowid,url):
 	player_info = playerInfo(save)
 	farm_info = getFarmInfo(save)
 	try:
-		print md5_info,old_md5
+		print(md5_info,old_md5)
 		assert md5_info == old_md5
 	except AssertionError:
 		return False
-		print filename,'failed md5'
+		print(filename,'failed md5')
 	columns = []
 	values = []
 	for key in player_info.keys():
@@ -89,8 +89,8 @@ def getEntries(where=None):
 if __name__ == "__main__":
 	entries = getEntries()
 	for eno, entry in enumerate(entries):
-		print entry
+		print(entry)
 		success = processFile(entry[3],entry[1],entry[0],entry[2])
-		print eno+1,'of',len(entries)
+		print(eno+1,'of',len(entries))
 		if not success:
-			print 'FAIL:',entry
+			print('FAIL:',entry)

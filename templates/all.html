@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Browse - {{super()}}{% endblock %}
+{% block header %}
+	{{super()}}
+	{% include "votesetup.html" %}
+{% endblock %}
 {%block bodycontent %}
 {% include "titlebar.html" %}
 <div class="row center-block panel">

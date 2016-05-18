@@ -165,7 +165,8 @@ def account_page():
 		e = c.fetchone()
 		g.db.close()
 		acc_info = {'email':e[0],'imgur':json.loads(e[1]) if e[1] != None else None}
-		return render_template('account.html',error=error,claimed=claimed_ids,claimable=claimable_ids, acc_info=acc_info,processtime=round(time.time()-start_time,5))
+		has_liked = True if True in has_votes(user).values() else False
+		return render_template('account.html',error=error,claimed=claimed_ids,claimable=claimable_ids, has_liked=has_liked, acc_info=acc_info,processtime=round(time.time()-start_time,5))
 
 
 
@@ -539,7 +540,6 @@ def display_data(url):
 		# passworded=passworded, removed from next line
 		claimables = find_claimables()
 		vote = json.dumps({url:get_votes(url)})
-		print vote
 		if logged_in() == False and len(claimables) > 1 and request.cookies.get('no_signup')!='true':
 			flash({'message':"<p>It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!</p>".format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
 		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote,data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
@@ -901,18 +901,21 @@ def allmain():
 		return redirect(url_for('allmain'))
 	#adapt get_recents() to take a kwarg for sort type; sort type can be GET value: /all&sort=popular
 	arguments['sort_by'] = request.args.get('sort') if request.args.get('sort') != None else 'recent'
-	if 'series' in request.args:
-		arguments['series'] = request.args.get('series')
 	if 'search' in request.args:
 		arguments['search_terms']= [ item.encode('utf-8') for item in request.args.get('search').split(' ')[:10]]
-	# try:
-	entries = get_entries(num_entries,**arguments)
-	# except:
-	#  	error = 'Malformed request for entries!'
-	#  	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+	if 'series' in request.args:
+		arguments['series'] = request.args.get('series')
+	if 'liked' in request.args:
+		arguments['liked'] = True if request.args.get('liked')=='True' else False
+	try:
+		entries = get_entries(num_entries,**arguments)
+	except:
+	 	error = 'Malformed request for entries!'
+	 	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 	if entries['total']<=arguments['offset'] and entries['total']>0:
 		return redirect(url_for('allmain'))
-	return render_template('all.html',full=True,offset=arguments['offset'],recents=entries,error=error, processtime=round(time.time()-start_time,5))
+	vote = json.dumps({entry[0]:get_votes(entry[0]) for entry in entries['posts']})
+	return render_template('all.html',full=True,offset=arguments['offset'],recents=entries,vote=vote,error=error, processtime=round(time.time()-start_time,5))
 
 
 def get_entries(n=6,**kwargs):
@@ -921,6 +924,7 @@ def get_entries(n=6,**kwargs):
 		include_failed	bool	if True includes uploads which failed image generation
 		search_terms	text	search string
 		series 			text	takes 'url' as key; finds all matching in series 	
+		liked 			bool	if True only show results user has upvoted
 		offset 			int 	to allow for pagination
 		sort_by			text	'rating', 'views', 'recent'; 'rating' defined according to snippet from http://www.evanmiller.org/how-not-to-sort-by-average-rating.html
 	'''
@@ -956,6 +960,12 @@ def get_entries(n=6,**kwargs):
 		where_contents.append(search)
 	if 'series' in kwargs and kwargs['series']!=None:
 		where_contents.append(cur.mogrify('series_id=(SELECT series_id FROM playerinfo WHERE url='+app.sqlesc+')',(kwargs['series'],)).decode('utf-8'))
+	if 'liked' in kwargs and kwargs['liked']==True and logged_in():
+		likes = [url for url, value in has_votes(get_logged_in_user()).items() if value==True ]
+		if len(likes)>0:
+			where_contents.append(cur.mogrify('url=ANY('+app.sqlesc+')',(likes,)).decode('utf-8'))
+		else:
+			where_contents.append('url=ANY(ARRAY[])')
 	where = ''
 	for c,contents in enumerate(where_contents):
 		if c == 0:
@@ -964,9 +974,8 @@ def get_entries(n=6,**kwargs):
 			where+='AND '+contents+' '
 	order = 'ORDER BY id ' if 'sort_by' not in kwargs else order_types[kwargs['sort_by']]
 	query = 'SELECT url, name, farmName, date, avatar_url, farm_url FROM playerinfo '+where+order+'DESC LIMIT '+app.sqlesc
-	print('query:',query)
+	# print('query:',query)
 	offset = 0
-	# print(query)
 	if 'offset' in kwargs:
 		offset = kwargs['offset']
 		query += " OFFSET "+app.sqlesc

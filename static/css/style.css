@@ -272,6 +272,13 @@ dt, dd {
 	overflow:hidden;
 }
 
+.previewvote {
+	position:absolute;
+	right: 36px;
+	top:20px;
+	background-color: rgba(0,0,0,0.75);
+}
+
 .maptextbase {
 	position:absolute;
 	font-family: 'VT323';

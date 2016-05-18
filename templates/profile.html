@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block header %}
-{{super()}}
+		{{super()}}
 		<!-- Place this data between the <head> tags of your website -->
 		<meta name="description" content="Summary of {{data.farmName}} Farm by {{data.name}} (Stardew Valley)" />
 
@@ -56,19 +56,8 @@ $(document).ready(function() {
 		};
 	});
 });
-
-/*Voting state setup*/
-var votestate = {{vote|safe}};
-
-var upvotecontents = '{{url_for('static',filename='css/voting/upvote.png')}}';
-var downvotecontents = '{{url_for('static',filename='css/voting/downvote.png')}}';
-var unupvotecontents = '{{url_for('static',filename='css/voting/upvoted.png')}}';
-var undownvotecontents = '{{url_for('static',filename='css/voting/downvoted.png')}}';
-var upvotehovercontents = '{{url_for('static',filename='css/voting/upvote-hover.png')}}';
-var downvotehovercontents = '{{url_for('static',filename='css/voting/downvote-hover.png')}}';
-/*end voting logic*/
 </script>
-<script src="{{ url_for('static', filename='js/voting.js') }}"></script>
+{% include "votesetup.html" %}
 {% if others %}
 	{% for other in others %}
 		{% if other.0 == data.url %}
