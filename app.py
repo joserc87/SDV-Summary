@@ -873,7 +873,7 @@ def blogmain():
 def allmain():
 	error = None
 	start_time = time.time()
-	num_entries = 18
+	num_entries = 3
 	#print(request.args.get('p'))
 	arguments = {'include_failed':True}
 	try:

@@ -576,3 +576,16 @@ p .cc_message {
 .title-vote {
 	display:inline-block;
 }
+
+.browsebutton {
+	padding: 2px 12px;
+	line-height: 1;
+	font-family: 'VT323';
+	font-size: 20pt;
+	margin: 0;
+}
+
+.browsetext {
+	padding: 1px 0px;
+	margin: 2px 0px;
+}

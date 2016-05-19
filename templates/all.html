@@ -19,25 +19,54 @@
 								<button class="btn btn-primary btn-lg" type="submit" describedby="helpBlock">Search</button>
 							</span>
 						</div>
-						{%if request.args.get('sort') %}<input type="hidden" type="text"name="sort" value="{{request.args.get('sort')}}"></form>{%endif%}
+						{% for key in request.args.keys() %}
+							{%if key != 'search' %}
+								<input type="hidden" type="text" name="{{key}}" value="{{request.args.get(key)}}">
+							{%endif%}
+						{% endfor %}
 						<span id="helpBlock" class="help-block sr-only">Search for farms by user or farm name, or change sort type</span>
 					</form>
 				</div>
 				<div class="text-center">
-					<p class="pull-left">Sorting results by 
-						<div class="btn-group pull-left dropdown">
-							<button class="btn btn-primary dropdown-toggle btn-link" type="button" data-toggle="dropdown">{%if request.args.get('sort')!=None%}{{request.args.get('sort')}}{%else%}recent{%endif%}<span class="caret"></span></button>
-							<ul class="dropdown-menu">
-							{% set url_args = dict(request.args) %}
-								{% do url_args.update({'sort':'rating'}) %}
-								<li><a href="{{url_for('allmain',**url_args)}}">rating</a></li>
-								{% do url_args.update({'sort':'views'}) %}
-								<li><a href="{{url_for('allmain',**url_args)}}">views</a></li>
-								{% do url_args.update({'sort':'recent'}) %}
-								<li><a href="{{url_for('allmain',**url_args)}}">recent</a></li>
-							</ul>
-						</div>
-					</p>
+					<p class="pull-left browsetext">Sorting {{recents.total}} result{%if recents.total!=1%}s{%endif%} by </p>
+					{% set sort_types = {'rating':'top rated','views':'most views','recent':'most recent'} %}
+					<div class="btn-group pull-left dropdown">
+						<button class="btn btn-primary dropdown-toggle btn-link browsebutton" type="button" data-toggle="dropdown">{{sort_types.get(request.args.get('sort'),'most recent')}}<span class="caret"></span></button>
+						<ul class="dropdown-menu">
+						{% set url_args = dict(request.args) %}
+							{% do url_args.update({'sort':'rating'}) %}
+							<li><a href="{{url_for('allmain',**url_args)}}">{{sort_types.get('rating')}}</a></li>
+							{% do url_args.update({'sort':'views'}) %}
+							<li><a href="{{url_for('allmain',**url_args)}}">{{sort_types.get('views')}}</a></li>
+							{% do url_args.update({'sort':'recent'}) %}
+							<li><a href="{{url_for('allmain',**url_args)}}">{{sort_types.get('recent')}}</a></li>
+						</ul>
+					</div>
+					<p class="pull-left browsetext">showing</p>
+					{% set dl_types = {'True':'only downloadable'} %}
+					<div class="btn-group pull-left dropdown">
+						<button class="btn btn-primary dropdown-toggle btn-link browsebutton" type="button" data-toggle="dropdown">{{dl_types.get(request.args.get('dl'),'all farms')}}<span class="caret"></span></button>
+						<ul class="dropdown-menu">
+						{% set url_args = dict(request.args) %}
+							{% do url_args.pop('dl',None) %}
+							<li><a href="{{url_for('allmain',**url_args)}}">all farms</a></li>
+							{% do url_args.update({'dl':True}) %}
+							<li><a href="{{url_for('allmain',**url_args)}}">{{dl_types.get('True')}}</a></li>
+						</ul>
+					</div>
+					<p class="pull-left browsetext">with</p>
+					{% set thumb_types = {'True':'full'} %}
+					<div class="btn-group pull-left dropdown">
+						<button class="btn btn-primary dropdown-toggle btn-link browsebutton" type="button" data-toggle="dropdown">{{thumb_types.get(request.args.get('full_thumbnail'),'minimap')}}<span class="caret"></span></button>
+						<ul class="dropdown-menu">
+						{% set url_args = dict(request.args) %}
+							{% do url_args.pop('full_thumbnail',None) %}
+							<li><a href="{{url_for('allmain',**url_args)}}">minimap</a></li>
+							{% do url_args.update({'full_thumbnail':True}) %}
+							<li><a href="{{url_for('allmain',**url_args)}}">{{thumb_types.get('True')}}</a></li>
+						</ul>
+					</div>
+					<p class="pull-left browsetext">thumbnail</p>
 				</div>
 			</div>
 		</div>
