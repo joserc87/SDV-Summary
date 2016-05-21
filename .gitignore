@@ -63,14 +63,14 @@ target/
 
 #specifics for sdv-summary
 config.py
-saves/
-save/
-assets/
-uploads/
-static/assets/
-static/images/
-sdv.db
-templates/analytics.html
+uploadfarm/saves/
+uploadfarm/save/
+uploadfarm/assets/
+uploadfarm/uploads/
+uploadfarm/static/assets/
+uploadfarm/static/images/
+uploadfarm/sdv.db
+uploadfarm/templates/analytics.html
 
 # Batch
 *.bat
