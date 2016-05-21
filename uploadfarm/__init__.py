@@ -6,6 +6,7 @@ from uploadfarm.config import DevelopmentConfig
 
 app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
+
 if app.config['USE_SQLITE'] == True:
     app.database = app.config['DB_SQLITE']
     app.sqlesc = '?'
@@ -25,14 +26,8 @@ from werkzeug.contrib.fixers import ProxyFix
 from werkzeug.security import generate_password_hash
 import os
 import sys
-from uploadfarm.playerInfo import playerInfo
-from uploadfarm.farmInfo import getFarmInfo
-from uploadfarm.tools.bigbase import dec2big
-import uploadfarm.generateSavegame
 import json
 import hashlib
-from uploadfarm.imageDrone import process_queue
-from uploadfarm.createdb import database_structure_dict, database_fields
 import defusedxml
 import operator
 import random
@@ -44,11 +39,20 @@ import datetime
 from flask_recaptcha import ReCaptcha
 import uuid
 from google_measurement_protocol import Event, report
-import uploadfarm.imgur
-from uploadfarm.savefile import savefile
 
-from uploadfarm.profile import profile
+from uploadfarm.savehandling.playerInfo import playerInfo
+import uploadfarm.savehandling.generateSavegame
+from uploadfarm.savehandling.farmInfo import getFarmInfo
+from uploadfarm.tools.bigbase import dec2big
+from uploadfarm.imagegeneration.imageDrone import process_queue
+from uploadfarm.tools.createdb import database_structure_dict, database_fields
+import uploadfarm.imgur
+from uploadfarm.savehandling.savefile import savefile
+
+from uploadfarm.blueprints import profile, blog
+from uploadfarm.blueprints.blog import get_blogposts
 app.register_blueprint(profile)
+app.register_blueprint(blog, url_prefix="/blog")
 
 if sys.version_info >= (3,0):
     unicode = str
@@ -176,10 +180,9 @@ def account_page():
         return render_template('account.html',error=error,claimed=claimed_ids,claimable=claimable_ids, acc_info=acc_info,processtime=round(time.time()-start_time,5))
 
 
-
 def logged_in():
     # designed to prevent repeated db requests
-    if not hasattr(g,'logged_in_user'):
+    if not hasattr(g, 'logged_in_user'):
         if 'logged_in_user' in session:
             g.db = connect_db()
             cur = g.db.cursor()
@@ -200,6 +203,7 @@ def logged_in():
 app.jinja_env.globals.update(logged_in=logged_in)
 app.jinja_env.globals.update(list=list)
 app.jinja_env.add_extension('jinja2.ext.do')
+
 
 def add_to_series(rowid, uniqueIDForThisGame, name, farmName):
     current_auto_key = json.dumps([uniqueIDForThisGame, name, farmName])
@@ -225,11 +229,13 @@ def add_to_series(rowid, uniqueIDForThisGame, name, farmName):
     db.close()
     return series_id
 
+
 def get_logged_in_user():
     if logged_in():
         return session['logged_in_user'][0]
     else:
         return None
+
 
 def file_uploaded(inputfile):
     memfile = io.BytesIO()
@@ -288,6 +294,7 @@ def file_uploaded(inputfile):
         session[outcome+'del_token'] = del_token
         return {'type':'redirect','target':'profile.display_data','parameters':{"url":outcome}}
 
+
 @app.route('/',methods=['GET','POST'])
 def home():
     start_time = time.time()
@@ -306,6 +313,7 @@ def home():
                 return render_template(result['target'], **params)
     return render_template("index.html", recents=get_recents(), error=error,blogposts=get_blogposts(5), processtime=round(time.time()-start_time,5))
 
+
 @app.route('/_uploader',methods=['GET','POST'])
 def api_upload():
     if request.method=='POST':
@@ -317,10 +325,12 @@ def api_upload():
         else:
             return abort(401)
 
+
 def analyticsEvent(userid, category, action):
     event = Event(category,action)
     r = report(app.config['ANALYTICS_ID'],userid,event)
     return r
+
 
 def verify_api_auth(form):
     if 'api_key' not in form or 'api_secret' not in form or form['api_key']=='':
@@ -349,6 +359,7 @@ def verify_api_auth(form):
         else:
             return False
 
+
 @app.route('/_register-api',methods=['GET','POST'])
 def api_register():
     if request.method=='POST':
@@ -358,6 +369,7 @@ def api_register():
             return api_data
         else:
             return abort(401)
+
 
 def login_to_api(form):
     # takes username password, verifies they're in the db, if so, returns api key and hashed and salted password
@@ -557,68 +569,12 @@ def admin_panel():
         return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
 
 
-def get_blogposts(n=False,**kwargs):
-    g.db = connect_db()
-    cur = g.db.cursor()
-    blogposts = None
-    query = "SELECT id,time,author,title,post,live FROM blog"
-    metaquery = "SELECT count(*) FROM blog"
-    try:
-        if kwargs['include_hidden'] == False:
-            query += " WHERE live='1'"
-            metaquery += " WHERE live='1'"
-    except KeyError:
-        query += " WHERE live='1'"
-        metaquery += " WHERE live='1'"
-    query += " ORDER BY id DESC"
-    if app.config['USE_SQLITE'] == True:
-        if n==False:
-            n=-1
-    if n!=False:
-        query += " LIMIT "+app.sqlesc
-    offset = 0
-    if 'offset' in kwargs:
-        offset = kwargs['offset']
-    query += " OFFSET "+app.sqlesc
-    if n==False:
-        cur.execute(query,(offset,))
-    else:
-        cur.execute(query,(n,offset))
-    blogposts = list(cur.fetchall())
-    for b,blogentry in enumerate(blogposts):
-        blogposts[b] = list(blogentry)
-        blogposts[b][1] = datetime.datetime.fromtimestamp(blogentry[1])
-    cur.execute(metaquery)
-    metadata = cur.fetchone()
-    blogdict = {'total':metadata[0],
-                'posts':blogposts}
-    return blogdict
-
-
 @app.route('/lo')
 def logout():
     if 'admin' in session:
         session.pop('admin',None)
     session.pop('logged_in_user',None)
     return redirect(url_for('home'))
-
-
-@app.route('/blog')
-def blogmain():
-    error = None
-    start_time = time.time()
-    num_entries = 5
-    #print(request.args.get('p'))
-    try:
-        offset = int(request.args.get('p')) * num_entries
-    except:
-        offset = 0
-    if offset < 0:
-        return redirect(url_for('blogmain'))
-    blogposts = get_blogposts(num_entries,offset=offset)
-    if blogposts['total']<=offset and blogposts['total']>0:
-        return redirect(url_for('blogmain'))
-    return render_template('blog.html',full=True,offset=offset,blogposts=blogposts,error=error, processtime=round(time.time()-start_time,5))
 
 
 @app.route('/all')
@@ -642,7 +598,7 @@ def allmain():
     if 'series' in request.args:
         arguments['series'] = request.args.get('series')
     if 'search' in request.args:
-        arguments['search_terms']= [ item.encode('utf-8') for item in request.args.get('search').split(' ')[:10]]
+        arguments['search_terms'] = [item.encode('utf-8') for item in request.args.get('search').split(' ')[:10]]
     # try:
     entries = get_entries(num_entries,**arguments)
     # except:
@@ -720,28 +676,6 @@ def get_entries(n=6,**kwargs):
         entries == None
     g.db.close()
     return entries
-
-
-@app.route('/blog/<id>')
-def blogindividual(id):
-    error = None
-    start_time = time.time()
-    try:
-        blogid = int(id)
-        g.db = connect_db()
-        cur = g.db.cursor()
-        cur.execute("SELECT id,time,author,title,post,live FROM blog WHERE id="+app.sqlesc+" AND live='1'",(blogid,))
-        blogdata = cur.fetchone()
-        if blogdata != None:
-            blogdata = list(blogdata)
-            blogdata[1] = datetime.datetime.fromtimestamp(blogdata[1])
-            blogposts = {'posts':(blogdata,),'total':1}
-            return render_template('blog.html',full=True,offset=0,recents=get_recents(),blogposts=blogposts,error=error, processtime=round(time.time()-start_time,5))
-        else:
-            error = "No blog with that ID!"
-    except:
-        error = "No blog with that ID!"
-    return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 
 
 @app.route('/dl/<url>')

@@ -5,12 +5,12 @@ import psycopg2
 import json
 from flask import Flask
 from flask import current_app as app
-from .createdb import database_structure_dict, database_fields
-from .farmInfo import regenerateFarmInfo
-from .imagegeneration.avatar import generateAvatar
-from .imagegeneration.familyportrait import generateFamilyPortrait
-from .imagegeneration.farm import generateFarm, generateMinimap
-from . import connect_db
+from uploadfarm.tools.createdb import database_structure_dict, database_fields
+from uploadfarm.savehandling.farmInfo import regenerateFarmInfo
+from .avatar import generateAvatar
+from .familyportrait import generateFamilyPortrait
+from .farm import generateFarm, generateMinimap
+from uploadfarm import connect_db
 from PIL import Image
 
 

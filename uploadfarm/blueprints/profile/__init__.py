@@ -2,12 +2,13 @@ from flask import Blueprint, g, session, render_template, request, flash, url_fo
 import time
 from flask import current_app as app
 from uploadfarm import connect_db
-from uploadfarm.createdb import database_structure_dict, database_fields
+from uploadfarm.tools.createdb import database_structure_dict, database_fields
 import json
 import os
 
 profile = Blueprint('profile', __name__,
                     template_folder='templates')
+
 
 def logged_in():
     # designed to prevent repeated db requests
