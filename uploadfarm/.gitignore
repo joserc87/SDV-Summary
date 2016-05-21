@@ -65,7 +65,6 @@ target/
 config.py
 saves/
 save/
-tools/
 assets/
 uploads/
 static/assets/
