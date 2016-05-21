@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block header %}
 {{ super() }}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 {% include "votesetup.html" %}
 <script src="{{ url_for('static', filename='js/ajaxRequest.js') }}"></script>
 {% endblock %}

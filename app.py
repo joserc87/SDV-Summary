@@ -508,6 +508,7 @@ def display_data(url):
 		elif logged_in() and str(datadict['owner_id']) == str(get_logged_in_user()):
 			deletable = True
 
+		other_saves, gallery_set = get_others(datadict['series_id'],datadict['millisecondsPlayed'])
 		for item in ['money','totalMoneyEarned','statsStepsTaken','millisecondsPlayed']:
 			if item == 'millisecondsPlayed':
 				datadict[item] = "{:,}".format(round(float((int(datadict[item])/1000)/3600.0),1))
@@ -518,8 +519,6 @@ def display_data(url):
 		datadict['portrait_info'] = json.loads(datadict['portrait_info'])
 		friendships = sorted([[friendship[11:],datadict[friendship]] for friendship in sorted(database_structure_dict.keys()) if friendship.startswith('friendships') and datadict[friendship]!=None],key=lambda x: x[1])[::-1]
 		kills = sorted([[kill[27:].replace('_',' '),datadict[kill]] for kill in sorted(database_structure_dict.keys()) if kill.startswith('statsSpecificMonstersKilled') and datadict[kill]!=None],key=lambda x: x[1])[::-1]
-		cur.execute('SELECT url, date FROM playerinfo WHERE series_id='+app.sqlesc,(datadict['series_id'],))
-		other_saves = cur.fetchall()
 		if datadict['imgur_json']!=None:
 			datadict['imgur_json'] = json.loads(datadict['imgur_json'])
 		# passworded = True if datadict['del_password'] != None else False
@@ -528,7 +527,31 @@ def display_data(url):
 		vote = json.dumps({url:get_votes(url)})
 		if logged_in() == False and len(claimables) > 1 and request.cookies.get('no_signup')!='true':
 			flash({'message':"<p>It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!</p>".format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
-		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote,data=datadict, kills=kills, friendships=friendships, others=other_saves, error=error, processtime=round(time.time()-start_time,5))
+		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote,data=datadict, kills=kills, friendships=friendships, others=other_saves, gallery_set=gallery_set, error=error, processtime=round(time.time()-start_time,5))
+
+def get_others(series_id,millisecondsPlayed):
+	'''
+	generates {'previous':prev_data,'current':current_data,'next':next_data}; skips if none present (e.g returns [current,next] if no previous)
+	'''
+	g.db = connect_db()
+	cur = g.db.cursor()
+	return_data = {}
+	signs = [('<','DESC','previous'),('=','ASC','current'),('>','ASC','next')]
+	for sign in signs:
+		cur.execute('SELECT url, date FROM playerinfo WHERE series_id='+app.sqlesc+' AND millisecondsPlayed'+sign[0]+app.sqlesc+' ORDER BY millisecondsPlayed '+sign[1]+' LIMIT 1',(series_id,millisecondsPlayed,))
+		response = cur.fetchone()
+		if response != None:
+			return_data[sign[2]]=response
+	cur.execute('SELECT url, map_url, date FROM playerinfo WHERE series_id='+app.sqlesc+' ORDER BY millisecondsPlayed ASC',(series_id,))
+	response = cur.fetchall()
+	gallery_set = {'order':[],'lookup':{}}
+	for row in response:
+		gallery_set['order'].append(row[1])
+		gallery_set['lookup'][row[1]]=[row[0],row[2]]
+	gallery_set = {'json':json.dumps(gallery_set),'dict':gallery_set}
+	return return_data, gallery_set
+
+
 
 
 def find_claimables():
@@ -873,7 +896,7 @@ def blogmain():
 def allmain():
 	error = None
 	start_time = time.time()
-	num_entries = 3
+	num_entries = 18
 	#print(request.args.get('p'))
 	arguments = {'include_failed':True}
 	try:
@@ -923,7 +946,7 @@ def get_entries(n=6,**kwargs):
 	order_types = {'rating':'ORDER BY ((positive_votes + 1.9208) / (positive_votes + negative_votes) - 1.96 * SQRT((positive_votes*negative_votes)/(positive_votes+negative_votes)+0.9604) / (positive_votes+negative_votes)) / ( 1 + 3.8416 / (positive_votes + negative_votes)) ',
 					'views':'ORDER BY views ',
 					'recent':'ORDER BY id '}
-	search_fields = ('name','farmName')
+	search_fields = ('name','farmName','date')
 	g.db = connect_db()
 	cur = g.db.cursor()
 	where_contents = []
@@ -943,7 +966,6 @@ def get_entries(n=6,**kwargs):
 					search+='('
 				else:
 					search+='OR '
-				print('testing...')
 				search+=cur.mogrify(field +' ILIKE '+app.sqlesc+' ',('%%'+item.decode('utf-8')+'%%',)).decode('utf-8')
 				if f == len(search_fields)-1:
 					search+=')'

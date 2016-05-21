@@ -421,7 +421,7 @@ dt, dd {
 	background-color: #ffffff;
 	border-width: 2px;
 	border-color: #000000;
-	margin: 2px;
+	margin: 1px;
 	overflow: hidden;
 	padding: 2px;
 }
@@ -589,3 +589,31 @@ p .cc_message {
 	padding: 1px 0px;
 	margin: 2px 0px;
 }
+
+.featherlight-gallery {
+	background: rgba(100,100,100,0.5);
+}
+.featherlight-gallery .featherlight-content {
+	background: #000;
+}
+.featherlight-gallery .featherlight-next:hover,
+.featherlight-gallery .featherlight-previous:hover {
+	background: rgba(0,0,0,0.5);
+}
+.featherlight-gallery .featherlight-next:hover span,
+.featherlight-gallery .featherlight-previous:hover span {
+	font-size: 25px;
+	line-height: 25px;
+	margin-top: -12.5px;
+	color: #fff;
+}
+.featherlight-gallery .featherlight-close {
+	background: transparent;
+	color: #fff;
+	font-size: 1.2em;
+}
+.featherlight-gallery.featherlight-last-slide .featherlight-next,
+.featherlight-gallery.featherlight-first-slide .featherlight-previous {
+	display: none;
+}
+

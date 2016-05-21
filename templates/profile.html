@@ -27,6 +27,7 @@
 		<meta property="og:image" content="http://upload.farm/{{data.farm_url}}" />
 		<meta property="og:description" content="Summary of {{data.farmName}} Farm by {{data.name}} (Stardew Valley)" />
 		<meta property="og:site_name" content="upload.farm" />
+<script src="{{ url_for('static', filename='js/jquery.detect_swipe.js') }}"></script>
 <script>
 $(function () {
   $('[data-toggle="popover"]').popover()
@@ -58,26 +59,77 @@ $(document).ready(function() {
 });
 </script>
 {% include "votesetup.html" %}
-{% if others %}
-	{% for other in others %}
-		{% if other.0 == data.url %}
-			{% set center = loop.index0 %}
-			<script>
-				document.addEventListener('keydown',function(e) {
-					{% if center-1 >= 0 %}
-					if (e.keyCode == 37) {
-						window.location.replace('{{others[center-1].0}}');
-					}
-					{% endif %}
-					{% if center-1 >= 0 and others[center+1] %}else{%endif%} {%if others[center+1]%}if (e.keyCode == 39) {
-						window.location.replace('{{others[center+1].0}}')
-					}
-					{%endif%}
-				});	
-			</script>
+{% if others.keys()|length > 1 %}
+	<script>
+	var keyboard_control_enabled = true;
+	document.addEventListener('keydown',function(e) {
+		{% if 'previous' in others %}
+		if (e.keyCode == 37 && keyboard_control_enabled) {
+			window.location.replace('{{others['previous'].0}}');
+		}
+		{% endif %}
+		{% if 'next' in others and 'previous' in others %}else{%endif%} {%if 'next' in others %}if (e.keyCode == 39 && keyboard_control_enabled) {
+			window.location.replace('{{others['next'].0}}')
+		}
 		{%endif%}
-	{% endfor %}
+	});	
+	</script>
 {% endif %}
+<!-- includes for featherlight 1.4.1 lightbox (https://github.com/noelboss/featherlight/) -->
+<link href="//cdn.rawgit.com/noelboss/featherlight/1.4.1/release/featherlight.min.css" type="text/css" rel="stylesheet" />
+<link href="//cdn.rawgit.com/noelboss/featherlight/1.4.1/release/featherlight.gallery.min.css" type="text/css" rel="stylesheet" />
+<script src="{{url_for('static',filename='js/featherlight.min.js')}}" type="text/javascript" charset="utf-8"></script>
+<!-- using slightly modified featherlight.min.js following fix here: https://github.com/noelboss/featherlight/issues/43#issuecomment-182295214 -->
+<script src="//cdn.rawgit.com/noelboss/featherlight/1.4.1/release/featherlight.gallery.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+var gallery_set = {{gallery_set.json|safe}}
+var current_url = null;
+
+function set_url() {
+	current_url = window.location.pathname;
+	window.location.hash = 'map';
+	keyboard_control_enabled = false;
+}
+
+function reset_url() {
+    history.pushState("", document.title, window.location.pathname + window.location.search);
+	keyboard_control_enabled = true;
+	if (window.location.pathname != current_url) {
+		window.location = window.location;
+	}
+}
+
+function get_img_src() {
+	// console.log(gallery_set['lookup'][$('.featherlight-image').attr('src')]);
+    history.pushState("", document.title,gallery_set['lookup'][$('.featherlight-image').attr('src')][0]+'#map');
+}
+
+$(document).ready(function() {
+	$.featherlight.defaults['afterOpen'] = set_url
+	$.featherlight.defaults['afterClose'] = reset_url
+	$.featherlight.defaults['afterContent'] = get_img_src
+	$.featherlight.defaults['openSpeed'] = 100
+	$.featherlight.defaults['closeSpeed'] = 100
+	var hash = window.location.hash;
+	$('a.gallery').featherlightGallery({
+		gallery: {
+			previous: '«',
+			next: '»',
+			fadeIn: 0
+		},
+		openSpeed: 0,
+		variant: 'featherlight-gallery'
+	});
+	if (hash == '#map') {
+		//$.featherlightGallery($('a.gallery')); //'{{data.map_url|replace('\\','\\\\')}}'
+		$('#farm-map-image').trigger('click');
+	}
+	$('body').on('click',function(e){
+	
+	});
+});
+</script>
+
 {% endblock %}
 
 {% block title %}{{data.farmName}} Farm - {{super()}}{% endblock %}
@@ -108,13 +160,9 @@ $(document).ready(function() {
 								<div class="row center-block">
 									<div class="col-md-12">
 										<ul class="list-inline text-center">
-										{% for other in others %}
-											{% if other.0 == data.url %}
-											<li><b>{{ other.1 }}</b></li>
-											{% else %}
-											<li><a href="/{{ other.0 }}" >{{ other.1 }}</a></li>
-											{% endif %}
-										{% endfor %}
+											<li>{% if 'previous' in others %}<a href="/{{others['previous'].0}}" title="Go back to {{others['previous'].1}} (left arrow on keyboard also works)"><</a>{%else%}<span style="opacity: 0.5;"><</span>{% endif %}</li>
+											<li><b>{% if others.keys()|length > 1 %}<a href="{{url_for('allmain',series=data.url)}}">{{ others['current'].1 }}</a>{%else%}{{ others['current'].1 }}{%endif%}</b></li>
+											<li>{% if 'next' in others %}<a href="/{{others['next'].0}}" title="Go forward to {{others['next'].1}} (right arrow on keyboard also works)">></a>{%else%}<span style="opacity: 0.5;">></span>{% endif %}</li>
 										</ul>
 									</div>
 								</div>
@@ -373,7 +421,7 @@ $(document).ready(function() {
 						<a href="#mainFarm"><img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
 						{% if data.download_enabled == True %}
 							<p class="text-center">
-								<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='You use the contents of this zip at your own risk!<br><a href="/dl/{{data.url}}">I understand, download!</a>'>download savegame</button>
+								<img src="{{url_for('static',filename='css/dl32.png')}}"><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='You use the contents of this zip at your own risk!<br><a href="/dl/{{data.url}}">I understand, download!</a>'>download savegame</button>
 							</p>
 							{% if deletable %}
 							<h5 class="text-center">
@@ -382,7 +430,7 @@ $(document).ready(function() {
 							{%endif%}
 						{% elif logged_in() and data.download_enabled != True and deletable %}
 							<p class="text-center">
-								<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='Enables sharing of the savegame you uploaded by <b>all</b> users. Can be turned off any time!<br><form action="{{data.url}}/enable-dl" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Enable!</button></form>'>enable savegame sharing</button>
+								<img src="{{url_for('static',filename='css/dl32.png')}}"><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='Enables sharing of the savegame you uploaded by <b>all</b> users. Can be turned off any time!<br><form action="{{data.url}}/enable-dl" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Enable!</button></form>'>enable savegame sharing</button>
 							</p>
 						{% elif claimable or deletable %}
 							<p class="text-center">
@@ -393,7 +441,7 @@ $(document).ready(function() {
 				</div>
 			</div>
 			<div class="row center-block">
-				<div class="col-md-8 col-sm-12 panel">
+				<div class="col-md-7 col-sm-12 panel">
 					<div class="interiorpanel">	
 						<div class="col-md-12 text-center">
 							<h3>Friendships</h3>
@@ -409,7 +457,6 @@ $(document).ready(function() {
 						{% endfor %}
 					</div>
 				</div>
-
 				{% set monster_dict = {'Armored Bug':['Armored Bug','armored_bug.png'],
 										'Bat':['Bat','bat.png'],
 										'Big Slime':['Big Slime','big_slime.png'],
@@ -438,8 +485,8 @@ $(document).ready(function() {
 										'Shadow Shaman':['Void Spirit','void_spirit.png'],
 										'Sludge':['Yellow Slime','yellow_slime.png']} %}
 
-				<div class="col-md-4 panel">
-					<div class="interiorpanel text-center">
+				<div class="col-md-5 panel">
+					<div class="interiorpanel text-center" style="padding-left:8px;padding-right:8px;">
 						<h3>Monster Kills</h3>
 						<div id="stats">
 						{% if kills %}
@@ -464,10 +511,15 @@ $(document).ready(function() {
 				<div class="interiorpanel">
 					<div class="col-md-12 text-center">
 						<h3>Map of {{data.farmName}} Farm</h3>
-
 						<div class="previewbox">
 							<div class="previewimage">
-								<a href="{{ data.map_url }}" target="_blank"><img src="{{ data.map_url }}" class="img-responsive farmImg" height="auto"></a>
+								{% for gallery_item in gallery_set.dict.order %}
+									{% if data.map_url == gallery_item %}
+										<a href="{{ data.map_url }}" class="gallery" id="farm-map-image" target="_blank"><img src="{{ data.map_url }}" class="img-responsive farmImg" height="auto"></a> <!--data-featherlight="{{data.map_url}}"-->
+									{% else%}
+										<div style="position:absolute;visibility:hidden;"><a class="gallery" href="{{ gallery_item }}">hi</a></div>
+									{% endif %}
+								{% endfor %}
 							</div>
 							<div class="maptextbase">
 								{% if data['imgur_json'] != None %}
