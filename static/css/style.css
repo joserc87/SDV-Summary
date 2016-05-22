@@ -324,7 +324,7 @@ dt, dd {
 	background-color: #ffffff;
 	border-width: 2px;
 	border-color: #000000;
-	margin: 1px;
+	margin: 1px 0px;
 }
 
 .npc-relationship {
