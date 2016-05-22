@@ -102,6 +102,16 @@ function reset_url() {
 function get_img_src() {
 	// console.log(gallery_set['lookup'][$('.featherlight-image').attr('src')]);
     history.pushState("", document.title,gallery_set['lookup'][$('.featherlight-image').attr('src')][0]+'#map');
+    var box_caption_id = 'featherlight-box-caption';
+    a = $('#'+box_caption_id);
+    if (a.length == 0) {
+    	//create caption box
+    	$('.featherlight-content').append('<div id="'+box_caption_id+'" ></div>');
+    	a = $('#'+box_caption_id);
+    }
+    a.html(gallery_set['lookup'][$('.featherlight-image').attr('src')][1]);
+
+
 }
 
 $(document).ready(function() {

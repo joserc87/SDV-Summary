@@ -590,6 +590,7 @@ p .cc_message {
 	margin: 2px 0px;
 }
 
+/*begin stuff borrowed from featherlight gallery example*/
 .featherlight-gallery {
 	background: rgba(100,100,100,0.5);
 }
@@ -616,4 +617,26 @@ p .cc_message {
 .featherlight-gallery.featherlight-first-slide .featherlight-previous {
 	display: none;
 }
+/*end stuff borrowed from gallery example*/
 
+
+@media all {
+	#featherlight-box-caption {
+		position:absolute;
+		font-family: 'VT323';
+		font-size: 16pt;
+		top:25px;
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: rgba(0,0,0,0.7);
+		padding: 0px 5px;
+		color: #FFFFFF;
+		overflow:hidden;
+	}
+}
+
+@media only screen and (max-width: 1024px) {
+	#featherlight-box-caption {
+		top:10px;
+	}
+}
