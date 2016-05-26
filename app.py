@@ -81,7 +81,7 @@ def login():
 	start_time=time.time()
 	error=None
 	session.permanent = True
-	if 'logged_in_user' in session:
+	if logged_in():
 		return redirect(url_for('home'))
 	if request.method == 'POST':
 		if 'email' not in request.form or 'password' not in request.form or request.form['email']=='':
@@ -108,6 +108,13 @@ def login():
 				else:
 					error = 'Incorrect password!'
 	return render_template("login.html",error=error,processtime=round(time.time()-start_time,5))
+
+@app.route('/reset', methods=['GET','POST'])
+def reset_password():
+	start_time = time.time()
+	error = None
+	
+	return render_template("reset.html",error=error,processtime=round(time.time()-start_time,5))
 
 @app.route('/su',methods=['GET','POST'])
 def signup():

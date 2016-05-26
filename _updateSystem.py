@@ -23,7 +23,7 @@ def check_voting_base():
 
 def main():
 	print('rebalanced the votes of {} playerinfo entries'.format(check_voting_base()))
-	print('added {} accounts to email queue'.format(check_email_verification()))
+	print('added {} accounts to email queue: if this is more than zero, you might need to manually run emailDrone'.format(check_email_verification()))
 
 if __name__ == '__main__':
 	main()

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Login - {{super()}}{% endblock %}
+{% block title %}Password reset - {{super()}}{% endblock %}
 {% block bodycontent %}
 {% include "titlebar.html" %}
 			<div class="row center-block panel">
 				<div class="interiorpanel">
 					<div class="col-md-12">
-						<h2>Sign in</h2>
+						<h2>Reset password</h2>
 						{% with messages = get_flashed_messages() %}
 							{% if messages %}
 								{% for message in messages %}
@@ -17,19 +17,14 @@
 							<div class=" col-lg-offset-3 col-md-offset-3 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center">
 								<div style="padding-bottom: 1em;">
 									<form action="" method="post">
-										<label for="uploadFarm" class="sr-only">Log in to a user account on upload.farm</label>
+										<label for="uploadFarm" class="sr-only">Reset password for user account on upload.farm</label>
 
 										<div class="form-group">
 											<label for="email" class="sr-only">Email address</label>
 											<input class="form-control input-lg" type="text" id="email" name="email" value="{{request.form['email']}}" placeholder="email">
 										</div>
 
-										<div class="form-group">
-											<label for="password" class="sr-only">Password</label>
-											<input class="form-control input-lg" id="password" type="password" name="password" value="" placeholder="password">
-										</div>
-
-										<button class="btn btn-primary btn-lg" type="submit" describedby="helpBlock">Sign in!</button>
+										<button class="btn btn-primary btn-lg" type="submit" describedby="helpBlock">Reset password</button>
 									</form>
 								</div>
 							</div>
@@ -37,7 +32,6 @@
 						{% if error %}
 							<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
 						{% endif %}
-						<p class="text-center">Need to register? <a href="{{url_for('signup')}}">Sign up!</a> Forgot password? <a href="{{url_for('reset_password')}}">Reset it!</a></p>
 					</div>
 				</div>
 			</div>
