@@ -1,7 +1,3 @@
-import os
-import time
-import sqlite3
-import psycopg2
 import json
 from flask import Flask
 from flask_mail import Mail, Message
