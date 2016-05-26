@@ -37,6 +37,26 @@
 		{% endif %}
 	</div>
 </div>
+{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		{% for message in messages %}
+			<div class="row center-block" id="{{loop.index0}}-container">
+				<div class="col-md-12 panel text-center">
+					<div class="bulletinpanel">
+						<div class="bulletinclose">
+							<span id="{{loop.index0}}-{%if 'cookie_controlled' in message.keys()%}scafc-{{message.cookie_controlled}}{%else%}fc{%endif%}" class="clickable"><img class="img-responsive" src="{{url_for('static',filename='css/bulletin/cross.png')}}"></span>
+						</div>
+						<div class="row center-block">
+							<div class="col-md-12">
+								{{message.message|safe}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endwith %}
 <div class="row center-block panel lead">	
 	<div class="interiorpanel">
 		<div class="col-md-12">

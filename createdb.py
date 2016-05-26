@@ -210,6 +210,8 @@ else:
 
 users_structure_dict = {'id':idcode,
 'email':'TEXT',
+'email_confirmed':'BOOLEAN',
+'email_conf_token':'TEXT',
 'password':'TEXT',
 'imgur_json':'TEXT',
 'imgur_id':'TEXT',

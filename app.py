@@ -128,7 +128,9 @@ def signup():
 				result = cur.fetchall()
 				if len(result) == 0:
 					if len(request.form['email'].split('@')) == 2 and len(request.form['email'].split('@')[1].split('.'))>= 2:
-						cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+')',(request.form['email'],generate_password_hash(request.form['password'])))
+						cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+') RETURNING id',(request.form['email'],generate_password_hash(request.form['password'])))
+						user_id = cur.fetchall()[0][0]
+						cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('email_confirmation',user_id))
 						g.db.commit()
 						flash('You have successfully registered. Now, please sign in!')
 						return redirect(url_for('login'))
@@ -173,7 +175,6 @@ def account_page():
 		acc_info = {'email':e[0],'imgur':json.loads(e[1]) if e[1] != None else None}
 		has_liked = True if True in has_votes(user).values() else False
 		return render_template('account.html',error=error,claimed=claimed_ids,claimable=claimable_ids, has_liked=has_liked, acc_info=acc_info,processtime=round(time.time()-start_time,5))
-
 
 
 def logged_in():
@@ -550,8 +551,6 @@ def get_others(series_id,millisecondsPlayed):
 		gallery_set['lookup'][row[1]]=[row[0],row[2]]
 	gallery_set = {'json':json.dumps(gallery_set),'dict':gallery_set}
 	return return_data, gallery_set
-
-
 
 
 def find_claimables():
@@ -1082,6 +1081,33 @@ def get_imgur_auth_code():
 	else:
 		error = "Cannot connect to imgur if not logged in!"
 		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+
+@app.route('/verify_email')
+def verify_email():
+	start_time = time.time()
+	error=None
+	if 'i' in request.args and 't' in request.args:
+		g.db = connect_db()
+		cur = g.db.cursor()
+		cur.execute('SELECT email_conf_token, email_confirmed FROM users WHERE id='+app.sqlesc,(request.args.get('i'),))
+		t = cur.fetchall()
+		if len(t) == 0:
+			error = 'Account does not exist!'
+			return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+		elif t[0][1] == True:
+			error = 'Already confirmed email address!'
+			return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+		else:
+			print 'from url:',request.args.get('t')
+			print 'from db:',t[0][0]
+			if t[0][0] == request.args.get('t'):
+				cur.execute('UPDATE users SET email_confirmed='+app.sqlesc+' WHERE id='+app.sqlesc,(True,request.args.get('i')))
+				g.db.commit()
+				flash({'message':"<p>Account email address confirmed!</p>"})
+				return redirect(url_for('home'))
+	error = 'Malformed verification string!'
+	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+
 
 @app.route('/_vote',methods=['POST'])
 def submit_vote():
