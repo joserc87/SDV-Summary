@@ -1102,8 +1102,8 @@ def verify_email():
 			error = 'Account does not exist!'
 			return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 		elif t[0][1] == True:
-			error = 'Already confirmed email address!'
-			return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+			flash({'message':'<p>Already confirmed email address!</p>'})
+			return redirect(url_for('home'))
 		else:
 			print 'from url:',request.args.get('t')
 			print 'from db:',t[0][0]

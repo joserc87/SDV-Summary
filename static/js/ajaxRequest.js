@@ -24,8 +24,7 @@ function recentTemplate(recent,votes){
 				'+ recent[1] +', '+ recent[2] +' Farm <br/>  '+ recent[3] +' \
 			</div> \
 		</a>'
-	if (recent[6]!=null and recent[6]!=false) {
-		build_string = build_string.concat(recent[6])
+	if (recent[6]!=null && recent[6]!=false) {
 		build_string = build_string.concat('<div class="previewdl"> \
 				<img title="This farm has a downloadable savegame available" src="static/css/dl32.png"> \
 			</div>');

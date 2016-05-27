@@ -28,6 +28,7 @@
 		<meta property="og:description" content="Summary of {{data.farmName}} Farm by {{data.name}} (Stardew Valley)" />
 		<meta property="og:site_name" content="upload.farm" />
 <script src="{{ url_for('static', filename='js/jquery.detect_swipe.js') }}"></script>
+<script src="{{url_for('static',filename='js/flashedmessages.js')}}" type="text/javascript" charset="utf-8"></script>
 <script>
 $(function () {
   $('[data-toggle="popover"]').popover()
@@ -35,28 +36,6 @@ $(function () {
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
-function flashed_close(id) {
-	$(document.getElementById(id)).slideUp(400);
-}
-
-$(document).ready(function() {
-	$(".clickable").click(function() {
-		var splitstr = $(this).attr('id').split('-')
-		if ( splitstr[1] == 'scafc' ) {
-			var now = new Date();
-			var time = now.getTime();
-			var expireTime = time + 30000*36000;
-			now.setTime(expireTime);
-			document.cookie = splitstr[2]+'=true;expires='+now.toGMTString()+';path=/';
-			flashed_close(splitstr[0]+'-container');
-		}
-		else if ( splitstr[1] == 'fc' ) {
-			flashed_close(splitstr[0]+'-container');
-		}
-		else {
-		};
-	});
-});
 </script>
 {% include "votesetup.html" %}
 {% if others.keys()|length > 1 %}
