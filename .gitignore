@@ -78,3 +78,4 @@ uploadfarm/templates/analytics.html
 *.zip
 # Images
 *.png
+*.pdn

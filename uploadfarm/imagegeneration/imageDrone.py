@@ -41,7 +41,7 @@ def process_queue():
                     os.mkdir(base_path)
                 except OSError:
                     pass
-
+                print(os.getcwd())
                 avatar_path = os.path.join(base_path, data['url']+'-a.png')
                 avatar = generateAvatar(data)
 
@@ -50,11 +50,11 @@ def process_queue():
                 generateFamilyPortrait(avatar, pi).save(portrait_path, compress_level=9)
 
                 avatar.resize((avatar.width*4, avatar.height*4)).save(avatar_path, compress_level=9)
-                
+
                 farm_data = regenerateFarmInfo(json.loads(data['farm_info']))
                 farm_path = os.path.join(base_path, data['url']+'-f.png')
                 generateMinimap(farm_data).save(farm_path, compress_level=9)
-                
+
                 map_path = os.path.join(base_path, data['url']+'-m.png')
                 thumb_path = os.path.join(base_path, data['url']+'-t.png')
                 farm = generateFarm(data['currentSeason'], farm_data)

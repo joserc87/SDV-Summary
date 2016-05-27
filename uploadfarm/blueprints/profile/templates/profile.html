@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block header %}
 {{super()}}
+{% from "macros.html" import get_image with context%}
 		<!-- Place this data between the <head> tags of your website -->
 		<meta name="description" content="Summary of {{data.farmName}} Farm by {{data.name}} (Stardew Valley)" />
 
@@ -237,6 +238,9 @@ $(document).ready(function() {
 					{% endfor %}
 				{% endif %}
 			{% endwith %}
+			{% macro get_image(type) %}
+					{{ url_for('static', filename='images/{0}/{0}-{1}.png'.format(data.url, type)) }}
+			{% endmacro %}
 			<div class="row center-block">				
 				<div class="col-md-8 col-sm-12 panel text-center">
 					<div class="interiorpanel tabbable">
@@ -249,7 +253,7 @@ $(document).ready(function() {
 							<div id="playerInfo" class="tab-pane active">
 								<div class="col-md-4 col-sm-4 col-xs-12">
 									<div class="avatarPanel">
-										<img src="{{ data.avatar_url }}" class="playerAvatar">
+										<img src="{{ get_image('a') }}" class="playerAvatar">
 									</div>
 								</div>
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
@@ -278,7 +282,7 @@ $(document).ready(function() {
 
 								<div class="col-md-4 col-sm-4 col-xs-12">
 									<div class="portraitPanel">
-										<img src="{{ data.portrait_url }}" class="playerPortrait">
+										<img src="{{ get_image('p') }}" class="playerPortrait">
 									</div>
 								</div>
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
@@ -376,10 +380,10 @@ $(document).ready(function() {
 														{% for level in range(skill[1]) %}
 															<div class="pipdiv">
 																{% if (level + 1) % 5 != 0 %}
-																<img class="pip" src="{{url_for('static', filename='images/skills/point_active.png')}}">
+																<img class="pip" src="{{url_for('static', filename='assets/skills/point_active.png')}}">
 																{% else %}
 																<a style="text-decoration: none;" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-container="body" data-html="true" {% for value in profindex[skill[0]][level] %}{% if value in professions %}title="<img src='{{url_for('static', filename='assets/professions/'+value+'.png')}}'>{{value}}" data-content="{{blurbs[value]}}"{%endif%}{%endfor%}>
-																<img class="pip" src="{{url_for('static', filename='images/skills/profession_active.png')}}">
+																<img class="pip" src="{{url_for('static', filename='assets/skills/profession_active.png')}}">
 																</a>
 																{% endif %}
 															</div>
@@ -391,9 +395,9 @@ $(document).ready(function() {
 													{% for level in range(skill[1] + 1, 11) %}
 														<div class="pipdiv">
 															{% if (level) % 5 != 0 %}
-															<img class="pip" src="{{url_for('static', filename='images/skills/point_inactive.png')}}">
+															<img class="pip" src="{{url_for('static', filename='assets/skills/point_inactive.png')}}">
 															{% else %}
-															<img class="pip" src="{{url_for('static', filename='images/skills/profession_inactive.png')}}">
+															<img class="pip" src="{{url_for('static', filename='assets/skills/profession_inactive.png')}}">
 															{% endif %}
 														</div>
 														{% if level == 4 %}
@@ -423,7 +427,7 @@ $(document).ready(function() {
 				<div class="col-md-4 col-sm-12 panel"><!--col-md-offset-1-->
 					<div class="interiorpanel text-center">
 						<h3>Minimap</h3>
-						<a href="#mainFarm"><img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
+						<a href="#mainFarm"><img src="{{ get_image('f') }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
 						{% if data.download_enabled == True %}
 							<p class="text-center">
 								<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='You use the contents of this zip at your own risk!<br><a href="/dl/{{data.url}}">I understand, download!</a>'>download savegame</button>
@@ -520,7 +524,7 @@ $(document).ready(function() {
 
 						<div class="previewbox">
 							<div class="previewimage">
-								<a href="{{ data.map_url }}" target="_blank"><img src="{{ data.map_url }}" class="img-responsive farmImg" height="auto"></a>
+								<a href="{{ get_image('m') }}" target="_blank"><img src="{{ get_image('m') }}" class="img-responsive farmImg" height="auto"></a>
 							</div>
 							<div class="maptextbase">
 								{% if data['imgur_json'] != None %}
