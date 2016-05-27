@@ -2,32 +2,35 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify, make_response, send_from_directory, abort
-import time
+from flask_recaptcha import ReCaptcha
+from flask.ext.bcrypt import Bcrypt
+from flask_mail import Mail, Message
 from werkzeug import secure_filename, check_password_hash
 from werkzeug.contrib.fixers import ProxyFix
 from werkzeug.security import generate_password_hash
+from google_measurement_protocol import Event, report
+import time
 import os
 import sys
+import json
+import hashlib
+from xml.etree.ElementTree import ParseError
+import operator
+import random
+import sqlite3
+import datetime
+import uuid
+import io
+import imgur
+import defusedxml
+import psycopg2
 from playerInfo import playerInfo
 from farmInfo import getFarmInfo
 from bigbase import dec2big
 import generateSavegame
-import json
-import hashlib
 from imageDrone import process_queue
+from emailDrone import process_email
 from createdb import database_structure_dict, database_fields
-import defusedxml
-import operator
-import random
-import sqlite3
-import psycopg2
-import io
-from xml.etree.ElementTree import ParseError
-import datetime
-from flask_recaptcha import ReCaptcha
-import uuid
-from google_measurement_protocol import Event, report
-import imgur
 from savefile import savefile
 from zipuploads import zopen, zwrite
 
@@ -42,6 +45,8 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
 app = Flask(__name__)
 app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
 recaptcha = ReCaptcha(app=app)
+bcrypt = Bcrypt(app)
+mail = Mail(app)
 app.secret_key = app.config['SECRET_KEY']
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
@@ -66,6 +71,7 @@ def md5(md5file):
 			h.update(chunk)
 	return h.hexdigest()
 
+
 @app.route('/_get_recents')
 def jsonifyRecents():
 	recents = get_recents()['posts']
@@ -75,6 +81,48 @@ def jsonifyRecents():
 		for recent in recents:
 			votes[recent[0]] = get_votes(recent[0])
 	return jsonify(recents=recents,votes=votes)
+
+
+def check_user_pw(email,password_attempt):
+	g.db = connect_db()
+	cur = g.db.cursor()
+	cur.execute('SELECT id,password,auth_key FROM users WHERE email='+app.sqlesc,(email,))
+	result = cur.fetchall()
+	assert len(result) <= 1
+	if len(result) == 0:
+		return {'result':False, 'error':'Username not found!'}
+	else:
+		hash_type = _get_hash_type(result[0][1])
+		if hash_type == 'sha1':
+			password_valid = check_password_hash(result[0][1],password_attempt)
+			if password_valid:
+				new_hash = bcrypt.generate_password_hash(password_attempt)
+				cur.execute('UPDATE users SET password='+app.sqlesc+' WHERE email='+app.sqlesc,(new_hash,email))
+				g.db.commit()
+		elif hash_type == 'bcrypt':
+			password_valid = bcrypt.check_password_hash(result[0][1],password_attempt)
+		else:
+			return {'result':False,'error':'Unable to interpret stored password hash!'}
+		if password_valid == True:
+			if result[0][2] == None:
+				auth_key = dec2big(random.randint(0,(2**128)))
+				cur.execute('UPDATE users SET auth_key='+app.sqlesc+', login_time='+app.sqlesc+' WHERE id='+app.sqlesc,(auth_key,time.time(),result[0][0]))
+				g.db.commit()
+			else:
+				auth_key = result[0][2]
+			session['logged_in_user']=(result[0][0],auth_key)
+			return {'result':True}
+		else:
+			return {'result':False,'error':'Incorrect password!'}
+
+def _get_hash_type(hashed_pw):
+	split_hash = hashed_pw.split('$')
+	if split_hash[0] == 'pbkdf2:sha1:1000':
+		return 'sha1'
+	elif split_hash[1] == '2b' and split_hash[0] == '':
+		return 'bcrypt'
+	else:
+		raise TypeError
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -87,33 +135,79 @@ def login():
 		if 'email' not in request.form or 'password' not in request.form or request.form['email']=='':
 			error = 'Missing email or password for login!'
 		else:
-			time.sleep(0.2)
-			g.db = connect_db()
-			cur = g.db.cursor()
-			cur.execute('SELECT id,password,auth_key FROM users WHERE email='+app.sqlesc,(request.form['email'],))
-			result = cur.fetchall()
-			assert len(result) <= 1
-			if len(result) == 0:
-				error = 'Username not found!'
+			pw = check_user_pw(request.form['email'],request.form['password'])
+			if pw['result'] != True:
+				error = pw['error']
 			else:
-				if check_password_hash(result[0][1],request.form['password']) == True:
-					if result[0][2] == None:
-						auth_key = dec2big(random.randint(0,(2**128)))
-						cur.execute('UPDATE users SET auth_key='+app.sqlesc+', login_time='+app.sqlesc+' WHERE id='+app.sqlesc,(auth_key,time.time(),result[0][0]))
-						g.db.commit()
-					else:
-						auth_key = result[0][2]
-					session['logged_in_user']=(result[0][0],auth_key)
-					return redirect(url_for('home'))
-				else:
-					error = 'Incorrect password!'
+				flash({'message':'<p>Logged in successfully!</p>'})
+				return redirect(url_for('home'))
 	return render_template("login.html",error=error,processtime=round(time.time()-start_time,5))
 
 @app.route('/reset', methods=['GET','POST'])
 def reset_password():
 	start_time = time.time()
 	error = None
-	
+	if request.method == 'POST':
+		if 'email' in request.form and request.form['email']!='':
+			g.db = connect_db()
+			cur = g.db.cursor()
+			cur.execute('SELECT id, email_confirmed FROM users WHERE email='+app.sqlesc,(request.form['email'],))
+			result = cur.fetchall()
+			if len(result) == 0:
+				error = 'Username not found!'
+			elif result[0][1] != True:
+				error = 'Email address not verified; please verify your account using the verification email sent when you registered before attempting to reset password!'
+			else:
+				cur.execute('SELECT users.id FROM users WHERE email='+app.sqlesc+' AND NOT EXISTS (SELECT todo.id FROM todo WHERE todo.playerid=CAST(users.id AS text))',(request.form['email'],))
+				user_id = cur.fetchone()
+				if user_id != None:
+					cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('email_passwordreset',user_id[0]))
+					g.db.commit()
+					# process_email()
+					flash({'message':'<p>Password reset email queued</p>'})
+				else:
+					flash({'message':'<p>Previous password reset email still waiting to be sent... (sorry)</p>'})
+				return redirect(url_for('login'))
+		elif 'password' in request.form and len(request.form['password'])>=	app.config['PASSWORD_MIN_LENGTH'] and 'id' in request.form and 'pw_reset_token' in request.form:
+			g.db = connect_db()
+			cur = g.db.cursor()
+			cur.execute('SELECT pw_reset_token, id FROM users WHERE id='+app.sqlesc,(request.form['id'],))
+			t = cur.fetchall()
+			if len(t) == 0:
+				error = 'Cannot reset password: account does not exist'
+				return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+			elif t[0][0] == None:
+				flash({'message':'<p>This reset link has already been used!</p>'})
+				return redirect(url_for('home'))
+			else:
+				if t[0][0] == request.args.get('t'):
+					new_hash = bcrypt.generate_password_hash(request.form['password'])
+					cur.execute('UPDATE users SET password='+app.sqlesc+' WHERE id='+app.sqlesc,(new_hash,request.form['id']))
+					g.db.commit()
+					flash({'message':'<p>Password reset, please log in!</p>'})
+					return redirect(url_for('login'))
+			error = 'Malformed verification string!'
+			return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+		elif 'password' in request.form and len(request.form['password'])< app.config['PASSWORD_MIN_LENGTH']:
+			error = 'Password insufficiently long, please try again'
+		else:
+			error = 'Please enter the email address you used to register'
+	if 'i' in request.args and 't' in request.args:
+		g.db = connect_db()
+		cur = g.db.cursor()
+		cur.execute('SELECT pw_reset_token, email, id FROM users WHERE id='+app.sqlesc,(request.args.get('i'),))
+		t = cur.fetchall()
+		if len(t) == 0:
+			error = 'Cannot reset password: account does not exist'
+			return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+		elif t[0][0] == None:
+			flash({'message':'<p>This reset link has already been used!</p>'})
+			return redirect(url_for('home'))
+		else:
+			if t[0][0] == request.args.get('t'):
+				return render_template("reset.html",error=error,details=t[0],processtime=round(time.time()-start_time,5))
+		error = 'Malformed verification string!'
+		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
 	return render_template("reset.html",error=error,processtime=round(time.time()-start_time,5))
 
 @app.route('/su',methods=['GET','POST'])
@@ -135,11 +229,12 @@ def signup():
 				result = cur.fetchall()
 				if len(result) == 0:
 					if len(request.form['email'].split('@')) == 2 and len(request.form['email'].split('@')[1].split('.'))>= 2:
-						cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+') RETURNING id',(request.form['email'],generate_password_hash(request.form['password'])))
+						cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+') RETURNING id',(request.form['email'],bcrypt.generate_password_hash(request.form['password'])))
 						user_id = cur.fetchall()[0][0]
 						cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('email_confirmation',user_id))
 						g.db.commit()
-						flash('You have successfully registered. Now, please sign in!')
+						process_email()
+						flash({'message':'<p>You have successfully registered. A verification email has been sent to you. Now, please sign in!</p>'})
 						return redirect(url_for('login'))
 					else:
 						error = 'Invalid email address!'

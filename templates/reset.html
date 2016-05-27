@@ -16,6 +16,26 @@
 						<div class="row">
 							<div class=" col-lg-offset-3 col-md-offset-3 col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center">
 								<div style="padding-bottom: 1em;">
+									{% if details %}
+									<form action="" method="post">
+										<label for="uploadFarm" class="sr-only">Reset password for user account on upload.farm</label>
+
+										<input type="hidden" type="text" name="pw_reset_token" value="{{details.0}}">
+										<input type="hidden" type="text" name="id" value="{{details.2}}">
+
+										<div class="form-group">
+											<label for="email" class="sr-only">Email address</label>
+											<input class="form-control input-lg" type="text" placeholder="{{details.1}}" readonly>
+										</div>
+
+										<div class="form-group">
+											<label for="password" class="sr-only">New password</label>
+											<input class="form-control input-lg" id="password" type="password" name="password" value="" placeholder="password"  pattern=".{{"{"}}{{config.PASSWORD_MIN_LENGTH}},}" required title="Passcode must be at least {{config.PASSWORD_MIN_LENGTH}} characters long!">
+										</div>
+
+										<button class="btn btn-primary btn-lg" type="submit" describedby="helpBlock">Set new password</button>
+									</form>
+									{% else %}
 									<form action="" method="post">
 										<label for="uploadFarm" class="sr-only">Reset password for user account on upload.farm</label>
 
@@ -26,6 +46,7 @@
 
 										<button class="btn btn-primary btn-lg" type="submit" describedby="helpBlock">Reset password</button>
 									</form>
+									{% endif %}
 								</div>
 							</div>
 						</div>
