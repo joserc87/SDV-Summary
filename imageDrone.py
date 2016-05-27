@@ -47,7 +47,7 @@ def process_queue():
 				data['newEyeColor'] = [data['newEyeColor0'],data['newEyeColor1'],data['newEyeColor2'],data['newEyeColor3']]
 				data['hairstyleColor'] = [data['hairstyleColor0'],data['hairstyleColor1'],data['hairstyleColor2'],data['hairstyleColor3']]
 
-				base_path = file_path = os.path.join(app.config.get('IMAGE_FOLDER'), data['url'])
+				base_path = os.path.join(app.config.get('IMAGE_FOLDER'), data['url'])
 				try:
 					os.mkdir(base_path)
 				except OSError:
