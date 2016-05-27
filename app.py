@@ -163,11 +163,11 @@ def reset_password():
 				if user_id != None:
 					cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('email_passwordreset',user_id[0]))
 					g.db.commit()
-					# process_email()
-					flash({'message':'<p>Password reset email queued</p>'})
+					process_email()
+					flash({'message':'<p>Password reset email sent!</p>'})
 				else:
 					flash({'message':'<p>Previous password reset email still waiting to be sent... (sorry)</p>'})
-				return redirect(url_for('login'))
+				return redirect(url_for('home'))
 		elif 'password' in request.form and len(request.form['password'])>=	app.config['PASSWORD_MIN_LENGTH'] and 'id' in request.form and 'pw_reset_token' in request.form:
 			g.db = connect_db()
 			cur = g.db.cursor()
@@ -182,7 +182,7 @@ def reset_password():
 			else:
 				if t[0][0] == request.args.get('t'):
 					new_hash = bcrypt.generate_password_hash(request.form['password'])
-					cur.execute('UPDATE users SET password='+app.sqlesc+' WHERE id='+app.sqlesc,(new_hash,request.form['id']))
+					cur.execute('UPDATE users SET password='+app.sqlesc+', pw_reset_token=NULL WHERE id='+app.sqlesc,(new_hash,request.form['id']))
 					g.db.commit()
 					flash({'message':'<p>Password reset, please log in!</p>'})
 					return redirect(url_for('login'))
