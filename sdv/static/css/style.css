@@ -633,6 +633,10 @@ p .cc_message {
 		color: #FFFFFF;
 		overflow:hidden;
 	}
+
+	#featherlight-box-caption a {
+		color: #FFFFFF;
+	}
 }
 
 @media only screen and (max-width: 1024px) {

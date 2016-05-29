@@ -2,9 +2,9 @@
 
 A Flask webapp using Python Image Library to reconstruct and display a summary of the player and farm from a Stardew Valley save file.
 
-## Configuration
+## config.py
 
-The `SDV_APP_SETTINGS` environment variable is used in order to specify which Python object to load for configuration from config.py as per Flask's config.from_object. In that file the following settings can be used:
+`config.py` goes alongside `runserver.py`. The `SDV_APP_SETTINGS` environment variable is used in order to specify which Python object to load for configuration from config.py as per Flask's config.from_object. In that file the following settings can be used:
 
 ### Mandatory Settings
 
@@ -50,6 +50,14 @@ The `SDV_APP_SETTINGS` environment variable is used in order to specify which Py
 
 `DB_PASSWORD`
 
-## Creating the database
+##### Flask-mail
 
-Once the config file has been setup, run createadmin.py and createdb.py and follow the prompts.
+As per flask-mail docs and your email server
+
+## Initialization
+
+Once the config file has been written, run createadmin.py and createdb.py and follow the prompts to create the database structure.
+
+To run, the templating engine jinja2 needs `sdv\templates\analytics.html` to exist.
+
+Assets for image generation go in `sdv\assets\[subfolder]`. Assets used as-is go in `sdv\static\assets\[subfolder]`.

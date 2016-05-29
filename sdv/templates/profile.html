@@ -88,7 +88,7 @@ function get_img_src() {
     	$('.featherlight-content').append('<div id="'+box_caption_id+'" ></div>');
     	a = $('#'+box_caption_id);
     }
-    a.html(gallery_set['lookup'][$('.featherlight-image').attr('src')][1]);
+    a.html('<a href="'+$('.featherlight-image').attr('src')+'">'+gallery_set['lookup'][$('.featherlight-image').attr('src')][1]+'</a>');
 
 
 }
