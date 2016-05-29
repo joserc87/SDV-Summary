@@ -1,7 +1,7 @@
 import json
 from flask import Flask
 from flask_mail import Message
-import app
+import __init__ as app
 import uuid
 import time
 

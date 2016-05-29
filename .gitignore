@@ -66,12 +66,12 @@ config.py
 saves/
 save/
 tools/
-assets/
-uploads/
-static/assets/
-static/images/
+sdv/assets/
+sdv/uploads/
+sdv/static/assets/
+sdv/static/images/
 sdv.db
-templates/analytics.html
+sdv/templates/analytics.html
 
 # Batch
 *.bat

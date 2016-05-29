@@ -1,5 +1,5 @@
 import json
-from app import app, connect_db
+from __init__ import app, connect_db
 
 def check_email_verification():
 	db = connect_db()
