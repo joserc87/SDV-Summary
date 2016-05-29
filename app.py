@@ -1043,6 +1043,7 @@ def get_entries(n=6,**kwargs):
 		dl 				bool	if True only show results with downloads enabled
 		full_thumbnail	bool	if True, return *full* thumbnails, not maps
 		sort_by			text	'rating', 'views', 'recent'; 'rating' defined according to snippet from http://www.evanmiller.org/how-not-to-sort-by-average-rating.html
+		include_private bool	if True, return will check for admin status and include private farms (NOT FULLY IMPLEMENTED YET!)
 	'''
 	order_types = {'rating':'ORDER BY ((positive_votes + 1.9208) / (positive_votes + negative_votes) - 1.96 * SQRT((positive_votes*negative_votes)/(positive_votes+negative_votes)+0.9604) / (positive_votes+negative_votes)) / ( 1 + 3.8416 / (positive_votes + negative_votes)) ',
 					'views':'ORDER BY views ',
@@ -1083,6 +1084,11 @@ def get_entries(n=6,**kwargs):
 			where_contents.append('url=ANY(ARRAY[])')
 	if 'dl' in kwargs and kwargs['dl']==True:
 		where_contents.append('download_enabled=TRUE')
+	if 'include_private' in kwargs and kwargs['include_private'] == True:
+		pass
+		# do some checking to ensure the person getting the private data is an admin
+	else:
+		where_contents.append(cur.mogrify('(private IS NOT TRUE OR (private IS TRUE AND owner_id='+app.sqlesc+'))',(get_logged_in_user(),)).decode('utf-8'))
 	where = ''
 	for c,contents in enumerate(where_contents):
 		if c == 0:
@@ -1200,8 +1206,6 @@ def verify_email():
 			flash({'message':'<p>Already confirmed email address!</p>'})
 			return redirect(url_for('home'))
 		else:
-			print 'from url:',request.args.get('t')
-			print 'from db:',t[0][0]
 			if t[0][0] == request.args.get('t'):
 				cur.execute('UPDATE users SET email_confirmed='+app.sqlesc+' WHERE id='+app.sqlesc,(True,request.args.get('i')))
 				g.db.commit()

@@ -197,7 +197,8 @@ database_structure_dict = {'md5':'TEXT',
 'positive_votes':'BIGINT DEFAULT 1',
 'negative_votes':'BIGINT DEFAULT 1',
 'base_path':'TEXT',
-'thumb_url':'TEXT'}
+'thumb_url':'TEXT',
+'private':'BOOLEAN'}
 
 if app.config['USE_SQLITE']==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'
@@ -220,7 +221,8 @@ users_structure_dict = {'id':idcode,
 'login_time':'BIGINT',
 'api_key':'TEXT',
 'api_secret':'TEXT',
-'votes':'TEXT'}
+'votes':'TEXT',
+'privacy_default':'BOOLEAN DEFAULT FALSE'}
 
 database_fields = ''
 for key in sorted(database_structure_dict.keys()):
