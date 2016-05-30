@@ -31,11 +31,12 @@
 <script src="{{url_for('static',filename='js/flashedmessages.js')}}" type="text/javascript" charset="utf-8"></script>
 <script>
 $(function () {
-  $('[data-toggle="popover"]').popover()
-})
+	$('[data-toggle="popover"]').popover();
+});
 $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
+	$('[data-toggle="tooltip"]').tooltip();
+});
+
 </script>
 {% include "votesetup.html" %}
 {% if others.keys()|length > 1 %}
@@ -132,7 +133,6 @@ $(document).ready(function() {
 	});
 });
 </script>
-
 {% endblock %}
 
 {% block title %}{{data.farmName}} Farm - {{super()}}{% endblock %}

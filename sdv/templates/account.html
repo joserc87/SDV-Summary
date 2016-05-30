@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% block header %}
 {{ super() }}
+<script>
+$(function () {
+  $('[data-toggle="popover"]').popover()
+})
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 {% endblock %}
 {% block title %}Account - {{super()}}{% endblock %}
 {%block bodycontent %}
@@ -16,6 +24,11 @@
 					{% if has_liked %}
 						<p><a href="{{url_for('allmain',liked=True)}}">Browse my liked farms</a></p>
 					{% endif %}
+					<br>
+				</div>
+				<div class="col-md-12" style="padding-left:2%;padding-right:2%;">
+					<h3>Preferences</h3>
+					<p>Upload default: {%if acc_info.privacy_default %}<button type="button" class="btn-link reducedpadding" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='<b>Change to listed?</b><br>This will allow new uploads it to appear in searches on the site by default<br><form action="{{url_for('account_page')}}" method="post"><button type="submit" name="privacy_default" value="False" class="btn-link">Change&nbsp;to&nbsp;listed!</button></form>'><img src="{{url_for('static',filename='css/unlist32.png')}}"></button>{%else%}<button type="button" class="btn-link reducedpadding" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='<b>Change to unlisted?</b><br>This will prevent new uploads appearing to others on the site by default<br><form action="{{url_for('account_page')}}" method="post"><button type="submit" name="privacy_default" value="True" class="btn-link">Change&nbsp;to&nbsp;unlisted!</button></form>'><img src="{{url_for('static',filename='css/list32.png')}}"></button>{%endif%}</p>
 				</div>
 			</div>
 			{% if error %}

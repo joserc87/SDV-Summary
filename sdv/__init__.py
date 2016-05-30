@@ -269,6 +269,11 @@ def account_page():
 		claimables = find_claimables()
 		db = get_db()
 		c = db.cursor()
+		if request.method == 'POST':
+			if 'privacy_default' in request.form and request.form.get('privacy_default') in ['True','False']:
+				print c.mogrify('UPDATE users SET privacy_default='+app.sqlesc+' WHERE id='+app.sqlesc,(True if request.form.get('privacy_default') == 'True' else False,user)).decode('utf-8')
+				c.execute('UPDATE users SET privacy_default='+app.sqlesc+' WHERE id='+app.sqlesc,(True if request.form.get('privacy_default') == 'True' else False,user))
+				db.commit()
 		c.execute('SELECT id,auto_key_json FROM series WHERE owner='+app.sqlesc,(user,))
 		r = c.fetchall()
 		claimed_ids = {}
@@ -284,9 +289,10 @@ def account_page():
 			c.execute('SELECT auto_key_json FROM series WHERE id=(SELECT series_id FROM playerinfo WHERE id='+app.sqlesc+')',(row[0],))
 			a = json.loads(c.fetchone()[0])
 			claimable_ids[row[0]] = {'auto_key_json':a,'data':(row[1],d)}
-		c.execute('SELECT email,imgur_json FROM users WHERE id='+app.sqlesc,(user,))
+		c.execute('SELECT email,imgur_json,privacy_default FROM users WHERE id='+app.sqlesc,(user,))
 		e = c.fetchone()
-		acc_info = {'email':e[0],'imgur':json.loads(e[1]) if e[1] != None else None}
+		print 'privacy',e[2]
+		acc_info = {'email':e[0],'imgur':json.loads(e[1]) if e[1] != None else None, 'privacy_default':e[2]}
 		has_liked = True if True in has_votes(user).values() else False
 		return render_template('account.html',error=error,claimed=claimed_ids,claimable=claimable_ids, has_liked=has_liked, acc_info=acc_info,processtime=round(time.time()-start_time,5))
 
