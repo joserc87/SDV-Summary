@@ -644,3 +644,26 @@ p .cc_message {
 		top:10px;
 	}
 }
+
+.indicate-private {
+	font-size:16pt;
+	font-family: 'VT323';
+	color: #FF4444;
+}
+
+.private-banner {
+	position:absolute;
+	top:16px;
+	right:17px;
+}
+
+.private-banner img {
+	width:140px;
+	height:140px;
+	image-rendering: pixelated;
+	image-rendering: -moz-crisp-edges;
+}
+
+.reducedpadding {
+	padding: 2px 1px;
+}

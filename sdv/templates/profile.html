@@ -52,6 +52,20 @@ $(function () {
 		}
 		{%endif%}
 	});	
+	{% if 'previous' in others %}
+	$("*").on('swiperight', function() {
+		if (keyboard_control_enabled) {
+			window.location.replace('{{others['previous'].0}}');
+		}
+	});
+	{%endif%}
+	{%if 'next' in others %}
+	$("*").on('swipeleft', function() {
+		if (keyboard_control_enabled) {
+			window.location.replace('{{others['next'].0}}');
+		}
+	});
+	{%endif%}
 	</script>
 {% endif %}
 <!-- includes for featherlight 1.4.1 lightbox (https://github.com/noelboss/featherlight/) -->
@@ -88,7 +102,7 @@ function get_img_src() {
     	$('.featherlight-content').append('<div id="'+box_caption_id+'" ></div>');
     	a = $('#'+box_caption_id);
     }
-    a.html('<a href="'+$('.featherlight-image').attr('src')+'">'+gallery_set['lookup'][$('.featherlight-image').attr('src')][1]+'</a>');
+    a.html('<a href="'+$('.featherlight-image').attr('src')+'" target="_blank">'+gallery_set['lookup'][$('.featherlight-image').attr('src')][1]+'</a>');
 
 
 }
@@ -126,6 +140,7 @@ $(document).ready(function() {
 			<div class="row center-block">
 				<div class="col-md-12 col-sm-12 panel">
 					<div class="interiorpanel">
+						{% if data.private %}<div class="private-banner"><img src="{{url_for('static',filename='css/private.png')}}"></div>{%endif%}
 						<div class="col-sm-2 hidden-xs text-center">
 							<a href="/"><img src="{{url_for('static', filename='logo.png')}}" class="logo"></a>
 						</div>
@@ -152,32 +167,6 @@ $(document).ready(function() {
 											<li>{% if 'previous' in others %}<a href="/{{others['previous'].0}}" title="Go back to {{others['previous'].1}} (left arrow on keyboard also works)"><</a>{%else%}<span style="opacity: 0.5;"><</span>{% endif %}</li>
 											<li><b>{% if others.keys()|length > 1 %}<a href="{{url_for('allmain',series=data.url)}}">{{ others['current'].1 }}</a>{%else%}{{ others['current'].1 }}{%endif%}</b></li>
 											<li>{% if 'next' in others %}<a href="/{{others['next'].0}}" title="Go forward to {{others['next'].1}} (right arrow on keyboard also works)">></a>{%else%}<span style="opacity: 0.5;">></span>{% endif %}</li>
-										</ul>
-									</div>
-								</div>
-							{% endif %}
-							{% if claimable %}
-								<div class="row center-block">
-									<div class="col-md-12">
-										<ul class="list-inline text-center">
-										<li>Claim:</li>
-										<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will claim <b>only this</b> upload.<br><form action="{{data.url}}/claim" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim&nbsp;it!</button></form>'>this page</button>?</li>
-										{% if claimables|length > 1 %}
-											<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will claim <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/claimall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim&nbsp;all!</button></form>'>all claimable</button>?</li>
-										{% endif %}
-										</ul>
-									</div>
-								</div>
-							{% elif deletable %}
-								<div class="row center-block">
-									<div class="col-md-12">
-										<ul class="list-inline text-center">
-										<li>Delete:</li>
-										<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>only this</b> upload.<br><form action="{{data.url}}/del" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;it!</button></form>'>this page</button>?</li>
-										<li>
-										{% if others|length > 1 %}
-											<li><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will delete <b>all uploads</b> of this Farm.<br><form action="{{data.url}}/delall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;all!</button></form>'>all for this farm</button>?</li>
-										{% endif %}
 										</ul>
 									</div>
 								</div>
@@ -238,7 +227,7 @@ $(document).ready(function() {
 								</div>
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
 									<dl class="dl-horizontal">
-										<dt>Name</dt><dd>{{ data.name }}</dd>
+										<dt><b>Name</b></dt><dd><b>{{ data.name }}</b></dd>
 										<dt>Current Funds</dt><dd>{{ data.money }}g</dd>
 										<dt>Total Earnings</dt><dd>{{ data.totalMoneyEarned }}g</dd>
 										<dt>Gender</dt><dd>{% if data.isMale == 'true' %} Male {% else %} Female {% endif %}</dd>
@@ -248,11 +237,10 @@ $(document).ready(function() {
 										<dt>Stamina</dt><dd>{{ data.maxStamina }}</dd>
 										<dt>Steps Taken</dt><dd>{{ data.statsStepsTaken }}</dd>
 										{% if data.deepestMineLevel > 120 %}
-											<dt><b>Max Depth:</b><dd></dd></dt>
-											<dt>The Mines</dt><dd>level 120</dd>
-											<dt>Skull Cavern</dt><dd>level {{ data.deepestMineLevel - 120}}</dd>
+											<dt>Mines Depth</dt><dd>level 120</dd>
+											<dt>Cavern Depth</dt><dd>level {{ data.deepestMineLevel - 120}}</dd>
 										{% else %}
-											<dt>Max Mine Depth</dt><dd>level {{ data.deepestMineLevel }}</dd>
+											<dt>Mine Depth</dt><dd>level {{ data.deepestMineLevel }}</dd>
 										{% endif %}
 		 								<dt>Time Played</dt><dd>{{ data.millisecondsPlayed }} hours</dd>
 		 							</dl>
@@ -268,18 +256,18 @@ $(document).ready(function() {
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
 									<p>
 									{% if data.portrait_info['partner'] != None %}
-										{{data.name}} is married to {{ data.portrait_info['partner'] }}{%if data.petName!=None%}, {%else%}and{%endif%}
+										<b>{{data.name}}</b> is married to <b>{{ data.portrait_info['partner'] }}</b>{%if data.petName!=None%}, {%else%}and{%endif%}
 									{% else %}
-										{{data.name}} is unmarried{%if data.petName!=None%},{%else%} and{%endif%}
+										<b>{{data.name}}</b> is unmarried{%if data.petName!=None%},{%else%} and{%endif%}
 									{%endif%}
 									{% if data.portrait_info['children']|length > 0 %}
 										{% for child in data.portrait_info['children'] %}
-										{%if loop.index0 == 0 %}has{%else%}and{%endif%} a {{ child[2] }} day old {% if child[0] == 0 %}son{%else%}daughter{%endif%} named {{ child[3] }}{%if not loop.last %} {%endif%}{% endfor %}{%if loop.last and data.petName!=None%},{%endif%} 
+										{%if loop.index0 == 0 %}has{%else%}and{%endif%} a {{ child[2] }} day old {% if child[0] == 0 %}son{%else%}daughter{%endif%} named <b>{{ child[3] }}</b>{%if not loop.last %} {%endif%}{% endfor %}{%if loop.last and data.petName!=None%},{%endif%} 
 									{% else %}
 										has no children{%if data.petName!=None%},{%else%}.{%endif%} 
 									{%endif%}
 									{%if data.petName != None %}
-									and has a pet {% if data.catPerson == 'true' %} cat {% else %} dog {% endif %} named {{ data.petName }}.
+									and has a pet {% if data.catPerson == 'true' %} cat {% else %} dog {% endif %} named <b>{{ data.petName }}</b>.
 									{%endif%}
 									</p>
 								</div>
@@ -406,26 +394,50 @@ $(document).ready(function() {
 				</div>
 				<div class="col-md-4 col-sm-12 panel"><!--col-md-offset-1-->
 					<div class="interiorpanel text-center">
-						<h3>Minimap</h3>
+						{% if deletable or claimable %}
+							<div class="bulletinpanel">
+								<div class="row center-block">
+									<div class="col-md-12">
+										{% if claimable %}
+											<button type="button" class="btn-link reducedpadding" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will claim <b>only this</b> upload.<br><form action="{{data.url}}/claim" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim&nbsp;it!</button></form>'><img src="{{url_for('static',filename='css/clm32.png')}}"></button>
+											{% if claimables|length > 1 %}
+												<button type="button" class="btn-link reducedpadding" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will claim <b>all unclaimed uploads</b> made from this browser.<br><form action="{{data.url}}/claimall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim&nbsp;all!</button></form>'><img src="{{url_for('static',filename='css/clmall32.png')}}"></button>
+											{% endif %}
+										{% endif %}
+										{% if data.download_enabled == True and deletable %}
+											<button type="button" class="btn-link reducedpadding" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='<b>Disable downloads?</b><br>Disables sharing of the savegame you uploaded<br><form action="{{data.url}}/disable-dl" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Disable!</button></form>'><img src="{{url_for('static',filename='css/dl32.png')}}"></button>
+										{%endif%}
+										{% if data.download_enabled != True and logged_in() and data.download_enabled != True and deletable %}
+											<button type="button" class="btn-link reducedpadding" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='<b>Enable downloads?</b><br>Enables download of the savegame you uploaded by other users<br><form action="{{data.url}}/enable-dl" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Enable!</button></form>'><img src="{{url_for('static',filename='css/dldis32.png')}}"></button>
+										{% elif data.download_enabled != True and (claimable or deletable) %}
+											<button type="button" class="btn-link reducedpadding" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='To enable savegame download please first{%if not logged_in()%} <a href="{{url_for('signup')}}">sign up</a> or <a href="{{url_for('login')}}">sign in</a>, then{%endif%} claim this page.'><img src="{{url_for('static',filename='css/dl32.png')}}"></button>
+										{% endif %}
+										{% if logged_in() and deletable %}
+											{% if data.private %}
+												<button type="button" class="btn-link reducedpadding" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='<b>List your farm?</b><br>Allows it to appear in searches on the site<br><form action="{{data.url}}/list" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">List!</button></form>'><img src="{{url_for('static',filename='css/unlist32.png')}}"></button>
+											{% else %}
+												<button type="button" class="btn-link reducedpadding" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='<b>Unlist your farm?</b><br>Prevents it appearing on the site except to you and people with the URL<br><form action="{{data.url}}/unlist" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Unlist!</button></form>'><img src="{{url_for('static',filename='css/list32.png')}}"></button>
+											{% endif %}
+										{% endif %}
+										{% if not claimable and deletable %}
+													<button type="button" class="btn-link reducedpadding" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='<b>Delete this farm?</b><br>This will delete <b>only this</b> upload<br><form action="{{data.url}}/del" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;it!</button></form>'><img src="{{url_for('static',filename='css/del32.png')}}"></button>
+													{% if others|length > 1 %}
+														<button type="button" class="btn-link reducedpadding" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='<b>Delete all for this farm?</b><br>This will delete <b>all uploads in this series</b> This will remove this farm and all associated farms, be sure you mean to do this!<br><form action="{{data.url}}/delall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Delete&nbsp;entire&nbsp;series!</button></form>'><img src="{{url_for('static',filename='css/delall32.png')}}"></button>
+													{% endif %}
+										{% endif %}
+									</div>
+								</div>
+							</div>
+							<br>
+						{%endif%}
+
+						<!-- <h3>Minimap</h3> -->
 						<a href="#mainFarm"><img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
 						{% if data.download_enabled == True %}
 							<p class="text-center">
 								<img src="{{url_for('static',filename='css/dl32.png')}}"><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='You use the contents of this zip at your own risk!<br><a href="/dl/{{data.url}}">I understand, download!</a>'>download savegame</button>
 							</p>
-							{% if deletable %}
-							<h5 class="text-center">
-								<button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='Disables sharing of the savegame you uploaded. Can be turned back on any time!<br><form action="{{data.url}}/disable-dl" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Disable!</button></form>'>disable sharing</button>
-							</h5>
-							{%endif%}
-						{% elif logged_in() and data.download_enabled != True and deletable %}
-							<p class="text-center">
-								<img src="{{url_for('static',filename='css/dl32.png')}}"><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='Enables sharing of the savegame you uploaded by <b>all</b> users. Can be turned off any time!<br><form action="{{data.url}}/enable-dl" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Enable!</button></form>'>enable savegame sharing</button>
-							</p>
-						{% elif claimable or deletable %}
-							<p class="text-center">
-								To enable savegame sharing please first{%if not logged_in()%} <a href="{{url_for('signup')}}">sign up</a> or <a href="{{url_for('login')}}">sign in</a>, then{%endif%} claim this page.
-							</p>
-						{% endif %}
+						{%endif%}
 					</div>					
 				</div>
 			</div>
@@ -504,7 +516,7 @@ $(document).ready(function() {
 							<div class="previewimage">
 								{% for gallery_item in gallery_set.dict.order %}
 									{% if data.map_url == gallery_item %}
-										<a href="{{ data.map_url }}" class="gallery" id="farm-map-image" target="_blank"><img src="{{ data.map_url }}" class="img-responsive farmImg" height="auto"></a> <!--data-featherlight="{{data.map_url}}"-->
+										<a href="{{ data.map_url }}" class="gallery" id="farm-map-image" target="_blank"><img src="{{ data.map_url }}" title="Click to open farm gallery" class="img-responsive farmImg" height="auto"></a> <!--data-featherlight="{{data.map_url}}"-->
 									{% else%}
 										<div style="position:absolute;visibility:hidden;"><a class="gallery" href="{{ gallery_item }}">hi</a></div>
 									{% endif %}

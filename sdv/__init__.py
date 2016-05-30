@@ -28,8 +28,8 @@ from playerInfo import playerInfo
 from farmInfo import getFarmInfo
 from bigbase import dec2big
 import generateSavegame
-from imageDrone import process_queue
-from emailDrone import process_email
+import imageDrone
+import emailDrone
 from createdb import database_structure_dict, database_fields
 from savefile import savefile
 from zipuploads import zopen, zwrite
@@ -62,6 +62,19 @@ else:
 	def connect_db():
 		return psycopg2.connect(app.database)
 
+def get_db():
+	# designed to prevent repeated db connections
+	db = getattr(g,'db',None)
+	if db is None:
+		db = g.db = connect_db()
+	return db
+
+@app.teardown_appcontext
+def teardown_db(exception):
+	db = getattr(g,'db',None)
+	if db is not None:
+		db.close()
+
 def md5(md5file):
 	h = hashlib.md5()
 	if type(md5file) == io.BytesIO:
@@ -84,8 +97,8 @@ def jsonifyRecents():
 
 
 def check_user_pw(email,password_attempt):
-	g.db = connect_db()
-	cur = g.db.cursor()
+	db = get_db()
+	cur = db.cursor()
 	cur.execute('SELECT id,password,auth_key FROM users WHERE email='+app.sqlesc,(email,))
 	result = cur.fetchall()
 	assert len(result) <= 1
@@ -98,7 +111,7 @@ def check_user_pw(email,password_attempt):
 			if password_valid:
 				new_hash = bcrypt.generate_password_hash(password_attempt)
 				cur.execute('UPDATE users SET password='+app.sqlesc+' WHERE email='+app.sqlesc,(new_hash,email))
-				g.db.commit()
+				db.commit()
 		elif hash_type == 'bcrypt':
 			password_valid = bcrypt.check_password_hash(result[0][1],password_attempt)
 		else:
@@ -107,7 +120,7 @@ def check_user_pw(email,password_attempt):
 			if result[0][2] == None:
 				auth_key = dec2big(random.randint(0,(2**128)))
 				cur.execute('UPDATE users SET auth_key='+app.sqlesc+', login_time='+app.sqlesc+' WHERE id='+app.sqlesc,(auth_key,time.time(),result[0][0]))
-				g.db.commit()
+				db.commit()
 			else:
 				auth_key = result[0][2]
 			session['logged_in_user']=(result[0][0],auth_key)
@@ -149,8 +162,8 @@ def reset_password():
 	error = None
 	if request.method == 'POST':
 		if 'email' in request.form and request.form['email']!='':
-			g.db = connect_db()
-			cur = g.db.cursor()
+			db = get_db()
+			cur = db.cursor()
 			cur.execute('SELECT id, email_confirmed FROM users WHERE email='+app.sqlesc,(request.form['email'],))
 			result = cur.fetchall()
 			if len(result) == 0:
@@ -162,15 +175,15 @@ def reset_password():
 				user_id = cur.fetchone()
 				if user_id != None:
 					cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('email_passwordreset',user_id[0]))
-					g.db.commit()
-					process_email()
+					db.commit()
+					emailDrone.process_email()
 					flash({'message':'<p>Password reset email sent!</p>'})
 				else:
 					flash({'message':'<p>Previous password reset email still waiting to be sent... (sorry)</p>'})
 				return redirect(url_for('home'))
 		elif 'password' in request.form and len(request.form['password'])>=	app.config['PASSWORD_MIN_LENGTH'] and 'id' in request.form and 'pw_reset_token' in request.form:
-			g.db = connect_db()
-			cur = g.db.cursor()
+			db = get_db()
+			cur = db.cursor()
 			cur.execute('SELECT pw_reset_token, id FROM users WHERE id='+app.sqlesc,(request.form['id'],))
 			t = cur.fetchall()
 			if len(t) == 0:
@@ -183,7 +196,7 @@ def reset_password():
 				if t[0][0] == request.args.get('t'):
 					new_hash = bcrypt.generate_password_hash(request.form['password'])
 					cur.execute('UPDATE users SET password='+app.sqlesc+', pw_reset_token=NULL WHERE id='+app.sqlesc,(new_hash,request.form['id']))
-					g.db.commit()
+					db.commit()
 					flash({'message':'<p>Password reset, please log in!</p>'})
 					return redirect(url_for('login'))
 			error = 'Malformed verification string!'
@@ -193,8 +206,8 @@ def reset_password():
 		else:
 			error = 'Please enter the email address you used to register'
 	if 'i' in request.args and 't' in request.args:
-		g.db = connect_db()
-		cur = g.db.cursor()
+		db = get_db()
+		cur = db.cursor()
 		cur.execute('SELECT pw_reset_token, email, id FROM users WHERE id='+app.sqlesc,(request.args.get('i'),))
 		t = cur.fetchall()
 		if len(t) == 0:
@@ -223,8 +236,8 @@ def signup():
 			error = 'Password too short!'
 		else:
 			if recaptcha.verify():
-				g.db = connect_db()
-				cur = g.db.cursor()
+				db = get_db()
+				cur = db.cursor()
 				cur.execute('SELECT id FROM users WHERE email='+app.sqlesc,(request.form['email'],))
 				result = cur.fetchall()
 				if len(result) == 0:
@@ -232,8 +245,8 @@ def signup():
 						cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+') RETURNING id',(request.form['email'],bcrypt.generate_password_hash(request.form['password'])))
 						user_id = cur.fetchall()[0][0]
 						cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('email_confirmation',user_id))
-						g.db.commit()
-						process_email()
+						db.commit()
+						emailDrone.process_email()
 						flash({'message':'<p>You have successfully registered. A verification email has been sent to you. Now, please sign in!</p>'})
 						return redirect(url_for('login'))
 					else:
@@ -254,8 +267,8 @@ def account_page():
 	else:
 		user = get_logged_in_user()
 		claimables = find_claimables()
-		g.db = connect_db()
-		c = g.db.cursor()
+		db = get_db()
+		c = db.cursor()
 		c.execute('SELECT id,auto_key_json FROM series WHERE owner='+app.sqlesc,(user,))
 		r = c.fetchall()
 		claimed_ids = {}
@@ -273,7 +286,6 @@ def account_page():
 			claimable_ids[row[0]] = {'auto_key_json':a,'data':(row[1],d)}
 		c.execute('SELECT email,imgur_json FROM users WHERE id='+app.sqlesc,(user,))
 		e = c.fetchone()
-		g.db.close()
 		acc_info = {'email':e[0],'imgur':json.loads(e[1]) if e[1] != None else None}
 		has_liked = True if True in has_votes(user).values() else False
 		return render_template('account.html',error=error,claimed=claimed_ids,claimable=claimable_ids, has_liked=has_liked, acc_info=acc_info,processtime=round(time.time()-start_time,5))
@@ -283,8 +295,8 @@ def logged_in():
 	# designed to prevent repeated db requests
 	if not hasattr(g,'logged_in_user'):
 		if 'logged_in_user' in session:
-			g.db = connect_db()
-			cur = g.db.cursor()
+			db = get_db()
+			cur = db.cursor()
 			cur.execute('SELECT auth_key FROM users WHERE id='+app.sqlesc,(session['logged_in_user'][0],))
 			result = cur.fetchall()
 			if len(result) == 0:
@@ -305,7 +317,7 @@ app.jinja_env.add_extension('jinja2.ext.do')
 
 def add_to_series(rowid,uniqueIDForThisGame,name,farmName):
 	current_auto_key = json.dumps([uniqueIDForThisGame,name,farmName])
-	db = connect_db()
+	db = get_db()
 	cur = db.cursor()
 	if logged_in():
 		logged_in_userid = session['logged_in_user'][0]
@@ -324,7 +336,6 @@ def add_to_series(rowid,uniqueIDForThisGame,name,farmName):
 		cur.execute('INSERT INTO series (members_json, auto_key_json) VALUES ('+app.sqlesc+','+app.sqlesc+') RETURNING id',(json.dumps([rowid]),current_auto_key))
 		series_id = cur.fetchall()[0][0]
 	db.commit()
-	db.close()
 	return series_id
 
 def get_logged_in_user():
@@ -345,11 +356,10 @@ def file_uploaded(inputfile):
 		return {'type':'render','target':'index.html','parameters':{"error":error}}
 	except IOError:
 		error = "Savegame failed sanity check (if you think this is in error please let us know)"
-		g.db = connect_db()
-		cur = g.db.cursor()
+		db = get_db()
+		cur = db.cursor()
 		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(secure_filename(inputfile.filename))))
-		g.db.commit()
-		g.db.close()
+		db.commit()
 		return {'type': 'render', 'target': 'index.html', 'parameters': {"error": error}}
 	except AttributeError as e:
 		error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
@@ -372,19 +382,20 @@ def file_uploaded(inputfile):
 			# with open(filename,'wb') as f:
 			# 	f.write(memfile.getvalue())
 			# REPLACED WITH ZIPUPLOADS
+			print 'cwd',os.getcwd()
+			print 'aiming for',filename
 			zwrite(memfile.getvalue(),filename)
 			series_id = add_to_series(rowid,player_info['uniqueIDForThisGame'],player_info['name'],player_info['farmName'])
 			owner_id = get_logged_in_user()
-			g.db = connect_db()
-			cur = g.db.cursor()
+			db = get_db()
+			cur = db.cursor()
 			cur.execute('UPDATE playerinfo SET savefileLocation='+app.sqlesc+', series_id='+app.sqlesc+', owner_id='+app.sqlesc+' WHERE url='+app.sqlesc+';',(filename,series_id,owner_id,outcome))
-			g.db.commit()
-			g.db.close()
+			db.commit()
 		else:
 			if error == None:
 				error = "Error occurred inserting information into the database!"
 			return {'type':'render','target':'index.html','parameters':{"error":error}}
-		process_queue()
+		imageDrone.process_queue()
 		memfile.close()
 	if outcome != False:
 		session.permanent = True
@@ -432,8 +443,8 @@ def verify_api_auth(form):
 	if 'api_key' not in form or 'api_secret' not in form or form['api_key']=='':
 		return False
 	else:
-		g.db = connect_db()
-		cur = g.db.cursor()
+		db = get_db()
+		cur = db.cursor()
 		cur.execute('SELECT id,api_secret,auth_key FROM users WHERE api_key='+app.sqlesc,(form['api_key'],))
 		result = cur.fetchall()
 		try:
@@ -446,7 +457,7 @@ def verify_api_auth(form):
 			if result[0][2] == None:
 				auth_key = dec2big(random.randint(0,(2**128)))
 				cur.execute('UPDATE users SET auth_key='+app.sqlesc+', login_time='+app.sqlesc+' WHERE id='+app.sqlesc,(auth_key,time.time(),result[0][0]))
-				g.db.commit()
+				db.commit()
 			else:
 				auth_key = result[0][2]
 			session['logged_in_user']=(result[0][0],auth_key)
@@ -471,8 +482,8 @@ def login_to_api(form):
 	if 'email' not in form or 'password' not in form or form['email']=='':
 		return False
 	else:
-		g.db = connect_db()
-		cur = g.db.cursor()
+		db = get_db()
+		cur = db.cursor()
 		cur.execute('SELECT id,password,api_key,api_secret FROM users WHERE email='+app.sqlesc,(form['email'],))
 		result = cur.fetchall()
 		try:
@@ -485,7 +496,7 @@ def login_to_api(form):
 				api_key = dec2big(random.randint(0,(2**128)))
 				api_secret = dec2big(random.randint(0,(2**128)))
 				cur.execute('UPDATE users SET api_key='+app.sqlesc+', api_secret='+app.sqlesc+' WHERE id='+app.sqlesc,(api_key,api_secret,result[0][0]))
-				g.db.commit()
+				db.commit()
 			else:
 				api_key = result[0][2]
 				api_secret = result[0][3]
@@ -498,19 +509,16 @@ def get_recents(n=6,**kwargs):
 	return recents
 
 def is_duplicate(md5_info,player_info):
-	db = connect_db()
+	db = get_db()
 	cur = db.cursor()
 	cur.execute('SELECT id, md5, name, uniqueIDForThisGame, url, del_token FROM playerinfo WHERE md5='+app.sqlesc,(md5_info,))
 	matches = cur.fetchall()
 	if len(matches) > 0:
 		for match in matches:
 			if str(player_info['name'])==str(match[2]) and str(player_info['uniqueIDForThisGame'])==str(match[3]):
-				db.close()
 				return (match[4],match[5])
-		db.close()
 		return False
 	else:
-		db.close()
 		return False
 
 
@@ -561,8 +569,8 @@ def insert_info(player_info,farm_info,md5_info):
 		colstring += c+', '
 	colstring = colstring[:-2]
 	questionmarks = ((app.sqlesc+',')*len(values))[:-1]
-	g.db = connect_db()
-	cur = g.db.cursor()
+	db = get_db()
+	cur = db.cursor()
 	try:
 		cur.execute('INSERT INTO playerinfo ('+colstring+') VALUES ('+questionmarks+') RETURNING id,added_time',tuple(values))
 		row = cur.fetchone()
@@ -570,12 +578,12 @@ def insert_info(player_info,farm_info,md5_info):
 		rowid = row[0]
 		cur.execute('UPDATE playerinfo SET url='+app.sqlesc+' WHERE id='+app.sqlesc+'',(url,rowid))
 		cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('process_image',rowid))
-		g.db.commit()
+		db.commit()
 		return url, del_token, rowid, None
 	except (sqlite3.OperationalError, psycopg2.ProgrammingError) as e:
-		g.db.rollback()
+		db.rollback()
 		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'], time.time(),str(e)+' '+json.dumps([columns,values])))
-		g.db.commit()
+		db.commit()
 		return False, del_token, False, "Save file incompatible with current database: error is "+str(e)
 
 
@@ -584,18 +592,18 @@ def display_data(url):
 	error = None
 	deletable = None
 	start_time = time.time()
-	g.db = connect_db()
-	cur = g.db.cursor()
+	db = get_db()
+	cur = db.cursor()
 	cur.execute('SELECT '+database_fields+' FROM playerinfo WHERE url='+app.sqlesc+'',(url,))
 	data = cur.fetchall()
 	if len(data) != 1:
 		error = 'There is nothing here... is this URL correct?'
 		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),str(len(data))+' cur.fetchall() for url:'+str(url)))
-		g.db.commit()
+		db.commit()
 		return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
 	else:
 		cur.execute('UPDATE playerinfo SET views=views+1 WHERE url='+app.sqlesc+'',(url,))
-		g.db.commit()
+		db.commit()
 		datadict = {}
 		for k, key in enumerate(sorted(database_structure_dict.keys())):
 			if key != 'farm_info':
@@ -611,7 +619,7 @@ def display_data(url):
 		elif logged_in() and str(datadict['owner_id']) == str(get_logged_in_user()):
 			deletable = True
 
-		other_saves, gallery_set = get_others(datadict['series_id'],datadict['millisecondsPlayed'])
+		other_saves, gallery_set = get_others(datadict['url'],datadict['date'],datadict['map_url'])
 		for item in ['money','totalMoneyEarned','statsStepsTaken','millisecondsPlayed']:
 			if item == 'millisecondsPlayed':
 				datadict[item] = "{:,}".format(round(float((int(datadict[item])/1000)/3600.0),1))
@@ -632,28 +640,26 @@ def display_data(url):
 			flash({'message':"<p>It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!</p>".format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
 		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote,data=datadict, kills=kills, friendships=friendships, others=other_saves, gallery_set=gallery_set, error=error, processtime=round(time.time()-start_time,5))
 
-def get_others(series_id,millisecondsPlayed):
-	'''
-	generates {'previous':prev_data,'current':current_data,'next':next_data}; skips if none present (e.g returns [current,next] if no previous)
-	'''
-	g.db = connect_db()
-	cur = g.db.cursor()
+def get_others(url,date,map_url):
 	return_data = {}
-	signs = [('<','DESC','previous'),('=','ASC','current'),('>','ASC','next')]
-	for sign in signs:
-		cur.execute('SELECT url, date FROM playerinfo WHERE series_id='+app.sqlesc+' AND millisecondsPlayed'+sign[0]+app.sqlesc+' ORDER BY millisecondsPlayed '+sign[1]+' LIMIT 1',(series_id,millisecondsPlayed,))
-		response = cur.fetchone()
-		if response != None:
-			return_data[sign[2]]=response
-	cur.execute('SELECT url, map_url, date FROM playerinfo WHERE series_id='+app.sqlesc+' ORDER BY millisecondsPlayed ASC',(series_id,))
-	response = cur.fetchall()
 	gallery_set = {'order':[],'lookup':{}}
-	for row in response:
-		gallery_set['order'].append(row[1])
-		gallery_set['lookup'][row[1]]=[row[0],row[2]]
+	try:
+		arguments = {'series':url,'sort_by':'chronological'}
+		results = get_entries(1000,**arguments)['posts'][::-1]
+		current_index = list(zip(*results))[0].index(url)
+		for j,i in enumerate(range(current_index-1, current_index+2)):
+			if i>=0 and i<len(results):
+				return_data[['previous','current','next'][j]] = (results[i][0],results[i][3])
+		for row in results:
+			gallery_set['order'].append(row[7])
+			gallery_set['lookup'][row[7]]=[row[0],row[3]]
+	except (ValueError, IndexError):
+		# this would occur in the case of a private page being viewed by a non-logged-in user; get_entries() will return nothing
+		return_data['current'] = (url,date,map_url)
+		gallery_set['order'].append(map_url)
+		gallery_set['lookup'][map_url]=[url,date]
 	gallery_set = {'json':json.dumps(gallery_set),'dict':gallery_set}
 	return return_data, gallery_set
-
 
 def find_claimables():
 	if not hasattr(g,'claimables'):
@@ -666,7 +672,7 @@ def find_claimables():
 				pass
 		urls = tuple([key for key in sessionids if not key.endswith('del_token')])
 		if len(urls) > 0:
-			db = connect_db()
+			db = get_db()
 			cur = db.cursor()
 			cur.execute('SELECT id, md5, del_token, url FROM playerinfo WHERE owner_id IS NULL AND url IN '+app.sqlesc,(urls,))
 			result = cur.fetchall()
@@ -675,7 +681,6 @@ def find_claimables():
 				if row[1] == session[row[3]] and row[2] == session[row[3]+'del_token']:
 					checked_results.append((row[0],row[3]))
 			g.claimables = checked_results
-			db.close()
 		else:
 			g.claimables = []
 	return g.claimables
@@ -687,119 +692,149 @@ def operate_on_url(url,instruction):
 	start_time = time.time()
 	if request.method == 'POST':
 		if (url in session and url+'del_token' in session) or logged_in():
-			g.db = connect_db()
-			cur = g.db.cursor()
-			if logged_in():
-				cur.execute('SELECT url,md5,del_token FROM playerinfo WHERE owner_id='+app.sqlesc,(get_logged_in_user(),))
-				result = cur.fetchall()
-				for row in result:
-					if not row[0] in session:
-						session[row[0]]=row[1]
-					if not row[0]+'del_token' in session:
-						session[row[0]+'del_token']=row[2]
-			if instruction == 'del':
-				cur.execute('SELECT owner_id FROM playerinfo WHERE url='+app.sqlesc,(url,))
-				data = cur.fetchone()
-				if str(data[0]) == str(get_logged_in_user()):
-					outcome = delete_playerinfo_entry(url,session[url],session[url+'del_token'])
-					if outcome == True:
-						return redirect(url_for('home'))
-					else:
-						error = outcome
-				else:
-					error = 'You do not own this farm'
-				return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+			db = get_db()
+			cur = db.cursor()
+			# first: if logged in, get the URL, MD5 and deletion token for all farms owned by user; set session cookies indicating this ownership for all
+			_op_set_ownership_cookies()
 
+			if instruction == 'del':
+				return _op_del(url)
 			elif instruction == 'delall':
-				cur.execute('SELECT url,owner_id FROM playerinfo WHERE series_id=(SELECT series_id FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
-				data = cur.fetchall()
-				for row in data:
-					if str(row[1]) != str(get_logged_in_user()):
-						error = 'You do not own at least one of the farms'
-						return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
-				# verified logged_in_user owns all farms
-				for row in data:
-					outcome = delete_playerinfo_entry(row[0],session[row[0]],session[row[0]+'del_token'])
-					if outcome != True:
-						error = outcome
-						return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
-				return redirect(url_for('home'))
+				return _op_delall(url)
 
 			elif instruction == 'claim':
-				if url in [url for rowid, url in find_claimables()]:
-					outcome = claim_playerinfo_entry(url,session[url],session[url+'del_token'])
-					if outcome == True:
-						return redirect(url_for('display_data',url=url))
-					else:
-						error = outcome
-				else:
-					error = 'You do not have sufficient credentials to claim this page'
-				return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
-
+				return _op_claim(url)
 			elif instruction == 'claimall':
-				for rowid, claim_url in find_claimables():
-					outcome = claim_playerinfo_entry(claim_url,session[claim_url],session[claim_url+'del_token'])
-					if outcome != True:
-						error = 'You do not have sufficient credentials to claim one of these pages'
-				return redirect(url_for('display_data',url=url))
+				return _op_claimall(url)
 
 			elif instruction == 'enable-dl':
-				cur.execute('SELECT owner_id,id FROM playerinfo WHERE url='+app.sqlesc,(url,))
-				data = cur.fetchone()
-				if str(data[0]) == str(get_logged_in_user()):
-					cur = g.db.cursor()
-					cur.execute('UPDATE playerinfo SET download_enabled=TRUE WHERE id='+app.sqlesc,(data[1],))
-					g.db.commit()
-					return redirect(url_for('display_data',url=url))
-				else:
-					error = 'You do not have sufficient credentials to perform this action'
-					return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
-
+				return _op_toggle_boolean_param(url,'download_enabled',True)
 			elif instruction == 'disable-dl':
-				cur.execute('SELECT owner_id,id FROM playerinfo WHERE url='+app.sqlesc,(url,))
-				data = cur.fetchone()
-				if str(data[0]) == str(get_logged_in_user()):
-					cur = g.db.cursor()
-					cur.execute('UPDATE playerinfo SET download_enabled=FALSE WHERE id='+app.sqlesc,(data[1],))
-					g.db.commit()
-					return redirect(url_for('display_data',url=url))
-				else:
-					error = 'You do not have sufficient credentials to perform this action'
-					return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+				return _op_toggle_boolean_param(url,'download_enabled',False)
 
 			elif instruction == 'imgur':
-				if logged_in():
-					check_access = imgur.checkApiAccess(get_logged_in_user())
-					if check_access == True:
-						result = imgur.uploadToImgur(get_logged_in_user(),url)
-						if 'success' in result:
-							return redirect(result['link'])
-						elif 'error' in result:
-							if result['error'] == 'too_soon':
-								error = 'You have uploaded this page to imgur in the last 2 hours: please wait to upload again'
-							elif result['error'] == 'upload_issue':
-								error = 'There was an issue with uploading the file to imgur. Please try again later!'
-						else:
-							error = 'There was an unknown error!'
-						return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
-					elif check_access == False:
-						return redirect(imgur.getAuthUrl(get_logged_in_user(),target=request.path))
-					elif check_access == None:
-						error = 'Either you or upload.farm are out of imgur credits for the day! Sorry :( Try again tomorrow'
-						return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
-				else:
-					error = "You must be logged in to post your farm to imgur!"
-					return render_template("signup.html", error=error, processtime=round(time.time()-start_time,5))
-		else:
-			return render_template("error.html", error="Unknown instruction or insufficient credentials", processtime=round(time.time()-start_time,5))
+				return _op_imgur_post(url)
+
+			elif instruction == 'list':
+				return _op_toggle_boolean_param(url,'private',False)
+			elif instruction == 'unlist':
+				return _op_toggle_boolean_param(url,'private',True)
+
+		return render_template("error.html", error="Unknown instruction or insufficient credentials", processtime=round(time.time()-start_time,5))
 	else:
 		return redirect(url_for('display_data',url=url))
+
+def _op_set_ownership_cookies():
+	db = get_db()
+	cur = db.cursor()
+	if logged_in():
+		cur.execute('SELECT url,md5,del_token FROM playerinfo WHERE owner_id='+app.sqlesc,(get_logged_in_user(),))
+		result = cur.fetchall()
+		for row in result:
+			if not row[0] in session:
+				session[row[0]]=row[1]
+			if not row[0]+'del_token' in session:
+				session[row[0]+'del_token']=row[2]
+
+def _op_del(url):
+	db = get_db()
+	cur = db.cursor()
+	cur.execute('SELECT owner_id FROM playerinfo WHERE url='+app.sqlesc,(url,))
+	data = cur.fetchone()
+	if str(data[0]) == str(get_logged_in_user()):
+		outcome = delete_playerinfo_entry(url,session[url],session[url+'del_token'])
+		if outcome == True:
+			return redirect(url_for('home'))
+		else:
+			error = outcome
+	else:
+		error = 'You do not own this farm'
+	return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+
+def _op_delall(url):
+	db = get_db()
+	cur = db.cursor()
+	cur.execute('SELECT url,owner_id FROM playerinfo WHERE series_id=(SELECT series_id FROM playerinfo WHERE url='+app.sqlesc+')',(url,))
+	data = cur.fetchall()
+	for row in data:
+		if str(row[1]) != str(get_logged_in_user()):
+			error = 'You do not own at least one of the farms'
+			return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+	# verified logged_in_user owns all farms
+	for row in data:
+		outcome = delete_playerinfo_entry(row[0],session[row[0]],session[row[0]+'del_token'])
+		if outcome != True:
+			error = outcome
+			return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+	return redirect(url_for('home'))
+
+def _op_claim(url):
+	db = get_db()
+	cur = db.cursor()
+	if url in [url for rowid, url in find_claimables()]:
+		outcome = claim_playerinfo_entry(url,session[url],session[url+'del_token'])
+		if outcome == True:
+			return redirect(url_for('display_data',url=url))
+		else:
+			error = outcome
+	else:
+		error = 'You do not have sufficient credentials to claim this page'
+	return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+
+def _op_claimall(url):
+	db = get_db()
+	cur = db.cursor()
+	for rowid, claim_url in find_claimables():
+		outcome = claim_playerinfo_entry(claim_url,session[claim_url],session[claim_url+'del_token'])
+		if outcome != True:
+			error = 'You do not have sufficient credentials to claim one of these pages'
+	return redirect(url_for('display_data',url=url))
+
+def _op_toggle_boolean_param(url,param,state):
+	db = get_db()
+	cur = db.cursor()
+	cur.execute('SELECT owner_id,id FROM playerinfo WHERE url='+app.sqlesc,(url,))
+	data = cur.fetchone()
+	if str(data[0]) == str(get_logged_in_user()):
+		cur = db.cursor()
+		cur.execute('UPDATE playerinfo SET '+param+'='+app.sqlesc+' WHERE id='+app.sqlesc,(state,data[1],))
+		db.commit()
+		return redirect(url_for('display_data',url=url))
+	else:
+		error = 'You do not have sufficient credentials to perform this action'
+		return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+
+def _op_imgur_post(url):
+	db = get_db()
+	cur = db.cursor()
+	if logged_in():
+		check_access = imgur.checkApiAccess(get_logged_in_user())
+		if check_access == True:
+			result = imgur.uploadToImgur(get_logged_in_user(),url)
+			if 'success' in result:
+				return redirect(result['link'])
+			elif 'error' in result:
+				if result['error'] == 'too_soon':
+					error = 'You have uploaded this page to imgur in the last 2 hours: please wait to upload again'
+				elif result['error'] == 'upload_issue':
+					error = 'There was an issue with uploading the file to imgur. Please try again later!'
+			else:
+				error = 'There was an unknown error!'
+			return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+		elif check_access == False:
+			return redirect(imgur.getAuthUrl(get_logged_in_user(),target=request.path))
+		elif check_access == None:
+			error = 'Either you or upload.farm are out of imgur credits for the day! Sorry :( Try again tomorrow'
+			return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+	else:
+		error = "You must be logged in to post your farm to imgur!"
+		return render_template("signup.html", error=error, processtime=round(time.time()-start_time,5))
 
 
 def delete_playerinfo_entry(url,md5,del_token):
 	# takes url, md5, and del_token (from session); if verified, deletes
-	g.db = connect_db()
-	cur = g.db.cursor()
+	db = get_db()
+	cur = db.cursor()
 	cur.execute('SELECT id,md5,del_token,url,savefileLocation,avatar_url,portrait_url,map_url,farm_url,download_url,thumb_url,base_path,owner_id,series_id FROM playerinfo WHERE url='+app.sqlesc,(url,))
 	result = cur.fetchone()
 	if result[1] == md5 and result[2] == del_token and str(result[12]) == str(get_logged_in_user()):
@@ -817,7 +852,7 @@ def delete_playerinfo_entry(url,md5,del_token):
 			os.rmdir(result[11])
 		except:
 			pass
-		g.db.commit()
+		db.commit()
 		session.pop(url, None)
 		session.pop(url+'del_token', None)
 		return True
@@ -827,9 +862,8 @@ def delete_playerinfo_entry(url,md5,del_token):
 
 def remove_series_link(rowid, series_id):
 	# removes a link to playerinfo id (rowid) from id in series (series_id)
-	if not hasattr(g,'db'):
-		g.db = connect_db()
-	cur = g.db.cursor()
+	db = get_db()
+	cur = db.cursor()
 	cur.execute('SELECT members_json FROM series WHERE id='+app.sqlesc,(series_id,))
 	a = cur.fetchone()
 	result = json.loads(a[0]) if a != None else None
@@ -843,23 +877,22 @@ def remove_series_link(rowid, series_id):
 	else:
 		cur.execute('UPDATE series SET members_json='+app.sqlesc+' WHERE id='+app.sqlesc,(json.dumps(result),series_id))
 		cur.execute('UPDATE playerinfo SET series_id=NULL WHERE id='+app.sqlesc,(rowid,))
-	g.db.commit()
+	db.commit()
 	return True
 
 
 def claim_playerinfo_entry(url,md5,del_token):
 	# verify ability to be owner, then remove_series_link (checking ownership!), then add_to_series
 	if logged_in():
-		if not hasattr(g,'db'):
-			g.db = connect_db()
-		cur = g.db.cursor()
+		db = get_db()
+		cur = db.cursor()
 		cur.execute('SELECT id,series_id,md5,del_token,owner_id,uniqueIDForThisGame,name,farmName FROM playerinfo WHERE url='+app.sqlesc,(url,))
 		result = cur.fetchone()
 		if result[2] == md5 and result[3] == del_token and result[4] == None:
 			remove_series_link(result[0], result[1])
 			series_id = add_to_series(result[0],result[5],result[6],result[7])
 			cur.execute('UPDATE playerinfo SET series_id='+app.sqlesc+', owner_id='+app.sqlesc+' WHERE id='+app.sqlesc,(series_id,get_logged_in_user(),result[0]))
-			g.db.commit()
+			db.commit()
 			return True
 		else:
 			return 'Problem authenticating!'
@@ -874,8 +907,8 @@ def admin_panel():
 	if 'admin' in session:
 		#trusted
 		returned_blog_data = None
-		g.db = connect_db()
-		cur = g.db.cursor()
+		db = get_db()
+		cur = db.cursor()
 		if request.method == 'POST':
 			if request.form['blog'] == 'Post':
 				live = False
@@ -889,7 +922,7 @@ def admin_panel():
 											'checked': live}
 				else:
 					cur.execute('INSERT INTO blog (time, author, title, post, live) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(int(time.time()),session['admin'],request.form['blogtitle'],request.form['content'],live))
-					g.db.commit()
+					db.commit()
 					if live == True:
 						flash('Posted blog entry "'+str(request.form['blogtitle']+'"'))
 					else:
@@ -897,11 +930,11 @@ def admin_panel():
 			elif request.form['blog'] == 'update':
 				state = request.form['live'] == 'true'
 				cur.execute('UPDATE blog SET live='+app.sqlesc+' WHERE id='+app.sqlesc,(state,request.form['id']))
-				g.db.commit()
+				db.commit()
 				return 'Success'
 			elif request.form['blog'] == 'delete':
 				cur.execute('DELETE FROM blog WHERE id='+app.sqlesc,(request.form['id'],))
-				g.db.commit()
+				db.commit()
 				return 'Success'
 		cur.execute('SELECT url,name,farmName,date FROM playerinfo')
 		entries = cur.fetchall()
@@ -912,8 +945,8 @@ def admin_panel():
 				return 'Failure'
 			else:
 				try:
-					g.db = connect_db()
-					cur = g.db.cursor()
+					db = get_db()
+					cur = db.cursor()
 					cur.execute('SELECT password FROM admin WHERE username='+app.sqlesc+' ORDER BY id',(request.form['username'],))
 					r = cur.fetchone()
 					if r != None:
@@ -921,8 +954,7 @@ def admin_panel():
 							session['admin']=request.form['username']
 							return redirect(url_for('admin_panel'))
 					cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'], time.time(),'failed login: '+request.form['username']))
-					g.db.commit()
-					g.db.close()
+					db.commit()
 					error = 'Incorrect username or password'
 				except:
 					pass
@@ -930,8 +962,8 @@ def admin_panel():
 
 
 def get_blogposts(n=False,**kwargs):
-	g.db = connect_db()
-	cur = g.db.cursor()
+	db = get_db()
+	cur = db.cursor()
 	blogposts = None
 	query = "SELECT id,time,author,title,post,live FROM blog"
 	metaquery = "SELECT count(*) FROM blog"
@@ -1042,15 +1074,16 @@ def get_entries(n=6,**kwargs):
 		offset 			int 	to allow for pagination
 		dl 				bool	if True only show results with downloads enabled
 		full_thumbnail	bool	if True, return *full* thumbnails, not maps
-		sort_by			text	'rating', 'views', 'recent'; 'rating' defined according to snippet from http://www.evanmiller.org/how-not-to-sort-by-average-rating.html
+		sort_by			text	'rating', 'views', 'recent', 'chronological'; 'rating' defined according to snippet from http://www.evanmiller.org/how-not-to-sort-by-average-rating.html
 		include_private bool	if True, return will check for admin status and include private farms (NOT FULLY IMPLEMENTED YET!)
 	'''
 	order_types = {'rating':'ORDER BY ((positive_votes + 1.9208) / (positive_votes + negative_votes) - 1.96 * SQRT((positive_votes*negative_votes)/(positive_votes+negative_votes)+0.9604) / (positive_votes+negative_votes)) / ( 1 + 3.8416 / (positive_votes + negative_votes)) ',
 					'views':'ORDER BY views ',
-					'recent':'ORDER BY id '}
+					'recent':'ORDER BY id ',
+					'chronological':'ORDER BY millisecondsPlayed '}
 	search_fields = ('name','farmName','date')
-	g.db = connect_db()
-	cur = g.db.cursor()
+	db = get_db()
+	cur = db.cursor()
 	where_contents = []
 	if 'include_failed' not in kwargs or 'include_failed' in kwargs and kwargs['include_failed'] == False:
 		where_contents.append('failed_processing IS NOT TRUE')
@@ -1097,7 +1130,7 @@ def get_entries(n=6,**kwargs):
 			where+='AND '+contents+' '
 	order = 'ORDER BY id ' if 'sort_by' not in kwargs else order_types[kwargs['sort_by']]
 	thumbtype = 'thumb_url' if 'full_thumbnail' in kwargs and kwargs['full_thumbnail']==True else 'farm_url'
-	query = 'SELECT url, name, farmName, date, avatar_url, '+thumbtype+', download_enabled FROM playerinfo '+where+order+'DESC LIMIT '+app.sqlesc
+	query = 'SELECT url, name, farmName, date, avatar_url, '+thumbtype+', download_enabled, map_url, private FROM playerinfo '+where+order+'DESC LIMIT '+app.sqlesc
 	# print('query:',query)
 	offset = 0
 	if 'offset' in kwargs:
@@ -1113,7 +1146,6 @@ def get_entries(n=6,**kwargs):
 	entries['total'] = cur.fetchone()[0]
 	if len(entries)==0:
 		entries == None
-	g.db.close()
 	return entries
 
 
@@ -1123,8 +1155,8 @@ def blogindividual(id):
 	start_time = time.time()
 	try:
 		blogid = int(id)
-		g.db = connect_db()
-		cur = g.db.cursor()
+		db = get_db()
+		cur = db.cursor()
 		cur.execute("SELECT id,time,author,title,post,live FROM blog WHERE id="+app.sqlesc+" AND live='1'",(blogid,))
 		blogdata = cur.fetchone()
 		if blogdata != None:
@@ -1142,15 +1174,15 @@ def blogindividual(id):
 def retrieve_file(url):
 	error=None
 	start_time = time.time()
-	g.db = connect_db()
-	cur = g.db.cursor()
+	db = get_db()
+	cur = db.cursor()
 	cur.execute("SELECT savefileLocation,name,uniqueIDForThisGame,download_enabled,download_url,id FROM playerinfo WHERE url="+app.sqlesc,(url,))
 	result = cur.fetchone()
 	if result[3] == True:
 		if result[4] == None:
 			filename = generateSavegame.createZip(url,result[1],result[2],'static/saves',result[0])
 			cur.execute('UPDATE playerinfo SET download_url='+app.sqlesc+' WHERE id='+app.sqlesc,(filename,result[5]))
-			g.db.commit()
+			db.commit()
 			return redirect(filename)
 		else:
 			return redirect(result[4])
@@ -1195,8 +1227,8 @@ def verify_email():
 	start_time = time.time()
 	error=None
 	if 'i' in request.args and 't' in request.args:
-		g.db = connect_db()
-		cur = g.db.cursor()
+		db = get_db()
+		cur = db.cursor()
 		cur.execute('SELECT email_conf_token, email_confirmed FROM users WHERE id='+app.sqlesc,(request.args.get('i'),))
 		t = cur.fetchall()
 		if len(t) == 0:
@@ -1208,7 +1240,7 @@ def verify_email():
 		else:
 			if t[0][0] == request.args.get('t'):
 				cur.execute('UPDATE users SET email_confirmed='+app.sqlesc+' WHERE id='+app.sqlesc,(True,request.args.get('i')))
-				g.db.commit()
+				db.commit()
 				flash({'message':"<p>Account email address confirmed!</p>"})
 				return redirect(url_for('home'))
 	error = 'Malformed verification string!'
@@ -1234,8 +1266,8 @@ def handle_vote(logged_in_user,vote_info):
 		return True
 	else:
 		# subtract previous vote
-		g.db = connect_db()
-		cur = g.db.cursor()
+		db = get_db()
+		cur = db.cursor()
 		if previous != None:
 			prev_col = 'positive_votes' if previous == True else 'negative_votes'
 			cur.execute('UPDATE playerinfo SET '+prev_col+'='+prev_col+'-1 WHERE url='+app.sqlesc,(request.form['url'],))
@@ -1247,14 +1279,14 @@ def handle_vote(logged_in_user,vote_info):
 			votes[request.form['url']] = vote
 		votes = json.dumps(votes)
 		cur.execute('UPDATE users SET votes='+app.sqlesc+' WHERE id='+app.sqlesc,(votes,logged_in_user))
-		g.db.commit()
+		db.commit()
 		return True		
 		# 4: commit, return
 
 def has_votes(logged_in_user):
 	if not hasattr(g,'logged_in_users_votes'):
-		g.db = connect_db()
-		cur = g.db.cursor()
+		db = get_db()
+		cur = db.cursor()
 		cur.execute('SELECT votes FROM users WHERE id='+app.sqlesc,(logged_in_user,))
 		votes = cur.fetchone()[0]
 		g.logged_in_users_votes = json.loads(votes) if votes != None else {}

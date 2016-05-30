@@ -8,7 +8,7 @@
 				<img src="{{ recent[4] }}" class="headimg" >
 			</div>
 			<div class="previewtext">
-				{{ recent[1] }}, {{ recent[2] }} Farm <br/>  {{ recent[3] }}
+				{%if recent[8] == True %}<abbr title="This farm is unlisted and will not show up in searches nor on the front page except to you. It can still be viewed by people with a direct link." class="indicate-private">[U]</abbr>{%endif%} {{ recent[1] }}, {{ recent[2] }} Farm <br/>  {{ recent[3] }}
 			</div>
 		</a>
 		{% if recent[6] %}

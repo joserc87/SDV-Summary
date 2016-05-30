@@ -14,6 +14,10 @@ function ajaxRequest(){
 }
 
 function recentTemplate(recent,votes){
+	var privacy = '';
+	if (recent[8] == true) {
+		privacy = '<abbr title="This farm is unlisted and will not show up in searches nor on the front page except to you. It can still be viewed by people with a direct link." class="indicate-private">[U]</abbr> ';
+	}
 	var build_string = '<div class="col-md-4 col-sm-6 text-center previewbox"> \
 		<a href="'+recent[0]+'"> \
 			<div class="previewimage"> \
@@ -21,7 +25,7 @@ function recentTemplate(recent,votes){
 				<img src="'+ recent[4] +'" class="headimg" > \
 			</div> \
 			<div class="previewtext"> \
-				'+ recent[1] +', '+ recent[2] +' Farm <br/>  '+ recent[3] +' \
+				'+privacy+ recent[1] +', '+ recent[2] +' Farm <br/>  '+ recent[3] +' \
 			</div> \
 		</a>'
 	if (recent[6]!=null && recent[6]!=false) {
