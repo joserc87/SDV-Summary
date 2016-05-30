@@ -4,7 +4,7 @@ A Flask webapp using Python Image Library to reconstruct and display a summary o
 
 ## config.py
 
-`config.py` goes alongside `runserver.py`. The `SDV_APP_SETTINGS` environment variable is used in order to specify which Python object to load for configuration from config.py as per Flask's config.from_object. In that file the following settings can be used:
+`config.py` goes in the `sdv` subfolder. The `SDV_APP_SETTINGS` environment variable is used in order to specify which Python object to load for configuration from config.py as per Flask's config.from_object. In that file the following settings can be used:
 
 ### Mandatory Settings
 
