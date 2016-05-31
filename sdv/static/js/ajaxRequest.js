@@ -9,9 +9,15 @@ function ajaxSuccess(data) {
 
 function ajaxRequest(){
 	$.getJSON('/_get_recents', {}, function(data){
-		ajaxSuccess(data);
+		if (JSON.stringify(data) != current_data) {
+				console.log('done a thing')
+				current_data = JSON.stringify(data);
+				ajaxSuccess(data);
+		}
 	});
 }
+
+var current_data;
 
 function recentTemplate(recent,votes){
 	var privacy = '';
@@ -30,7 +36,7 @@ function recentTemplate(recent,votes){
 		</a>'
 	if (recent[6]!=null && recent[6]!=false) {
 		build_string = build_string.concat('<div class="previewdl"> \
-				<img title="This farm has a downloadable savegame available" src="static/css/dl32.png"> \
+				<img title="This farm has a downloadable savegame available" src="static/css/cpanel/dl32.png"> \
 			</div>');
 	}
 	if (votes != null) {
@@ -44,6 +50,8 @@ function recentTemplate(recent,votes){
 }
 
 $(document).ready(function(){
-	var request = ajaxRequest;
+	$.getJSON('/_get_recents', {}, function(data) {
+			current_data = JSON.stringify(data);
+	});
 	setInterval(ajaxRequest, 3000);
 });
