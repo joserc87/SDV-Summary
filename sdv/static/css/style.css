@@ -418,7 +418,7 @@ dt, dd {
 	width:64px;
 	height:64px;
 	border-style: solid;
-	background-color: #ffffff;
+	/*background-color: #ffffff;*/
 	border-width: 2px;
 	border-color: #000000;
 	margin: 1px;
@@ -646,9 +646,17 @@ p .cc_message {
 }
 
 .indicate-private {
-	font-size:16pt;
-	font-family: 'VT323';
-	color: #FF4444;
+	position:absolute;
+	top:6px;
+	left:23px;
+}
+
+.indicate-private img {
+	transform: rotate(-90deg);
+	width: 140px;
+	height:140px;
+	image-rendering: pixelated;
+	image-rendering: -moz-crisp-edges;
 }
 
 .private-banner {
@@ -668,10 +676,14 @@ p .cc_message {
 	padding: 2px 1px;
 }
 
-.cpanel-state-on {
+.cpanel-object:hover {
+	opacity: 1.0;
+}
 
+.cpanel-state-on {
+	opacity: 1.0;
 }
 
 .cpanel-state-off {
-
+	opacity: 0.5;
 }

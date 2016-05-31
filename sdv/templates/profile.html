@@ -280,7 +280,7 @@ $(document).ready(function() {
 										{%endif%}
 										{% for key in data.animals.keys() %}
 											{%if key != 'horse' %}
-												<p>{{data.animals[key]|length}} {{key}}{% if data.animals[key]|length>1 %}s{% endif %}:
+												<p>{{data.animals[key]|length}} {{key}}{% if data.animals[key]|length>1 and key!='Sheep' %}s{% endif %}:
 													{% for row in data.animals[key] %}
 														<span class="clickable" data-toggle="tooltip" title="{{row[1]}} days old">{{row[0]}}</span>{%if not loop.last%},{%endif%}
 													{% endfor %}
@@ -494,7 +494,7 @@ $(document).ready(function() {
 							{% for kill in kills %}
 							<div class="monster-container text-center">
 								<button type="button" class="btn-link monster-button" data-animation="false" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title='{{monster_dict[kill.0][0]}}: {{ kill.1 }}'>
-									<div class="monster-profile">						
+									<div class="monster-profile npc-{{(13 * kill.1)//kills.0.1}}">				
 										<img class="img-responsive" src="{{url_for('static',filename='assets/monsters/'+monster_dict[kill.0][1])}}">
 									</div>
 								</button>
