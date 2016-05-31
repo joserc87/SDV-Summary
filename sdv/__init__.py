@@ -75,6 +75,15 @@ def teardown_db(exception):
 	if db is not None:
 		db.close()
 
+def page_init():
+	if not hasattr(g,'start_time'):
+		g.start_time = time.time()
+	if not hasattr(g,'error'):
+		g.error = None
+
+def page_args():
+	return {'processtime':round(time.time()-g.start_time,5),'error':g.error}
+
 def md5(md5file):
 	h = hashlib.md5()
 	if type(md5file) == io.BytesIO:
@@ -139,27 +148,25 @@ def _get_hash_type(hashed_pw):
 
 @app.route('/login', methods=['GET','POST'])
 def login():
-	start_time=time.time()
-	error=None
+	page_init()
 	session.permanent = True
 	if logged_in():
 		return redirect(url_for('home'))
 	if request.method == 'POST':
 		if 'email' not in request.form or 'password' not in request.form or request.form['email']=='':
-			error = 'Missing email or password for login!'
+			g.error = 'Missing email or password for login!'
 		else:
 			pw = check_user_pw(request.form['email'],request.form['password'])
 			if pw['result'] != True:
-				error = pw['error']
+				g.error = pw['error']
 			else:
 				flash({'message':'<p>Logged in successfully!</p>'})
 				return redirect(url_for('home'))
-	return render_template("login.html",error=error,processtime=round(time.time()-start_time,5))
+	return render_template("login.html",**page_args())
 
 @app.route('/reset', methods=['GET','POST'])
 def reset_password():
-	start_time = time.time()
-	error = None
+	page_init()
 	if request.method == 'POST':
 		if 'email' in request.form and request.form['email']!='':
 			db = get_db()
@@ -167,9 +174,9 @@ def reset_password():
 			cur.execute('SELECT id, email_confirmed FROM users WHERE email='+app.sqlesc,(request.form['email'],))
 			result = cur.fetchall()
 			if len(result) == 0:
-				error = 'Username not found!'
+				g.error = 'Username not found!'
 			elif result[0][1] != True:
-				error = 'Email address not verified; please verify your account using the verification email sent when you registered before attempting to reset password!'
+				g.error = 'Email address not verified; please verify your account using the verification email sent when you registered before attempting to reset password!'
 			else:
 				cur.execute('SELECT users.id FROM users WHERE email='+app.sqlesc+' AND NOT EXISTS (SELECT todo.id FROM todo WHERE todo.playerid=CAST(users.id AS text))',(request.form['email'],))
 				user_id = cur.fetchone()
@@ -187,8 +194,8 @@ def reset_password():
 			cur.execute('SELECT pw_reset_token, id FROM users WHERE id='+app.sqlesc,(request.form['id'],))
 			t = cur.fetchall()
 			if len(t) == 0:
-				error = 'Cannot reset password: account does not exist'
-				return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+				g.error = 'Cannot reset password: account does not exist'
+				return render_template('error.html',**page_args())
 			elif t[0][0] == None:
 				flash({'message':'<p>This reset link has already been used!</p>'})
 				return redirect(url_for('home'))
@@ -199,41 +206,40 @@ def reset_password():
 					db.commit()
 					flash({'message':'<p>Password reset, please log in!</p>'})
 					return redirect(url_for('login'))
-			error = 'Malformed verification string!'
-			return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+			g.error = 'Malformed verification string!'
+			return render_template('error.html',**page_args())
 		elif 'password' in request.form and len(request.form['password'])< app.config['PASSWORD_MIN_LENGTH']:
-			error = 'Password insufficiently long, please try again'
+			g.error = 'Password insufficiently long, please try again'
 		else:
-			error = 'Please enter the email address you used to register'
+			g.error = 'Please enter the email address you used to register'
 	if 'i' in request.args and 't' in request.args:
 		db = get_db()
 		cur = db.cursor()
 		cur.execute('SELECT pw_reset_token, email, id FROM users WHERE id='+app.sqlesc,(request.args.get('i'),))
 		t = cur.fetchall()
 		if len(t) == 0:
-			error = 'Cannot reset password: account does not exist'
-			return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+			g.error = 'Cannot reset password: account does not exist'
+			return render_template('error.html',**page_args())
 		elif t[0][0] == None:
 			flash({'message':'<p>This reset link has already been used!</p>'})
 			return redirect(url_for('home'))
 		else:
 			if t[0][0] == request.args.get('t'):
-				return render_template("reset.html",error=error,details=t[0],processtime=round(time.time()-start_time,5))
-		error = 'Malformed verification string!'
-		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
-	return render_template("reset.html",error=error,processtime=round(time.time()-start_time,5))
+				return render_template("reset.html",details=t[0],**page_args())
+		g.error = 'Malformed verification string!'
+		return render_template('error.html',**page_args())
+	return render_template("reset.html",**page_args())
 
 @app.route('/su',methods=['GET','POST'])
 def signup():
-	start_time = time.time()
-	error=None
+	page_init()
 	if 'logged_in_user' in session:
-		error = 'You are already logged in!'
+		g.error = 'You are already logged in!'
 	elif request.method == 'POST':
 		if 'email' not in request.form or 'password' not in request.form or request.form['email']=='':
-			error = 'Missing email or password!'
+			g.error = 'Missing email or password!'
 		elif len(request.form['password'])<app.config['PASSWORD_MIN_LENGTH']:
-			error = 'Password too short!'
+			g.error = 'Password too short!'
 		else:
 			if recaptcha.verify():
 				db = get_db()
@@ -250,20 +256,19 @@ def signup():
 						flash({'message':'<p>You have successfully registered. A verification email has been sent to you. Now, please sign in!</p>'})
 						return redirect(url_for('login'))
 					else:
-						error = 'Invalid email address!'
+						g.error = 'Invalid email address!'
 				else:
-					error = 'This email address has already registered'
+					g.error = 'This email address has already registered'
 			else:
-				error = 'Captcha failed! If you are human, please try again!'
-	return render_template("signup.html",error=error,processtime=round(time.time()-start_time,5))
+				g.error = 'Captcha failed! If you are human, please try again!'
+	return render_template("signup.html",**page_args())
 
 @app.route('/acc',methods=['GET','POST'])
 def account_page():
-	start_time=time.time()
-	error = None
+	page_init()
 	if not logged_in():
-		error = 'You must be signed in to view your profile!'
-		return render_template("login.html",error=error,processtime=round(time.time()-start_time,5))
+		g.error = 'You must be signed in to view your profile!'
+		return render_template("login.html",**page_args())
 	else:
 		user = get_logged_in_user()
 		claimables = find_claimables()
@@ -271,7 +276,7 @@ def account_page():
 		c = db.cursor()
 		if request.method == 'POST':
 			if 'privacy_default' in request.form and request.form.get('privacy_default') in ['True','False']:
-				print c.mogrify('UPDATE users SET privacy_default='+app.sqlesc+' WHERE id='+app.sqlesc,(True if request.form.get('privacy_default') == 'True' else False,user)).decode('utf-8')
+				# print c.mogrify('UPDATE users SET privacy_default='+app.sqlesc+' WHERE id='+app.sqlesc,(True if request.form.get('privacy_default') == 'True' else False,user)).decode('utf-8')
 				c.execute('UPDATE users SET privacy_default='+app.sqlesc+' WHERE id='+app.sqlesc,(True if request.form.get('privacy_default') == 'True' else False,user))
 				db.commit()
 		c.execute('SELECT id,auto_key_json FROM series WHERE owner='+app.sqlesc,(user,))
@@ -291,10 +296,9 @@ def account_page():
 			claimable_ids[row[0]] = {'auto_key_json':a,'data':(row[1],d)}
 		c.execute('SELECT email,imgur_json,privacy_default FROM users WHERE id='+app.sqlesc,(user,))
 		e = c.fetchone()
-		print 'privacy',e[2]
 		acc_info = {'email':e[0],'imgur':json.loads(e[1]) if e[1] != None else None, 'privacy_default':e[2]}
 		has_liked = True if True in has_votes(user).values() else False
-		return render_template('account.html',error=error,claimed=claimed_ids,claimable=claimable_ids, has_liked=has_liked, acc_info=acc_info,processtime=round(time.time()-start_time,5))
+		return render_template('account.html',claimed=claimed_ids,claimable=claimable_ids, has_liked=has_liked, acc_info=acc_info,**page_args())
 
 
 def logged_in():
@@ -358,22 +362,22 @@ def file_uploaded(inputfile):
 		save = savefile(memfile.getvalue(), True)
 		player_info = playerInfo(save)
 	except defusedxml.common.EntitiesForbidden:
-		error = "I don't think that's very funny"
-		return {'type':'render','target':'index.html','parameters':{"error":error}}
+		g.error = "I don't think that's very funny"
+		return {'type':'render','target':'index.html','parameters':{"error":g.error}}
 	except IOError:
-		error = "Savegame failed sanity check (if you think this is in error please let us know)"
+		g.error = "Savegame failed sanity check (if you think this is in error please let us know)"
 		db = get_db()
 		cur = db.cursor()
 		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(secure_filename(inputfile.filename))))
 		db.commit()
-		return {'type': 'render', 'target': 'index.html', 'parameters': {"error": error}}
+		return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
 	except AttributeError as e:
-		error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
+		g.error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
 		print(e)
-		return {'type': 'render', 'target': 'index.html', 'parameters': {"error": error}}
+		return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
 	except ParseError as e:
-		error = "Not well-formed xml"
-		return {'type':'render','target':'index.html','parameters':{"error":error}}
+		g.error = "Not well-formed xml"
+		return {'type':'render','target':'index.html','parameters':{"error":g.error}}
 	dupe = is_duplicate(md5_info,player_info)
 	if dupe != False:
 		session[dupe[0]] = md5_info
@@ -382,14 +386,12 @@ def file_uploaded(inputfile):
 		return redirect(url_for('display_data',url=dupe[0]))
 	else:
 		farm_info = getFarmInfo(save)
-		outcome, del_token, rowid, error = insert_info(player_info,farm_info,md5_info)
+		outcome, del_token, rowid, g.error = insert_info(player_info,farm_info,md5_info)
 		if outcome != False:
 			filename = os.path.join(app.config['UPLOAD_FOLDER'],outcome)
 			# with open(filename,'wb') as f:
 			# 	f.write(memfile.getvalue())
 			# REPLACED WITH ZIPUPLOADS
-			print 'cwd',os.getcwd()
-			print 'aiming for',filename
 			zwrite(memfile.getvalue(),filename)
 			series_id = add_to_series(rowid,player_info['uniqueIDForThisGame'],player_info['name'],player_info['farmName'])
 			owner_id = get_logged_in_user()
@@ -398,9 +400,9 @@ def file_uploaded(inputfile):
 			cur.execute('UPDATE playerinfo SET savefileLocation='+app.sqlesc+', series_id='+app.sqlesc+', owner_id='+app.sqlesc+' WHERE url='+app.sqlesc+';',(filename,series_id,owner_id,outcome))
 			db.commit()
 		else:
-			if error == None:
-				error = "Error occurred inserting information into the database!"
-			return {'type':'render','target':'index.html','parameters':{"error":error}}
+			if g.error == None:
+				g.error = "Error occurred inserting information into the database!"
+			return {'type':'render','target':'index.html','parameters':{"error":g.error}}
 		imageDrone.process_queue()
 		memfile.close()
 	if outcome != False:
@@ -411,8 +413,7 @@ def file_uploaded(inputfile):
 
 @app.route('/',methods=['GET','POST'])
 def home():
-	start_time = time.time()
-	error = None
+	page_init()
 	if request.method == 'POST':
 		inputfile = request.files['file']
 		if inputfile:
@@ -420,14 +421,14 @@ def home():
 			if result['type'] == 'redirect':
 				return redirect(url_for(result['target'],**result['parameters']))
 			elif result['type'] == 'render':
-				params = {'error':error,'blogposts':get_blogposts(5),'recents':get_recents(),'processtime':round(time.time()-start_time,5)}
+				params = {'blogposts':get_blogposts(5),'recents':get_recents()}
 				if 'parameters' in result:
 					for key in result['parameters'].keys():
 						params[key] = result['parameters'][key]
 				return render_template(result['target'], **params)
 	recents = get_recents()
 	vote = json.dumps({entry[0]:get_votes(entry[0]) for entry in recents['posts']})
-	return render_template("index.html", recents=recents,error=error, vote=vote, blogposts=get_blogposts(5), processtime=round(time.time()-start_time,5))
+	return render_template("index.html", recents=recents, vote=vote, blogposts=get_blogposts(5), **page_args())
 
 @app.route('/_uploader',methods=['GET','POST'])
 def api_upload():
@@ -527,6 +528,16 @@ def is_duplicate(md5_info,player_info):
 	else:
 		return False
 
+def get_privacy():
+	if not hasattr(g,'logged_in_privacy_default'):
+		if logged_in():
+			db = get_db()
+			cur = db.cursor()
+			cur.execute('SELECT privacy_default FROM users WHERE id='+app.sqlesc,(get_logged_in_user(),))
+			g.logged_in_privacy_default = cur.fetchone()[0]
+		else:
+			g.logged_in_privacy_default = None
+	return g.logged_in_privacy_default
 
 def insert_info(player_info,farm_info,md5_info):
 	columns = []
@@ -562,6 +573,9 @@ def insert_info(player_info,farm_info,md5_info):
 	values.append(del_token)
 	columns.append('views')
 	values.append('0')
+	if get_privacy() != None:
+		columns.append('private')
+		values.append(get_privacy())
 	default_images = [['avatar_url','static/placeholders/avatar.png'],
 					  ['farm_url','static/placeholders/minimap.png'],
 					  ['map_url','static/placeholders/'+str(player_info['currentSeason'])+'.png'],
@@ -595,18 +609,17 @@ def insert_info(player_info,farm_info,md5_info):
 
 @app.route('/<url>')
 def display_data(url):
-	error = None
+	page_init()
 	deletable = None
-	start_time = time.time()
 	db = get_db()
 	cur = db.cursor()
 	cur.execute('SELECT '+database_fields+' FROM playerinfo WHERE url='+app.sqlesc+'',(url,))
 	data = cur.fetchall()
 	if len(data) != 1:
-		error = 'There is nothing here... is this URL correct?'
+		g.error = 'There is nothing here... is this URL correct?'
 		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),str(len(data))+' cur.fetchall() for url:'+str(url)))
 		db.commit()
-		return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+		return render_template("error.html", **page_args())
 	else:
 		cur.execute('UPDATE playerinfo SET views=views+1 WHERE url='+app.sqlesc+'',(url,))
 		db.commit()
@@ -644,7 +657,7 @@ def display_data(url):
 		vote = json.dumps({url:get_votes(url)})
 		if logged_in() == False and len(claimables) > 1 and request.cookies.get('no_signup')!='true':
 			flash({'message':"<p>It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!</p>".format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
-		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote,data=datadict, kills=kills, friendships=friendships, others=other_saves, gallery_set=gallery_set, error=error, processtime=round(time.time()-start_time,5))
+		return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote,data=datadict, kills=kills, friendships=friendships, others=other_saves, gallery_set=gallery_set, **page_args())
 
 def get_others(url,date,map_url):
 	return_data = {}
@@ -694,8 +707,7 @@ def find_claimables():
 
 @app.route('/<url>/<instruction>',methods=['GET','POST'])
 def operate_on_url(url,instruction):
-	error = None
-	start_time = time.time()
+	page_init()
 	if request.method == 'POST':
 		if (url in session and url+'del_token' in session) or logged_in():
 			db = get_db()
@@ -725,8 +737,8 @@ def operate_on_url(url,instruction):
 				return _op_toggle_boolean_param(url,'private',False)
 			elif instruction == 'unlist':
 				return _op_toggle_boolean_param(url,'private',True)
-
-		return render_template("error.html", error="Unknown instruction or insufficient credentials", processtime=round(time.time()-start_time,5))
+		g.error = "Unknown or insufficient credentials"
+		return render_template("error.html", **page_args())
 	else:
 		return redirect(url_for('display_data',url=url))
 
@@ -752,10 +764,10 @@ def _op_del(url):
 		if outcome == True:
 			return redirect(url_for('home'))
 		else:
-			error = outcome
+			g.error = outcome
 	else:
-		error = 'You do not own this farm'
-	return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+		g.error = 'You do not own this farm'
+	return render_template("error.html", **page_args())
 
 def _op_delall(url):
 	db = get_db()
@@ -764,14 +776,14 @@ def _op_delall(url):
 	data = cur.fetchall()
 	for row in data:
 		if str(row[1]) != str(get_logged_in_user()):
-			error = 'You do not own at least one of the farms'
-			return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+			g.error = 'You do not own at least one of the farms'
+			return render_template("error.html", **page_args())
 	# verified logged_in_user owns all farms
 	for row in data:
 		outcome = delete_playerinfo_entry(row[0],session[row[0]],session[row[0]+'del_token'])
 		if outcome != True:
-			error = outcome
-			return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+			g.error = outcome
+			return render_template("error.html", **page_args())
 	return redirect(url_for('home'))
 
 def _op_claim(url):
@@ -782,10 +794,10 @@ def _op_claim(url):
 		if outcome == True:
 			return redirect(url_for('display_data',url=url))
 		else:
-			error = outcome
+			g.error = outcome
 	else:
-		error = 'You do not have sufficient credentials to claim this page'
-	return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+		g.error = 'You do not have sufficient credentials to claim this page'
+	return render_template("error.html", **page_args())
 
 def _op_claimall(url):
 	db = get_db()
@@ -793,7 +805,7 @@ def _op_claimall(url):
 	for rowid, claim_url in find_claimables():
 		outcome = claim_playerinfo_entry(claim_url,session[claim_url],session[claim_url+'del_token'])
 		if outcome != True:
-			error = 'You do not have sufficient credentials to claim one of these pages'
+			g.error = 'You do not have sufficient credentials to claim one of these pages'
 	return redirect(url_for('display_data',url=url))
 
 def _op_toggle_boolean_param(url,param,state):
@@ -807,8 +819,8 @@ def _op_toggle_boolean_param(url,param,state):
 		db.commit()
 		return redirect(url_for('display_data',url=url))
 	else:
-		error = 'You do not have sufficient credentials to perform this action'
-		return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+		g.error = 'You do not have sufficient credentials to perform this action'
+		return render_template("error.html", **page_args())
 
 def _op_imgur_post(url):
 	db = get_db()
@@ -821,20 +833,20 @@ def _op_imgur_post(url):
 				return redirect(result['link'])
 			elif 'error' in result:
 				if result['error'] == 'too_soon':
-					error = 'You have uploaded this page to imgur in the last 2 hours: please wait to upload again'
+					g.error = 'You have uploaded this page to imgur in the last 2 hours: please wait to upload again'
 				elif result['error'] == 'upload_issue':
-					error = 'There was an issue with uploading the file to imgur. Please try again later!'
+					g.error = 'There was an issue with uploading the file to imgur. Please try again later!'
 			else:
-				error = 'There was an unknown error!'
-			return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+				g.error = 'There was an unknown error!'
+			return render_template("error.html", **page_args())
 		elif check_access == False:
 			return redirect(imgur.getAuthUrl(get_logged_in_user(),target=request.path))
 		elif check_access == None:
-			error = 'Either you or upload.farm are out of imgur credits for the day! Sorry :( Try again tomorrow'
-			return render_template("error.html", error=error, processtime=round(time.time()-start_time,5))
+			g.error = 'Either you or upload.farm are out of imgur credits for the day! Sorry :( Try again tomorrow'
+			return render_template("error.html", **page_args())
 	else:
-		error = "You must be logged in to post your farm to imgur!"
-		return render_template("signup.html", error=error, processtime=round(time.time()-start_time,5))
+		g.error = "You must be logged in to post your farm to imgur!"
+		return render_template("signup.html", **page_args())
 
 
 def delete_playerinfo_entry(url,md5,del_token):
@@ -908,8 +920,7 @@ def claim_playerinfo_entry(url,md5,del_token):
 
 @app.route('/admin',methods=['GET','POST'])
 def admin_panel():
-	start_time = time.time()
-	error = None
+	page_init()
 	if 'admin' in session:
 		#trusted
 		returned_blog_data = None
@@ -922,7 +933,7 @@ def admin_panel():
 					if request.form['live']=='on':
 						live = True
 				if request.form['content'] == '' or request.form['blogtitle'] == '':
-					error = 'Failed to post blog entry, title or body was empty!'
+					g.error = 'Failed to post blog entry, title or body was empty!'
 					returned_blog_data = {'blogtitle':request.form['blogtitle'],
 											'content':request.form['content'],
 											'checked': live}
@@ -944,7 +955,7 @@ def admin_panel():
 				return 'Success'
 		cur.execute('SELECT url,name,farmName,date FROM playerinfo')
 		entries = cur.fetchall()
-		return render_template('adminpanel.html',returned_blog_data=returned_blog_data,blogposts=get_blogposts(include_hidden=True),entries=entries,error=error, processtime=round(time.time()-start_time,5))
+		return render_template('adminpanel.html',returned_blog_data=returned_blog_data,blogposts=get_blogposts(include_hidden=True),entries=entries,**page_args())
 	else:
 		if request.method == 'POST':
 			if 'blog' in request.form:
@@ -961,10 +972,10 @@ def admin_panel():
 							return redirect(url_for('admin_panel'))
 					cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'], time.time(),'failed login: '+request.form['username']))
 					db.commit()
-					error = 'Incorrect username or password'
+					g.error = 'Incorrect username or password'
 				except:
 					pass
-		return render_template('admin.html',error=error,processtime=round(time.time()-start_time,5))
+		return render_template('admin.html',**page_args())
 
 
 def get_blogposts(n=False,**kwargs):
@@ -1015,8 +1026,7 @@ def logout():
 
 @app.route('/blog')
 def blogmain():
-	error = None
-	start_time = time.time()
+	page_init()
 	num_entries = 5
 	#print(request.args.get('p'))
 	try:
@@ -1028,13 +1038,12 @@ def blogmain():
 	blogposts = get_blogposts(num_entries,offset=offset)
 	if blogposts['total']<=offset and blogposts['total']>0:
 		return redirect(url_for('blogmain'))
-	return render_template('blog.html',full=True,offset=offset,blogposts=blogposts,error=error, processtime=round(time.time()-start_time,5))
+	return render_template('blog.html',full=True,offset=offset,blogposts=blogposts,**page_args())
 
 
 @app.route('/all')
 def allmain():
-	error = None
-	start_time = time.time()
+	page_init()
 	num_entries = 18
 	#print(request.args.get('p'))
 	arguments = {'include_failed':True}
@@ -1043,8 +1052,8 @@ def allmain():
 	except TypeError:
 		arguments['offset'] = 0
 	except:
-		error = "No browse with that ID!"
-		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+		g.error = "No browse with that ID!"
+		return render_template('error.html',**page_args())
 	if arguments['offset'] < 0:
 		return redirect(url_for('allmain'))
 	#adapt get_recents() to take a kwarg for sort type; sort type can be GET value: /all&sort=popular
@@ -1062,12 +1071,12 @@ def allmain():
 	try:
 		entries = get_entries(num_entries,**arguments)
 	except:
-	 	error = 'Malformed request for entries!'
-	 	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+	 	g.error = 'Malformed request for entries!'
+	 	return render_template('error.html',**page_args())
 	if entries['total']<=arguments['offset'] and entries['total']>0:
 		return redirect(url_for('allmain'))
 	vote = json.dumps({entry[0]:get_votes(entry[0]) for entry in entries['posts']})
-	return render_template('all.html',full=True,offset=arguments['offset'],recents=entries,vote=vote,error=error, processtime=round(time.time()-start_time,5))
+	return render_template('all.html',full=True,offset=arguments['offset'],recents=entries,vote=vote,**page_args())
 
 
 def get_entries(n=6,**kwargs):
@@ -1157,8 +1166,7 @@ def get_entries(n=6,**kwargs):
 
 @app.route('/blog/<id>')
 def blogindividual(id):
-	error = None
-	start_time = time.time()
+	page_init()
 	try:
 		blogid = int(id)
 		db = get_db()
@@ -1169,17 +1177,16 @@ def blogindividual(id):
 			blogdata = list(blogdata)
 			blogdata[1] = datetime.datetime.fromtimestamp(blogdata[1])
 			blogposts = {'posts':(blogdata,),'total':1}
-			return render_template('blog.html',full=True,offset=0,recents=get_recents(),blogposts=blogposts,error=error, processtime=round(time.time()-start_time,5))
+			return render_template('blog.html',full=True,offset=0,recents=get_recents(),blogposts=blogposts,**page_args())
 		else:
-			error = "No blog with that ID!"
+			g.error = "No blog with that ID!"
 	except:
-		error = "No blog with that ID!"
-	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+		g.error = "No blog with that ID!"
+	return render_template('error.html',**page_args())
 
 @app.route('/dl/<url>')
 def retrieve_file(url):
-	error=None
-	start_time = time.time()
+	page_init()
 	db = get_db()
 	cur = db.cursor()
 	cur.execute("SELECT savefileLocation,name,uniqueIDForThisGame,download_enabled,download_url,id FROM playerinfo WHERE url="+app.sqlesc,(url,))
@@ -1199,21 +1206,19 @@ def retrieve_file(url):
 			response.headers["Content-Disposition"] = "attachment; filename="+str(result[1])+'_'+str(result[2])
 			return response
 		else:
-			error = "URL does not exist"
+			g.error = "URL does not exist"
 	else:
-		error = "You are unable to download this farm data at this time."
-	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+		g.error = "You are unable to download this farm data at this time."
+	return render_template('error.html',**page_args())
 
 @app.route('/faq')
 def faq():
-	error = None
-	start_time=time.time()
-	return render_template('faq.html',error=error,processtime=round(time.time()-start_time,5))
+	page_init()
+	return render_template('faq.html',**page_args())
 
 @app.route('/imgur')
 def get_imgur_auth_code():
-	start_time = time.time()
-	error = None
+	page_init()
 	if logged_in():
 		if len(request.args)==0:
 			return redirect(imgur.getAuthUrl(get_logged_in_user(),target=url_for('account_page')))
@@ -1222,24 +1227,23 @@ def get_imgur_auth_code():
 			if result['success']==True:
 				return redirect(result['redir'])
 			else:
-				error = "Problem authenticating at imgur!"
-				return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+				g.error = "Problem authenticating at imgur!"
+				return render_template('error.html',**page_args())
 	else:
-		error = "Cannot connect to imgur if not logged in!"
-		return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+		g.error = "Cannot connect to imgur if not logged in!"
+		return render_template('error.html',**page_args())
 
 @app.route('/verify_email')
 def verify_email():
-	start_time = time.time()
-	error=None
+	page_init()
 	if 'i' in request.args and 't' in request.args:
 		db = get_db()
 		cur = db.cursor()
 		cur.execute('SELECT email_conf_token, email_confirmed FROM users WHERE id='+app.sqlesc,(request.args.get('i'),))
 		t = cur.fetchall()
 		if len(t) == 0:
-			error = 'Account does not exist!'
-			return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+			g.error = 'Account does not exist!'
+			return render_template('error.html',**page_args())
 		elif t[0][1] == True:
 			flash({'message':'<p>Already confirmed email address!</p>'})
 			return redirect(url_for('home'))
@@ -1249,8 +1253,8 @@ def verify_email():
 				db.commit()
 				flash({'message':"<p>Account email address confirmed!</p>"})
 				return redirect(url_for('home'))
-	error = 'Malformed verification string!'
-	return render_template('error.html',error=error,processtime=round(time.time()-start_time,5))
+	g.error = 'Malformed verification string!'
+	return render_template('error.html',**page_args())
 
 
 @app.route('/_vote',methods=['POST'])

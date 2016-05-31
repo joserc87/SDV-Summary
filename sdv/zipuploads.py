@@ -29,7 +29,7 @@ def zwrite(data,filename):
 	designed to replace saving unzipped savegames
 	'''
 	zf = zipfile.ZipFile(filename,'w',compression=zipfile.ZIP_DEFLATED)
-	if type(data) != str:
+	if type(data) not in [str,bytes]:
 		data = data.read()
 	zf.writestr(os.path.split(filename)[1],data,zipfile.ZIP_DEFLATED)
 	zf.close()
