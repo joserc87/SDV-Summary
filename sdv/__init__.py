@@ -617,8 +617,9 @@ def display_data(url):
 	data = cur.fetchall()
 	if len(data) != 1:
 		g.error = 'There is nothing here... is this URL correct?'
-		cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),str(len(data))+' cur.fetchall() for url:'+str(url)))
-		db.commit()
+		if str(url) != 'favicon.ico':
+			cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),str(len(data))+' cur.fetchall() for url:'+str(url)))
+			db.commit()
 		return render_template("error.html", **page_args())
 	else:
 		cur.execute('UPDATE playerinfo SET views=views+1 WHERE url='+app.sqlesc+'',(url,))
