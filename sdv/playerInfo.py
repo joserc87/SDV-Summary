@@ -1,4 +1,6 @@
 import json
+import validate
+import savefile
 
 ns = "{http://www.w3.org/2001/XMLSchema-instance}"
 animal_habitable_buildings = ['Coop', 'Barn', 'SlimeHutch']
@@ -112,6 +114,8 @@ def playerInfo(saveFile):
     root = saveFile.getRoot()
 
     player = root.find("player")
+    player_children = getChildren(root)
+    child_names = [c.find('name').text for c in player_children]
     info = {}
 
     # Collect information stored in the player tag
@@ -121,34 +125,50 @@ def playerInfo(saveFile):
         else:
             if tag == "professions":
                 profs = player.find(tag)
-                s = [professions[int(a.text)] for a in profs.iter("int")]
+                s = []
+                for a in profs.iter("int"):
+                    a = int(a.text)
+                    assert a < len(professions)
+                    s.append(professions[a])
             if tag == "friendships":
                 s = {}
                 fship = player.find(tag)
                 for item in fship:
                     name = item.find("key").find('string').text
-                    if name in npcs:
-                        rating = item.find('value').find('ArrayOfInt').find('int').text
-                        s[name] = rating
+                    assert name in validate.giftable_npcs or name in child_names
+                    rating = int(item.find('value').find('ArrayOfInt').find('int').text)
+                    assert rating >= 0 and rating < 14*250
+                    s[name] = rating
 
             if tag in ['hairstyleColor', 'pantsColor', 'newEyeColor']:
-                red = player.find(tag).find('R').text
-                green = player.find(tag).find('G').text
-                blue = player.find(tag).find('B').text
-                alpha = player.find(tag).find('A').text
+                red = int(player.find(tag).find('R').text)
+                assert red >= 0 and red <= 255
+
+                green = int(player.find(tag).find('G').text)
+                assert green >= 0 and green <= 255
+
+                blue = int(player.find(tag).find('B').text)
+                assert blue >= 0 and blue <= 255
+
+                alpha = int(player.find(tag).find('A').text)
+                assert alpha >= 0 and alpha <= 255
+
                 s = [red, green, blue, alpha]
-        if tag in ['name','farmName','favoriteThing']:
-            if len(s)>34:
-                raise IOError
+
+        if tag in ['name', 'farmName', 'favoriteThing']:
+            assert len(tag) <= 32
         if tag == 'dateStringForSaveGame':
             tag = 'date'
         info[tag] = s
 
-
-    # Information from elsewhere    
+    # Information from elsewhere
     # UID for save file
     info['uniqueIDForThisGame'] = int(root.find('uniqueIDForThisGame').text)
-    info['currentSeason'] = root.find('currentSeason').text
+
+    season = root.find('currentSeason').text
+    assert season in validate.seasons
+    info['currentSeason'] = season
+
     # Collecting player stats
     info['stats'] = getStats(root)
 
@@ -159,27 +179,29 @@ def playerInfo(saveFile):
         info['petName'] = getNPCs(root, petLocations, petTypes)[0].find('name').text
     except IndexError:
         pass
-    
+
     # Information for portrait generation
     p = {}
     partners = getPartners(root)
-    if partners: 
-        p['partner'] = partners[0].find('name').text
+    if partners:
+        partner_name = partners[0].find('name').text
+        assert partner_name in validate.marriage_candidates
+        p['partner'] = partner_name
     else:
         p['partner'] = None
-    p['cat']=strToBool(info['catPerson'])
-    p['children'] = [(int(child.find('gender').text),strToBool(child.find('darkSkinned').text),int(child.find('daysOld').text),child.find('name').text) for child in getChildren(root)]
+    p['cat'] = strToBool(info['catPerson'])
+    p['children'] = [(int(child.find('gender').text), strToBool(child.find('darkSkinned').text),int(child.find('daysOld').text),child.find('name').text) for child in player_children]
 
     info['portrait_info'] = json.dumps(p)
     info['animals'] = json.dumps(getAnimals(root))
 
     return info
 
+
 def main():
-    saveFile = "./saves/Lukas_117195717"
+    saveFile = savefile.savefile("./saves/Kristi_119549314")
     p = player(saveFile)
     (p.getPlayerInfo())
-    # print(p.getCurrentSeason())
 
 if __name__ == '__main__':
     main()
