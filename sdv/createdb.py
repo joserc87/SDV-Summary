@@ -440,9 +440,8 @@ def update_users():
 	print('all modifications committed')
 
 
-if __name__ == "__main__":
-	a = raw_input('Drop all non-admin databases? (y/n): ')
-	if a == 'y':
+def init_db(drop_all=False):
+	if drop_all:
 		delete_db()
 	print('---------')
 	a = raw_input('Generate playerinfo database? (y/n): ')
@@ -470,3 +469,6 @@ if __name__ == "__main__":
 	a = raw_input('Update users database? (y/n): ')
 	if a == 'y':
 		update_users()
+
+if __name__ == "__main__":
+	init_db()
