@@ -4,7 +4,7 @@ import random
 from PIL import Image
 from itertools import chain
 from collections import namedtuple
-from imagegeneration.tools import colourBox, tintImage, cropImg
+from .tools import colourBox, tintImage, cropImg
 
 
 def loadTree(ss_tree, loc=0):
@@ -135,7 +135,7 @@ def loadAssets():
 def generateFarm(season, farm, assets=None):
     sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
     craftable_blacklist = ['Twig', 'Torch', 'Sprinkler',
-                           'Quality Sprinkler', 'Iridium Sprinkler']
+                           'Quality Sprinkler', 'Iridium Sprinkler', 'Note Block', 'Jack-O-Lantern']
 
     if assets is None:
         print('\tLoading Assets...')
