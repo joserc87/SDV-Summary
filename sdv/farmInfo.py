@@ -47,9 +47,9 @@ def checkSurrounding(tiles):
 # located on the players farm.
 # returns a dict with an array of tuples of the form: (name, x, y)
 
-def getFarmInfo(saveFile):
-    sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
+sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
 
+def getFarmInfo(saveFile):
     ns = "{http://www.w3.org/2001/XMLSchema-instance}"
 
     farm = {}
@@ -103,7 +103,7 @@ def getFarmInfo(saveFile):
         if name == 'Tree':
             t = int(item.find('value').find('TerrainFeature').find('treeType').text)
             s = int(item.find('value').find('TerrainFeature').find('growthStage').text)
-            if item.find('value').find('TerrainFeature').find('flipped').text == 'true': f= True
+            if item.find('value').find('TerrainFeature').find('flipped').text == 'true': f = True
         if name == 'Flooring':
             t = int(item.find('value').find('TerrainFeature').find('whichFloor').text)
             s = int(item.find('value').find('TerrainFeature').find('whichView').text)
