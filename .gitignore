@@ -79,3 +79,5 @@ sdv/templates/analytics.html
 *.zip
 # Images
 *.png
+
+/.idea
