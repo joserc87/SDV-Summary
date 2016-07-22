@@ -1,6 +1,6 @@
 import json
-import validate
-import savefile
+from sdv import validate
+import sdv.savefile
 
 ns = "{http://www.w3.org/2001/XMLSchema-instance}"
 animal_habitable_buildings = ['Coop', 'Barn', 'SlimeHutch']
@@ -108,9 +108,6 @@ def playerInfo(saveFile):
                 'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist',
                 'Tracker','Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout',
                 'Brute', 'Defender','Acrobat', 'Desperado']
-    npcs = ['Willy','Clint','Jodi','Harvey','Leah','Wizard','Jas','Abigail','Maru','Elliott','Caroline','Pam','Dwarf',
-            'Shane','Demetrius','Alex','Gus','Vincent','Sebastian','Robin','Sam','Lewis','Marnie','Penny','Haley','Pierre',
-            'Evelyn','Linus','George','Emily','Kent','Krobus','Sandy']
     root = saveFile.getRoot()
 
     player = root.find("player")
@@ -135,10 +132,11 @@ def playerInfo(saveFile):
                 fship = player.find(tag)
                 for item in fship:
                     name = item.find("key").find('string').text
-                    assert name in validate.giftable_npcs or name in child_names
-                    rating = int(item.find('value').find('ArrayOfInt').find('int').text)
-                    assert rating >= 0 and rating < 14*250
-                    s[name] = rating
+                    if name not in child_names:
+                        assert name in validate.giftable_npcs
+                        rating = int(item.find('value').find('ArrayOfInt').find('int').text)
+                        assert rating >= 0 and rating < 14*250
+                        s[name] = rating
 
             if tag in ['hairstyleColor', 'pantsColor', 'newEyeColor']:
                 red = int(player.find(tag).find('R').text)
