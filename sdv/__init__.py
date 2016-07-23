@@ -424,7 +424,7 @@ def file_uploaded(inputfile):
         farm_info = getFarmInfo(save)
         outcome, del_token, rowid, g.error = insert_info(player_info,farm_info,md5_info)
         if outcome != False:
-            filename = os.path.join(app.config['UPLOAD_FOLDER'], wwwwwwoutcome)
+            filename = os.path.join(app.config['UPLOAD_FOLDER'], outcome)
             # with open(filename,'wb') as f:
             # 	f.write(memfile.getvalue())
             # REPLACED WITH ZIPUPLOADS
