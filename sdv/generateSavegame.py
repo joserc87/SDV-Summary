@@ -1,7 +1,7 @@
 from xml.etree.ElementTree import ElementTree, Element, SubElement, dump
 from defusedxml import ElementTree as ET
 import zipfile
-from zipuploads import zopen
+from sdv.zipuploads import zopen
 import os
 
 required_namespaces = '<Farmer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">'

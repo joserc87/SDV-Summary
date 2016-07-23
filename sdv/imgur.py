@@ -1,6 +1,6 @@
 from imgurpython import ImgurClient
 from imgurpython.helpers.error import ImgurClientError
-import __init__ as app
+import sdv as app
 from flask import url_for
 import uuid
 import json
