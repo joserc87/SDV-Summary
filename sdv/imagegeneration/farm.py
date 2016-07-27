@@ -5,6 +5,7 @@ from PIL import Image
 from itertools import chain
 from collections import namedtuple
 from .tools import colourBox, tintImage, cropImg
+from .assets import loadFarmAssets
 
 
 def loadTree(ss_tree, loc=0):
@@ -43,95 +44,6 @@ def getPlant(img, growth, colour, days, T, defaultSize=(16, 16), objectSize=(16,
         return plant_body
 
 
-def loadAssets():
-    assets = {
-                'base': {
-                            'spring': Image.open('sdv/assets/bases/spring_base.png'),
-                            'summer': Image.open('sdv/assets/bases/summer_base.png'),
-                            'fall': Image.open('sdv/assets/bases/fall_base.png'),
-                            'winter': Image.open('sdv/assets/bases/winter_base.png')
-                          },
-                'overlays': {
-                                'spring': [
-                                                Image.open('sdv/assets/bases/spring_overlay_0.png'),
-                                                Image.open('sdv/assets/bases/spring_overlay_1.png'),
-                                                Image.open('sdv/assets/bases/spring_overlay_2.png'),
-                                                Image.open('sdv/assets/bases/spring_overlay_3.png')
-                                            ],
-                                'summer': [
-                                                Image.open('sdv/assets/bases/summer_overlay_0.png'),
-                                                Image.open('sdv/assets/bases/summer_overlay_1.png'),
-                                                Image.open('sdv/assets/bases/summer_overlay_2.png'),
-                                                Image.open('sdv/assets/bases/summer_overlay_3.png')
-                                            ],
-                                'fall': [
-                                                Image.open('sdv/assets/bases/fall_overlay_0.png'),
-                                                Image.open('sdv/assets/bases/fall_overlay_1.png'),
-                                                Image.open('sdv/assets/bases/fall_overlay_2.png'),
-                                                Image.open('sdv/assets/bases/fall_overlay_3.png')
-                                            ],
-                                'winter': [
-                                                Image.open('sdv/assets/bases/winter_overlay_0.png'),
-                                                Image.open('sdv/assets/bases/winter_overlay_1.png'),
-                                                Image.open('sdv/assets/bases/winter_overlay_2.png'),
-                                                Image.open('sdv/assets/bases/winter_overlay_3.png')
-                                            ]
-                               },
-                'objects': Image.open('sdv/assets/farm/objects.png'),
-                'craftables': Image.open('sdv/assets/farm/craftables.png'),
-                'flooring': Image.open('sdv/assets/farm/flooring.png'),
-                'hoe dirt': {
-                              'normal': Image.open('sdv/assets/farm/hoeDirt.png'),
-                              'winter': Image.open('sdv/assets/farm/hoeDirtsnow.png')
-                              },
-                'crops': Image.open('sdv/assets/farm/crops.png'),
-                'fences': {
-                                'wood': Image.open('sdv/assets/farm/Fence1.png'),
-                                'stone': Image.open('sdv/assets/farm/Fence2.png'),
-                                'iron': Image.open('sdv/assets/farm/Fence3.png'),
-                                'hardwood': Image.open('sdv/assets/farm/Fence5.png')
-                            },
-                'trees': {
-                            'oak': {
-                                        'spring': Image.open('sdv/assets/farm/trees/tree1_spring.png'),
-                                        'summer': Image.open('sdv/assets/farm/trees/tree1_summer.png'),
-                                        'fall': Image.open('sdv/assets/farm/trees/tree1_fall.png'),
-                                        'winter': Image.open('sdv/assets/farm/trees/tree1_winter.png')
-                                    },
-                            'maple': {
-                                        'spring': Image.open('sdv/assets/farm/trees/tree2_spring.png'),
-                                        'summer': Image.open('sdv/assets/farm/trees/tree2_summer.png'),
-                                        'fall': Image.open('sdv/assets/farm/trees/tree2_fall.png'),
-                                        'winter': Image.open('sdv/assets/farm/trees/tree2_winter.png')
-                                        },
-                            'pine': {
-                                        'spring': Image.open('sdv/assets/farm/trees/tree3_spring.png'),
-                                        'summer': Image.open('sdv/assets/farm/trees/tree3_summer.png'),
-                                        'fall': Image.open('sdv/assets/farm/trees/tree3_fall.png'),
-                                        'winter': Image.open('sdv/assets/farm/trees/tree3_winter.png')
-                                     },
-                            'mushroom': Image.open('sdv/assets/farm/trees/mushroom_tree.png'),
-                            'fruit': Image.open('sdv/assets/farm/fruitTrees.png')
-                            },
-                'grass': Image.open('sdv/assets/farm/grass/grass.png'),
-                'buildings': {
-                                    'barn': Image.open('sdv/assets/farm/buildings/Barn.png'),
-                                    'big barn': Image.open('sdv/assets/farm/buildings/Big Barn.png'),
-                                    'deluxe barn': Image.open('sdv/assets/farm/buildings/Deluxe Barn.png'),
-                                    'coop': Image.open('sdv/assets/farm/buildings/Coop.png'),
-                                    'big coop': Image.open('sdv/assets/farm/buildings/Big Coop.png'),
-                                    'deluxe coop': Image.open('sdv/assets/farm/buildings/Deluxe Coop.png'),
-                                    'greenhouse': Image.open('sdv/assets/farm/buildings/Greenhouse.png'),
-                                    'house': Image.open('sdv/assets/farm/buildings/houses.png'),
-                                    'silo': Image.open('sdv/assets/farm/buildings/Silo.png'),
-                                    'slime hutch': Image.open('sdv/assets/farm/buildings/Slime Hutch.png'),
-                                    'stable': Image.open('sdv/assets/farm/buildings/Stable.png'),
-                                    'well': Image.open('sdv/assets/farm/buildings/Well.png'),
-                                }
-              }
-    return assets
-
-
 def generateFarm(season, farm, assets=None):
     sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
     craftable_blacklist = ['Twig', 'Torch', 'Sprinkler',
@@ -139,7 +51,7 @@ def generateFarm(season, farm, assets=None):
 
     if assets is None:
         print('\tLoading Assets...')
-        assets = loadAssets()
+        assets = loadFarmAssets()
 
     farm_base = Image.new('RGBA', (1280, 1040))
     farm_base.paste(assets['base'][season], (0, 0))
@@ -370,7 +282,7 @@ def generateFarm(season, farm, assets=None):
 #      Blue - Water
 #      Off Tan - Tilled Soil
 def generateMinimap(farm):
-    image = Image.open("./assets/bases/minimap_base.png")
+    image = Image.open("./sdv/assets/bases/minimap_base.png")
     pixels = image.load()
 
     pixels[1, 1] = (255, 255, 255)

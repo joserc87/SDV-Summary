@@ -2,33 +2,7 @@
 
 from PIL import Image
 from .tools import tintImage, cropImg
-
-
-def loadAvatarAssets():
-    assets = {
-                'base': {
-                            'male': Image.open('./assets/player/male_base.png'),
-                            'female': Image.open('./assets/player/female_base.png')
-                          },
-                'boots': {
-                            'male': Image.open('./assets/player/male_boots.png'),
-                            'female': Image.open('./assets/player/female_boots.png')
-                           },
-                'legs': {
-                            'male': Image.open('./assets/player/male_legs.png'),
-                            'female': Image.open('./assets/player/female_legs.png')
-                          },
-                'arms': {
-                            'male': Image.open('./assets/player/male_arms.png'),
-                            'female': Image.open('./assets/player/female_arms.png')
-                          },
-                'hair': Image.open('./assets/player/hair.png'),
-                'accessories': Image.open('./assets/player/accessories.png'),
-                'shirts': Image.open('./assets/player/shirts.png'),
-                'skin colors': Image.open('./assets/player/skinColors.png')
-               }
-
-    return assets
+from . assets import loadAvatarAssets
 
 
 def generateAvatar(player, assets=None):
@@ -90,13 +64,3 @@ def generateAvatar(player, assets=None):
     base = Image.alpha_composite(base, acc)
     base = Image.alpha_composite(base, assets['boots'][gender])
     return base
-
-
-def main():
-    from playerInfo import playerInfo
-    # player = playerInfo('./save/Crono_116230451')
-    player = playerInfo('./saves/Sketchy_116441313')
-    generateAvatar(player).save('test.png')
-
-if __name__ == '__main__':
-    main()
