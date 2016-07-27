@@ -126,7 +126,7 @@ def parse_json(data):
             elif 'iron' in type:
                 t = 3
             elif 'hardwood' in type:
-                t = 4
+                t = 5
             objects.append(
                 sprite('Fence', x, y, 1, 1, 0, t, False, 0, 0)
             )
