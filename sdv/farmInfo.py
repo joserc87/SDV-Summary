@@ -106,7 +106,11 @@ def getFarmInfo(saveFile):
             if item.find('value').find('TerrainFeature').find('flipped').text == 'true': f = True
         if name == 'Flooring':
             t = int(item.find('value').find('TerrainFeature').find('whichFloor').text)
-            s = int(item.find('value').find('TerrainFeature').find('whichView').text)
+            s = item.find('value').find('TerrainFeature').find('whichView')
+            if s is None:
+                s = 0
+            else:
+                s = int(s.text)
         if name == "HoeDirt":
             crop = item.find('value').find('TerrainFeature').find('crop')
             if crop is not None:
