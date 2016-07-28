@@ -106,6 +106,8 @@ def getFarmInfo(saveFile):
             if item.find('value').find('TerrainFeature').find('flipped').text == 'true': f = True
         if name == 'Flooring':
             t = int(item.find('value').find('TerrainFeature').find('whichFloor').text)
+
+            # simple fix to correct missing whichView node in some save files
             s = item.find('value').find('TerrainFeature').find('whichView')
             if s is None:
                 s = 0
