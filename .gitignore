@@ -65,7 +65,6 @@ target/
 config.py
 saves/
 save/
-tools/
 sdv/assets/
 sdv/uploads/
 sdv/static/assets/
@@ -81,3 +80,5 @@ sdv/templates/analytics.html
 *.png
 
 /.idea
+logfile
+assets/
