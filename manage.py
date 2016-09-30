@@ -4,6 +4,7 @@ import subprocess
 from flask_script import Manager
 from sdv import app
 from sdv.createdb import init_db
+from tools import copy_assets
 
 manager = Manager(app)
 
@@ -29,6 +30,11 @@ def lint():
     if lint:
         print('OK')
     sys.exit(lint)
+
+@manager.command
+def init():
+    """Copy game assets from folder"""
+    copy_assets()
 
 if __name__ == "__main__":
     manager.run()
