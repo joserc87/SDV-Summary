@@ -3,7 +3,7 @@
 
 from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify, make_response, send_from_directory, abort
 from flask_recaptcha import ReCaptcha
-from flask.ext.bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt
 from flask_mail import Mail, Message
 from werkzeug import secure_filename, check_password_hash
 from werkzeug.contrib.fixers import ProxyFix
