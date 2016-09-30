@@ -165,4 +165,4 @@ class TileMap:
                 else:
                     tileImg = tileset["tileCache"][tile["tile"]]
                 pasteImg(img, tileImg, tile["pos"], (layer["width"], layer["height"]), (16, 16))
-img.save(os.path.join(outdir, layer["name"] + ".png"))
+            img.save(os.path.join(outdir, layer["name"] + ".png"))

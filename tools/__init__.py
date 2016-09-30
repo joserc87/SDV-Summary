@@ -3,11 +3,28 @@ import errno
 
 from .farm import copy_farm
 from .partners import copy_partners
+from .bases import generateBases
 
 base_path = os.getcwd() + os.path.join(os.path.sep, 'sdv', 'assets')
 
 
 def create_directories():
+
+    types = [
+        'Combat',
+        'Fishing',
+        'Foraging',
+        'Mining',
+        'Default'
+    ]
+
+    seasons = [
+        'spring',
+        'summer',
+        'fall',
+        'winter'
+    ]
+
     directories = [
         'base',
         'farm',
@@ -19,6 +36,10 @@ def create_directories():
         'pets',
         'player'
     ]
+
+    for season in seasons:
+        for type in types:
+            directories.append(os.path.join('base', type, season))
 
     for directory in directories:
         try:
@@ -32,3 +53,4 @@ def copy_assets():
     create_directories()
     copy_farm()
     copy_partners()
+    generateBases()
