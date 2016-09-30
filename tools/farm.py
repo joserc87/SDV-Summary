@@ -55,8 +55,11 @@ def copy_farm():
     tileSheets = [
         'Craftables.png',
         'crops.png',
-        'fruitTrees.png',
-        'objects.png'
+        'fruitTrees.png'
+    ]
+
+    maps = [
+        'springobjects.png'
     ]
 
     looseSprites = [
@@ -69,4 +72,5 @@ def copy_farm():
     copy_images(buildings, 'Buildings', os.path.join('farm', 'buildings'))
     copy_images(terrainFeatures, 'TerrainFeatures', os.path.join('farm', 'terrainFeatures'))
     copy_images(tileSheets, 'TileSheets', os.path.join('farm', 'tileSheets'))
+    copy_images(maps, 'Maps', os.path.join('farm', 'tileSheets'))
     copy_images(looseSprites, 'LooseSprites', os.path.join('farm', 'looseSprites'))

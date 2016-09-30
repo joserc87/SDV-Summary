@@ -40,7 +40,7 @@ def loadFarmAssets():
                                                 Image.open(os.path.join(asset_dir, 'bases', 'winter_overlay_3.png'))
                                             ]
                                },
-                'objects': Image.open(os.path.join(asset_dir, 'farm', 'objects.png')),
+                'objects': Image.open(os.path.join(asset_dir, 'farm', 'springobjects.png')),
                 'craftables': Image.open(os.path.join(asset_dir, 'farm', 'craftables.png')),
                 'flooring': Image.open(os.path.join(asset_dir, 'farm', 'flooring.png')),
                 'hoe dirt': {
