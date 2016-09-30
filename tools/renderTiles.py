@@ -2,7 +2,7 @@
 
 from PIL import Image
 from PIL.ImageChops import offset
-import argparse, os
+import os
 
 
 def cropImg(img, location, size, tileSize):
