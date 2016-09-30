@@ -21,8 +21,6 @@ def rip_stones():
 def copy_farm():
     buildings = [
         'Barn.png',
-        'Barn2.png',
-        'Barn3.png',
         'Big Barn.png',
         'Big Coop.png',
         'Coop.png',
