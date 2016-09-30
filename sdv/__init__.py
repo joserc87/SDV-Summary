@@ -63,9 +63,7 @@ def create_app(config_name=None):
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
     app.wsgi_app = ProxyFix(app.wsgi_app)
-    print('app loading')
     if app.config['USE_SQLITE'] == True:
-        print('sqlite')
         app.database = app.config['DB_SQLITE']
         app.sqlesc = '?'
         def connect_db():
