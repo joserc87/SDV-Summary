@@ -55,6 +55,14 @@ def create_directories():
             if e.errno != errno.EEXIST:
                 raise
 
+    # TODO: clean this up
+    path = os.getcwd() + os.path.join(os.path.sep, 'sdv',)
+    try:
+        os.makedirs(os.path.join(path, 'uploads'))
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+
 
 def copy_assets():
     create_directories()
