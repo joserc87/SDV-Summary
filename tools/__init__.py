@@ -38,7 +38,10 @@ def create_directories():
         'npcs',
         os.path.join('npcs', 'partners'),
         os.path.join('npcs', 'animals'),
-        'player'
+        'player',
+        os.path.join('player', 'male'),
+        os.path.join('player', 'female'),
+        os.path.join('player', 'misc')
     ]
 
     for season in seasons:
