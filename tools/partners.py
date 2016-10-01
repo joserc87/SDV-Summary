@@ -22,7 +22,7 @@ def copy_partners():
     ]
     for partner in partners:
         img = Image.open(os.path.join(src_directory, 'Characters', partner))
-        img.crop((0, 0, 16, 32)).save(os.path.join(dest_directory, 'partners', partner))
+        img.crop((0, 0, 16, 32)).save(os.path.join(dest_directory, 'npcs', 'partners', partner))
 
 if __name__ == '__main__':
     copy_partners()

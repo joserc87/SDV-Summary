@@ -2,8 +2,11 @@ import os
 import errno
 
 from .farm import copy_farm
-from .partners import copy_partners
 from .bases import generateBases
+
+# TODO: merge pets and partners to NPCs
+from .partners import copy_partners
+from .pets import copy_pets
 
 base_path = os.getcwd() + os.path.join(os.path.sep, 'sdv', 'assets')
 
@@ -32,8 +35,9 @@ def create_directories():
         os.path.join('farm', 'terrainFeatures'),
         os.path.join('farm', 'looseSprites'),
         os.path.join('farm', 'tileSheets'),
-        'partners',
-        'pets',
+        'npcs',
+        os.path.join('npcs', 'partners'),
+        os.path.join('npcs', 'animals'),
         'player'
     ]
 
@@ -54,3 +58,4 @@ def copy_assets():
     copy_farm()
     copy_partners()
     generateBases()
+    copy_pets()
