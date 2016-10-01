@@ -6,16 +6,15 @@ from sdv import app
 asset_dir = app.config.get('ASSET_PATH')
 
 overlays = [
-    'Buildings.png',
     'Front.png',
-    'AlwaysFront.png'
+    'AlwaysFront.png',
+    'Buildings.png'
 ]
-
 
 def loadFarmAssets():
     assets = {
                 'base': {
-                    'Defaut': {
+                    'Default': {
                         'spring': Image.open(os.path.join(asset_dir, 'base', 'Default', 'spring', 'Back.png')),
                         'summer': Image.open(os.path.join(asset_dir, 'base', 'Default', 'summer', 'Back.png')),
                         'fall': Image.open(os.path.join(asset_dir, 'base', 'Default', 'fall', 'Back.png')),
@@ -122,15 +121,14 @@ def loadFarmAssets():
                                     'coop': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Coop.png')),
                                     'big coop': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Big Coop.png')),
                                     'deluxe coop': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Deluxe Coop.png')),
-                                    'greenhouse': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Houses.png')),
-                                    'house': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Houses.png')),
+                                    'greenhouse': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Houses.png')).crop((160,0, 160+112, 144*3)),
+                                    'house': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Houses.png')).crop((0,0, 160, 144*3)),
                                     'silo': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Silo.png')),
                                     'slime hutch': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Slime Hutch.png')),
                                     'stable': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Stable.png')),
                                     'well': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Well.png'))
                                 }
               }
-
     return assets
 
 def loadAvatarAssets():
