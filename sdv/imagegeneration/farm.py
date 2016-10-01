@@ -44,7 +44,7 @@ def getPlant(img, growth, colour, days, T, defaultSize=(16, 16), objectSize=(16,
         return plant_body
 
 
-def generateFarm(season, farm, assets=None):
+def generateFarm(season, farm, type, assets=None):
     sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
     craftable_blacklist = ['Twig', 'Torch', 'Sprinkler',
                            'Quality Sprinkler', 'Iridium Sprinkler', 'Note Block', 'Jack-O-Lantern']
@@ -54,16 +54,16 @@ def generateFarm(season, farm, assets=None):
         assets = loadFarmAssets()
 
     farm_base = Image.new('RGBA', (1280, 1040))
-    farm_base.paste(assets['base'][season], (0, 0))
+    farm_base.paste(assets['base'][type][season], (0, 0))
+    farm_base.paste(assets['overlays'][type][season][2], (0, 0), assets['overlays'][type][season][2])
     
     # seed the random number generator so we render the same way every time
     random.seed(0)
 
     farm['overlays'] = [
-                        sprite('overlay', 0, 14, 0, 0, 0, 0, 0, 0, 0),
-                        sprite('overlay', 0, 16, 0, 0, 0, 1, 0, 0, 0),
-                        sprite('overlay', 0, 23, 0, 0, 0, 2, 0, 0, 0),
-                        sprite('overlay', 0, 63, 0, 0, 0, 3, 0, 0, 0)
+                        sprite('overlay', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                        sprite('overlay', 0, 0, 0, 0, 0, 1, 0, 0, 0),
+                        sprite('overlay', 0, 0, 0, 0, 0, 2, 0, 0, 0)
                         ]
 
     farm = sorted(chain.from_iterable(farm.values()), key=lambda x: x.y)
@@ -243,9 +243,9 @@ def generateFarm(season, farm, assets=None):
             except Exception as e:
                 print(e)
 
-        if item.name == 'overlay':
+        if item.name == 'overlay' and item.type != 2:
             try:
-                farm_base.paste(assets['overlays'][season][item.type], (0, 0), assets['overlays'][season][item.type])
+                farm_base.paste(assets['overlays'][type][season][item.type], (0, 0), assets['overlays'][type][season][item.type])
             except Exception as e:
                 print(e)
 
