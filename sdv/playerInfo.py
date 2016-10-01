@@ -167,6 +167,21 @@ def playerInfo(saveFile):
     assert season in validate.seasons
     info['currentSeason'] = season
 
+    types = [
+        'Default',
+        'Combat',
+        'Fishing',
+        'Mining',
+        'Foraging'
+    ]
+
+    mapType = root.find('whichFarm').text
+    try:
+        mapType = int(mapType)
+    except Exception as e:
+        mapType = 0
+    info['mapType'] = types[mapType]
+
     # Collecting player stats
     info['stats'] = getStats(root)
 
