@@ -137,7 +137,7 @@ def loadFarmAssets():
                                         'fall': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Junimo Hut.png')).crop((48*2,0,48*3,64)),
                                         'winter': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Junimo Hut.png')).crop((48*3,0,48*4,64))
                                     },
-                                    'mill':Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Mill.png')),
+                                    #'mill':Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Mill.png')),
                                     'shed': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Shed.png')),
                                     'water obelisk': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Water Obelisk.png'))
                                 }
