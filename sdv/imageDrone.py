@@ -39,7 +39,7 @@ def process_queue():
 
                 base_path = os.path.join(app.config.get('IMAGE_FOLDER'), data['url'])
                 try:
-                    os.mkdir(base_path)
+                    os.mkdir(legacy_location(base_path))
                 except OSError:
                     pass
 
