@@ -18,6 +18,8 @@ def rip_stones():
     pass
 
 
+
+
 def copy_farm():
     buildings = [
         'Barn.png',
@@ -30,8 +32,14 @@ def copy_farm():
         'Slime Hutch.png',
         'Stable.png',
         'Well.png',
-        'Houses.png'
+        'Houses.png',
+        'Earth Obelisk.png',
+        'Gold Clock.png',
+        'Junimo Hut.png',
+        'Shed.png',
+        'Water Obelisk.png'
     ]
+
 
     terrainFeatures = [
         'mushroom_tree.png',

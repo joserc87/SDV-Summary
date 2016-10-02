@@ -121,12 +121,25 @@ def loadFarmAssets():
                                     'coop': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Coop.png')),
                                     'big coop': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Big Coop.png')),
                                     'deluxe coop': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Deluxe Coop.png')),
-                                    'greenhouse': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Houses.png')).crop((160,0, 160+112, 144*3)),
-                                    'house': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Houses.png')).crop((0,0, 160, 144*3)),
+                                    'greenhouse': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Houses.png'))
+                                        .crop((160,0, 160+112, 144*3)),
+                                    'house': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Houses.png'))
+                                        .crop((0,0, 160, 144*3)),
                                     'silo': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Silo.png')),
                                     'slime hutch': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Slime Hutch.png')),
                                     'stable': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Stable.png')),
-                                    'well': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Well.png'))
+                                    'well': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Well.png')),
+                                    'earth obelisk':Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Earth Obelisk.png')),
+                                    'gold clock':Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Gold Clock.png')),
+                                    'junimo hut': {
+                                        'spring': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Junimo Hut.png')).crop((0,0,48,64)),
+                                        'summer': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Junimo Hut.png')).crop((48,0,48*2,64)),
+                                        'fall': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Junimo Hut.png')).crop((48*2,0,48*3,64)),
+                                        'winter': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Junimo Hut.png')).crop((48*3,0,48*4,64))
+                                    },
+                                    'mill':Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Mill.png')),
+                                    'shed': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Shed.png')),
+                                    'water obelisk': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Water Obelisk.png'))
                                 }
               }
     return assets
