@@ -19,7 +19,7 @@ def generateAvatar(player, assets=None):
     leg_colour = (int(player['pantsColor'][0]), int(player['pantsColor'][1]), int(player['pantsColor'][2]))
     legs = tintImage(assets['legs'][gender], leg_colour)
 
-    hair = cropImg(assets['hair'], int(player['hair']), defaultSize=(16, 32), objectSize=(16, 32), resize=True, displacement=(0, 0))
+    hair = cropImg(assets['hair'], int(player['hair']), defaultSize=(16, 32*3), objectSize=(16, 32), resize=True, displacement=(0, 0))
     hair_color = tuple(map(int, player['hairstyleColor']))
     hair = tintImage(hair, hair_color)
 
@@ -27,10 +27,10 @@ def generateAvatar(player, assets=None):
     if int(player['accessory']) <= 5:
         acc = tintImage(acc, hair_color)
 
-    shirt = cropImg(assets['shirts'], int(player['shirt']), defaultSize=(8, 8), objectSize=(8, 8), resize=True, displacement=(4, 14))
+    shirt = cropImg(assets['shirts'], int(player['shirt']), defaultSize=(8, 8*4), objectSize=(8, 8), resize=True, displacement=(4, 14))
 
-    skin_x = int(player['skin']) % 3 * 1
-    skin_y = int(player['skin']) // 3 * 1
+    skin_x = int(player['skin']) % 24 * 1
+    skin_y = int(player['skin']) // 24 * 1
     skin_color = assets['skin colors'].getpixel((skin_x, skin_y))
     base = tintImage(base, skin_color)
     arms = tintImage(assets['arms'][gender], skin_color)
