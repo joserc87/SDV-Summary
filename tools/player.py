@@ -20,42 +20,43 @@ def copy_player():
         'hats.png',
         'shirts.png',
         'shoeColors.png',
-        'skinColors.png'
     ]
 
     copy_images(misc, os.path.join('Characters', 'Farmer'), os.path.join('player', 'misc'))
 
-    genders = [
-        'male',
-        'female'
-    ]
+    # Using old custom sprites for now
 
-    for gender in genders:
-        filename = 'farmer_base.png'
-        if gender == 'female':
-            filename = 'farmer_girl_base.png'
-        assets = Image.open(os.path.join(src_directory, 'Characters', 'Farmer', filename))
-
-        base = Image.new('RGBA', (16,32))
-        arms = assets.crop((96, 0, 96 + 16, 32))
-        arms.save(os.path.join(dest_directory, 'player', gender, '{}_arms.png'.format(gender)))
-        base.paste(arms, mask=arms)
-        body = assets.crop((0,0, 16, 24))
-        base.paste(body, box=(0,0), mask=body)
-        base.save(os.path.join(dest_directory, 'player', gender, '{}_base.png'.format(gender)))
-        base.close()
-
-        boots = Image.new('RGBA', (16,32))
-        boot_asset = assets.crop((0,24, 16, 32))
-        boots.paste(boot_asset, box=(0, 24), mask=boot_asset)
-        boots.save(os.path.join(dest_directory, 'player', gender, '{}_boots.png'.format(gender)))
-        boots.close()
-
-        legs = Image.new('RGBA', (16, 32))
-        leg_asset = assets.crop((288, 0, 288+16, 32))
-        legs.paste(leg_asset, mask=leg_asset)
-        legs.save(os.path.join(dest_directory, 'player', gender, '{}_legs.png'.format(gender)))
-        legs.close()
+    # genders = [
+    #     'male',
+    #     'female'
+    # ]
+    #
+    # for gender in genders:
+    #     filename = 'farmer_base.png'
+    #     if gender == 'female':
+    #         filename = 'farmer_girl_base.png'
+    #     assets = Image.open(os.path.join(src_directory, 'Characters', 'Farmer', filename))
+    #
+    #     base = Image.new('RGBA', (16,32))
+    #     arms = assets.crop((96, 1, 96 + 16, 33))
+    #     arms.save(os.path.join(dest_directory, 'player', gender, '{}_arms.png'.format(gender)))
+    #     base.paste(arms, box=(0, -1), mask=arms)
+    #     body = assets.crop((0, 0, 16, 24))
+    #     base.paste(body, box=(0,0), mask=body)
+    #     base.convert('LA').convert('RGBA').save(os.path.join(dest_directory, 'player', gender, '{}_base.png'.format(gender)))
+    #     base.close()
+    #
+    #     boots = Image.new('RGBA', (16,32))
+    #     boot_asset = assets.crop((0,25, 16, 33))
+    #     boots.paste(boot_asset, box=(0, 24), mask=boot_asset)
+    #     boots.save(os.path.join(dest_directory, 'player', gender, '{}_boots.png'.format(gender)))
+    #     boots.close()
+    #
+    #     legs = Image.new('RGBA', (16, 32))
+    #     leg_asset = assets.crop((288, 1, 288+16, 33))
+    #     legs.paste(leg_asset, mask=leg_asset)
+    #     legs.save(os.path.join(dest_directory, 'player', gender, '{}_legs.png'.format(gender)))
+    #     legs.close()
 
 
 if __name__ == '__main__':
