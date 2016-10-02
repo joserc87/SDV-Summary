@@ -5,6 +5,7 @@ from flask_script import Manager
 from sdv import app
 from sdv.createdb import init_db
 from tools import copy_assets
+import os
 
 manager = Manager(app)
 
@@ -36,5 +37,9 @@ def init():
     """Copy game assets from folder"""
     copy_assets()
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
+    # print('os.chdir coming up... if the program refuses to run, comment it out, manage.py runserver, then uncomment and save')
+    # os.chdir(os.path.join(os.path.dirname(__file__),"sdv"))
+    # sys.path.insert(0, './')
+    # sys.path.insert(0, './sdv')
     manager.run()
