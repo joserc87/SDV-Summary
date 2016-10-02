@@ -220,7 +220,20 @@ def getFarmInfo(saveFile):
                             None, None, None, None)
     farm['misc'] = [house, greenHouse]
 
-    return farm
+    types = [
+        'Default',
+        'Fishing',
+        'Foraging',
+        'Mining',
+        'Combat'
+    ]
+
+    try:
+        mapType = int(root.find('whichFarm').text)
+    except Exception as e:
+        mapType = 0
+
+    return {'type': types[mapType], 'data': farm}
 
 
 def colourBox(x, y, colour, pixels, scale=8):
@@ -304,9 +317,9 @@ def generateImage(farm):
 def regenerateFarmInfo(json_from_db):
     sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
 
-    for key in json_from_db.keys():
-        for i, item in enumerate(json_from_db[key]):
-            json_from_db[key][i] = sprite(*item)
+    for key in json_from_db['data'].keys():
+        for i, item in enumerate(json_from_db['data'][key]):
+            json_from_db['data'][key][i] = sprite(*item)
     return json_from_db
 
 

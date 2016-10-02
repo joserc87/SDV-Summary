@@ -26,7 +26,6 @@ def process_queue():
         cur.execute('UPDATE todo SET currently_processing='+sqlesc+' WHERE id=(SELECT id FROM todo WHERE task='+sqlesc+' AND currently_processing IS NOT TRUE LIMIT 1) RETURNING *',(True,'process_image',))
         tasks = cur.fetchall()
         db.commit()
-        # print tasks
         if len(tasks) != 0:
             for task in tasks:
                 cur.execute('SELECT '+database_fields+' FROM playerinfo WHERE id=('+sqlesc+')',(task[2],))
@@ -38,7 +37,7 @@ def process_queue():
                 data['newEyeColor'] = [data['newEyeColor0'],data['newEyeColor1'],data['newEyeColor2'],data['newEyeColor3']]
                 data['hairstyleColor'] = [data['hairstyleColor0'],data['hairstyleColor1'],data['hairstyleColor2'],data['hairstyleColor3']]
 
-                base_path = os.path.join(config.get('IMAGE_FOLDER'), data['url'])
+                base_path = os.path.join(app.config.get('IMAGE_FOLDER'), data['url'])
                 try:
                     os.mkdir(base_path)
                 except OSError:
@@ -55,7 +54,7 @@ def process_queue():
 
                 farm_data = regenerateFarmInfo(json.loads(data['farm_info']))
                 farm_path = os.path.join(base_path, data['url']+'-f.png')
-                generateMinimap(farm_data).save(farm_path, compress_level=9)
+                # generateMinimap(farm_data).save(farm_path, compress_level=9)
 
                 map_path = os.path.join(base_path, data['url']+'-m.png')
                 thumb_path = os.path.join(base_path, data['url']+'-t.png')
@@ -66,9 +65,9 @@ def process_queue():
 
                 cur.execute('UPDATE playerinfo SET farm_url='+sqlesc+', avatar_url='+sqlesc+', portrait_url='+sqlesc+', map_url='+sqlesc+', thumb_url='+sqlesc+', base_path='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,avatar_path,portrait_path,map_path,thumb_path,base_path,data['id']))
                 db.commit()
-                # except:
-                    # cur.execute('UPDATE playerinfo SET failed_processing='+sqlesc+' WHERE id='+,(True,data['id']))
-                    # db.commit()
+                # except Exception as e:
+                #     cur.execute('UPDATE playerinfo SET failed_processing='+sqlesc+' WHERE id='+,(True,data['id']))
+                #     db.commit()
                 cur.execute('DELETE FROM todo WHERE id=('+sqlesc+')',(task[0],))
                 db.commit()
                 records_handled += 1

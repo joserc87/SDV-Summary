@@ -222,7 +222,7 @@ $(document).ready(function() {
 							<div id="playerInfo" class="tab-pane active">
 								<div class="col-md-4 col-sm-4 col-xs-12">
 									<div class="avatarPanel">
-										<img src="{{ data.avatar_url }}" class="playerAvatar">
+										<img src="{{url_for('static', filename='images/{0}/{0}-a.png'.format(data.url))}}" class="playerAvatar">
 									</div>
 								</div>
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
@@ -250,7 +250,7 @@ $(document).ready(function() {
 
 								<div class="col-md-4 col-sm-4 col-xs-12">
 									<div class="portraitPanel">
-										<img src="{{ data.portrait_url }}" class="playerPortrait">
+										<img src="{{url_for('static', filename='images/{0}/{0}-p.png'.format(data.url))}}" class="playerPortrait">
 									</div>
 								</div>
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
@@ -432,7 +432,7 @@ $(document).ready(function() {
 						{%endif%}
 
 						<!-- <h3>Minimap</h3> -->
-						<a href="#mainFarm"><img src="{{ data.farm_url }}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
+						<a href="#mainFarm"><img src="{{url_for('static', filename='images/{0}/{0}-t.png'.format(data.url))}}" class="img-responsive farmImg" style="image-rendering: pixelated;" height="auto"></a>
 						{% if data.download_enabled == True %}
 							<p class="text-center">
 								<img src="{{url_for('static',filename='css/cpanel/dl32.png')}}"><button type="button" class="btn-link" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='You use the contents of this zip at your own risk!<br><a href="/dl/{{data.url}}">I understand, download!</a>'>download savegame</button>
@@ -516,7 +516,7 @@ $(document).ready(function() {
 							<div class="previewimage">
 								{% for gallery_item in gallery_set.dict.order %}
 									{% if data.map_url == gallery_item %}
-										<a href="{{ data.map_url }}" class="gallery" id="farm-map-image" target="_blank"><img src="{{ data.map_url }}" title="Click to open farm gallery" class="img-responsive farmImg" height="auto"></a> <!--data-featherlight="{{data.map_url}}"-->
+										<a href="{{url_for('static', filename='images/{0}/{0}-m.png'.format(data.url))}}" class="gallery" id="farm-map-image" target="_blank"><img src="{{url_for('static', filename='images/{0}/{0}-m.png'.format(data.url))}}" title="Click to open farm gallery" class="img-responsive farmImg" height="auto"></a> <!--data-featherlight="{{data.map_url}}"-->
 									{% else%}
 										<div style="position:absolute;visibility:hidden;"><a class="gallery" href="{{ gallery_item }}">hi</a></div>
 									{% endif %}

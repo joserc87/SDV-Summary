@@ -44,7 +44,9 @@ def getPlant(img, growth, colour, days, T, defaultSize=(16, 16), objectSize=(16,
         return plant_body
 
 
-def generateFarm(season, farm, type, assets=None):
+def generateFarm(season, data, assets=None):
+    type = data['type']
+    farm = data['data']
     sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
     craftable_blacklist = ['Twig', 'Torch', 'Sprinkler',
                            'Quality Sprinkler', 'Iridium Sprinkler', 'Note Block', 'Jack-O-Lantern']

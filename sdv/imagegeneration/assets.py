@@ -46,7 +46,7 @@ def loadFarmAssets():
                     }
                 },
                 'overlays': {
-                    'Defaut': {
+                    'Default': {
                         'spring': [Image.open(os.path.join(asset_dir, 'base', 'Default', 'spring', s)) for s in overlays],
                         'summer': [Image.open(os.path.join(asset_dir, 'base', 'Default', 'summer', s)) for s in overlays ],
                         'fall': [Image.open(os.path.join(asset_dir, 'base', 'Default', 'fall', s)) for s in overlays],
@@ -134,25 +134,25 @@ def loadFarmAssets():
 def loadAvatarAssets():
     assets = {
                 'base': {
-                            'male': Image.open(os.path.join(asset_dir, 'player', 'male_base.png')),
-                            'female': Image.open(os.path.join(asset_dir, 'player', 'female_base.png'))
+                            'male': Image.open(os.path.join(asset_dir, 'player', 'male', 'male_base.png')),
+                            'female': Image.open(os.path.join(asset_dir, 'player', 'female', 'female_base.png'))
                           },
                 'boots': {
-                            'male': Image.open(os.path.join(asset_dir, 'player', 'male_boots.png')),
-                            'female': Image.open(os.path.join(asset_dir, 'player', 'female_boots.png'))
+                            'male': Image.open(os.path.join(asset_dir, 'player', 'male', 'male_boots.png')),
+                            'female': Image.open(os.path.join(asset_dir, 'player', 'female', 'female_boots.png'))
                            },
                 'legs': {
-                            'male': Image.open(os.path.join(asset_dir, 'player', 'male_legs.png')),
-                            'female': Image.open(os.path.join(asset_dir, 'player', 'female_legs.png'))
+                            'male': Image.open(os.path.join(asset_dir, 'player', 'male', 'male_legs.png')),
+                            'female': Image.open(os.path.join(asset_dir, 'player', 'female', 'female_legs.png'))
                           },
                 'arms': {
-                            'male': Image.open(os.path.join(asset_dir, 'player', 'male_arms.png')),
-                            'female': Image.open(os.path.join(asset_dir, 'player', 'female_arms.png'))
+                            'male': Image.open(os.path.join(asset_dir, 'player', 'male', 'male_arms.png')),
+                            'female': Image.open(os.path.join(asset_dir, 'player', 'female', 'female_arms.png'))
                           },
-                'hair': Image.open(os.path.join(asset_dir, 'player', 'hair.png')),
-                'accessories': Image.open(os.path.join(asset_dir, 'player', 'accessories.png')),
-                'shirts': Image.open(os.path.join(asset_dir, 'player', 'shirts.png')),
-                'skin colors': Image.open(os.path.join(asset_dir, 'player', 'skinColors.png'))
+                'hair': Image.open(os.path.join(asset_dir, 'player', 'misc', 'hairstyles.png')),
+                'accessories': Image.open(os.path.join(asset_dir, 'player', 'misc', 'accessories.png')),
+                'shirts': Image.open(os.path.join(asset_dir, 'player', 'misc', 'shirts.png')),
+                'skin colors': Image.open(os.path.join(asset_dir, 'player', 'misc', 'skinColors.png'))
                }
 
     return assets

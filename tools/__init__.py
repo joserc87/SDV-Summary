@@ -3,6 +3,7 @@ import errno
 
 from .farm import copy_farm
 from .bases import generateBases
+from .styleAssets import copyStyleAssets
 
 # TODO: merge pets and partners to NPCs
 from .partners import copy_partners
@@ -70,3 +71,4 @@ def copy_assets():
     copy_partners()
     generateBases()
     copy_pets()
+    copyStyleAssets()

@@ -29,8 +29,8 @@ def generateAvatar(player, assets=None):
 
     shirt = cropImg(assets['shirts'], int(player['shirt']), defaultSize=(8, 8), objectSize=(8, 8), resize=True, displacement=(4, 14))
 
-    skin_x = int(player['skin']) % 24 * 1
-    skin_y = int(player['skin']) // 24 * 1
+    skin_x = int(player['skin']) % 3 * 1
+    skin_y = int(player['skin']) // 3 * 1
     skin_color = assets['skin colors'].getpixel((skin_x, skin_y))
     base = tintImage(base, skin_color)
     arms = tintImage(assets['arms'][gender], skin_color)
