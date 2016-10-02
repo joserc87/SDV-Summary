@@ -23,7 +23,7 @@ def generateAvatar(player, assets=None):
     hair_color = tuple(map(int, player['hairstyleColor']))
     hair = tintImage(hair, hair_color)
 
-    acc = cropImg(assets['accessories'], int(player['accessory']), resize=True, displacement=(0, 1))
+    acc = cropImg(assets['accessories'], int(player['accessory']), objectSize=(16, 16*2), resize=True, displacement=(0, 1))
     if int(player['accessory']) <= 5:
         acc = tintImage(acc, hair_color)
 
