@@ -4,7 +4,7 @@ import os
 def generateFamilyPortrait(player_img, information, scale=4):
     portrait = Image.new('RGBA', (48, 48))
     if information['partner']:
-        partner_img = Image.open('.sdv/assets/partners/{0}.png'.format(information['partner']))
+        partner_img = Image.open('./sdv/assets/npcs/partners/{0}.png'.format(information['partner']))
 
     if information['cat']:
         pet_img = Image.open('./sdv/assets/npcs/animals/cat.png')
@@ -29,7 +29,7 @@ def generateFamilyPortrait(player_img, information, scale=4):
             stage = "Baby_floor"
             baby = True
 
-        child_imgs.append((Image.open('.sdv/assets/child/{0}{1}{2}.png'.format(stage, gender, skin)), baby))
+        child_imgs.append((Image.open('./sdv/assets/child/{0}{1}{2}.png'.format(stage, gender, skin)), baby))
 
     if information['partner']:
         portrait.paste(partner_img, (14+8, 0), partner_img)
