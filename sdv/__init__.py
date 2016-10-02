@@ -80,9 +80,17 @@ app = create_app()
 def connect_db():
     return psycopg2.connect(app.database)
 
+def legacy_location(location):
+    '''
+    this allows for the move from flat-file app to modular app. it's really hacky.
+    it should be used ONLY on READ and WRITE commands, NEVER to modify a filename before saving to db - or it'll be
+    reapplied later when that filename is read, and you'll end up with LEGACY_ROOT_FOLDER being prepended twice...
+    '''
+    return os.path.join(app.config['LEGACY_ROOT_FOLDER'],location)
+app.jinja_env.globals.update(legacy_location=legacy_location)
+
 import sdv.imageDrone  # noqa
 import sdv.emailDrone  # noqa
-
 
 def get_db():
     # designed to prevent repeated db connections
@@ -426,7 +434,7 @@ def file_uploaded(inputfile):
             # with open(filename,'wb') as f:
             # 	f.write(memfile.getvalue())
             # REPLACED WITH ZIPUPLOADS
-            zwrite(memfile.getvalue(),filename)
+            zwrite(memfile.getvalue(),legacy_location(filename))
             series_id = add_to_series(rowid,player_info['uniqueIDForThisGame'],player_info['name'],player_info['farmName'])
             owner_id = get_logged_in_user()
             db = get_db()
@@ -1255,7 +1263,7 @@ def retrieve_file(url):
             return redirect(result[4])
     elif 'admin' in session:
         if result != None:
-            with open(result[0],'rb') as f:
+            with open(legacy_location(result[0]),'rb') as f:
                 response = make_response(f.read())
             response.headers["Content-Disposition"] = "attachment; filename="+str(result[1])+'_'+str(result[2])
             return response

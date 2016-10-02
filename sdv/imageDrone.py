@@ -12,7 +12,7 @@ from sdv.farmInfo import regenerateFarmInfo
 from sdv.imagegeneration.avatar import generateAvatar
 from sdv.imagegeneration.familyportrait import generateFamilyPortrait
 from sdv.imagegeneration.farm import generateFarm, generateMinimap
-from sdv import app, connect_db
+from sdv import app, connect_db, legacy_location
 sqlesc = app.sqlesc
 
 
@@ -48,9 +48,9 @@ def process_queue():
 
                 pi = json.loads(data['portrait_info'])
                 portrait_path = os.path.join(base_path, data['url']+'-p.png')
-                generateFamilyPortrait(avatar, pi).save(portrait_path, compress_level=9)
+                generateFamilyPortrait(avatar, pi).save(legacy_location(portrait_path), compress_level=9)
 
-                avatar.resize((avatar.width*4, avatar.height*4)).save(avatar_path, compress_level=9)
+                avatar.resize((avatar.width*4, avatar.height*4)).save(legacy_location(avatar_path), compress_level=9)
 
                 farm_data = regenerateFarmInfo(json.loads(data['farm_info']))
                 farm_path = os.path.join(base_path, data['url']+'-f.png')
@@ -60,8 +60,8 @@ def process_queue():
                 thumb_path = os.path.join(base_path, data['url']+'-t.png')
                 farm = generateFarm(data['currentSeason'], farm_data)
                 th = farm.resize((int(farm.width/4), int(farm.height/4)), Image.ANTIALIAS)
-                th.save(thumb_path)
-                farm.save(map_path, compress_level=9)
+                th.save(legacy_location(thumb_path))
+                farm.save(legacy_location(map_path), compress_level=9)
 
                 cur.execute('UPDATE playerinfo SET farm_url='+sqlesc+', avatar_url='+sqlesc+', portrait_url='+sqlesc+', map_url='+sqlesc+', thumb_url='+sqlesc+', base_path='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,avatar_path,portrait_path,map_path,thumb_path,base_path,data['id']))
                 db.commit()
