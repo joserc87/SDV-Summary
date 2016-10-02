@@ -183,6 +183,7 @@ def playerInfo(saveFile):
     partners = getPartners(root)
     if partners:
         partner_name = partners[0].find('name').text
+        print(partner_name)
         assert partner_name in validate.marriage_candidates
         p['partner'] = partner_name
     else:

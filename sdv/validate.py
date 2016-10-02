@@ -1,11 +1,11 @@
 marriage_candidates = [
                     'Alex', 'Elliott', 'Harvey', 'Sam', 'Sebastian',
-                    'Abigail', 'Haley', 'Leah', 'Maru', 'Penny']
+                    'Abigail', 'Haley', 'Leah', 'Maru', 'Penny', 'Shane', 'Emily']
 
 non_marriage_candidates = [
-                    'Caroline', 'Clint', 'Demetrius', 'Dwarf', 'Emily', 'Evelyn', 'George',
+                    'Caroline', 'Clint', 'Demetrius', 'Dwarf', 'Evelyn', 'George',
                     'Gus', 'Jas', 'Jodi', 'Kent', 'Krobus', 'Lewis', 'Linus', 'Marnie', 'Pam',
-                    'Pierre', 'Robin', 'Sandy', 'Shane', 'Vincent', 'Willy', 'Wizard'
+                    'Pierre', 'Robin', 'Sandy', 'Vincent', 'Willy', 'Wizard'
                     ]
 
 non_giftable_npcs = [
