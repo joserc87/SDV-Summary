@@ -1,5 +1,6 @@
 import os
 from shutil import copy
+from PIL import Image
 
 base_path = os.getcwd() + os.path.join(os.path.sep, 'sdv', 'assets')
 
@@ -82,3 +83,12 @@ def copy_farm():
     copy_images(tileSheets, 'TileSheets', os.path.join('farm', 'tileSheets'))
     copy_images(maps, 'Maps', os.path.join('farm', 'tileSheets'))
     copy_images(looseSprites, 'LooseSprites', os.path.join('farm', 'looseSprites'))
+
+    # Crop and compose mill asset
+    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
+    mill_sheet = Image.open(os.path.join(src_directory, 'Buildings', 'Mill.png'))
+
+    mill = mill_sheet.crop((0, 0, 64, 128))
+    blade = mill_sheet.crop((64,0, 64+32, 32))
+    mill.paste(blade, box=(8,1), mask=blade)
+    mill.save(os.path.join(base_path, 'farm', 'buildings', 'Mill.png'))
