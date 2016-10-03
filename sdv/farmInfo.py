@@ -70,6 +70,18 @@ def getFarmInfo(saveFile):
         i = int(obj.find('parentSheetIndex').text)
         t = obj.find('type').text
         a = False
+        other = obj.find('name').text
+        if name == 'Chest':
+            colours = obj.find('playerChoiceColor')
+            try:
+                red = int(colours.find('R').text)
+                green = int(colours.find('G').text)
+                blue = int(colours.find('B').text)
+                tint = (red, green, blue)
+                other = [other, tint]
+            except Exception as e:
+                print('Error getting chest colours.' + e)
+
         if obj.find('flipped').text == 'true':
             f = True
         if 'Fence' in name or name == 'Gate':
@@ -80,7 +92,7 @@ def getFarmInfo(saveFile):
             name = 'Fence'
         else:
             name = 'Object'
-        s.append(sprite(name, x, y, 0, 0, i, t, a, f, obj.find('name').text))
+        s.append(sprite(name, x, y, 0, 0, i, t, a, f, other))
 
     d = {k[0]: [a for a in s if a[0] == k[0]] for k in s}
 

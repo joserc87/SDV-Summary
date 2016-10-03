@@ -82,4 +82,5 @@ sdv/templates/analytics.html
 /.idea
 logfile
 assets/
-render_farm.py
+render_test.py
+test

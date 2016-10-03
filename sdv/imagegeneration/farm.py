@@ -119,6 +119,14 @@ def generateFarm(season, data, assets=None):
             else:
                 obj_img = cropImg(assets['objects'], item.index)
                 offset = 0
+            if len(item.orientation[1]) == 3:
+                # Seriously need to get reworking how images are rendered
+                obj_img = cropImg(assets['craftables'], 168,
+                                  (16, 32), (16, 32))
+                obj_img = tintImage(obj_img, item.orientation[1])
+                overlay = cropImg(assets['craftables'], 176,
+                                  (16, 32), (16, 32))
+                obj_img.paste(overlay, box=(0,0), mask=overlay)
             farm_base.paste(obj_img, (item.x*16, item.y*16 - offset), obj_img)
 
         if item.name == 'Fence':
