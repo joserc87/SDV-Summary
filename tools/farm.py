@@ -113,7 +113,7 @@ def copy_farm():
     barn = assets.crop((0, 0, 112, 112))
     door = assets.crop((0, 112, 32, 112 + 16))
     darkness = assets.crop((32, 112, 32 + 32, 112 + 16))
-    barn.paste(darkness, box=(64, 96), mask=darkne
+    barn.paste(darkness, box=(64, 96), mask=darkness)
     barn.save(os.path.join(base_path, 'farm', 'buildings', 'Deluxe Barn.png'))
 
     # Coops
