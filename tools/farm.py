@@ -14,21 +14,8 @@ def copy_images(file_names, src, dest):
             print(e)
 
 
-def rip_stones():
-    # Pull Stones from objects.png
-    pass
-
-
-
-
 def copy_farm():
     buildings = [
-        'Barn.png',
-        'Big Barn.png',
-        'Big Coop.png',
-        'Coop.png',
-        'Deluxe Barn.png',
-        'Deluxe Coop.png',
         'Silo.png',
         'Slime Hutch.png',
         'Stable.png',
@@ -84,11 +71,76 @@ def copy_farm():
     copy_images(maps, 'Maps', os.path.join('farm', 'tileSheets'))
     copy_images(looseSprites, 'LooseSprites', os.path.join('farm', 'looseSprites'))
 
-    # Crop and compose mill asset
-    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
-    mill_sheet = Image.open(os.path.join(src_directory, 'Buildings', 'Mill.png'))
+    # Crop and compose remaining asset
 
-    mill = mill_sheet.crop((0, 0, 64, 128))
-    blade = mill_sheet.crop((64,0, 64+32, 32))
+    # Mill
+    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
+    assets = Image.open(os.path.join(src_directory, 'Buildings', 'Mill.png'))
+
+    mill = assets.crop((0, 0, 64, 128))
+    blade = assets.crop((64,0, 64+32, 32))
     mill.paste(blade, box=(8,1), mask=blade)
     mill.save(os.path.join(base_path, 'farm', 'buildings', 'Mill.png'))
+
+    # Barns
+
+    # Normal
+    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
+    assets = Image.open(os.path.join(src_directory, 'Buildings', 'Barn.png'))
+
+    barn = assets.crop((0, 0, 112, 112))
+    door = assets.crop((0, 112, 32, 112 + 16))
+    darkness = assets.crop((32, 112, 32+32, 112 + 16))
+    barn.paste(darkness, box=(48, 96), mask=darkness)
+    barn.paste(door, box=(48, 88), mask=door)
+    barn.save(os.path.join(base_path, 'farm', 'buildings', 'Barn.png'))
+
+    # Big
+    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
+    assets = Image.open(os.path.join(src_directory, 'Buildings', 'Big Barn.png'))
+
+    barn = assets.crop((0, 0, 112, 112))
+    door = assets.crop((0, 112, 32, 112 + 16))
+    darkness = assets.crop((32, 112, 32 + 32, 112 + 16))
+    barn.paste(darkness, box=(64, 96), mask=darkness)
+    barn.paste(door, box=(64, 88), mask=door)
+    barn.save(os.path.join(base_path, 'farm', 'buildings', 'Big Barn.png'))
+
+    # Deluxe
+    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
+    assets = Image.open(os.path.join(src_directory, 'Buildings', 'Deluxe Barn.png'))
+
+    barn = assets.crop((0, 0, 112, 112))
+    door = assets.crop((0, 112, 32, 112 + 16))
+    darkness = assets.crop((32, 112, 32 + 32, 112 + 16))
+    barn.paste(darkness, box=(64, 96), mask=darkne
+    barn.save(os.path.join(base_path, 'farm', 'buildings', 'Deluxe Barn.png'))
+
+    # Coops
+
+    # Normal
+    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
+    assets = Image.open(os.path.join(src_directory, 'Buildings', 'Coop.png'))
+
+    coop = assets.crop((0, 0, 96, 112))
+    door = assets.crop((0, 112, 16, 112 + 16))
+    coop.paste(door, box=(3, 96), mask=door)
+    coop.save(os.path.join(base_path, 'farm', 'buildings', 'Coop.png'))
+
+    # Big
+    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
+    assets = Image.open(os.path.join(src_directory, 'Buildings', 'Big Coop.png'))
+
+    coop = assets.crop((0, 0, 96, 112))
+    door = assets.crop((0, 112, 16, 112 + 16))
+    coop.paste(door, box=(32, 96), mask=door)
+    coop.save(os.path.join(base_path, 'farm', 'buildings', 'Big Coop.png'))
+
+    # Delux
+    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
+    assets = Image.open(os.path.join(src_directory, 'Buildings', 'Deluxe Coop.png'))
+
+    coop = assets.crop((0, 0, 96, 112))
+    door = assets.crop((0, 112, 16, 112 + 16))
+    coop.paste(door, box=(32, 96), mask=door)
+    coop.save(os.path.join(base_path, 'farm', 'buildings', 'Deluxe Coop.png'))
