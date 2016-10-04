@@ -180,19 +180,13 @@ class TileMap:
                 pasteImg(img, tileImg, tile["pos"], (layer["width"], layer["height"]), (16, 16))
             img.save(os.path.join(outdir, layer["name"] + ".png"))
 
-    def renderMinimap(self, outdir):
+    def renderMinimap(self, outdir, name):
         tiles = []
 
         src_location = os.getcwd() + os.path.join(os.path.sep, 'assets', 'spring_outdoorsTileSheet.png')
         assets = Image.open(src_location)
         assets.crop((336, 784, 352, 800))
-        colour_avg = []
-        for i in range(int(assets.size[0] / 16)):
-            for j in range(int(assets.size[1] / 16)):
-                sample = assets.crop((i*16, j*16, (i+1)*16, (j+1)*16)).convert('RGB')
-                colours = sample.resize((1,1)).getpixel((0,0))
-                colour_avg.append(colours)
-
+        colour_pallet = Image.open('sample.png')
 
         # Flatten layers as miniamp only has base
         for layer in self.layers:
@@ -206,24 +200,7 @@ class TileMap:
         for tile in tiles:
             x = int(tile['pos'])%int(layer['width'])
             y = int(tile['pos'])/int(layer['width'])
-            tile_type = tile['tile']
-            colour = colour_avg[tile_type]
-            if tile_type < 200:
-                tile_type = 587
-            if 1150 < tile_type < 1350:
-                tile_type = 1246
-            if 925 < tile_type < 1075:
-                colour = (0, 150, 0)
-            land_colours = [
-                (73, 34, 14), (89, 73, 9), (200, 171, 136),
-                (126, 63, 31), (53, 22, 19), (50, 173, 20),
-                (37, 81, 85), (95, 64, 36), (160, 120, 15),
-                (129, 110, 88), (183, 172, 126), (15, 91, 35),
-                (237, 173, 35)
-            ]
-            if colour in land_colours:
-                colour = (115, 197, 53)
-            if colour == (21, 79, 40):
-                colour = (0,0,0)
-            i[x, y] = colour
-        img.resize((layer['width']*8, layer['height']*8)).save(os.path.join(outdir, layer["name"] + "-f.png"))
+            pallet_x = int(tile['tile']%25)
+            pallet_y = int(tile['tile']/25)
+            i[x, y] = colour_pallet.getpixel((pallet_x, pallet_y))
+        img.resize((layer['width']*8, layer['height']*8)).save(name+".png")

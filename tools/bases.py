@@ -10,7 +10,8 @@ def generateBase(assets, mapData, season, type):
     tileMap.processData()
     dest = os.path.join('base', type, season)
     tileMap.renderData(os.path.join(base_path, dest), season)
-    tileMap.renderMinimap(os.path.join(base_path, dest))
+    if season == 'spring':
+        tileMap.renderMinimap(os.path.join(base_path, dest), type)
 
 def generateBases():
     types = [
