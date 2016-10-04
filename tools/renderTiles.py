@@ -189,12 +189,8 @@ class TileMap:
         colour_avg = []
         for i in range(int(assets.size[0] / 16)):
             for j in range(int(assets.size[1] / 16)):
-                sample = assets.crop((i*16, j*16, (i+1)*16, (j+1)*16))
-                hist = sample.histogram()
-                colours =[hist[i+1:i+256] for i in range(0, len(hist), 256)]
-                print(len(colours))
-                colours = tuple(weighted_average(a) for a in colours)
-                print(colours)
+                sample = assets.crop((i*16, j*16, (i+1)*16, (j+1)*16)).convert('RGB')
+                colours = sample.resize((1,1)).getpixel((0,0))
                 colour_avg.append(colours)
 
 
@@ -208,8 +204,26 @@ class TileMap:
         img = Image.new('RGB', (layer["width"], layer["height"]))
         i = img.load()
         for tile in tiles:
-            print(colour_avg[tile['tile']])
             x = int(tile['pos'])%int(layer['width'])
             y = int(tile['pos'])/int(layer['width'])
-            i[x, y] = colour_avg[tile['tile']]
-        img.show()
+            tile_type = tile['tile']
+            colour = colour_avg[tile_type]
+            if tile_type < 200:
+                tile_type = 587
+            if 1150 < tile_type < 1350:
+                tile_type = 1246
+            if 925 < tile_type < 1075:
+                colour = (0, 150, 0)
+            land_colours = [
+                (73, 34, 14), (89, 73, 9), (200, 171, 136),
+                (126, 63, 31), (53, 22, 19), (50, 173, 20),
+                (37, 81, 85), (95, 64, 36), (160, 120, 15),
+                (129, 110, 88), (183, 172, 126), (15, 91, 35),
+                (237, 173, 35)
+            ]
+            if colour in land_colours:
+                colour = (115, 197, 53)
+            if colour == (21, 79, 40):
+                colour = (0,0,0)
+            i[x, y] = colour
+        img.resize((layer['width']*8, layer['height']*8)).save(os.path.join(outdir, layer["name"] + "-f.png"))
