@@ -3,6 +3,7 @@
 from PIL import Image
 from PIL.ImageChops import offset
 import os
+from math import floor
 
 
 def cropImg(img, location, size, tileSize):
@@ -14,6 +15,18 @@ def pasteImg(img, tile, location, size, tileSize):
     y = (location//size[0]) * tileSize[1]
     x = (location % size[0]) * tileSize[0]
     img.paste(tile, (x, y))
+
+def weighted_average(array, sensitivity=1):
+    s = 0
+    for i in range(len(array)):
+        s += i * array[i]
+    if sum(array) != 0:
+        s /= sum(array)
+        s = floor(s/sensitivity)*sensitivity
+        return floor(s)
+    else:
+        return 0
+
 
 class TileMap:
     def __init__(self, mapName):
@@ -168,52 +181,35 @@ class TileMap:
             img.save(os.path.join(outdir, layer["name"] + ".png"))
 
     def renderMinimap(self, outdir):
-        tilesetDir = os.path.dirname(self.mapPath)
         tiles = []
 
-        # Flatten lyayers as miniamp only has base
+        src_location = os.getcwd() + os.path.join(os.path.sep, 'assets', 'spring_outdoorsTileSheet.png')
+        assets = Image.open(src_location)
+        assets.crop((336, 784, 352, 800))
+        colour_avg = []
+        for i in range(int(assets.size[0] / 16)):
+            for j in range(int(assets.size[1] / 16)):
+                sample = assets.crop((i*16, j*16, (i+1)*16, (j+1)*16))
+                hist = sample.histogram()
+                colours =[hist[i+1:i+256] for i in range(0, len(hist), 256)]
+                print(len(colours))
+                colours = tuple(weighted_average(a) for a in colours)
+                print(colours)
+                colour_avg.append(colours)
+
+
+        # Flatten layers as miniamp only has base
         for layer in self.layers:
             for tile in layer['tiles']:
                 tiles.append(tile)
 
 
         # Count frequency of used tiles and rough colouring of tiles
-        from collections import Counter
-        cnt = Counter()
-        img = Image.new('RGBA', (layer["width"], layer["height"]))
+        img = Image.new('RGB', (layer["width"], layer["height"]))
         i = img.load()
         for tile in tiles:
-            cnt[tile['tile']] += 1
-            if int(tile['tile']) in range(1221, 1346):
-                i[int(tile['pos'])%int(layer['width']), int(tile['pos'])/int(layer['width'])] = (0, 0, 255, 255)
-            if int(tile['tile']) in range(150, 737):
-                i[int(tile['pos'])%int(layer['width']), int(tile['pos'])/int(layer['width'])] = (255, 0, 255, 255)
-            if int(tile['tile']) in [384, 385, 386, 387, 388, 364, 389, 414, 439, 418]:
-                i[int(tile['pos'])%int(layer['width']), int(tile['pos'])/int(layer['width'])] = (0, 0, 0, 255)
-        print(cnt)
-        i = img.load()
-        i[0,0] = (255,255,255, 255)
+            print(colour_avg[tile['tile']])
+            x = int(tile['pos'])%int(layer['width'])
+            y = int(tile['pos'])/int(layer['width'])
+            i[x, y] = colour_avg[tile['tile']]
         img.show()
-            #
-            # print("\tRendering layer", layer["name"])
-            # img = Image.new('RGBA', (layer["width"], layer["height"]))
-            # i = img.load()
-            # i[0,0] = (255,255,255, 255)
-            # img.show()
-            # for tile in layer["tiles"]:
-            #     print(tile['tile'])
-            #     tileset = self.tilesets[tile["tileset"]]
-            #     if not "img" in tileset:
-            #         sheetName = tileset["sheetName"]
-            #         if seasonName:
-            #             sheetName = sheetName.replace("spring", seasonName)
-            #         tileset["img"] = Image.open(os.path.join(tilesetDir, sheetName))
-            #
-            #     if not tile["tile"] in tileset["tileCache"]:
-            #         tileImg = cropImg(tileset["img"], tile["tile"], (tileset["width"], tileset["height"]), (16, 16))
-            #         tileset["tileCache"][tile["tile"]] = tileImg
-            #     else:
-            #         tileImg = tileset["tileCache"][tile["tile"]]
-            #     pasteImg(img, tileImg, tile["pos"], (layer["width"], layer["height"]), (16, 16))
-            # # img.show()
-            # img.save(os.path.join(outdir, layer["name"] + ".png"))
