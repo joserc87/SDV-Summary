@@ -149,7 +149,7 @@ class TileMap:
     def renderData(self, outdir, seasonName):
         tilesetDir = os.path.dirname(self.mapPath)
         for layer in self.layers:
-            print("Rendering layer", layer["name"])
+            print("\tRendering layer", layer["name"])
             img = Image.new('RGBA', (layer["width"] * layer["tileWidth"], layer["height"] * layer["tileHeight"]))
             for tile in layer["tiles"]:
                 tileset = self.tilesets[tile["tileset"]]
@@ -166,3 +166,54 @@ class TileMap:
                     tileImg = tileset["tileCache"][tile["tile"]]
                 pasteImg(img, tileImg, tile["pos"], (layer["width"], layer["height"]), (16, 16))
             img.save(os.path.join(outdir, layer["name"] + ".png"))
+
+    def renderMinimap(self, outdir):
+        tilesetDir = os.path.dirname(self.mapPath)
+        tiles = []
+
+        # Flatten lyayers as miniamp only has base
+        for layer in self.layers:
+            for tile in layer['tiles']:
+                tiles.append(tile)
+
+
+        # Count frequency of used tiles and rough colouring of tiles
+        from collections import Counter
+        cnt = Counter()
+        img = Image.new('RGBA', (layer["width"], layer["height"]))
+        i = img.load()
+        for tile in tiles:
+            cnt[tile['tile']] += 1
+            if int(tile['tile']) in range(1221, 1346):
+                i[int(tile['pos'])%int(layer['width']), int(tile['pos'])/int(layer['width'])] = (0, 0, 255, 255)
+            if int(tile['tile']) in range(150, 737):
+                i[int(tile['pos'])%int(layer['width']), int(tile['pos'])/int(layer['width'])] = (255, 0, 255, 255)
+            if int(tile['tile']) in [384, 385, 386, 387, 388, 364, 389, 414, 439, 418]:
+                i[int(tile['pos'])%int(layer['width']), int(tile['pos'])/int(layer['width'])] = (0, 0, 0, 255)
+        print(cnt)
+        i = img.load()
+        i[0,0] = (255,255,255, 255)
+        img.show()
+            #
+            # print("\tRendering layer", layer["name"])
+            # img = Image.new('RGBA', (layer["width"], layer["height"]))
+            # i = img.load()
+            # i[0,0] = (255,255,255, 255)
+            # img.show()
+            # for tile in layer["tiles"]:
+            #     print(tile['tile'])
+            #     tileset = self.tilesets[tile["tileset"]]
+            #     if not "img" in tileset:
+            #         sheetName = tileset["sheetName"]
+            #         if seasonName:
+            #             sheetName = sheetName.replace("spring", seasonName)
+            #         tileset["img"] = Image.open(os.path.join(tilesetDir, sheetName))
+            #
+            #     if not tile["tile"] in tileset["tileCache"]:
+            #         tileImg = cropImg(tileset["img"], tile["tile"], (tileset["width"], tileset["height"]), (16, 16))
+            #         tileset["tileCache"][tile["tile"]] = tileImg
+            #     else:
+            #         tileImg = tileset["tileCache"][tile["tile"]]
+            #     pasteImg(img, tileImg, tile["pos"], (layer["width"], layer["height"]), (16, 16))
+            # # img.show()
+            # img.save(os.path.join(outdir, layer["name"] + ".png"))
