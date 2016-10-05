@@ -253,12 +253,6 @@ def generateFarm(season, data, assets=None):
             except Exception as e:
                 print(e)
 
-        if item.name == 'overlay' and item.type != 2:
-            try:
-                farm_base.paste(assets['overlays'][type][season][item.type], (0, 0), assets['overlays'][type][season][item.type])
-            except Exception as e:
-                print(e)
-
     for item in gates:
         try:
                 offsetx = 0
@@ -278,6 +272,14 @@ def generateFarm(season, data, assets=None):
                 farm_base.paste(gate_img, (item.x * 16 + offsetx, item.y * 16 - offsety), gate_img)
         except Exception as e:
                 print(e)
+
+    try:
+        farm_base.paste(assets['overlays'][type][season][0], (0, 0),
+                        assets['overlays'][type][season][0])
+        farm_base.paste(assets['overlays'][type][season][1], (0, 0),
+                        assets['overlays'][type][season][1])
+    except Exception as e:
+        print(e)
 
     farm_base = farm_base.convert('RGBA').convert('P', palette=Image.ADAPTIVE, colors=255)
     return farm_base
