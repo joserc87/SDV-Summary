@@ -140,7 +140,8 @@ def loadFarmAssets():
                                     'mill':Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Mill.png')),
                                     'shed': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Shed.png')),
                                     'water obelisk': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Water Obelisk.png'))
-                                }
+                                },
+                'binLid': Image.open(os.path.join(asset_dir, 'farm', 'looseSprites', 'binLid.png'))
               }
     return assets
 

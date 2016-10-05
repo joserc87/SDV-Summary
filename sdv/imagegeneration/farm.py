@@ -278,6 +278,8 @@ def generateFarm(season, data, assets=None):
                         assets['overlays'][type][season][0])
         farm_base.paste(assets['overlays'][type][season][1], (0, 0),
                         assets['overlays'][type][season][1])
+        #bin lid
+        farm_base.paste(assets['binLid'], (1136, 210), mask=assets['binLid'])
     except Exception as e:
         print(e)
 

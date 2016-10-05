@@ -85,7 +85,6 @@ def copy_farm():
     # Barns
 
     # Normal
-    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
     assets = Image.open(os.path.join(src_directory, 'Buildings', 'Barn.png'))
 
     barn = assets.crop((0, 0, 112, 112))
@@ -96,7 +95,6 @@ def copy_farm():
     barn.save(os.path.join(base_path, 'farm', 'buildings', 'Barn.png'))
 
     # Big
-    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
     assets = Image.open(os.path.join(src_directory, 'Buildings', 'Big Barn.png'))
 
     barn = assets.crop((0, 0, 112, 112))
@@ -107,7 +105,6 @@ def copy_farm():
     barn.save(os.path.join(base_path, 'farm', 'buildings', 'Big Barn.png'))
 
     # Deluxe
-    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
     assets = Image.open(os.path.join(src_directory, 'Buildings', 'Deluxe Barn.png'))
 
     barn = assets.crop((0, 0, 112, 112))
@@ -119,7 +116,6 @@ def copy_farm():
     # Coops
 
     # Normal
-    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
     assets = Image.open(os.path.join(src_directory, 'Buildings', 'Coop.png'))
 
     coop = assets.crop((0, 0, 96, 112))
@@ -128,7 +124,6 @@ def copy_farm():
     coop.save(os.path.join(base_path, 'farm', 'buildings', 'Coop.png'))
 
     # Big
-    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
     assets = Image.open(os.path.join(src_directory, 'Buildings', 'Big Coop.png'))
 
     coop = assets.crop((0, 0, 96, 112))
@@ -137,10 +132,16 @@ def copy_farm():
     coop.save(os.path.join(base_path, 'farm', 'buildings', 'Big Coop.png'))
 
     # Delux
-    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
     assets = Image.open(os.path.join(src_directory, 'Buildings', 'Deluxe Coop.png'))
 
     coop = assets.crop((0, 0, 96, 112))
     door = assets.crop((0, 112, 16, 112 + 16))
     coop.paste(door, box=(32, 96), mask=door)
     coop.save(os.path.join(base_path, 'farm', 'buildings', 'Deluxe Coop.png'))
+
+    # Copy Bin Lid
+    asset = Image.open(os.path.join(src_directory, 'loosesprites', 'cursors.png'))
+    x = 132
+    y = 235
+    bin_lid = asset.crop((x, y, x+ 32, y + 16))
+    bin_lid.save(os.path.join(base_path, 'farm', 'looseSprites', 'binLid.png'))
