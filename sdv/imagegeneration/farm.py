@@ -291,8 +291,10 @@ def generateFarm(season, data, assets=None):
 #      Light red - Player placed objects (Scarecrows, etc)
 #      Blue - Water
 #      Off Tan - Tilled Soil
-def generateMinimap(farm):
-    image = Image.open("./sdv/assets/bases/minimap_base.png")
+def generateMinimap(data):
+    type = data['type']
+    farm = data['data']
+    image = Image.open("./sdv/assets/base/minimap/{}.png".format(type))
     pixels = image.load()
 
     pixels[1, 1] = (255, 255, 255)
