@@ -80,7 +80,7 @@ def getFarmInfo(saveFile):
                 tint = (red, green, blue)
                 other = [other, tint]
             except Exception as e:
-                print('Error getting chest colours.' + e)
+                print('Error getting chest colours. Possibly old save file')
 
         if obj.find('flipped').text == 'true':
             f = True
@@ -266,8 +266,11 @@ def colourBox(x, y, colour, pixels, scale=8):
 #      Light red - Player placed objects (Scarecrows, etc)
 #      Blue - Water
 #      Off Tan - Tilled Soil
-def generateImage(farm):
-    image = Image.open("./assets/bases/minimap_base.png")
+def generateImage(data):
+    type = data['type']
+    farm = data['data']
+
+    image = Image.open("./sdv/assets/base/minimap/{}.png".format(type))
     pixels = image.load()
 
     pixels[1, 1] = (255, 255, 255)
