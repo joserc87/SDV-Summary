@@ -54,7 +54,7 @@ def process_queue():
 
                 farm_data = regenerateFarmInfo(json.loads(data['farm_info']))
                 farm_path = os.path.join(base_path, data['url']+'-f.png')
-                # generateMinimap(farm_data).save(farm_path, compress_level=9)
+                generateMinimap(farm_data).save(farm_path, compress_level=9)
 
                 map_path = os.path.join(base_path, data['url']+'-m.png')
                 thumb_path = os.path.join(base_path, data['url']+'-t.png')
