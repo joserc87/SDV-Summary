@@ -7,9 +7,9 @@ def generateFamilyPortrait(player_img, information, scale=4):
         partner_img = Image.open('./sdv/assets/npcs/partners/{0}.png'.format(information['partner']))
 
     if information['cat']:
-        pet_img = Image.open('./sdv/assets/npcs/animals/cat.png')
+        pet_img = Image.open('./sdv/assets/npcs/animals/Cat.png')
     else:
-        pet_img = Image.open('./sdv/assets/npcs/animals/dog.png')
+        pet_img = Image.open('./sdv/assets/npcs/animals/Dog.png')
 
     child_imgs = []
     for child in information['children']:

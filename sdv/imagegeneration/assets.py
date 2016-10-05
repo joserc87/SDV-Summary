@@ -78,7 +78,7 @@ def loadFarmAssets():
                     }
                 },
                 'objects': Image.open(os.path.join(asset_dir, 'farm', 'tileSheets', 'springobjects.png')),
-                'craftables': Image.open(os.path.join(asset_dir, 'farm', 'tileSheets', 'craftables.png')),
+                'craftables': Image.open(os.path.join(asset_dir, 'farm', 'tileSheets', 'Craftables.png')),
                 'flooring': Image.open(os.path.join(asset_dir, 'farm', 'terrainFeatures', 'flooring.png')),
                 'hoe dirt': {
                               'normal': Image.open(os.path.join(asset_dir, 'farm', 'terrainFeatures', 'hoeDirt.png')),
@@ -121,9 +121,9 @@ def loadFarmAssets():
                                     'coop': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Coop.png')),
                                     'big coop': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Big Coop.png')),
                                     'deluxe coop': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Deluxe Coop.png')),
-                                    'greenhouse': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Houses.png'))
+                                    'greenhouse': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'houses.png'))
                                         .crop((160,0, 160+112, 144*3)),
-                                    'house': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Houses.png'))
+                                    'house': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'houses.png'))
                                         .crop((0,0, 160, 144*3)),
                                     'silo': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Silo.png')),
                                     'slime hutch': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Slime Hutch.png')),

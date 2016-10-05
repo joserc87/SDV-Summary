@@ -298,7 +298,7 @@ def generateFarm(season, data, assets=None):
 def generateMinimap(data):
     type = data['type']
     farm = data['data']
-    image = Image.open("./sdv/assets/base/minimap/{}.png".format(type))
+    image = Image.open("./sdv/assets/base/Minimap/{}.png".format(type))
     pixels = image.load()
 
     pixels[1, 1] = (255, 255, 255)
