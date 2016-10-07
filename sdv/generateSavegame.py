@@ -4,6 +4,14 @@ import zipfile
 from sdv.zipuploads import zopen
 import os
 from sdv import legacy_location
+import sys
+
+if sys.version_info >= (3, 0):
+	def str_or_bytes(string):
+		return bytes(string,'utf-8')
+else:
+	def str_or_bytes(string):
+		return string	
 
 required_namespaces = '<Farmer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">'
 target_namespaces = '<Farmer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
@@ -25,8 +33,8 @@ def createFarmer(player):
 
 def genSaveGameInfo(savegame_file,read_data=False):
 	farmer = createFarmer(findPlayer(savegame_file,read_data))
-	savegameinfo = ET.tostring(farmer, encoding='UTF-8', method='xml').strip('\r\n')
-	savegameinfo = savegameinfo.replace(target_namespaces,required_namespaces,1)
+	savegameinfo = ET.tostring(farmer, encoding='UTF-8', method='xml').strip(str_or_bytes('\r\n'))
+	savegameinfo = savegameinfo.replace(str_or_bytes(target_namespaces),str_or_bytes(required_namespaces),1)
 	return savegameinfo
 
 def createZip(url,name,uniqueidforthisgame,static_folder,savegame_file):
