@@ -3,6 +3,7 @@ from defusedxml import ElementTree as ET
 import zipfile
 from sdv.zipuploads import zopen
 import os
+from sdv import legacy_location
 
 required_namespaces = '<Farmer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">'
 target_namespaces = '<Farmer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
@@ -31,8 +32,8 @@ def genSaveGameInfo(savegame_file,read_data=False):
 def createZip(url,name,uniqueidforthisgame,static_folder,savegame_file):
 	target = os.path.join(static_folder,url+'.zip')
 	folder = str(name)+'_'+str(uniqueidforthisgame)
-	zf = zipfile.ZipFile(target,'w',compression=zipfile.ZIP_DEFLATED)
-	savegamedata = zopen(savegame_file).read()
+	zf = zipfile.ZipFile(legacy_location(target),'w',compression=zipfile.ZIP_DEFLATED)
+	savegamedata = zopen(legacy_location(savegame_file)).read()
 	zf.writestr(os.path.join(folder,folder),savegamedata,zipfile.ZIP_DEFLATED)
 	zf.writestr(os.path.join(folder,'SaveGameInfo'),genSaveGameInfo(savegamedata,True))
 	zf.writestr('upload.farm_instructions.txt','Downloaded from upload.farm/'+str(url)+'\r\n\r\nTo use, extract the folder in this archive to:\r\n%APPDATA%\\StardewValley\\Saves')

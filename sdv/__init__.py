@@ -27,7 +27,6 @@ import psycopg2
 from sdv.playerInfo import playerInfo
 from sdv.farmInfo import getFarmInfo
 from sdv.bigbase import dec2big
-import sdv.generateSavegame
 
 from config import config
 
@@ -91,6 +90,7 @@ app.jinja_env.globals.update(legacy_location=legacy_location)
 
 import sdv.imageDrone  # noqa
 import sdv.emailDrone  # noqa
+import sdv.generateSavegame # noqa
 
 def get_db():
     # designed to prevent repeated db connections
