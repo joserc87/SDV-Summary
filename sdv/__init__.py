@@ -473,6 +473,44 @@ def home():
     vote = json.dumps({entry[0]:get_votes(entry[0]) for entry in recents['posts']})
     return render_template("index.html", recents=recents, vote=vote, blogposts=get_blogposts(5), **page_args())
 
+@app.route('/api/v1/plan',methods=['PUT'])
+def api_v1_plan():
+    if request.method == 'PUT':
+        # check rate limiter; if all good, continue, else return status:'overlimit'
+        # check_rate_limiter()
+        # check input json for validity
+        verify_json(request.form)
+        # insert it to a database, checking for duplicates(?)
+        add_plan(request.form['plan_as_text'],request.form['source_url'])
+        # queue a rendering job
+        # insert_into_tasklist()
+        # optional: run imageDrone with a json parameter to tell it only to render json jobs?
+        # imageDrone('json')
+        # return status:'success' or status:'failedrender'; url, id
+        return jsonify({'status':'success'})
+
+def verify_json(form):
+    assert 'plan_as_text' in form
+    assert 'source_url' in form
+
+
+def add_plan(source_json, planner_url):
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('INSERT INTO plans (added_time,source_json,planner_url,views) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+') RETURNING id, added_time;',(time.time(),source_json,planner_url,0))
+    row = cur.fetchone()
+    url = dec2big(int(row[0])+int(row[1]))
+    cur.execute('UPDATE plans SET url='+app.sqlesc+' WHERE id='+app.sqlesc+'',(url,row[0]))
+    db.commit()
+
+def render_from_json():
+    # we need a new class of image render for imageDrone to handle and a new class of profile to display it!
+    print('render_from_json does nothing yet')
+    return({'status':'renderfromjsondoesnothingyet','id':'idnumber','url':'url_of_resulting_image'})
+
+'''
+# DEPRECIATED 'API' CODE
+# left in as reminder of how it worked; remove once new api complete
 
 @app.route('/_uploader',methods=['GET','POST'])
 def api_upload():
@@ -558,7 +596,7 @@ def login_to_api(form):
             return jsonify({'api_key':api_key,'api_secret':generate_password_hash(api_secret)})
         else:
             return False
-
+'''
 
 def get_recents(n=6,**kwargs):
     recents = get_entries(n,**kwargs)

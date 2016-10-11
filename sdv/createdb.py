@@ -303,6 +303,15 @@ def generate_serial():
 	connection.close()
 	print('done')
 
+def generate_plans():
+	connection=connect_db()
+	c = connection.cursor()
+	statement = 'CREATE TABLE plans(id '+idcode+', failed_render BOOLEAN, added_time BIGINT, source_json TEXT, url TEXT, image_url TEXT, planner_url TEXT, views INT, owner_id TEXT, series_id TEXT, positive_votes INT, negative_votes INT);'
+	c.execute(statement)
+	connection.commit()
+	connection.close()
+	print('done')
+
 def delete_db():
 	connection = connect_db()
 	c = connection.cursor()
@@ -320,6 +329,7 @@ def delete_db():
 			c.execute('DROP TABLE blog')
 			c.execute('DROP TABLE users')
 			c.execute('DROP TABLE series')
+			c.execute('DROP TABLE plans')
 			connection.commit()
 			connection.close()
 			print('all (except admin) deleted')
@@ -465,6 +475,9 @@ def init_db(drop_all=False):
 	a = raw_input('Generate serial database? (y/n): ')
 	if a == 'y':
 		generate_serial()
+	a = raw_input('Generate plans database? (y/n): ')
+	if a == 'y':
+		generate_plans()
 	print('--------')
 	a = raw_input('Update playerinfo database? (y/n): ')
 	if a == 'y':
