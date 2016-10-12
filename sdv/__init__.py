@@ -218,8 +218,9 @@ def reset_password():
                 cur.execute('SELECT users.id FROM users WHERE email='+app.sqlesc+' AND NOT EXISTS (SELECT todo.id FROM todo WHERE todo.playerid=CAST(users.id AS text))',(request.form['email'],))
                 user_id = cur.fetchone()
                 if user_id != None:
-                    cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('email_passwordreset',user_id[0]))
-                    db.commit()
+                    # cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('email_passwordreset',user_id[0]))
+                    # db.commit()
+                    add_task(user_id[0],'email_passwordreset')
                     emailDrone.process_email()
                     flash({'message':'<p>Password reset email sent!</p>'})
                 else:
@@ -288,8 +289,9 @@ def signup():
                     if len(request.form['email'].split('@')) == 2 and len(request.form['email'].split('@')[1].split('.'))>= 2:
                         cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+') RETURNING id',(request.form['email'],bcrypt.generate_password_hash(request.form['password'])))
                         user_id = cur.fetchall()[0][0]
-                        cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('email_confirmation',user_id))
-                        db.commit()
+                        # cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('email_confirmation',user_id))
+                        # db.commit()
+                        add_task(user_id,'email_confirmation')
                         emailDrone.process_email()
                         flash({'message':'<p>You have successfully registered. A verification email has been sent to you. Now, please sign in!</p>'})
                         return redirect(url_for('login'))
@@ -477,22 +479,35 @@ def home():
 def api_v1_plan():
     if request.method == 'PUT':
         # check rate limiter; if all good, continue, else return status:'overlimit'
-        # check_rate_limiter()
+        try:
+            check_rate_limiter()
+        except AssertionError:
+            return jsonify({'status':'over_rate_limit'})
         # check input json for validity
-        verify_json(request.form)
+        try:
+            verify_json(request.form)
+        except AssertionError:
+            return jsonify({'status':'bad_input'})
         # insert it to a database, checking for duplicates(?)
-        add_plan(request.form['plan_as_text'],request.form['source_url'])
+        plan_id, url = add_plan(request.form['plan_json'],request.form['source_url'])
         # queue a rendering job
-        # insert_into_tasklist()
+        add_task(plan_id,'process_plan_image')
         # optional: run imageDrone with a json parameter to tell it only to render json jobs?
-        # imageDrone('json')
+        imageDrone.process_plans()
+        # increment rate limiter
+        increment_rate_limiter()
         # return status:'success' or status:'failedrender'; url, id
-        return jsonify({'status':'success'})
+        return jsonify({'status':'success','url':url})
+
+def check_rate_limiter():
+    assert True
+
+def increment_rate_limiter():
+    print('need to write rate limiter!')
 
 def verify_json(form):
-    assert 'plan_as_text' in form
+    assert 'plan_json' in form
     assert 'source_url' in form
-
 
 def add_plan(source_json, planner_url):
     db = get_db()
@@ -502,11 +517,18 @@ def add_plan(source_json, planner_url):
     url = dec2big(int(row[0])+int(row[1]))
     cur.execute('UPDATE plans SET url='+app.sqlesc+' WHERE id='+app.sqlesc+'',(url,row[0]))
     db.commit()
+    return row[0], url
 
 def render_from_json():
     # we need a new class of image render for imageDrone to handle and a new class of profile to display it!
     print('render_from_json does nothing yet')
     return({'status':'renderfromjsondoesnothingyet','id':'idnumber','url':'url_of_resulting_image'})
+
+def add_task(id_number,task_type):
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',(task_type,id_number))
+    db.commit()
 
 '''
 # DEPRECIATED 'API' CODE
@@ -686,7 +708,8 @@ def insert_info(player_info,farm_info,md5_info):
         url = dec2big(int(row[0])+int(row[1]))
         rowid = row[0]
         cur.execute('UPDATE playerinfo SET url='+app.sqlesc+' WHERE id='+app.sqlesc+'',(url,rowid))
-        cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('process_image',rowid))
+        # cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('process_image',rowid))
+        add_task(rowid,'process_image')
         db.commit()
         return url, del_token, rowid, None
     except (sqlite3.OperationalError, psycopg2.ProgrammingError) as e:
