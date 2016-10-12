@@ -404,6 +404,9 @@ $(document).ready(function() {
 												<button type="button" class="btn-link cpanel-object" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='This will claim <b>all unclaimed uploads</b> made from this browser.<br><form action="{{data.url}}/claimall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim&nbsp;all!</button></form>'><img title="Claim all unclaimed farms (link them to your account)" src="{{url_for('static',filename='css/cpanel/clmall32.png')}}"></button>
 											{% endif %}
 										{% endif %}
+										{% if logged_in() or deletable %}
+											<button type="button" class="btn-link cpanel-object" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='Send to <b>stardew.info planner</b>?<br>(this is a separate site not part of upload.farm)<br><form action="{{data.url}}/plan" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Plan&nbsp;my&nbsp;farm!</button></form>'><img title="Plan my farm (send to stardew.info planner)" src="{{url_for('static',filename='css/cpanel/plan32.png')}}"></button>
+										{% endif %}
 										{% if data.download_enabled == True and deletable %}
 											<button type="button" class="btn-link cpanel-object cpanel-state-on" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='<b>Disable downloads?</b><br>Disables sharing of the savegame you uploaded<br><form action="{{data.url}}/disable-dl" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Disable!</button></form>'><img title="Downloads currently enabled" src="{{url_for('static',filename='css/cpanel/dl32.png')}}"></button>
 										{%endif%}

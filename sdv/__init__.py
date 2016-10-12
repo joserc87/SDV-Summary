@@ -628,7 +628,6 @@ def login_to_api(form):
             return False
 '''
 
-# @app.route('/t/<url>') #only used for testing
 def get_planner_link(url):
     # check for existing planner_url in db; if present return this
     db = get_db()
@@ -656,7 +655,8 @@ def get_planner_link(url):
             db.commit()
             return {'status':'success','planner_url':response['absolutePath']}
         else:
-            return {'status':'unknown error'}
+            return {'status':'unknown_error'}
+
 
 def get_recents(n=6,**kwargs):
     recents = get_entries(n,**kwargs)
@@ -886,6 +886,9 @@ def operate_on_url(url,instruction):
             elif instruction == 'imgur':
                 return _op_imgur_post(url)
 
+            elif instruction == 'plan':
+                return _op_planner(url)
+
             elif instruction == 'list':
                 return _op_toggle_boolean_param(url,'private',False)
             elif instruction == 'unlist':
@@ -1008,6 +1011,13 @@ def _op_imgur_post(url):
         g.error = "You must be logged in to post your farm to imgur!"
         return render_template("signup.html", **page_args())
 
+def _op_planner(url):
+    result = get_planner_link(url)
+    if result['status'] == 'success':
+        return redirect(result['planner_url'])
+    else:
+        g.error = 'There was a problem accessing the planner. Error was: {}'.format(result['status'])
+        return render_template("error.html",**page_args())
 
 def delete_playerinfo_entry(url,md5,del_token):
     # takes url, md5, and del_token (from session); if verified, deletes
