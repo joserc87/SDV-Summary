@@ -24,6 +24,7 @@ import io
 import sdv.imgur
 import defusedxml
 import psycopg2
+import requests
 from sdv.playerInfo import playerInfo
 from sdv.farmInfo import getFarmInfo
 from sdv.bigbase import dec2big
@@ -455,7 +456,6 @@ def file_uploaded(inputfile):
         session[outcome+'del_token'] = del_token
         return {'type':'redirect','target':'display_data','parameters':{"url":outcome}}
 
-
 @app.route('/',methods=['GET','POST'])
 def home():
     page_init()
@@ -475,9 +475,10 @@ def home():
     vote = json.dumps({entry[0]:get_votes(entry[0]) for entry in recents['posts']})
     return render_template("index.html", recents=recents, vote=vote, blogposts=get_blogposts(5), **page_args())
 
-@app.route('/api/v1/plan',methods=['PUT'])
+
+@app.route('/api/v1/plan',methods=['POST'])
 def api_v1_plan():
-    if request.method == 'PUT':
+    if request.method == 'POST':
         # check rate limiter; if all good, continue, else return status:'overlimit'
         try:
             check_rate_limiter()
@@ -499,15 +500,19 @@ def api_v1_plan():
         # return status:'success' or status:'failedrender'; url, id
         return jsonify({'status':'success','url':url})
 
+
 def check_rate_limiter():
     assert True
+
 
 def increment_rate_limiter():
     print('need to write rate limiter!')
 
+
 def verify_json(form):
     assert 'plan_json' in form
     assert 'source_url' in form
+
 
 def add_plan(source_json, planner_url):
     db = get_db()
@@ -519,16 +524,19 @@ def add_plan(source_json, planner_url):
     db.commit()
     return row[0], url
 
+
 def render_from_json():
     # we need a new class of image render for imageDrone to handle and a new class of profile to display it!
     print('render_from_json does nothing yet')
     return({'status':'renderfromjsondoesnothingyet','id':'idnumber','url':'url_of_resulting_image'})
+
 
 def add_task(id_number,task_type):
     db = get_db()
     cur = db.cursor()
     cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',(task_type,id_number))
     db.commit()
+
 
 '''
 # DEPRECIATED 'API' CODE
@@ -619,6 +627,36 @@ def login_to_api(form):
         else:
             return False
 '''
+
+# @app.route('/t/<url>') #only used for testing
+def get_planner_link(url):
+    # check for existing planner_url in db; if present return this
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('SELECT planner_url, savefileLocation, id FROM playerinfo WHERE url='+app.sqlesc,(url,))
+    result = cur.fetchone()
+    if result[0] != None:
+        return {'status':'success','planner_url':result[0]}
+    else:
+        # check file exists; read file; raise error if problem!
+        try:
+            f = {'file':open(legacy_location(result[1]),'rb')}
+        except IOError:
+            #file is missing or not in the right place!
+            return {'status':'missing_file'}
+        # send to stardew.info
+        r = requests.post('https://stardew.info/api/import',files=f)
+        response = r.json()
+        # check not error (r.json()['message'] I think)
+        if 'message' in response:
+            return {'status':'error'}
+        elif 'absolutePath' in response:
+            # add absolutePath to database & commit
+            cur.execute('UPDATE playerinfo SET planner_url='+app.sqlesc+' WHERE id='+app.sqlesc,(response['absolutePath'],result[2]))
+            db.commit()
+            return {'status':'success','planner_url':response['absolutePath']}
+        else:
+            return {'status':'unknown error'}
 
 def get_recents(n=6,**kwargs):
     recents = get_entries(n,**kwargs)
