@@ -483,12 +483,12 @@ def api_v1_plan():
         try:
             check_rate_limiter()
         except AssertionError:
-            return jsonify({'status':'over_rate_limit'})
+            return make_response(jsonify({'status':'over_rate_limit'}),429)
         # check input json for validity
         try:
             verify_json(request.form)
         except AssertionError:
-            return jsonify({'status':'bad_input'})
+            return make_response(jsonify({'status':'bad_input'}),400)
         # insert it to a database, checking for duplicates(?)
         plan_id, url = add_plan(request.form['plan_json'],request.form['source_url'])
         # queue a rendering job
@@ -498,7 +498,7 @@ def api_v1_plan():
         # increment rate limiter
         increment_rate_limiter()
         # return status:'success' or status:'failedrender'; url, id
-        return jsonify({'status':'success','url':url})
+        return make_response(jsonify({'status':'success','url':url}),200)
 
 
 def check_rate_limiter():

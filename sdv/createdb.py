@@ -307,7 +307,7 @@ def generate_serial():
 def generate_plans():
 	connection=connect_db()
 	c = connection.cursor()
-	statement = 'CREATE TABLE plans(id '+idcode+', failed_render BOOLEAN, added_time BIGINT, source_json TEXT, url TEXT, image_url TEXT, planner_url TEXT, views INT, owner_id TEXT, series_id TEXT, positive_votes INT, negative_votes INT);'
+	statement = 'CREATE TABLE plans(id '+idcode+', failed_render BOOLEAN, added_time BIGINT, source_json TEXT, url TEXT, image_url TEXT, base_path TEXT, planner_url TEXT, views INT, owner_id TEXT, series_id TEXT, positive_votes INT, negative_votes INT);'
 	c.execute(statement)
 	connection.commit()
 	connection.close()

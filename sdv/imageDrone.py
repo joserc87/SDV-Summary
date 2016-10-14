@@ -12,6 +12,7 @@ from sdv.farmInfo import regenerateFarmInfo
 from sdv.imagegeneration.avatar import generateAvatar
 from sdv.imagegeneration.familyportrait import generateFamilyPortrait
 from sdv.imagegeneration.farm import generateFarm, generateMinimap
+from sdv.parsers.json import parse_json
 from sdv import app, connect_db, legacy_location
 sqlesc = app.sqlesc
 
@@ -88,43 +89,32 @@ def process_plans():
         if len(tasks) != 0:
             for task in tasks:
                 print('need to write logic for processing json plans!')
-                # cur.execute('SELECT '+database_fields+' FROM playerinfo WHERE id=('+sqlesc+')',(task[2],))
-                # result = cur.fetchone()
-                # data = {}
-                # for i, item in enumerate(result):
-                #     data[sorted(database_structure_dict.keys())[i]] = item
-                # data['pantsColor'] = [data['pantsColor0'],data['pantsColor1'],data['pantsColor2'],data['pantsColor3']]
-                # data['newEyeColor'] = [data['newEyeColor0'],data['newEyeColor1'],data['newEyeColor2'],data['newEyeColor3']]
-                # data['hairstyleColor'] = [data['hairstyleColor0'],data['hairstyleColor1'],data['hairstyleColor2'],data['hairstyleColor3']]
+                cur.execute('SELECT source_json, url FROM plans WHERE id=('+sqlesc+')',(task[2],))
+                result = cur.fetchone()
+                farm_json = json.loads(result[0])
+                url = result[1]
 
-                # base_path = os.path.join(app.config.get('IMAGE_FOLDER'), data['url'])
-                # try:
-                #     os.mkdir(legacy_location(base_path))
-                # except OSError:
-                #     pass
+                base_path = os.path.join(app.config.get('RENDER_FOLDER'), url)
+                try:
+                    os.mkdir(legacy_location(base_path))
+                except OSError:
+                    pass
 
-                # avatar_path = os.path.join(base_path, data['url']+'-a.png')
-                # avatar = generateAvatar(data)
+                farm_data = parse_json(farm_json)
+                farm_render = generateFarm('spring',farm_data)
 
-                # pi = json.loads(data['portrait_info'])
-                # portrait_path = os.path.join(base_path, data['url']+'-p.png')
-                # generateFamilyPortrait(avatar, pi).save(legacy_location(portrait_path), compress_level=9)
-
-                # avatar.resize((avatar.width*4, avatar.height*4)).save(legacy_location(avatar_path), compress_level=9)
-
-                # farm_data = regenerateFarmInfo(json.loads(data['farm_info']))
-                # farm_path = os.path.join(base_path, data['url']+'-f.png')
+                farm_path = os.path.join(base_path, url+'-plan.png')
                 # generateMinimap(farm_data).save(legacy_location(farm_path), compress_level=9)
 
                 # map_path = os.path.join(base_path, data['url']+'-m.png')
                 # thumb_path = os.path.join(base_path, data['url']+'-t.png')
-                # farm = generateFarm(data['currentSeason'], farm_data)
+                farm = generateFarm('spring', farm_data)
                 # th = farm.resize((int(farm.width/4), int(farm.height/4)), Image.ANTIALIAS)
                 # th.save(legacy_location(thumb_path))
-                # farm.save(legacy_location(map_path), compress_level=9)
+                farm.save(legacy_location(map_path), compress_level=9)
 
-                # cur.execute('UPDATE playerinfo SET farm_url='+sqlesc+', avatar_url='+sqlesc+', portrait_url='+sqlesc+', map_url='+sqlesc+', thumb_url='+sqlesc+', base_path='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,avatar_path,portrait_path,map_path,thumb_path,base_path,data['id']))
-                # db.commit()
+                cur.execute('UPDATE plans SET image_url='+sqlesc+', base_path='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,base_path,task[2]))
+                db.commit()
                 # # except Exception as e:
                 # #     cur.execute('UPDATE playerinfo SET failed_processing='+sqlesc+' WHERE id='+,(True,data['id']))
                 # #     db.commit()
