@@ -119,7 +119,7 @@ def generateFarm(season, data, assets=None):
             else:
                 obj_img = cropImg(assets['objects'], item.index)
                 offset = 0
-            if len(item.orientation[1]) == 3:
+            if item.orientation and len(item.orientation[1]) == 3:
                 # Seriously need to get reworking how images are rendered
                 obj_img = cropImg(assets['craftables'], 168,
                                   (16, 32), (16, 32))
@@ -218,8 +218,14 @@ def generateFarm(season, data, assets=None):
 
         if item.name == "Building":
             try:
-                offsety = assets['buildings'][item.type.lower()].height - (item.h)*16
-                farm_base.paste(assets['buildings'][item.type.lower()], (item.x*16, item.y*16 - offsety), assets['buildings'][item.type.lower()])
+                if item.type == "junimo hut":
+                    offsety = assets['buildings'][item.type.lower()][season].height - (item.h)*16
+                    farm_base.paste(assets['buildings'][item.type.lower()][season], (item.x * 16, item.y * 16 - offsety),
+                                    assets['buildings'][item.type.lower()][season])
+                else:
+                    offsety = assets['buildings'][item.type.lower()].height - (item.h) * 16
+                    farm_base.paste(assets['buildings'][item.type.lower()], (item.x * 16, item.y * 16 - offsety),
+                                    assets['buildings'][item.type.lower()])
             except Exception as e:
                 print(e)
 

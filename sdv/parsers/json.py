@@ -45,6 +45,12 @@ def parse_json(data):
     path_types = ['gravel-path', 'wood-path', 'steppingstone-path', 'crystal-path', 'road']
     floor_types = ['wood-floor', 'straw-floor', 'weathered-floor', 'stone-floor', 'crystal-floor']
 
+    # Deal with different sized building footprints
+    buildings2 = ['stable', 'gold-clock', 'junimo-hut', 'mill']
+    buildings3 = ['silo', 'well', 'coop', 'water-obelisk', 'earth-obelisk', 'shed']
+    buildings4 = ['barn']
+    buildings7 = ['slime-hutch']
+
     for tile in tiles:
         type = tile['type']
         x = int(int(tile['x']) / 16)
@@ -77,29 +83,21 @@ def parse_json(data):
             objects.append(
                 sprite('HoeDirtCrop', x, y, 1, 1, 0, 26, random.randint(4, 5), random.randint(0, 1), (colour, days))
             )
-        elif type == 'silo':
+        elif type in buildings2:
             objects.append(
-                sprite('Building', x, y, 3, 3, None, 'silo', None, None, None)
+                sprite('Building', x, y, 4, 2, None, type.replace('-', ' '), None, None, None)
             )
-        elif type == 'well':
+        elif type in buildings3:
             objects.append(
-                sprite('Building', x, y, 3, 3, None, 'well', None, None, None)
+                sprite('Building', x, y, 4, 3, None, type.replace('-', ' '), None, None, None)
             )
-        elif type == 'coop':
+        elif type in buildings4:
             objects.append(
-                sprite('Building', x, y, 6, 3, None, 'coop', None, None, None)
+                sprite('Building', x, y, 4, 4, None, type.replace('-', ' '), None, None, None)
             )
-        elif type == 'barn':
+        elif type in buildings7:
             objects.append(
-                sprite('Building', x, y, 7, 4, None, 'barn', None, None, None)
-            )
-        elif type == 'stable':
-            objects.append(
-                sprite('Building', x, y, 4, 2, None, 'stable', None, None, None)
-            )
-        elif type == 'slime-hutch':
-            objects.append(
-                sprite('Building', x, y, 11, 5, None, 'slime hutch', None, None, None)
+                sprite('Building', x, y, 4, 7, None, type.replace('-', ' '), None, None, None)
             )
         elif type in craftable_index:
             objects.append(
