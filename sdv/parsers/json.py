@@ -35,7 +35,9 @@ def parse_json(data):
         'torch': 93,
         'sprinkler': 599,
         'q-sprinkler': 621,
-        'irid-sprinkler': 645
+        'irid-sprinkler': 645,
+        'twig': 295,
+        'stone': 450
     }
 
     random.seed(502)
@@ -106,6 +108,18 @@ def parse_json(data):
         elif type == 'gate':
             objects.append(
                 sprite('Fence', x, y, 0, 0, 0, 0, True, 0, type)
+            )
+        elif type == 'large-rock':
+            objects.append(
+                sprite('ResourceClump', x, y-1, 0, 0, None, 672, None, None, None)
+            )
+        elif type == 'large-log':
+            objects.append(
+                sprite('ResourceClump', x, y-1, 0, 0, None, 602, None, None, None)
+            )
+        elif type == 'large-stump':
+            objects.append(
+                sprite('ResourceClump', x, y-1, 0, 0, None, 600, None, None, None)
             )
         elif type in object_index:
             if type == 'torch':
