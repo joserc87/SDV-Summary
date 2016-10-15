@@ -1,6 +1,13 @@
 from PIL import Image
 from collections import namedtuple
 
+map_types = [
+    'Default',
+    'Fishing',
+    'Foraging',
+    'Mining',
+    'Combat'
+]
 
 # Check adj. tiles for all tiles on map to determine orientation. Uses bit mask to  select correct tile from spritesheet
 def checkSurrounding(tiles):
@@ -232,20 +239,12 @@ def getFarmInfo(saveFile):
                             None, None, None, None)
     farm['misc'] = [house, greenHouse]
 
-    types = [
-        'Default',
-        'Fishing',
-        'Foraging',
-        'Mining',
-        'Combat'
-    ]
-
     try:
         mapType = int(root.find('whichFarm').text)
     except Exception as e:
         mapType = 0
 
-    return {'type': types[mapType], 'data': farm}
+    return {'type': map_types[mapType], 'data': farm}
 
 
 def colourBox(x, y, colour, pixels, scale=8):

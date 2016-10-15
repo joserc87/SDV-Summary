@@ -88,7 +88,6 @@ def process_plans():
         db.commit()
         if len(tasks) != 0:
             for task in tasks:
-                print('need to write logic for processing json plans!')
                 cur.execute('SELECT source_json, url FROM plans WHERE id=('+sqlesc+')',(task[2],))
                 result = cur.fetchone()
                 farm_json = json.loads(result[0])
@@ -98,9 +97,11 @@ def process_plans():
                 try:
                     os.mkdir(legacy_location(base_path))
                 except OSError:
-                    pass
+                    continue
 
                 farm_data = parse_json(farm_json)
+                if farm_data['type'] == 'unsupported_map':
+                    continue
                 farm_render = generateFarm('spring',farm_data)
 
                 farm_path = os.path.join(base_path, url+'-plan.png')
@@ -111,7 +112,7 @@ def process_plans():
                 farm = generateFarm('spring', farm_data)
                 # th = farm.resize((int(farm.width/4), int(farm.height/4)), Image.ANTIALIAS)
                 # th.save(legacy_location(thumb_path))
-                farm.save(legacy_location(map_path), compress_level=9)
+                farm.save(legacy_location(farm_path), compress_level=9)
 
                 cur.execute('UPDATE plans SET image_url='+sqlesc+', base_path='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,base_path,task[2]))
                 db.commit()

@@ -1,10 +1,12 @@
 import random
 
-from sdv.farmInfo import sprite, checkSurrounding
+from sdv.farmInfo import sprite, checkSurrounding, map_types
 
 
 def parse_json(data):
-
+    map_type = selectMapType(data)
+    if map_type == 'unsupported_map':
+        return {'type':map_type,'data':{}}
     tiles = data['tiles'] + data['buildings']
     # ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation']
     craftable_index = {
@@ -184,6 +186,8 @@ def parse_json(data):
             objects.append(
                 sprite('Flooring', x, y, 1, 1, None, T, 0, False, None)
             )
+        else:
+            print('json input: type not in known types: {} coords {}, {}'.format(type,x,y))
 
     farm = {k.name: [a for a in objects if a.name == k.name] for k in objects}
 
@@ -216,12 +220,30 @@ def parse_json(data):
     except Exception as e:
         pass
 
-    for i, fence in enumerate(farm['Fence']):
-        if fence.growth and fence.orientation == 17:
-            farm['Fence'][i] = fence._replace(y = fence.y - 1)
+    try:
+        for i, fence in enumerate(farm['Fence']):
+            if fence.growth and fence.orientation == 17:
+                farm['Fence'][i] = fence._replace(y = fence.y - 1)
+    except Exception as e:
+        pass
 
-    return farm
+    return_data = {'type':map_types[map_type],'data':farm}
+    return return_data
 
+def selectMapType(data):
+    try:
+        json_options_layout = data['options']['layout']
+    except:
+        return 0
+    json_layout_map = {'regular':0,
+                       'fishing':1,
+                       'foraging':2,
+                       'mining':3,
+                       'combat':4}
+    if json_options_layout in json_layout_map:
+        return json_layout_map[json_options_layout]
+    else:
+        return 'unsupported_map'
 
 def addhoedirt(x, y):
     return sprite(
