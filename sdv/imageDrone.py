@@ -100,6 +100,10 @@ def process_plans():
                     continue
 
                 farm_data = parse_json(farm_json)
+                
+                print('json:',farm_json,'\n\n')
+                print('parsed:',farm_data,'\n\n')
+
                 if farm_data['type'] == 'unsupported_map':
                     continue
                 farm_render = generateFarm('spring',farm_data)
