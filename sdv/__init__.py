@@ -28,6 +28,7 @@ import requests
 from sdv.playerInfo import playerInfo
 from sdv.farmInfo import getFarmInfo
 from sdv.bigbase import dec2big
+from sdv.parsers.json import parse_json, json_layout_map
 
 from config import config
 
@@ -482,6 +483,13 @@ def api_v1_plan():
         # check rate limiter; if all good, continue, else return status:'overlimit'
         try:
             check_rate_limiter()
+            db = get_db()
+            cur = db.cursor()
+            time_offset = 3600
+            rate_limit = 10
+            print('NEED TO CHANGE THESE LIMITS OH GOD')
+            cur.execute('SELECT count(*) FROM plans WHERE added_time>'+app.sqlesc,(time.time()-time_offset,))
+            assert cur.fetchone()[0] <= rate_limit
         except AssertionError:
             return make_response(jsonify({'status':'over_rate_limit'}),429)
         # check input json for validity
@@ -489,6 +497,13 @@ def api_v1_plan():
             verify_json(request.form)
         except AssertionError:
             return make_response(jsonify({'status':'bad_input'}),400)
+        # convert to upload.farm format
+        try:
+            parsed = parse_json(json.loads(request.form['plan_json']))
+            if parsed['type'] == 'unsupported_map':
+                return make_response(jsonify({'status':'unsupported_map'}),400)
+        except:
+            return make_response(jsonify({'status':'failed_conversion_to_local_structure'}),400)
         # insert it to a database, checking for duplicates(?)
         plan_id, url = add_plan(request.form['plan_json'],request.form['source_url'])
         # queue a rendering job

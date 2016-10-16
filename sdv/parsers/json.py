@@ -2,6 +2,11 @@ import random
 
 from sdv.farmInfo import sprite, checkSurrounding, map_types
 
+json_layout_map = {'regular':0,
+                   'fishing':1,
+                   'foraging':2,
+                   'mining':3,
+                   'combat':4}
 
 def parse_json(data):
     map_type = selectMapType(data)
@@ -247,11 +252,6 @@ def selectMapType(data):
         json_options_layout = data['options']['layout']
     except:
         return 0
-    json_layout_map = {'regular':0,
-                       'fishing':1,
-                       'foraging':2,
-                       'mining':3,
-                       'combat':4}
     if json_options_layout in json_layout_map:
         return json_layout_map[json_options_layout]
     else:
