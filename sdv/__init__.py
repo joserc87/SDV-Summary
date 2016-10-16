@@ -480,70 +480,100 @@ def home():
 @app.route('/api/v1/plan',methods=['POST'])
 def api_v1_plan():
     if request.method == 'POST':
-        # check rate limiter; if all good, continue, else return status:'overlimit'
-        try:
-            check_rate_limiter()
-            db = get_db()
-            cur = db.cursor()
-            time_offset = 3600
-            rate_limit = 10
-            print('NEED TO CHANGE THESE LIMITS OH GOD')
-            cur.execute('SELECT count(*) FROM plans WHERE added_time>'+app.sqlesc,(time.time()-time_offset,))
-            assert cur.fetchone()[0] <= rate_limit
-        except AssertionError:
-            return make_response(jsonify({'status':'over_rate_limit'}),429)
-        # check input json for validity
+        # check input json for validity (because if it's invalid, why hit db?)
         try:
             verify_json(request.form)
         except AssertionError:
             return make_response(jsonify({'status':'bad_input'}),400)
-        # convert to upload.farm format
+
+        # check rate limiter; if all good, continue, else return status:'overlimit'
+        try:
+            check_rate_limiter()
+        except AssertionError:
+            return make_response(jsonify({'status':'over_rate_limit'}),429)
+
+        # check conversion to upload.farm format & map type
         try:
             parsed = parse_json(json.loads(request.form['plan_json']))
             if parsed['type'] == 'unsupported_map':
                 return make_response(jsonify({'status':'unsupported_map'}),400)
         except:
             return make_response(jsonify({'status':'failed_conversion_to_local_structure'}),400)
-        # insert it to a database, checking for duplicates(?)
-        plan_id, url = add_plan(request.form['plan_json'],request.form['source_url'])
-        # queue a rendering job
-        add_task(plan_id,'process_plan_image')
-        # optional: run imageDrone with a json parameter to tell it only to render json jobs?
-        imageDrone.process_plans()
-        # increment rate limiter
-        increment_rate_limiter()
-        # return status:'success' or status:'failedrender'; url, id
+
+        # insert it to the database, checking for duplicates(?)
+        season = None if 'season' not in request.form else request.form['season']
+        url, md5_value = check_for_duplicate(request.form['plan_json'],season)
+        if url == None: # if no existing url
+            # insert into db
+            plan_id, url = add_plan(request.form['plan_json'],request.form['source_url'],season,md5_value)
+            # queue a rendering job
+            add_task(plan_id,'process_plan_image')
+            # optional: run imageDrone
+            imageDrone.process_plans()
+            # check for number of entries; remove entry if over limit
+            check_max_renders()
+        # return status:'success'
         return make_response(jsonify({'status':'success','url':url}),200)
 
 
 def check_rate_limiter():
-    assert True
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('SELECT count(*) FROM plans WHERE added_time>'+app.sqlesc,(time.time()-app.config['API_V1_PLAN_TIME'],))
+    assert cur.fetchone()[0] <= app.config['API_V1_PLAN_LIMIT']
+
+def check_max_renders():
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('SELECT count(*) FROM plans WHERE render_deleted IS NOT TRUE')
+    if cur.fetchone()[0] > app.config['API_V1_PLAN_MAX_RENDERS']:
+        print('over max render limit!')
+        cur.execute('SELECT url FROM plans WHERE render_deleted IS NOT TRUE AND last_visited=(SELECT MIN(last_visited) FROM plans WHERE render_deleted IS NOT TRUE);')
+        url = cur.fetchone()[0]
+        remove_render_over_limit(url)
 
 
-def increment_rate_limiter():
-    print('need to write rate limiter!')
+def remove_render_over_limit(url):
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('UPDATE plans SET render_deleted=TRUE WHERE url='+app.sqlesc+' RETURNING image_url, base_path',(url,))
+    image_url, base_path = cur.fetchone()
+    print('filenames:',image_url,base_path)
+    print('magic:',os.path.split(os.path.split(image_url)[0])[1])
+    print(os.path.split(os.path.split(image_url)[0])[1],url)
+    if image_url != None and os.path.split(os.path.split(image_url)[0])[1] == url:
+        # second condition ensures you're in a folder named after the URL which prevents accidentally deleting placeholders
+        try:
+            print('trying...')
+            os.remove(legacy_location(image_url))
+        except:
+            print('failed')
+            pass
+    try:
+        print('trying dir...')
+        os.rmdir(legacy_location(base_path))
+    except:
+        print('failed too')
+        pass
+    db.commit()
 
 
 def verify_json(form):
     assert 'plan_json' in form
     assert 'source_url' in form
+    if 'season' in form:
+        assert form['season'] in ['spring','summer','fall','winter']
 
 
-def add_plan(source_json, planner_url):
+def add_plan(source_json, planner_url, season, md5_value):
     db = get_db()
     cur = db.cursor()
-    cur.execute('INSERT INTO plans (added_time,source_json,planner_url,views) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+') RETURNING id, added_time;',(time.time(),source_json,planner_url,0))
+    cur.execute('INSERT INTO plans (added_time,source_json,planner_url,views,last_visited,season,md5) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+') RETURNING id, added_time;',(time.time(),source_json,planner_url,0,time.time(),season,md5_value))
     row = cur.fetchone()
     url = dec2big(int(row[0])+int(row[1]))
     cur.execute('UPDATE plans SET url='+app.sqlesc+' WHERE id='+app.sqlesc+'',(url,row[0]))
     db.commit()
     return row[0], url
-
-
-def render_from_json():
-    # we need a new class of image render for imageDrone to handle and a new class of profile to display it!
-    print('render_from_json does nothing yet')
-    return({'status':'renderfromjsondoesnothingyet','id':'idnumber','url':'url_of_resulting_image'})
 
 
 def add_task(id_number,task_type):
@@ -552,6 +582,22 @@ def add_task(id_number,task_type):
     cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',(task_type,id_number))
     db.commit()
 
+
+def check_for_duplicate(plan_json,season):
+    h = hashlib.md5()
+    h.update(plan_json.encode())
+    md5_value = h.hexdigest()
+    db = get_db()
+    cur = db.cursor()
+    if season == None:
+        cur.execute('SELECT source_json, url FROM plans WHERE md5='+app.sqlesc+' AND season IS NULL',(md5_value,))
+    else:
+        cur.execute('SELECT source_json, url FROM plans WHERE md5='+app.sqlesc+' AND season='+app.sqlesc,(md5_value,season))
+    result = cur.fetchone()
+    if result != None and result[0] == plan_json:
+        return result[1], md5_value
+    else:
+        return None, md5_value
 
 '''
 # DEPRECIATED 'API' CODE

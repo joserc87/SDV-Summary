@@ -104,11 +104,11 @@ def parse_json(data):
             )
         elif type in buildings7:
             objects.append(
-                sprite('Building', x, y, 4, 7, None, type.replace('-', ' '), None, None, None)
+                sprite('Building', x, y-1, 4, 7, None, type.replace('-', ' '), None, None, None)
             )
         elif type in craftable_index:
             objects.append(
-                sprite('Object', x, y-1, 1, 1, craftable_index[type], 'Crafting', 0, 0, 0)
+                sprite('Object', x, y, 1, 1, craftable_index[type], 'Crafting', 0, 0, 0)
             )
         elif type == 'gate':
             objects.append(
@@ -116,15 +116,15 @@ def parse_json(data):
             )
         elif type == 'large-rock':
             objects.append(
-                sprite('ResourceClump', x, y-1, 0, 0, None, 672, None, None, None)
+                sprite('ResourceClump', x, y, 0, 0, None, 672, None, None, None)
             )
         elif type == 'large-log':
             objects.append(
-                sprite('ResourceClump', x, y-1, 0, 0, None, 602, None, None, None)
+                sprite('ResourceClump', x, y, 0, 0, None, 602, None, None, None)
             )
         elif type == 'large-stump':
             objects.append(
-                sprite('ResourceClump', x, y-1, 0, 0, None, 600, None, None, None)
+                sprite('ResourceClump', x, y, 0, 0, None, 600, None, None, None)
             )
         elif type in object_index:
             if type == 'torch':
@@ -136,7 +136,7 @@ def parse_json(data):
             elif type == 'irid-sprinkler':
                 name = 'Iridium Sprinkler'
             objects.append(
-                sprite('Object', x, y - 1, 1, 1, object_index[type], 'Crafting', 0, 0, name)
+                sprite('Object', x, y, 1, 1, object_index[type], 'Crafting', 0, 0, name)
             )
         elif type in fence_types:
             t = 1

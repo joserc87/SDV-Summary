@@ -88,10 +88,11 @@ def process_plans():
         db.commit()
         if len(tasks) != 0:
             for task in tasks:
-                cur.execute('SELECT source_json, url FROM plans WHERE id=('+sqlesc+')',(task[2],))
+                cur.execute('SELECT source_json, url, season FROM plans WHERE id=('+sqlesc+')',(task[2],))
                 result = cur.fetchone()
                 farm_json = json.loads(result[0])
                 url = result[1]
+                season = 'spring' if result[2] == None else result[2]
 
                 base_path = os.path.join(app.config.get('RENDER_FOLDER'), url)
                 try:
@@ -103,14 +104,13 @@ def process_plans():
                 
                 if farm_data['type'] == 'unsupported_map':
                     continue
-                farm_render = generateFarm('spring',farm_data)
 
                 farm_path = os.path.join(base_path, url+'-plan.png')
                 # generateMinimap(farm_data).save(legacy_location(farm_path), compress_level=9)
 
                 # map_path = os.path.join(base_path, data['url']+'-m.png')
                 # thumb_path = os.path.join(base_path, data['url']+'-t.png')
-                farm = generateFarm('spring', farm_data)
+                farm = generateFarm(season, farm_data)
                 # th = farm.resize((int(farm.width/4), int(farm.height/4)), Image.ANTIALIAS)
                 # th.save(legacy_location(thumb_path))
                 farm.save(legacy_location(farm_path), compress_level=9)
