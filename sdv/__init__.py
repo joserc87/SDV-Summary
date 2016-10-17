@@ -422,7 +422,7 @@ def file_uploaded(inputfile):
         return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
     except AttributeError as e:
         g.error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
-        print(e)
+        # print(e)
         return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
     except ParseError as e:
         g.error = "Not well-formed xml"
@@ -544,7 +544,7 @@ def check_max_renders():
     cur = db.cursor()
     cur.execute('SELECT count(*) FROM plans WHERE render_deleted IS NOT TRUE')
     if cur.fetchone()[0] > app.config['API_V1_PLAN_MAX_RENDERS']:
-        print('over max render limit!')
+        # print('over max render limit!')
         cur.execute('SELECT url FROM plans WHERE render_deleted IS NOT TRUE AND last_visited=(SELECT MIN(last_visited) FROM plans WHERE render_deleted IS NOT TRUE);')
         url = cur.fetchone()[0]
         remove_render_over_limit(url)
@@ -1132,7 +1132,6 @@ def delete_playerinfo_entry(url,md5,del_token):
             if filename != None and (os.path.split(os.path.split(filename)[0])[1] == result[3] or os.path.split(os.path.split(filename)[0])[1] == 'uploads'):
                 # second condition ensures you're in a folder named after the URL which prevents accidentally deleting placeholders
                 try:
-                    print(filename)
                     os.remove(legacy_location(filename))
                 except:
                     pass
