@@ -133,10 +133,10 @@ def playerInfo(saveFile):
                 for item in fship:
                     name = item.find("key").find('string').text
                     if name not in child_names:
-                        assert name in validate.giftable_npcs
-                        rating = int(item.find('value').find('ArrayOfInt').find('int').text)
-                        assert rating >= 0 and rating < 14*250
-                        s[name] = rating
+                        if name in validate.giftable_npcs:
+                            rating = int(item.find('value').find('ArrayOfInt').find('int').text)
+                            assert rating >= 0 and rating < 14*250
+                            s[name] = rating
 
             if tag in ['hairstyleColor', 'pantsColor', 'newEyeColor']:
                 red = int(player.find(tag).find('R').text)

@@ -35,6 +35,7 @@ from config import config
 from sdv.createdb import database_structure_dict, database_fields
 from sdv.savefile import savefile
 from sdv.zipuploads import zopen, zwrite
+import sdv.validate
 
 if sys.version_info >= (3, 0):
     unicode = str
@@ -571,7 +572,7 @@ def verify_json(form):
     assert 'plan_json' in form
     assert 'source_url' in form
     if 'season' in form:
-        assert form['season'] in ['spring','summer','fall','winter']
+        assert form['season'] in sdv.validate.seasons
 
 
 def add_plan(source_json, planner_url, season, md5_value):
@@ -1128,14 +1129,15 @@ def delete_playerinfo_entry(url,md5,del_token):
             pass #return 'Problem removing series link!'
         cur.execute('DELETE FROM playerinfo WHERE id=('+app.sqlesc+')',(result[0],))
         for filename in result[4:11]:
-            if filename != None and os.path.split(os.path.split(filename)[0])[1] == result[3]:
+            if filename != None and (os.path.split(os.path.split(filename)[0])[1] == result[3] or os.path.split(os.path.split(filename)[0])[1] == 'uploads'):
                 # second condition ensures you're in a folder named after the URL which prevents accidentally deleting placeholders
                 try:
-                    os.remove(filename)
+                    print(filename)
+                    os.remove(legacy_location(filename))
                 except:
                     pass
         try:
-            os.rmdir(result[11])
+            os.rmdir(legacy_location(result[11]))
         except:
             pass
         db.commit()

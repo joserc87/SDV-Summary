@@ -20,10 +20,6 @@ function ajaxRequest(){
 var current_data;
 
 function recentTemplate(recent,votes){
-	var privacy = '';
-	if (recent[8] == true) {
-		privacy = '<abbr title="This farm is unlisted and will not show up in searches nor on the front page except to you. It can still be viewed by people with a direct link." class="indicate-private">[U]</abbr> ';
-	}
 	var build_string = '<div class="col-md-4 col-sm-6 text-center previewbox"> \
 		<a href="'+recent[0]+'"> \
 			<div class="previewimage"> \
@@ -31,13 +27,18 @@ function recentTemplate(recent,votes){
 				<img src="'+ recent[4] +'" class="headimg" > \
 			</div> \
 			<div class="previewtext"> \
-				'+privacy+ recent[1] +', '+ recent[2] +' Farm <br/>  '+ recent[3] +' \
+				'+ recent[1] +', '+ recent[2] +' Farm <br/>  '+ recent[3] +' \
 			</div> \
 		</a>'
 	if (recent[6]!=null && recent[6]!=false) {
 		build_string = build_string.concat('<div class="previewdl"> \
 				<img title="This farm has a downloadable savegame available" src="static/css/cpanel/dl32.png"> \
 			</div>');
+	}
+	if (recent[8] == true) {
+		build_string = build_string.concat('<div class="indicate-private"> \
+					<img title="This farm is unlisted and will not show up in searches nor on the front page except to you. It can still be viewed by people with a direct link." src="static/css/cpanel/private.png"> \
+				</div>');
 	}
 	if (votes != null) {
 		build_string = build_string.concat('<div class="previewvote"> \
