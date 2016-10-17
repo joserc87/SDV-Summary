@@ -98,7 +98,7 @@ def process_plans():
                 try:
                     os.mkdir(legacy_location(base_path))
                 except OSError:
-                    continue
+                    pass
 
                 farm_data = parse_json(farm_json)
                 
@@ -115,7 +115,7 @@ def process_plans():
                 # th.save(legacy_location(thumb_path))
                 farm.save(legacy_location(farm_path), compress_level=9)
 
-                cur.execute('UPDATE plans SET image_url='+sqlesc+', base_path='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,base_path,task[2]))
+                cur.execute('UPDATE plans SET image_url='+sqlesc+', base_path='+sqlesc+', render_deleted=FALSE WHERE id='+sqlesc+'',(farm_path,base_path,task[2]))
                 db.commit()
                 # # except Exception as e:
                 # #     cur.execute('UPDATE playerinfo SET failed_processing='+sqlesc+' WHERE id='+,(True,data['id']))

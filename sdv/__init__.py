@@ -38,8 +38,10 @@ from sdv.zipuploads import zopen, zwrite
 
 if sys.version_info >= (3, 0):
     unicode = str
+    from urllib.parse import urlparse
 else:
     str = unicode
+    from urlparse import urlparse
 
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
@@ -516,6 +518,20 @@ def api_v1_plan():
         return make_response(jsonify({'status':'success','url':url}),200)
 
 
+@app.route('/api/v1/render_exists',methods=['GET'])
+def api_v1_render_exists():
+    if 'url' in request.args:
+        db = get_db()
+        cur = db.cursor()
+        cur.execute('SELECT render_deleted FROM plans WHERE url='+app.sqlesc,(request.args.get('url'),))
+        try:
+            result = True if cur.fetchone()[0] != True else False
+            return make_response(jsonify({'render_exists':result}))
+        except:
+            return make_response(jsonify({'render_exists':None}),400)
+    return make_response(jsonify(None),400)
+
+
 def check_rate_limiter():
     db = get_db()
     cur = db.cursor()
@@ -538,22 +554,15 @@ def remove_render_over_limit(url):
     cur = db.cursor()
     cur.execute('UPDATE plans SET render_deleted=TRUE WHERE url='+app.sqlesc+' RETURNING image_url, base_path',(url,))
     image_url, base_path = cur.fetchone()
-    print('filenames:',image_url,base_path)
-    print('magic:',os.path.split(os.path.split(image_url)[0])[1])
-    print(os.path.split(os.path.split(image_url)[0])[1],url)
     if image_url != None and os.path.split(os.path.split(image_url)[0])[1] == url:
         # second condition ensures you're in a folder named after the URL which prevents accidentally deleting placeholders
         try:
-            print('trying...')
             os.remove(legacy_location(image_url))
         except:
-            print('failed')
             pass
     try:
-        print('trying dir...')
         os.rmdir(legacy_location(base_path))
     except:
-        print('failed too')
         pass
     db.commit()
 
@@ -870,6 +879,34 @@ def display_data(url):
         if logged_in() == False and len(claimables) > 1 and request.cookies.get('no_signup')!='true':
             flash({'message':"<p>It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!</p>".format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
         return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote,data=datadict, kills=kills, friendships=friendships, others=other_saves, gallery_set=gallery_set, **page_args())
+
+
+@app.route('/plan/<url>')
+def display_plan(url):
+    page_init()
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('SELECT id, planner_url, image_url, render_deleted, season FROM plans WHERE url='+app.sqlesc+'',(url,))
+    data = cur.fetchall()
+    if len(data) != 1:
+        g.error = 'There is nothing here... is this URL correct?'
+        if str(url) != 'favicon.ico':
+            cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),str(len(data))+' cur.fetchall() for planner url:'+str(url)))
+            db.commit()
+        return render_template("error.html", **page_args())
+    else:
+        plan_id, planner_url, image_url, render_deleted, season = data[0]
+        if render_deleted == True:
+            check_max_renders()
+            add_task(plan_id,'process_plan_image')
+            imageDrone.process_plans()
+        image_url = image_url[1:]
+        if urlparse(planner_url).netloc not in app.config['API_V1_PLAN_APPROVED_SOURCES']:
+            planner_url = None
+        cur.execute('UPDATE plans SET views=views+1, last_visited='+app.sqlesc+' WHERE url='+app.sqlesc+'',(time.time(),url))
+        db.commit()
+        return render_template("plan.html", url=url, planner_url=planner_url, season=season, image_url=image_url, render_deleted=render_deleted, **page_args())
+
 
 
 def get_others(url,date,map_url):
