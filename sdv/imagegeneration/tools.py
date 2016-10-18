@@ -1,6 +1,10 @@
+import os
+
 from PIL import Image
 from PIL.ImageOps import grayscale, colorize
 from PIL.ImageChops import offset
+
+from sdv import app
 
 
 # Apply colour to image
@@ -33,3 +37,15 @@ def colourBox(x, y, colour, pixels, scale=8):
             except IndexError:
                 pass
     return pixels
+
+
+def watermark(img, mark=None):
+    asset_dir = app.config.get('ASSET_PATH')
+    if mark is None:
+        mark = Image.open(os.path.join(asset_dir, 'logo.png'))
+    x = 16
+    y = img.size[1] - 16 - mark.size[1]
+    if img.mode != 'RGBA':
+        img = img.convert('RGBA')
+    img.paste(mark, box=(x, y), mask=mark)
+    return img.convert('P', palette=Image.ADAPTIVE, colors=255)
