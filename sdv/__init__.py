@@ -749,7 +749,7 @@ def get_planner_link(url):
             #file is missing or not in the right place!
             return {'status':'missing_file'}
         # send to stardew.info
-        r = requests.post('https://stardew.info/api/import',files=f)
+        r = requests.post('https://stardew.info/api/import',files=f,verify=False)#verify false as there was a strange SSLError when I ran this on the server
         response = r.json()
         status_code = r.status_code
         # check not error (r.json()['message'] I think)
