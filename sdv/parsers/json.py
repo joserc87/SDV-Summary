@@ -67,6 +67,10 @@ def parse_json(data):
             objects.append(
                 sprite('Grass', x, y, 1, 1, 20, 1, random.randint(2, 4), random.randint(0, 1), None)
             )
+        if type == 'weeds':
+            objects.append(
+                sprite('Object', x, y, 1, 1, 313 + random.randint(0, 2), 'Crafting', 0, None, 'Weeds')
+            )
         elif type == 'farmland':
             objects.append(
                 addhoedirt(x, y)
@@ -135,6 +139,8 @@ def parse_json(data):
                 name = 'Quality Sprinkler'
             elif type == 'irid-sprinkler':
                 name = 'Iridium Sprinkler'
+            elif type == 'twig' or type == 'stone':
+                name = type.title()
             objects.append(
                 sprite('Object', x, y, 1, 1, object_index[type], 'Crafting', 0, 0, name)
             )
@@ -211,8 +217,14 @@ def parse_json(data):
     greenhouse = sprite('Greenhouse',
                         25, 12, 0, 6, 0,
                         None, None, None, None)
+    try:
+        g = False
+        if data['options']['greenhouse']:
+            g = True
+    except:
+        g = True
 
-    if data['options']['greenhouse']:
+    if g:
         greenhouse = sprite('Greenhouse',
                             25, 12, 0, 6, 1,
                             None, None, None, None)

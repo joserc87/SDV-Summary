@@ -48,7 +48,7 @@ def generateFarm(season, data, assets=None):
     type = data['type']
     farm = data['data']
     sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
-    craftable_blacklist = ['Twig', 'Torch', 'Sprinkler',
+    craftable_blacklist = ['Twig', 'Stone', 'Weeds', 'Torch', 'Sprinkler',
                            'Quality Sprinkler', 'Iridium Sprinkler', 'Note Block', 'Jack-O-Lantern']
 
     if assets is None:
