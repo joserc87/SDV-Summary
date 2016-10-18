@@ -479,6 +479,9 @@ def home():
     vote = json.dumps({entry[0]:get_votes(entry[0]) for entry in recents['posts']})
     return render_template("index.html", recents=recents, vote=vote, blogposts=get_blogposts(5), **page_args())
 
+@app.route('/test')
+def test_thing():
+    return make_response(url_for('display_plan',url='12345',_external=True))
 
 @app.route('/api/v1/plan',methods=['POST'])
 def api_v1_plan():
@@ -508,7 +511,7 @@ def api_v1_plan():
 
         # insert it to the database, checking for duplicates(?)
         season = None if 'season' not in input_structure else input_structure['season']
-        url, md5_value = check_for_duplicate(json.dumps(input_structure['plan_json']),season)
+        url, md5_value = check_for_duplicate(input_structure['plan_json'],season)
         if url == None: # if no existing url
             # insert into db
             plan_id, url = add_plan(json.dumps(input_structure['plan_json']),input_structure['source_url'],season,md5_value)
@@ -519,7 +522,7 @@ def api_v1_plan():
             # check for number of entries; remove entry if over limit
             check_max_renders()
         # return status:'success'
-        return make_response(jsonify({'status':'success','url':url}),200)
+        return make_response(jsonify({'status':'success','url':url_for('display_plan',url=url,_external=True)}),200)
 
 
 @app.route('/api/v1/render_exists',methods=['GET'])
@@ -596,9 +599,37 @@ def add_task(id_number,task_type):
     db.commit()
 
 
+def make_hashable(input_json):
+    big_string = ''
+    for key in sorted(input_json.keys()):
+        sub_string = '{}: {{'.format(key)
+        if type(input_json[key]) == list:
+            sub_string += '['
+            for item in input_json[key]:
+                sub_string += '{'
+                for sub_key in sorted(item.keys()):
+                    sub_string += '{}:{},'.format(sub_key,item[sub_key])
+                sub_string += '},'
+            sub_string += ']'
+        elif type(input_json[key]) == dict:
+            sub_string += '{'
+            for sub_key in sorted(input_json[key].keys()):
+                if type(input_json[key][sub_key]) != dict:
+                    sub_string += '{}:{},'.format(sub_key,input_json[key][sub_key])
+                else:
+                    sub_string += '{'
+                    for sub_sub_key in sorted(input_json[key][sub_key].keys()):
+                        sub_string += '{}:{},'.format(sub_sub_key,input_json[key][sub_key][sub_sub_key])
+                    sub_string += '},'
+            sub_string += '},'
+        sub_string += '}, '
+        big_string += sub_string
+    return big_string
+
+
 def check_for_duplicate(plan_json,season):
     h = hashlib.md5()
-    h.update(plan_json.encode())
+    h.update(make_hashable(plan_json).encode())
     md5_value = h.hexdigest()
     db = get_db()
     cur = db.cursor()
@@ -607,7 +638,7 @@ def check_for_duplicate(plan_json,season):
     else:
         cur.execute('SELECT source_json, url FROM plans WHERE md5='+app.sqlesc+' AND season='+app.sqlesc,(md5_value,season))
     result = cur.fetchone()
-    if result != None and result[0] == plan_json:
+    if result != None and make_hashable(json.loads(result[0])) == make_hashable(plan_json):
         return result[1], md5_value
     else:
         return None, md5_value
