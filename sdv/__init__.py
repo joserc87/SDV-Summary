@@ -485,7 +485,10 @@ def api_v1_plan():
     if request.method == 'POST':
         # check input json for validity (because if it's invalid, why hit db?)
         try:
-            verify_json(request.form)
+            input_structure = request.get_json()
+            if input_structure == None:
+                return make_response(jsonify({'status':'no_json_header'}),400)
+            verify_json(input_structure)
         except AssertionError:
             return make_response(jsonify({'status':'bad_input'}),400)
 
@@ -497,18 +500,18 @@ def api_v1_plan():
 
         # check conversion to upload.farm format & map type
         try:
-            parsed = parse_json(json.loads(request.form['plan_json']))
+            parsed = parse_json(input_structure['plan_json'])
             if parsed['type'] == 'unsupported_map':
                 return make_response(jsonify({'status':'unsupported_map'}),400)
         except:
             return make_response(jsonify({'status':'failed_conversion_to_local_structure'}),400)
 
         # insert it to the database, checking for duplicates(?)
-        season = None if 'season' not in request.form else request.form['season']
-        url, md5_value = check_for_duplicate(request.form['plan_json'],season)
+        season = None if 'season' not in input_structure else input_structure['season']
+        url, md5_value = check_for_duplicate(json.dumps(input_structure['plan_json']),season)
         if url == None: # if no existing url
             # insert into db
-            plan_id, url = add_plan(request.form['plan_json'],request.form['source_url'],season,md5_value)
+            plan_id, url = add_plan(json.dumps(input_structure['plan_json']),input_structure['source_url'],season,md5_value)
             # queue a rendering job
             add_task(plan_id,'process_plan_image')
             # optional: run imageDrone
@@ -568,11 +571,11 @@ def remove_render_over_limit(url):
     db.commit()
 
 
-def verify_json(form):
-    assert 'plan_json' in form
-    assert 'source_url' in form
-    if 'season' in form:
-        assert form['season'] in sdv.validate.seasons
+def verify_json(input_structure):
+    assert 'plan_json' in input_structure
+    assert 'source_url' in input_structure
+    if 'season' in input_structure:
+        assert input_structure['season'] in sdv.validate.seasons
 
 
 def add_plan(source_json, planner_url, season, md5_value):
@@ -717,14 +720,17 @@ def get_planner_link(url):
         # send to stardew.info
         r = requests.post('https://stardew.info/api/import',files=f)
         response = r.json()
+        status_code = r.status_code
         # check not error (r.json()['message'] I think)
         if 'message' in response:
-            return {'status':'error'}
+            return {'status':response['message']}
         elif 'absolutePath' in response:
             # add absolutePath to database & commit
             cur.execute('UPDATE playerinfo SET planner_url='+app.sqlesc+' WHERE id='+app.sqlesc,(response['absolutePath'],result[2]))
             db.commit()
             return {'status':'success','planner_url':response['absolutePath']}
+        elif status_code == 429:
+            return {'status':'over_rate_limit'}
         else:
             return {'status':'unknown_error'}
 
@@ -904,6 +910,7 @@ def display_plan(url):
         image_url = image_url[1:]
         if urlparse(planner_url).netloc not in app.config['API_V1_PLAN_APPROVED_SOURCES']:
             planner_url = None
+        season = season if season != None else 'spring'
         cur.execute('UPDATE plans SET views=views+1, last_visited='+app.sqlesc+' WHERE url='+app.sqlesc+'',(time.time(),url))
         db.commit()
         return render_template("plan.html", url=url, planner_url=planner_url, season=season, image_url=image_url, render_deleted=render_deleted, **page_args())
@@ -1114,9 +1121,13 @@ def _op_planner(url):
     result = get_planner_link(url)
     if result['status'] == 'success':
         return redirect(result['planner_url'])
+    elif result['status'] == 'over_rate_limit':
+        flash({'message':'<p>Sorry, the stardew.info planner API is over its rate limit: please try again in a few minutes!</p>'})
+        return redirect(url_for('display_data',url=url))
+        # return render_template("error.html",**page_args())
     else:
-        g.error = 'There was a problem accessing the planner. Error was: {}'.format(result['status'])
-        return render_template("error.html",**page_args())
+        flash({'message':'<p>There was a problem accessing the planner. Error was: {}</p>'.format(result['status'])})
+        return redirect(url_for('display_data',url=url))
 
 def delete_playerinfo_entry(url,md5,del_token):
     # takes url, md5, and del_token (from session); if verified, deletes
