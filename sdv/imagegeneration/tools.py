@@ -39,10 +39,12 @@ def colourBox(x, y, colour, pixels, scale=8):
     return pixels
 
 
-def watermark(img, mark=None):
+def watermark(img, **kwargs):
     asset_dir = app.config.get('ASSET_PATH')
+    mark = None if 'mark' not in kwargs else kwargs['mark']
+    filename = 'u.f.png' if 'filename' not in kwargs else kwargs['filename']
     if mark is None:
-        mark = Image.open(os.path.join(asset_dir, 'logo.png'))
+        mark = Image.open(os.path.join(asset_dir, 'watermarks',filename))
     x = 16
     y = img.size[1] - 16 - mark.size[1]
     if img.mode != 'RGBA':

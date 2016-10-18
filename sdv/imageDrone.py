@@ -12,6 +12,7 @@ from sdv.farmInfo import regenerateFarmInfo
 from sdv.imagegeneration.avatar import generateAvatar
 from sdv.imagegeneration.familyportrait import generateFamilyPortrait
 from sdv.imagegeneration.farm import generateFarm, generateMinimap
+from sdv.imagegeneration.tools import watermark
 from sdv.parsers.json import parse_json
 from sdv import app, connect_db, legacy_location
 sqlesc = app.sqlesc
@@ -111,6 +112,7 @@ def process_plans():
                 # map_path = os.path.join(base_path, data['url']+'-m.png')
                 # thumb_path = os.path.join(base_path, data['url']+'-t.png')
                 farm = generateFarm(season, farm_data)
+                farm = watermark(farm,filename='stardew_info.png')
                 # th = farm.resize((int(farm.width/4), int(farm.height/4)), Image.ANTIALIAS)
                 # th.save(legacy_location(thumb_path))
                 farm.save(legacy_location(farm_path), compress_level=9)
