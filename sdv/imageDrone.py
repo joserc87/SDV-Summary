@@ -100,30 +100,33 @@ def process_plans():
                     os.mkdir(legacy_location(base_path))
                 except OSError:
                     pass
+                try:
+                    farm_data = parse_json(farm_json)
+                    
+                    if farm_data['type'] == 'unsupported_map':
+                        continue
 
-                farm_data = parse_json(farm_json)
-                
-                if farm_data['type'] == 'unsupported_map':
-                    continue
+                    farm_path = os.path.join(base_path, url+'-plan.png')
+                    # generateMinimap(farm_data).save(legacy_location(farm_path), compress_level=9)
 
-                farm_path = os.path.join(base_path, url+'-plan.png')
-                # generateMinimap(farm_data).save(legacy_location(farm_path), compress_level=9)
+                    # map_path = os.path.join(base_path, data['url']+'-m.png')
+                    # thumb_path = os.path.join(base_path, data['url']+'-t.png')
+                    farm = generateFarm(season, farm_data)
+                    farm = watermark(farm,filename='stardew_info.png')
+                    # th = farm.resize((int(farm.width/4), int(farm.height/4)), Image.ANTIALIAS)
+                    # th.save(legacy_location(thumb_path))
+                    farm.save(legacy_location(farm_path), compress_level=9)
 
-                # map_path = os.path.join(base_path, data['url']+'-m.png')
-                # thumb_path = os.path.join(base_path, data['url']+'-t.png')
-                farm = generateFarm(season, farm_data)
-                farm = watermark(farm,filename='stardew_info.png')
-                # th = farm.resize((int(farm.width/4), int(farm.height/4)), Image.ANTIALIAS)
-                # th.save(legacy_location(thumb_path))
-                farm.save(legacy_location(farm_path), compress_level=9)
-
-                cur.execute('UPDATE plans SET image_url='+sqlesc+', base_path='+sqlesc+', render_deleted=FALSE WHERE id='+sqlesc+'',(farm_path,base_path,task[2]))
-                db.commit()
-                # # except Exception as e:
-                # #     cur.execute('UPDATE playerinfo SET failed_processing='+sqlesc+' WHERE id='+,(True,data['id']))
-                # #     db.commit()
-                cur.execute('DELETE FROM todo WHERE id=('+sqlesc+')',(task[0],))
-                db.commit()
+                    cur.execute('UPDATE plans SET image_url='+sqlesc+', base_path='+sqlesc+', render_deleted=FALSE, failed_render=NULL WHERE id='+sqlesc+'',(farm_path,base_path,task[2]))
+                    db.commit()
+                    # # except Exception as e:
+                    # #     cur.execute('UPDATE playerinfo SET failed_processing='+sqlesc+' WHERE id='+,(True,data['id']))
+                    # #     db.commit()
+                    cur.execute('DELETE FROM todo WHERE id=('+sqlesc+')',(task[0],))
+                    db.commit()
+                except:
+                    cur.execute('UPDATE plans SET failed_render=TRUE WHERE id='+sqlesc,(task[2],))
+                    cur.execute('DELETE fROM todo WHERE id=('+sqlesc+')',(task[0],))
                 records_handled += 1
         else:
             db.close()

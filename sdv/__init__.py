@@ -924,7 +924,7 @@ def display_plan(url):
     page_init()
     db = get_db()
     cur = db.cursor()
-    cur.execute('SELECT id, planner_url, image_url, render_deleted, season FROM plans WHERE url='+app.sqlesc+'',(url,))
+    cur.execute('SELECT id, planner_url, image_url, render_deleted, season, failed_render FROM plans WHERE url='+app.sqlesc+'',(url,))
     data = cur.fetchall()
     if len(data) != 1:
         g.error = 'There is nothing here... is this URL correct?'
@@ -933,19 +933,22 @@ def display_plan(url):
             db.commit()
         return render_template("error.html", **page_args())
     else:
-        plan_id, planner_url, image_url, render_deleted, season = data[0]
-        if render_deleted == True:
-            check_max_renders()
-            add_task(plan_id,'process_plan_image')
-            imageDrone.process_plans()
-        image_url = image_url[1:]
-        if urlparse(planner_url).netloc not in app.config['API_V1_PLAN_APPROVED_SOURCES']:
-            planner_url = None
-        season = season if season != None else 'spring'
-        cur.execute('UPDATE plans SET views=views+1, last_visited='+app.sqlesc+' WHERE url='+app.sqlesc+'',(time.time(),url))
-        db.commit()
-        return render_template("plan.html", url=url, planner_url=planner_url, season=season, image_url=image_url, render_deleted=render_deleted, **page_args())
-
+        plan_id, planner_url, image_url, render_deleted, season, failed_render = data[0]
+        if failed_render != True:
+            if render_deleted == True:
+                check_max_renders()
+                add_task(plan_id,'process_plan_image')
+                imageDrone.process_plans()
+            image_url = image_url[1:]
+            if urlparse(planner_url).netloc not in app.config['API_V1_PLAN_APPROVED_SOURCES']:
+                planner_url = None
+            season = season if season != None else 'spring'
+            cur.execute('UPDATE plans SET views=views+1, last_visited='+app.sqlesc+' WHERE url='+app.sqlesc+'',(time.time(),url))
+            db.commit()
+            return render_template("plan.html", url=url, planner_url=planner_url, season=season, image_url=image_url, render_deleted=render_deleted, **page_args())
+        else:
+            g.error = "This plan failed to render, probably because of a bug. It's logged and we'll look into it as soon as possible! Sorry!"
+            return(render_template("error.html", **page_args()))
 
 
 def get_others(url,date,map_url):
