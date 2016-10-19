@@ -548,10 +548,10 @@ def check_rate_limiter():
 def check_max_renders():
     db = get_db()
     cur = db.cursor()
-    cur.execute('SELECT count(*) FROM plans WHERE render_deleted IS NOT TRUE')
+    cur.execute('SELECT count(*) FROM plans WHERE render_deleted IS NOT TRUE AND failed_render IS NOT TRUE')
     if cur.fetchone()[0] > app.config['API_V1_PLAN_MAX_RENDERS']:
         # print('over max render limit!')
-        cur.execute('SELECT url FROM plans WHERE render_deleted IS NOT TRUE AND last_visited=(SELECT MIN(last_visited) FROM plans WHERE render_deleted IS NOT TRUE);')
+        cur.execute('SELECT url FROM plans WHERE render_deleted IS NOT TRUE AND failed_render IS NOT TRUE AND last_visited=(SELECT MIN(last_visited) FROM plans WHERE render_deleted IS NOT TRUE AND failed_render IS NOT TRUE);')
         url = cur.fetchone()[0]
         remove_render_over_limit(url)
 
