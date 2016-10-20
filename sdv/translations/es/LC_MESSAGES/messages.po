@@ -1,0 +1,443 @@
+# Spanish translations for PROJECT.
+# Copyright (C) 2016 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2016-10-20 17:58+0100\n"
+"PO-Revision-Date: 2016-10-20 17:58+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: es\n"
+"Language-Team: es <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: __init__.py:163 __init__.py:228
+msgid "Username not found!"
+msgstr ""
+
+#: __init__.py:175
+msgid "Unable to interpret stored password hash!"
+msgstr ""
+
+#: __init__.py:186
+msgid "Incorrect password!"
+msgstr ""
+
+#: __init__.py:207
+msgid "Missing email or password for login!"
+msgstr ""
+
+#: __init__.py:213
+msgid "<p>Logged in successfully!</p>"
+msgstr ""
+
+#: __init__.py:230
+msgid ""
+"Email address not verified; please verify your account using the "
+"verification email sent when you registered before attempting to reset "
+"password!"
+msgstr ""
+
+#: __init__.py:239
+msgid "<p>Password reset email sent!</p>"
+msgstr ""
+
+#: __init__.py:241
+msgid "<p>Previous password reset email still waiting to be sent... (sorry)</p>"
+msgstr ""
+
+#: __init__.py:249 __init__.py:273
+msgid "Cannot reset password: account does not exist"
+msgstr ""
+
+#: __init__.py:252 __init__.py:276
+msgid "<p>This reset link has already been used!</p>"
+msgstr ""
+
+#: __init__.py:259
+msgid "<p>Password reset, please log in!</p>"
+msgstr ""
+
+#: __init__.py:261 __init__.py:281 __init__.py:1582
+msgid "Malformed verification string!"
+msgstr ""
+
+#: __init__.py:264
+msgid "Password insufficiently long, please try again"
+msgstr ""
+
+#: __init__.py:266
+msgid "Please enter the email address you used to register"
+msgstr ""
+
+#: __init__.py:290
+msgid "You are already logged in!"
+msgstr ""
+
+#: __init__.py:293
+msgid "Missing email or password!"
+msgstr ""
+
+#: __init__.py:295
+msgid "Password too short!"
+msgstr ""
+
+#: __init__.py:310
+msgid ""
+"<p>You have successfully registered. A verification email has been sent "
+"to you. Now, please sign in!</p>"
+msgstr ""
+
+#: __init__.py:313
+msgid "Invalid email address!"
+msgstr ""
+
+#: __init__.py:315
+msgid "This email address has already registered"
+msgstr ""
+
+#: __init__.py:317
+msgid "Captcha failed! If you are human, please try again!"
+msgstr ""
+
+#: __init__.py:325
+msgid "You must be signed in to view your profile!"
+msgstr ""
+
+#: __init__.py:423
+msgid "I don't think that's very funny"
+msgstr ""
+
+#: __init__.py:426
+msgid ""
+"Savegame failed sanity check (if you think this is in error please let us"
+" know)"
+msgstr ""
+
+#: __init__.py:433
+msgid ""
+"Not valid save file - did you select file 'SaveGameInfo' instead of "
+"'playername_number'?"
+msgstr ""
+
+#: __init__.py:437
+msgid "Not well-formed xml"
+msgstr ""
+
+#: __init__.py:461
+msgid "Error occurred inserting information into the database!"
+msgstr ""
+
+#: __init__.py:873
+msgid "Save file incompatible with current database: error is "
+msgstr ""
+
+#: __init__.py:885 __init__.py:938
+msgid "There is nothing here... is this URL correct?"
+msgstr ""
+
+#: __init__.py:926
+msgid ""
+"<p>It looks like you have uploaded multiple files, but are not logged in:"
+" if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link"
+" these uploads, enable savegame sharing, and one-click-post farm renders "
+"to imgur!</p>"
+msgstr ""
+
+#: __init__.py:958
+msgid ""
+"This plan failed to render, probably because of a bug. It's logged and "
+"we'll look into it as soon as possible! Sorry!"
+msgstr ""
+
+#: __init__.py:1044
+msgid "Unknown or insufficient credentials"
+msgstr ""
+
+#: __init__.py:1075
+msgid "You do not own this farm"
+msgstr ""
+
+#: __init__.py:1086
+msgid "You do not own at least one of the farms"
+msgstr ""
+
+#: __init__.py:1107
+msgid "You do not have sufficient credentials to claim this page"
+msgstr ""
+
+#: __init__.py:1117
+msgid "You do not have sufficient credentials to claim one of these pages"
+msgstr ""
+
+#: __init__.py:1132
+msgid "You do not have sufficient credentials to perform this action"
+msgstr ""
+
+#: __init__.py:1147
+msgid ""
+"You have uploaded this page to imgur in the last 2 hours: please wait to "
+"upload again"
+msgstr ""
+
+#: __init__.py:1149
+msgid ""
+"There was an issue with uploading the file to imgur. Please try again "
+"later!"
+msgstr ""
+
+#: __init__.py:1156
+msgid ""
+"Either you or upload.farm are out of imgur credits for the day! Sorry :( "
+"Try again tomorrow"
+msgstr ""
+
+#: __init__.py:1159
+msgid "You must be logged in to post your farm to imgur!"
+msgstr ""
+
+#: __init__.py:1167
+msgid ""
+"<p>Sorry, the stardew.info planner API is over its rate limit: please try"
+" again in a few minutes!</p>"
+msgstr ""
+
+#: __init__.py:1171
+msgid "<p>There was a problem accessing the planner. Error was: {}</p>"
+msgstr ""
+
+#: __init__.py:1200
+msgid "You do not have the correct session information to perform this action!"
+msgstr ""
+
+#: __init__.py:1238
+msgid "Problem authenticating!"
+msgstr ""
+
+#: __init__.py:1240
+msgid "You are not logged in!"
+msgstr ""
+
+#: __init__.py:1377
+msgid "No browse with that ID!"
+msgstr ""
+
+#: __init__.py:1396
+msgid "Malformed request for entries!"
+msgstr ""
+
+#: __init__.py:1504 __init__.py:1506
+msgid "No blog with that ID!"
+msgstr ""
+
+#: __init__.py:1532
+msgid "URL does not exist"
+msgstr ""
+
+#: __init__.py:1534
+msgid "You are unable to download this farm data at this time."
+msgstr ""
+
+#: __init__.py:1555
+msgid "Problem authenticating at imgur!"
+msgstr ""
+
+#: __init__.py:1558
+msgid "Cannot connect to imgur if not logged in!"
+msgstr ""
+
+#: __init__.py:1571
+msgid "Account does not exist!"
+msgstr ""
+
+#: __init__.py:1574
+msgid "<p>Already confirmed email address!</p>"
+msgstr ""
+
+#: __init__.py:1580
+msgid "<p>Account email address confirmed!</p>"
+msgstr ""
+
+#: __init__.py:1593
+msgid "not logged in"
+msgstr ""
+
+#: templates/profile.html:5 templates/profile.html:9 templates/profile.html:16
+#: templates/profile.html:28
+#, python-format
+msgid "Summary of %(farmname)s Farm by %(name)s (Stardew Valley)"
+msgstr ""
+
+#: templates/profile.html:8 templates/profile.html:15 templates/profile.html:22
+#, python-format
+msgid "%(farmname)s Farm Summary - upload.farm"
+msgstr ""
+
+#: templates/profile.html:167
+#, python-format
+msgid "Go back to %(previous)s (left arrow on keyboard also works)"
+msgstr ""
+
+#: templates/profile.html:169
+#, python-format
+msgid "Go forward to %(next)s (right arrow on keyboard also works)"
+msgstr ""
+
+#: templates/profile.html:178
+msgid "Error:"
+msgstr ""
+
+#: templates/profile.html:181
+msgid "Warning:"
+msgstr ""
+
+#: templates/profile.html:181
+msgid ""
+"This farm failed image processing, which means the savegame had "
+"unexpected contents. It might be modded, or malicious. Be aware if "
+"downloading the savegame."
+msgstr ""
+
+#: templates/profile.html:217
+msgid "Stats"
+msgstr ""
+
+#: templates/profile.html:218
+msgid "Summary"
+msgstr ""
+
+#: templates/profile.html:219
+msgid "Skills"
+msgstr ""
+
+#: templates/profile.html:231
+msgid "Current Funds"
+msgstr ""
+
+#: templates/profile.html:232
+msgid "Total Earnings"
+msgstr ""
+
+#: templates/profile.html:233
+msgid "Gender"
+msgstr ""
+
+#: templates/profile.html:233
+msgid "Male"
+msgstr ""
+
+#: templates/profile.html:233
+msgid "Female"
+msgstr ""
+
+#: templates/profile.html:235
+msgid "Favorite Thing"
+msgstr ""
+
+#: templates/profile.html:236
+msgid "Health"
+msgstr ""
+
+#: templates/profile.html:237
+msgid "Stamina"
+msgstr ""
+
+#: templates/profile.html:238
+msgid "Steps Taken"
+msgstr ""
+
+#: templates/profile.html:240
+msgid "Mines Depth"
+msgstr ""
+
+#: templates/profile.html:240 templates/profile.html:241
+#: templates/profile.html:243
+msgid "level"
+msgstr ""
+
+#: templates/profile.html:241
+msgid "Cavern Depth"
+msgstr ""
+
+#: templates/profile.html:243
+msgid "Mine Depth"
+msgstr ""
+
+#: templates/profile.html:245
+msgid "Time Played"
+msgstr ""
+
+#: templates/profile.html:245
+msgid "hours"
+msgstr ""
+
+#: templates/profile.html:259
+msgid "is married to"
+msgstr ""
+
+#: templates/profile.html:259 templates/profile.html:262
+#: templates/profile.html:266
+msgid "and"
+msgstr ""
+
+#: templates/profile.html:262
+msgid "is unmarried"
+msgstr ""
+
+#: templates/profile.html:266
+msgid "has"
+msgstr ""
+
+#: templates/profile.html:266
+#, python-format
+msgid "a %(n)s day old"
+msgstr ""
+
+#: templates/profile.html:266
+msgid "son"
+msgstr ""
+
+#: templates/profile.html:266
+msgid "daughter"
+msgstr ""
+
+#: templates/profile.html:266 templates/profile.html:271
+msgid "named"
+msgstr ""
+
+#: templates/profile.html:268
+msgid "has no children"
+msgstr ""
+
+#: templates/profile.html:271
+msgid "and has a pet"
+msgstr ""
+
+#: templates/profile.html:271
+msgid "cat"
+msgstr ""
+
+#: templates/profile.html:271
+msgid "dog"
+msgstr ""
+
+#: templates/profile.html:280
+msgid "Farm horse:"
+msgstr ""
+
+#: templates/profile.html:286
+#, python-format
+msgid "%(n)s days old"
+msgstr ""
+
+#: templates/profile.html:385
+msgid "(Hover for professions)"
+msgstr ""
+

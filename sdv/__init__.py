@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify, make_response, send_from_directory, abort
+from flask_babel import Babel, _, gettext, ngettext
 from flask_recaptcha import ReCaptcha
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail, Message
@@ -79,7 +80,15 @@ def create_app(config_name=None):
     return app
 
 app = create_app()
+babel = Babel(app)
 
+@babel.localeselector
+def get_locale():
+    return 'es'
+
+@babel.timezoneselector
+def get_timezone():
+    return None
 
 def connect_db():
     return psycopg2.connect(app.database)
@@ -151,7 +160,7 @@ def check_user_pw(email,password_attempt):
     result = cur.fetchall()
     assert len(result) <= 1
     if len(result) == 0:
-        return {'result':False, 'error':'Username not found!'}
+        return {'result':False, 'error':_('Username not found!')}
     else:
         hash_type = _get_hash_type(result[0][1])
         if hash_type == 'sha1':
@@ -163,7 +172,7 @@ def check_user_pw(email,password_attempt):
         elif hash_type == 'bcrypt':
             password_valid = bcrypt.check_password_hash(result[0][1],password_attempt)
         else:
-            return {'result':False,'error':'Unable to interpret stored password hash!'}
+            return {'result':False,'error':_('Unable to interpret stored password hash!')}
         if password_valid == True:
             if result[0][2] == None:
                 auth_key = dec2big(random.randint(0,(2**128)))
@@ -174,11 +183,13 @@ def check_user_pw(email,password_attempt):
             session['logged_in_user']=(result[0][0],auth_key)
             return {'result':True}
         else:
-            return {'result':False,'error':'Incorrect password!'}
+            return {'result':False,'error':_('Incorrect password!')}
 
 
 def _get_hash_type(hashed_pw):
+    print(hashed_pw)
     split_hash = hashed_pw.split('$')
+    print(split_hash)
     if split_hash[0] == 'pbkdf2:sha1:1000':
         return 'sha1'
     elif split_hash[1] == '2b' and split_hash[0] == '':
@@ -195,13 +206,13 @@ def login():
         return redirect(url_for('home'))
     if request.method == 'POST':
         if 'email' not in request.form or 'password' not in request.form or request.form['email']=='':
-            g.error = 'Missing email or password for login!'
+            g.error = _('Missing email or password for login!')
         else:
             pw = check_user_pw(request.form['email'],request.form['password'])
             if pw['result'] != True:
                 g.error = pw['error']
             else:
-                flash({'message':'<p>Logged in successfully!</p>'})
+                flash({'message':'<p>'+_('Logged in successfully!')+'</p>'})
                 return redirect(url_for('home'))
     return render_template("login.html",**page_args())
 
@@ -216,9 +227,9 @@ def reset_password():
             cur.execute('SELECT id, email_confirmed FROM users WHERE email='+app.sqlesc,(request.form['email'],))
             result = cur.fetchall()
             if len(result) == 0:
-                g.error = 'Username not found!'
+                g.error = _('Username not found!')
             elif result[0][1] != True:
-                g.error = 'Email address not verified; please verify your account using the verification email sent when you registered before attempting to reset password!'
+                g.error = _('Email address not verified; please verify your account using the verification email sent when you registered before attempting to reset password!')
             else:
                 cur.execute('SELECT users.id FROM users WHERE email='+app.sqlesc+' AND NOT EXISTS (SELECT todo.id FROM todo WHERE todo.playerid=CAST(users.id AS text))',(request.form['email'],))
                 user_id = cur.fetchone()
@@ -227,9 +238,9 @@ def reset_password():
                     # db.commit()
                     add_task(user_id[0],'email_passwordreset')
                     emailDrone.process_email()
-                    flash({'message':'<p>Password reset email sent!</p>'})
+                    flash({'message':'<p>'+_('Password reset email sent!')+'</p>'})
                 else:
-                    flash({'message':'<p>Previous password reset email still waiting to be sent... (sorry)</p>'})
+                    flash({'message':'<p>'+_('Previous password reset email still waiting to be sent... (sorry)')+'</p>'})
                 return redirect(url_for('home'))
         elif 'password' in request.form and len(request.form['password'])>=	app.config['PASSWORD_MIN_LENGTH'] and 'id' in request.form and 'pw_reset_token' in request.form:
             db = get_db()
@@ -237,39 +248,39 @@ def reset_password():
             cur.execute('SELECT pw_reset_token, id FROM users WHERE id='+app.sqlesc,(request.form['id'],))
             t = cur.fetchall()
             if len(t) == 0:
-                g.error = 'Cannot reset password: account does not exist'
+                g.error = _('Cannot reset password: account does not exist')
                 return render_template('error.html',**page_args())
             elif t[0][0] == None:
-                flash({'message':'<p>This reset link has already been used!</p>'})
+                flash({'message':'<p>'+_('This reset link has already been used!</p>')+'</p>'})
                 return redirect(url_for('home'))
             else:
                 if t[0][0] == request.args.get('t'):
                     new_hash = bcrypt.generate_password_hash(request.form['password'])
                     cur.execute('UPDATE users SET password='+app.sqlesc+', pw_reset_token=NULL WHERE id='+app.sqlesc,(new_hash,request.form['id']))
                     db.commit()
-                    flash({'message':'<p>Password reset, please log in!</p>'})
+                    flash({'message':'<p>'+_('Password reset, please log in!')+'</p>'})
                     return redirect(url_for('login'))
-            g.error = 'Malformed verification string!'
+            g.error = _('Malformed verification string!')
             return render_template('error.html',**page_args())
         elif 'password' in request.form and len(request.form['password'])< app.config['PASSWORD_MIN_LENGTH']:
-            g.error = 'Password insufficiently long, please try again'
+            g.error = _('Password insufficiently long, please try again')
         else:
-            g.error = 'Please enter the email address you used to register'
+            g.error = _('Please enter the email address you used to register')
     if 'i' in request.args and 't' in request.args:
         db = get_db()
         cur = db.cursor()
         cur.execute('SELECT pw_reset_token, email, id FROM users WHERE id='+app.sqlesc,(request.args.get('i'),))
         t = cur.fetchall()
         if len(t) == 0:
-            g.error = 'Cannot reset password: account does not exist'
+            g.error = _('Cannot reset password: account does not exist')
             return render_template('error.html',**page_args())
         elif t[0][0] == None:
-            flash({'message':'<p>This reset link has already been used!</p>'})
+            flash({'message':'<p>'+_('This reset link has already been used!')+'</p>'})
             return redirect(url_for('home'))
         else:
             if t[0][0] == request.args.get('t'):
                 return render_template("reset.html",details=t[0],**page_args())
-        g.error = 'Malformed verification string!'
+        g.error = _('Malformed verification string!')
         return render_template('error.html',**page_args())
     return render_template("reset.html",**page_args())
 
@@ -278,12 +289,12 @@ def reset_password():
 def signup():
     page_init()
     if 'logged_in_user' in session:
-        g.error = 'You are already logged in!'
+        g.error = _('You are already logged in!')
     elif request.method == 'POST':
         if 'email' not in request.form or 'password' not in request.form or request.form['email']=='':
-            g.error = 'Missing email or password!'
+            g.error = _('Missing email or password!')
         elif len(request.form['password'])<app.config['PASSWORD_MIN_LENGTH']:
-            g.error = 'Password too short!'
+            g.error = _('Password too short!')
         else:
             if recaptcha.verify():
                 db = get_db()
@@ -298,14 +309,14 @@ def signup():
                         # db.commit()
                         add_task(user_id,'email_confirmation')
                         emailDrone.process_email()
-                        flash({'message':'<p>You have successfully registered. A verification email has been sent to you. Now, please sign in!</p>'})
+                        flash({'message':'<p>'+_('You have successfully registered. A verification email has been sent to you. Now, please sign in!')+'</p>'})
                         return redirect(url_for('login'))
                     else:
-                        g.error = 'Invalid email address!'
+                        g.error = _('Invalid email address!')
                 else:
-                    g.error = 'This email address has already registered'
+                    g.error = _('This email address has already registered')
             else:
-                g.error = 'Captcha failed! If you are human, please try again!'
+                g.error = _('Captcha failed! If you are human, please try again!')
     return render_template("signup.html",**page_args())
 
 
@@ -313,7 +324,7 @@ def signup():
 def account_page():
     page_init()
     if not logged_in():
-        g.error = 'You must be signed in to view your profile!'
+        g.error = _('You must be signed in to view your profile!')
         return render_template("login.html",**page_args())
     else:
         user = get_logged_in_user()
@@ -411,28 +422,27 @@ def file_uploaded(inputfile):
         save = savefile(memfile.getvalue(), True)
         player_info = playerInfo(save)
     except defusedxml.common.EntitiesForbidden:
-        g.error = "I don't think that's very funny"
+        g.error = _("I don't think that's very funny")
         return {'type':'render','target':'index.html','parameters':{"error":g.error}}
     except IOError:
-        g.error = "Savegame failed sanity check (if you think this is in error please let us know)"
+        g.error = _("Savegame failed sanity check (if you think this is in error please let us know)")
         db = get_db()
         cur = db.cursor()
         cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(secure_filename(inputfile.filename))))
         db.commit()
         return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
     except AttributeError as e:
-        g.error = "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
+        g.error = _("Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?")
         # print(e)
         return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
     except ParseError as e:
-        g.error = "Not well-formed xml"
+        g.error = _("Not well-formed xml")
         return {'type':'render','target':'index.html','parameters':{"error":g.error}}
     dupe = is_duplicate(md5_info,player_info)
     if dupe != False:
         session[dupe[0]] = md5_info
         session[dupe[0]+'del_token'] = dupe[1]
         return {'type':'redirect','target':'display_data','parameters':{"url":dupe[0]}}
-        return redirect(url_for('display_data',url=dupe[0]))
     else:
         farm_info = getFarmInfo(save)
         outcome, del_token, rowid, g.error = insert_info(player_info,farm_info,md5_info)
@@ -450,7 +460,7 @@ def file_uploaded(inputfile):
             db.commit()
         else:
             if g.error == None:
-                g.error = "Error occurred inserting information into the database!"
+                g.error = _("Error occurred inserting information into the database!")
             return {'type':'render','target':'index.html','parameters':{"error":g.error}}
         imageDrone.process_queue()
         memfile.close()
@@ -644,7 +654,7 @@ def check_for_duplicate(plan_json,season):
         return None, md5_value
 
 '''
-# DEPRECIATED 'API' CODE
+# DEPRECATED 'API' CODE
 # left in as reminder of how it worked; remove once new api complete
 
 @app.route('/_uploader',methods=['GET','POST'])
@@ -862,7 +872,7 @@ def insert_info(player_info,farm_info,md5_info):
         db.rollback()
         cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'], time.time(),str(e)+' '+json.dumps([columns,values])))
         db.commit()
-        return False, del_token, False, "Save file incompatible with current database: error is "+str(e)
+        return False, del_token, False, _("Save file incompatible with current database: error is ")+str(e)
 
 
 @app.route('/<url>')
@@ -874,7 +884,7 @@ def display_data(url):
     cur.execute('SELECT '+database_fields+' FROM playerinfo WHERE url='+app.sqlesc+'',(url,))
     data = cur.fetchall()
     if len(data) != 1:
-        g.error = 'There is nothing here... is this URL correct?'
+        g.error = _('There is nothing here... is this URL correct?')
         if str(url) != 'favicon.ico':
             cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),str(len(data))+' cur.fetchall() for url:'+str(url)))
             db.commit()
@@ -915,7 +925,7 @@ def display_data(url):
         claimables = find_claimables()
         vote = json.dumps({url:get_votes(url)})
         if logged_in() == False and len(claimables) > 1 and request.cookies.get('no_signup')!='true':
-            flash({'message':"<p>It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!</p>".format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
+            flash({'message':'<p>'+_("It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!")+'</p>'.format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
         return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote,data=datadict, kills=kills, friendships=friendships, others=other_saves, gallery_set=gallery_set, **page_args())
 
 
@@ -927,7 +937,7 @@ def display_plan(url):
     cur.execute('SELECT id, planner_url, image_url, render_deleted, season, failed_render FROM plans WHERE url='+app.sqlesc+'',(url,))
     data = cur.fetchall()
     if len(data) != 1:
-        g.error = 'There is nothing here... is this URL correct?'
+        g.error = _('There is nothing here... is this URL correct?')
         if str(url) != 'favicon.ico':
             cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),str(len(data))+' cur.fetchall() for planner url:'+str(url)))
             db.commit()
@@ -947,7 +957,7 @@ def display_plan(url):
             db.commit()
             return render_template("plan.html", url=url, planner_url=planner_url, season=season, image_url=image_url, render_deleted=render_deleted, **page_args())
         else:
-            g.error = "This plan failed to render, probably because of a bug. It's logged and we'll look into it as soon as possible! Sorry!"
+            g.error = _("This plan failed to render, probably because of a bug. It's logged and we'll look into it as soon as possible! Sorry!")
             return(render_template("error.html", **page_args()))
 
 
@@ -1033,7 +1043,7 @@ def operate_on_url(url,instruction):
                 return _op_toggle_boolean_param(url,'private',False)
             elif instruction == 'unlist':
                 return _op_toggle_boolean_param(url,'private',True)
-        g.error = "Unknown or insufficient credentials"
+        g.error = _("Unknown or insufficient credentials")
         return render_template("error.html", **page_args())
     else:
         return redirect(url_for('display_data',url=url))
@@ -1064,7 +1074,7 @@ def _op_del(url):
         else:
             g.error = outcome
     else:
-        g.error = 'You do not own this farm'
+        g.error = _('You do not own this farm')
     return render_template("error.html", **page_args())
 
 
@@ -1075,7 +1085,7 @@ def _op_delall(url):
     data = cur.fetchall()
     for row in data:
         if str(row[1]) != str(get_logged_in_user()):
-            g.error = 'You do not own at least one of the farms'
+            g.error = _('You do not own at least one of the farms')
             return render_template("error.html", **page_args())
     # verified logged_in_user owns all farms
     for row in data:
@@ -1096,7 +1106,7 @@ def _op_claim(url):
         else:
             g.error = outcome
     else:
-        g.error = 'You do not have sufficient credentials to claim this page'
+        g.error = _('You do not have sufficient credentials to claim this page')
     return render_template("error.html", **page_args())
 
 
@@ -1106,7 +1116,7 @@ def _op_claimall(url):
     for rowid, claim_url in find_claimables():
         outcome = claim_playerinfo_entry(claim_url,session[claim_url],session[claim_url+'del_token'])
         if outcome != True:
-            g.error = 'You do not have sufficient credentials to claim one of these pages'
+            g.error = _('You do not have sufficient credentials to claim one of these pages')
     return redirect(url_for('display_data',url=url))
 
 
@@ -1121,7 +1131,7 @@ def _op_toggle_boolean_param(url,param,state):
         db.commit()
         return redirect(url_for('display_data',url=url))
     else:
-        g.error = 'You do not have sufficient credentials to perform this action'
+        g.error = _('You do not have sufficient credentials to perform this action')
         return render_template("error.html", **page_args())
 
 
@@ -1136,19 +1146,19 @@ def _op_imgur_post(url):
                 return redirect(result['link'])
             elif 'error' in result:
                 if result['error'] == 'too_soon':
-                    g.error = 'You have uploaded this page to imgur in the last 2 hours: please wait to upload again'
+                    g.error = _('You have uploaded this page to imgur in the last 2 hours: please wait to upload again')
                 elif result['error'] == 'upload_issue':
-                    g.error = 'There was an issue with uploading the file to imgur. Please try again later!'
+                    g.error = _('There was an issue with uploading the file to imgur. Please try again later!')
             else:
                 g.error = 'There was an unknown error!'
             return render_template("error.html", **page_args())
         elif check_access == False:
             return redirect(imgur.getAuthUrl(get_logged_in_user(),target=request.path))
         elif check_access == None:
-            g.error = 'Either you or upload.farm are out of imgur credits for the day! Sorry :( Try again tomorrow'
+            g.error = _('Either you or upload.farm are out of imgur credits for the day! Sorry :( Try again tomorrow')
             return render_template("error.html", **page_args())
     else:
-        g.error = "You must be logged in to post your farm to imgur!"
+        g.error = _("You must be logged in to post your farm to imgur!")
         return render_template("signup.html", **page_args())
 
 def _op_planner(url):
@@ -1156,11 +1166,11 @@ def _op_planner(url):
     if result['status'] == 'success':
         return redirect(result['planner_url'])
     elif result['status'] == 'over_rate_limit':
-        flash({'message':'<p>Sorry, the stardew.info planner API is over its rate limit: please try again in a few minutes!</p>'})
+        flash({'message':'<p>'+_('Sorry, the stardew.info planner API is over its rate limit: please try again in a few minutes!')+'</p>'})
         return redirect(url_for('display_data',url=url))
         # return render_template("error.html",**page_args())
     else:
-        flash({'message':'<p>There was a problem accessing the planner. Error was: {}</p>'.format(result['status'])})
+        flash({'message':'<p>'+_('There was a problem accessing the planner. Error was: {}')+'</p>'.format(result['status'])})
         return redirect(url_for('display_data',url=url))
 
 def delete_playerinfo_entry(url,md5,del_token):
@@ -1189,7 +1199,7 @@ def delete_playerinfo_entry(url,md5,del_token):
         session.pop(url+'del_token', None)
         return True
     else:
-        return 'You do not have the correct session information to perform this action!'
+        return _('You do not have the correct session information to perform this action!')
 
 
 def remove_series_link(rowid, series_id):
@@ -1227,9 +1237,9 @@ def claim_playerinfo_entry(url,md5,del_token):
             db.commit()
             return True
         else:
-            return 'Problem authenticating!'
+            return _('Problem authenticating!')
     else:
-        return 'You are not logged in!'
+        return _('You are not logged in!')
 
 
 @app.route('/admin',methods=['GET','POST'])
@@ -1366,7 +1376,7 @@ def allmain():
     except TypeError:
         arguments['offset'] = 0
     except:
-        g.error = "No browse with that ID!"
+        g.error = _("No browse with that ID!")
         return render_template('error.html',**page_args())
     if arguments['offset'] < 0:
         return redirect(url_for('allmain'))
@@ -1385,7 +1395,7 @@ def allmain():
     try:
         entries = get_entries(num_entries,**arguments)
     except:
-        g.error = 'Malformed request for entries!'
+        g.error = _('Malformed request for entries!')
         return render_template('error.html',**page_args())
     if entries['total']<=arguments['offset'] and entries['total']>0:
         return redirect(url_for('allmain'))
@@ -1493,9 +1503,9 @@ def blogindividual(id):
             blogposts = {'posts':(blogdata,),'total':1}
             return render_template('blog.html',full=True,offset=0,recents=get_recents(),blogposts=blogposts,**page_args())
         else:
-            g.error = "No blog with that ID!"
+            g.error = _("No blog with that ID!")
     except:
-        g.error = "No blog with that ID!"
+        g.error = _("No blog with that ID!")
     return render_template('error.html',**page_args())
 
 
@@ -1521,9 +1531,9 @@ def retrieve_file(url):
             response.headers["Content-Disposition"] = "attachment; filename="+str(result[1])+'_'+str(result[2])
             return response
         else:
-            g.error = "URL does not exist"
+            g.error = _("URL does not exist")
     else:
-        g.error = "You are unable to download this farm data at this time."
+        g.error = _("You are unable to download this farm data at this time.")
     return render_template('error.html',**page_args())
 
 
@@ -1544,10 +1554,10 @@ def get_imgur_auth_code():
             if result['success']==True:
                 return redirect(result['redir'])
             else:
-                g.error = "Problem authenticating at imgur!"
+                g.error = _("Problem authenticating at imgur!")
                 return render_template('error.html',**page_args())
     else:
-        g.error = "Cannot connect to imgur if not logged in!"
+        g.error = _("Cannot connect to imgur if not logged in!")
         return render_template('error.html',**page_args())
 
 
@@ -1560,18 +1570,18 @@ def verify_email():
         cur.execute('SELECT email_conf_token, email_confirmed FROM users WHERE id='+app.sqlesc,(request.args.get('i'),))
         t = cur.fetchall()
         if len(t) == 0:
-            g.error = 'Account does not exist!'
+            g.error = _('Account does not exist!')
             return render_template('error.html',**page_args())
         elif t[0][1] == True:
-            flash({'message':'<p>Already confirmed email address!</p>'})
+            flash({'message':'<p>'+_('Already confirmed email address!')+'</p>'})
             return redirect(url_for('home'))
         else:
             if t[0][0] == request.args.get('t'):
                 cur.execute('UPDATE users SET email_confirmed='+app.sqlesc+' WHERE id='+app.sqlesc,(True,request.args.get('i')))
                 db.commit()
-                flash({'message':"<p>Account email address confirmed!</p>"})
+                flash({'message':'<p>'+_("Account email address confirmed!")+'</p>'})
                 return redirect(url_for('home'))
-    g.error = 'Malformed verification string!'
+    g.error = _('Malformed verification string!')
     return render_template('error.html',**page_args())
 
 
@@ -1582,7 +1592,7 @@ def submit_vote():
             if 'vote' in request.form:
                 return json.dumps(handle_vote(get_logged_in_user(),request.form))
     else:
-        return 'not logged in'
+        return _('not logged in')
 
 
 def handle_vote(logged_in_user,vote_info):
