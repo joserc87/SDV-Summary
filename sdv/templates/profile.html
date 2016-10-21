@@ -257,7 +257,6 @@ $(document).ready(function() {
 									<p>
 									{% if data.portrait_info['partner'] != None %}
 										<b>{{data.name}}</b> {{_('is married to')}} <b>{{ data.portrait_info['partner'] }}</b>{%if data.petName!=None%}, {%else%}{{ _('and') }}{%endif%}
-										}
 									{% else %}
 										<b>{{data.name}}</b> {{_('is unmarried')}}{%if data.petName!=None%},{%else%} {{ _('and') }}{%endif%}
 									{%endif%}
