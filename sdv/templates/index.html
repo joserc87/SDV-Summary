@@ -37,14 +37,14 @@
 			<div class="col-md-12" style="padding-left:2%;padding-right:2%;">
 				<div class="form-group">
 					<form enctype="multipart/form-data" action="" method="post">
-						<label for="uploadFarm" class="sr-only">Upload your farm</label>
+						<label for="uploadFarm" class="sr-only">{{_("Upload your farm")}}</label>
 						<div class="input-group">
 							<input class="form-control input-lg" id="uploadFarm" type="file" name="file" describedby="helpBlock">
 							<span class="input-group-btn">
-								<button class="btn btn-primary btn-lg" type="submit" describedby="helpBlock" onclick="ga('send', 'event', 'saveFile', 'upload');">Upload!</button>
+								<button class="btn btn-primary btn-lg" type="submit" describedby="helpBlock" onclick="ga('send', 'event', 'saveFile', 'upload');">{{_("Upload!")}}</button>
 							</span>
-						</div>
-						<span id="helpBlock" class="help-block text-center"><a href="http://stardewvalley.net">Stardew Valley</a> save files can be found under <code>%APPDATA%\StardewValley\Saves</code> and are named after your character, plus an ID number</span>
+						</div>{% autoescape false %}
+						<span id="helpBlock" class="help-block text-center">{{_("%(stardew_valley)s save files can be found under %(appdata)s and are named after your character, plus an ID number",stardew_valley='<a href="http://stardewvalley.net">Stardew Valley</a>',appdata='<code>%APPDATA%\StardewValley\Saves</code>')}}</span>{% endautoescape %}
 					</form>
 				</div>
 			</div>
@@ -52,7 +52,7 @@
 		{% if error %}
 			<div class="row">
 				<div class="col-md-12">
-					<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+					<p class="text-danger text-center"><strong>{{_("Error:")}}</strong> {{ error }}</p>
 				</div>
 			</div>
 		{% endif %}
@@ -61,11 +61,11 @@
 <div class="row center-block panel lead">	
 	<div class="interiorpanel">
 		<div class="col-md-12">
-			<div class="hidden-xs"><h3><a href="/all" class="titlelink">Recently uploaded farms</a></h3></div>
-			<div class="hidden-lg hidden-md hidden-sm"><h3><a href="/all" class="titlelink">Recent uploads</a></h3></div>
+			<div class="hidden-xs"><h3><a href="/all" class="titlelink">{{_("Recently uploaded farms")}}</a></h3></div>
+			<div class="hidden-lg hidden-md hidden-sm"><h3><a href="/all" class="titlelink">{{_("Recent uploads")}}</a></h3></div>
 			{% include "recents.html" %}
 			{% if recents.total > 6 %}
-				<div class="text-center"><p><a href="/all">more</a></p></div>
+				<div class="text-center"><p><a href="/all">{{_("more")}}</a></p></div>
 			{% endif %}
 		</div>
 	</div>
@@ -74,7 +74,7 @@
 	<div class="interiorpanel">
 		<div class="col-md-12">
 			<div class="adminpanelitem">
-				<h3><a href="/blog" class="titlelink">Development blog</a></h3>
+				<h3><a href="/blog" class="titlelink">{{_("Development blog")}}</a></h3>
 			{% include "blogcontent.html" %}
 			</div>
 		</div>

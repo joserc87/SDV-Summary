@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-10-20 17:58+0100\n"
-"PO-Revision-Date: 2016-10-20 17:58+0100\n"
+"POT-Creation-Date: 2016-10-21 16:15+0100\n"
+"PO-Revision-Date: 2016-10-21 16:15+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
 "Language-Team: es <LL@li.org>\n"
@@ -18,255 +18,714 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: __init__.py:163 __init__.py:228
+#: __init__.py:163 __init__.py:230
 msgid "Username not found!"
-msgstr ""
+msgstr "¡Usario no encontrado!"
 
 #: __init__.py:175
 msgid "Unable to interpret stored password hash!"
-msgstr ""
+msgstr "¡Incapaz de interpretar hash de la contraseña almacenada!"
 
 #: __init__.py:186
 msgid "Incorrect password!"
-msgstr ""
+msgstr "¡Contraseña incorrecta!"
 
-#: __init__.py:207
+#: __init__.py:209
 msgid "Missing email or password for login!"
-msgstr ""
+msgstr "Falta el correo electrónico o la contraseña para iniciar sesión"
 
-#: __init__.py:213
-msgid "<p>Logged in successfully!</p>"
-msgstr ""
+#: __init__.py:215
+msgid "Logged in successfully!"
+msgstr "Conectado con éxito"
 
-#: __init__.py:230
+#: __init__.py:232
 msgid ""
 "Email address not verified; please verify your account using the "
 "verification email sent when you registered before attempting to reset "
 "password!"
 msgstr ""
-
-#: __init__.py:239
-msgid "<p>Password reset email sent!</p>"
-msgstr ""
+"El correo electronico no ha sido verificada; por favor, ¡verifica "
+"su cuenta usando el correo electrónico de verificación enviado cuando se "
+"registró antes de intentar restablecer la contraseña!"
 
 #: __init__.py:241
-msgid "<p>Previous password reset email still waiting to be sent... (sorry)</p>"
-msgstr ""
+msgid "Password reset email sent!"
+msgstr "¡Correo electrónico de restablecimiento enviada!"
 
-#: __init__.py:249 __init__.py:273
+#: __init__.py:243
+msgid "Previous password reset email still waiting to be sent... (sorry)"
+msgstr "Anterior contraseña de correo electrónico de restablecimiento en espera de ser enviado"
+
+#: __init__.py:251 __init__.py:275
 msgid "Cannot reset password: account does not exist"
-msgstr ""
+msgstr "No se puede restablecer la contraseña: cuenta no existe"
 
-#: __init__.py:252 __init__.py:276
-msgid "<p>This reset link has already been used!</p>"
-msgstr ""
+#: __init__.py:254
+msgid "This reset link has already been used!</p>"
+msgstr "¡Este enlace de restablecimiento ya se ha utilizado!</p>"
 
-#: __init__.py:259
-msgid "<p>Password reset, please log in!</p>"
-msgstr ""
+#: __init__.py:261
+msgid "Password reset, please log in!"
+msgstr "¡Contraseña restablecida, ya puede iniciar sesión!"
 
-#: __init__.py:261 __init__.py:281 __init__.py:1582
+#: __init__.py:263 __init__.py:283 __init__.py:1584
 msgid "Malformed verification string!"
-msgstr ""
-
-#: __init__.py:264
-msgid "Password insufficiently long, please try again"
-msgstr ""
+msgstr "¡Secuencia de verificación de formato incorrecto!"
 
 #: __init__.py:266
+msgid "Password insufficiently long, please try again"
+msgstr "Contraseña suficientemente largo, por favor intente de nuevo"
+
+#: __init__.py:268
 msgid "Please enter the email address you used to register"
-msgstr ""
+msgstr "Por favor, introduzca la dirección de correo electrónico que utilizó para registrarse"
 
-#: __init__.py:290
+#: __init__.py:278
+msgid "This reset link has already been used!"
+msgstr "¡Este enlace de restablecimiento ya se ha utilizado!"
+
+#: __init__.py:292
 msgid "You are already logged in!"
-msgstr ""
-
-#: __init__.py:293
-msgid "Missing email or password!"
-msgstr ""
+msgstr "¡Ya se ha autentificado!"
 
 #: __init__.py:295
+msgid "Missing email or password!"
+msgstr "¡Falta el dirección de correo electrónico o contraseña!"
+
+#: __init__.py:297
 msgid "Password too short!"
-msgstr ""
+msgstr "¡Contraseña demasiado corta!"
 
-#: __init__.py:310
+#: __init__.py:312
 msgid ""
-"<p>You have successfully registered. A verification email has been sent "
-"to you. Now, please sign in!</p>"
+"You have successfully registered. A verification email has been sent to "
+"you. Now, please sign in!"
 msgstr ""
-
-#: __init__.py:313
-msgid "Invalid email address!"
-msgstr ""
+"Se ha registrado con éxito. Un mensaje de verificación ha sido enviada a "
+"usted. Ahora, por favor, ¡inicie sesión!"
 
 #: __init__.py:315
-msgid "This email address has already registered"
-msgstr ""
+msgid "Invalid email address!"
+msgstr "Dirección de correo electrónico invalida"
 
 #: __init__.py:317
+msgid "This email address has already registered"
+msgstr "Esta dirección de correo electrónico ya ha registrado"
+
+#: __init__.py:319
 msgid "Captcha failed! If you are human, please try again!"
-msgstr ""
+msgstr "¡Código de imagen erroneo! Si eres un ser humano, por favor intente de nuevo!"
 
-#: __init__.py:325
+#: __init__.py:327
 msgid "You must be signed in to view your profile!"
-msgstr ""
+msgstr "¡Debe estar autenticado para ver tu perfil!"
 
-#: __init__.py:423
+#: __init__.py:425
 msgid "I don't think that's very funny"
-msgstr ""
+msgstr "No creo que eso es muy divertido"
 
-#: __init__.py:426
+#: __init__.py:428
 msgid ""
 "Savegame failed sanity check (if you think this is in error please let us"
 " know)"
 msgstr ""
+"Guardar archivo partida no comprobación de validez (si usted piensa que esto "
+"es un error, por favor sepamos)"
 
-#: __init__.py:433
+#: __init__.py:435
 msgid ""
 "Not valid save file - did you select file 'SaveGameInfo' instead of "
 "'playername_number'?"
-msgstr ""
+msgstr "Archivo no es válido - ¿Ha seleccionado 'SaveGameInfo' en lugar de 'jugador_numeros'?"
 
-#: __init__.py:437
+#: __init__.py:439
 msgid "Not well-formed xml"
-msgstr ""
+msgstr "No XML bien formado"
 
-#: __init__.py:461
+#: __init__.py:463
 msgid "Error occurred inserting information into the database!"
-msgstr ""
+msgstr "¡Un error ocurrió la inserción de información en la base de datos!"
 
-#: __init__.py:873
+#: __init__.py:875
 msgid "Save file incompatible with current database: error is "
-msgstr ""
+msgstr "Guardar archivo incompatible con la base de datos actual: error es "
 
-#: __init__.py:885 __init__.py:938
+#: __init__.py:887 __init__.py:940
 msgid "There is nothing here... is this URL correct?"
-msgstr ""
+msgstr "No hay nada aquí... ¿es este URL correcta?"
 
-#: __init__.py:926
+#: __init__.py:928
 msgid ""
-"<p>It looks like you have uploaded multiple files, but are not logged in:"
-" if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link"
-" these uploads, enable savegame sharing, and one-click-post farm renders "
-"to imgur!</p>"
+"It looks like you have uploaded multiple files, but are not logged in: if"
+" you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link "
+"these uploads, enable savegame sharing, and one-click-post farm renders "
+"to imgur!"
 msgstr ""
+"Parece que has subido varios archivos, pero no está conectado: si <a href='{}'>regístrate</a> "
+"o <a href='{}'>iniciar sesión</a> que pueda vincular estos archivos, habilitar el uso " "compartido de partidas guardadas, y la granja de un solo clic post presta a imgur!"
 
-#: __init__.py:958
+
+#: __init__.py:960
 msgid ""
 "This plan failed to render, probably because of a bug. It's logged and "
 "we'll look into it as soon as possible! Sorry!"
-msgstr ""
+msgstr "Este plan no se pudo presentar, probablemente debido a un error. Se registra y vamos a mirar en él tan pronto como sea posible! ¡Lo siento!"
 
-#: __init__.py:1044
+#: __init__.py:1046
 msgid "Unknown or insufficient credentials"
-msgstr ""
+msgstr "Credenciales desconocida o insuficiente"
 
-#: __init__.py:1075
+#: __init__.py:1077
 msgid "You do not own this farm"
-msgstr ""
+msgstr "Usted no es dueño de esta granja"
 
-#: __init__.py:1086
+#: __init__.py:1088
 msgid "You do not own at least one of the farms"
-msgstr ""
+msgstr "Usted no es dueño de al menos una de estas granjas"
 
-#: __init__.py:1107
+#: __init__.py:1109
 msgid "You do not have sufficient credentials to claim this page"
-msgstr ""
+msgstr "Usted no tiene credenciales suficientes para reclamar esta página"
 
-#: __init__.py:1117
+#: __init__.py:1119
 msgid "You do not have sufficient credentials to claim one of these pages"
-msgstr ""
+msgstr "Usted no tiene credenciales suficientes para reclamar una de estas páginas"
 
-#: __init__.py:1132
+#: __init__.py:1134
 msgid "You do not have sufficient credentials to perform this action"
-msgstr ""
+msgstr "Usted no tiene credenciales suficientes para realizar esta acción"
 
-#: __init__.py:1147
+#: __init__.py:1149
 msgid ""
 "You have uploaded this page to imgur in the last 2 hours: please wait to "
 "upload again"
 msgstr ""
+"Ha cargado esta página a imgur en las últimas 2 horas: por favor espere a "
+"cargar de nuevo"
 
-#: __init__.py:1149
+#: __init__.py:1151
 msgid ""
 "There was an issue with uploading the file to imgur. Please try again "
 "later!"
-msgstr ""
+msgstr "Hubo un problema con la posibilidad de subir el archivo a Imgur. ¡Por favor, inténtelo de nuevo más tarde!"
 
-#: __init__.py:1156
+#: __init__.py:1158
 msgid ""
 "Either you or upload.farm are out of imgur credits for the day! Sorry :( "
 "Try again tomorrow"
-msgstr ""
+msgstr "Usted o upload.farm está fuera de Imgur créditos para el día! Lo sentimos :( Inténtelo de nuevo mañana"
 
-#: __init__.py:1159
+#: __init__.py:1161
 msgid "You must be logged in to post your farm to imgur!"
-msgstr ""
+msgstr "Usted debe ser conectado para publicar su granja para imgur!"
 
-#: __init__.py:1167
+#: __init__.py:1169
 msgid ""
-"<p>Sorry, the stardew.info planner API is over its rate limit: please try"
-" again in a few minutes!</p>"
-msgstr ""
+"Sorry, the stardew.info planner API is over its rate limit: please try "
+"again in a few minutes!"
+msgstr "Lo sentimos, la API planificador stardew.info está por encima de su límite de velocidad: por favor intente nuevamente en unos minutos!"
 
-#: __init__.py:1171
-msgid "<p>There was a problem accessing the planner. Error was: {}</p>"
-msgstr ""
+#: __init__.py:1173
+msgid "There was a problem accessing the planner. Error was: {}"
+msgstr "Hubo un problema de acceso al planificador. Hubo un error: {}"
 
-#: __init__.py:1200
+#: __init__.py:1202
 msgid "You do not have the correct session information to perform this action!"
-msgstr ""
-
-#: __init__.py:1238
-msgid "Problem authenticating!"
-msgstr ""
+msgstr "No tiene la información de sesión correcto para realizar esta acción!"
 
 #: __init__.py:1240
+msgid "Problem authenticating!"
+msgstr "Autentica problema!"
+
+#: __init__.py:1242
 msgid "You are not logged in!"
-msgstr ""
+msgstr "No esta autenticada!"
 
-#: __init__.py:1377
+#: __init__.py:1379
 msgid "No browse with that ID!"
-msgstr ""
+msgstr "No hay explora con ese numero de identificación!"
 
-#: __init__.py:1396
+#: __init__.py:1398
 msgid "Malformed request for entries!"
-msgstr ""
+msgstr "Solicitud mal formada para las entradas"
 
-#: __init__.py:1504 __init__.py:1506
+#: __init__.py:1506 __init__.py:1508
 msgid "No blog with that ID!"
-msgstr ""
-
-#: __init__.py:1532
-msgid "URL does not exist"
-msgstr ""
+msgstr "No hay blog con ese numero de identificación!"
 
 #: __init__.py:1534
+msgid "URL does not exist"
+msgstr "URL no existe"
+
+#: __init__.py:1536
 msgid "You are unable to download this farm data at this time."
-msgstr ""
+msgstr "No puede descargar este granja en este momento."
 
-#: __init__.py:1555
+#: __init__.py:1557
 msgid "Problem authenticating at imgur!"
-msgstr ""
+msgstr "Problema autenticar al imgur!"
 
-#: __init__.py:1558
+#: __init__.py:1560
 msgid "Cannot connect to imgur if not logged in!"
-msgstr ""
+msgstr "No puede conectar con imgur si no está autenticada!"
 
-#: __init__.py:1571
+#: __init__.py:1573
 msgid "Account does not exist!"
-msgstr ""
+msgstr "Cuenta no existe"
 
-#: __init__.py:1574
-msgid "<p>Already confirmed email address!</p>"
-msgstr ""
+#: __init__.py:1576
+msgid "Already confirmed email address!"
+msgstr "Dirección de correo electrónico ya esta confirmada!"
 
-#: __init__.py:1580
-msgid "<p>Account email address confirmed!</p>"
-msgstr ""
+#: __init__.py:1582
+msgid "Account email address confirmed!"
+msgstr "Dirección de correo electrónico confirmada!"
 
-#: __init__.py:1593
+#: __init__.py:1595
 msgid "not logged in"
+msgstr "sesión no iniciada"
+
+#: templates/account.html:13 templates/titlebar.html:22
+msgid "Account"
+msgstr "Cuenta"
+
+#: templates/account.html:21
+msgid "Account info"
+msgstr "Información de cuenta"
+
+#: templates/account.html:22
+#, python-format
+msgid "Email: %(email)s"
+msgstr "Correo electrónico: %(email)s"
+
+#: templates/account.html:23
+msgid "Imgur: "
+msgstr "Imgur: "
+
+#: templates/account.html:24
+#, python-format
+msgid "Logged in as %(username)s"
+msgstr "Sesión iniciada como %(username)s"
+
+#: templates/account.html:25
+msgid "connect to imgur"
+msgstr "conecta a imgur"
+
+#: templates/account.html:27
+msgid "Browse my liked farms"
+msgstr "Explorar mis granjas gustado"
+
+#: templates/account.html:32
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: templates/account.html:33
+msgid "Upload default: "
+msgstr "Subir por defecto: "
+
+#: templates/account.html:33
+msgid "Change to listed?"
+msgstr "¿Cambia a listada?"
+
+#: templates/account.html:33
+msgid ""
+"This will allow new uploads it to appear in searches on the site by "
+"default"
+msgstr "Esto permitirá que las nuevas subidas que aparezca en las búsquedas en el sitio por defecto"
+
+#: templates/account.html:33
+msgid "Change&nbsp;to&nbsp;listed!"
+msgstr "¡Cambia&nbsp;a&nbsp;listada!"
+
+#: templates/account.html:33
+msgid "New uploads will not appear on the site by default"
+msgstr "Las nuevas subidas no aparezca en el sitio por defecto"
+
+#: templates/account.html:33
+msgid "Change to unlisted?"
+msgstr "¿Cambia a no listada?"
+
+#: templates/account.html:33
+msgid "This will prevent new uploads appearing to others on the site by default"
+msgstr "Esto prevenir que las nuevas subidas que aparezca a otros en el sitio por defecto"
+
+#: templates/account.html:33
+msgid "Change&nbsp;to&nbsp;unlisted!"
+msgstr "¡Cambia&nbsp;a&nbsp;no&nbsp;listada!"
+
+#: templates/account.html:33
+msgid "New uploads will appear listed on the site by default"
+msgstr "Las nuevas subidas aparezca en el sitio por defecto"
+
+#: templates/account.html:39 templates/account.html:84 templates/error.html:9
+#: templates/index.html:55 templates/login.html:55 templates/profile.html:178
+#: templates/signup.html:39
+msgid "Error:"
+msgstr "Error:"
+
+#: templates/account.html:50
+msgid "Claimable farms"
+msgstr "Granjas reclamables"
+
+#: templates/account.html:51
+msgid ""
+"The following farms are not associated with your user account, but were "
+"uploaded from your computer:"
+msgstr "Los siguientes granjas no están asociados con su cuenta de usario, sino que eran cargada desde este ordenador:"
+
+#: templates/account.html:59
+msgid "Or, claim all"
+msgstr "O, reclama todos"
+
+#: templates/account.html:62
+msgid "Your farm series"
+msgstr "Series de sus granjas"
+
+#: templates/account.html:63
+msgid "Linked series of farms you have uploaded:"
+msgstr "Enlace de series de granjas que ha subido:"
+
+#: templates/account.html:67
+#, python-format
+msgid "%(name)s, %(farmname)s Farm"
+msgstr "%(name)s, Granja de %(farmname)s"
+
+#: templates/account.html:71
+msgid "imgur"
+msgstr "imgur"
+
+#: templates/base.html:4
+msgid "upload.farm Stardew Valley Summary Generator"
+msgstr "upload.farm Resumen Generador de Stardew Valley"
+
+#: templates/base.html:41
+msgid ""
+"This website uses cookies when you upload a savegame to determine "
+"ownership"
+msgstr "Este sitio web utiliza cookies al cargar un juego guardado para determinar la propiedad"
+
+#: templates/base.html:41
+msgid "Okay!"
+msgstr "¡De acuerdo!"
+
+#: templates/base.html:41
+msgid "More info"
+msgstr "Más información"
+
+#: templates/base.html:57
+#, python-format
+msgid "Took %(processtime)s seconds to process request"
+msgstr "Tomó %(processtime)s s para procesar solicitud"
+
+#: templates/base.html:57
+#, python-format
+msgid "source at %(github)s"
+msgstr "fuente en %(github)s"
+
+#: templates/base.html:57
+#, python-format
+msgid "All Stardew Valley assets copyright %(concerned_ape)s"
+msgstr "Todos activos de Stardew Valley copyright de %(concerned_ape)s"
+
+#: templates/blog.html:7 templates/index.html:77
+msgid "Development blog"
+msgstr "Blog de desarrollo"
+
+#: templates/blog.html:13 templates/blog.html:15
+msgid "newest"
+msgstr "más nuevo"
+
+#: templates/blog.html:18 templates/blog.html:20
+msgid "previous"
+msgstr "anterior"
+
+#: templates/blog.html:28 templates/blog.html:30
+msgid "next"
+msgstr "siguiente"
+
+#: templates/blog.html:33 templates/blog.html:35
+msgid "Todos activos de Stardew Valley copyright de"
+msgstr "más antiguo"
+
+#: templates/blogcontent.html:7
+#, python-format
+msgid "by %(name)s at %(time)s"
+msgstr "por %(name)s a las %(time)s"
+
+#: templates/error.html:7
+msgid "Error!"
+msgstr "Error!"
+
+#: templates/faq.html:7
+msgid "Frequently Asked Questions"
+msgstr "Preguntas Frecuentes"
+
+#: templates/faq.html:8 templates/titlebar.html:21
+msgid "FAQ"
+msgstr "FAQ"
+
+#: templates/faq.html:11
+msgid "What does this site do?"
+msgstr "¿Qué hace este sitio?"
+
+#: templates/faq.html:12
+#, python-format
+msgid ""
+"It generates a map and summary of a Stardew Valley farm, with your player"
+" avatar and portrait of your family. It's an alternative to screenshot "
+"tools like %(gedosato)s."
+msgstr ""
+"Se genera un mapa y resumen de una granja Stardew Valley, con su reproductor "
+"avatar y retrato de su familia. Es una alternativa a herramientas para la captura de pantalla "
+"como %(gedosato)s."
+
+#: templates/faq.html:14
+msgid "Where do I find the savegame?"
+msgstr "¿Dónde se encuentra la partida guardada?"
+
+#: templates/faq.html:15
+#, python-format
+msgid ""
+"Savegames are in %(appdata)s. This can be pasted into the file upload box"
+" to find the correct folder. Within this are subfolders for individual "
+"savegames. The file you should upload is named after your player (i.e. "
+"not named SaveGameInfo)."
+msgstr ""
+"Partidas guardadas están en %(appdata)s. Esto se puede pegar en la caja de carga de archivos para encontrar la carpeta correcta. Dentro de esto son las subcarpetas de partidas guardadas individuales. El archivo deberá cargar lleva el nombre de su reproductor (es decir, que no se llame SaveGameInfo)."
+
+#: templates/faq.html:17
+msgid "Why register for an upload.farm account?"
+msgstr "¿Por qué registrar una cuenta upload.farm?"
+
+#: templates/faq.html:18
+msgid ""
+"To add <a href='#whysignin'>certain features such as savegame sharing</a>"
+" to the site it became necessary to introduce user accounts, so that page"
+" ownership could be established. The up-side of this is that we are able "
+"to add other features to the site very easily, such as quick upload-to-"
+"imgur, and the ability to link up series of farms."
+msgstr ""
+"Para añadir <a href='#whysignin'>ciertas características tales como el reparto de partidas guardadas</a> al sitio se hizo necesario introducir cuentas de usuario, por lo que se pudo establecer que la propiedad de la página. La parte positiva de esto es que nos son capaces de añadir otras características al sitio con mucha facilidad, tales como carga a imgur rápida, y la capacidad de vincularse serie de granjas."
+
+#: templates/faq.html:20
+msgid "Can I upload multiple farms from the same playthrough?"
+msgstr ""
+
+#: templates/faq.html:21
+#, python-format
+msgid ""
+"Yes. If you are %(signed_up)s and %(logged_in)s, your uploads's series is"
+" automatically linked to below the farm name. You can also move between "
+"these farms using left and right keyboard keys. If you are not "
+"registered, farms are not automatically linked, but if you later choose "
+"to register, they can be claimed."
+msgstr ""
+
+#: templates/faq.html:21 templates/faq.html:27
+msgid "signed up"
+msgstr ""
+
+#: templates/faq.html:21 templates/faq.html:42
+msgid "logged in"
+msgstr ""
+
+#: templates/faq.html:23
+msgid "I can't find my farm!"
+msgstr ""
+
+#: templates/faq.html:24
+#, python-format
+msgid ""
+"If you are registered, check your %(account)s page. If you are not and "
+"have your original savegame, re-upload your farm and the site will "
+"redirect you to the existing data, and re-set your ownership."
+msgstr ""
+
+#: templates/faq.html:24
+msgid "account"
+msgstr ""
+
+#: templates/faq.html:26
+msgid "How do I enable savegame sharing?"
+msgstr ""
+
+#: templates/faq.html:27
+#, python-format
+msgid ""
+"If you are %(signed_up)s and own the page, beneath the minimap is a "
+"button to enable savegame sharing. This enables them for <em>all</em> "
+"users of the site, and may be enabled or disabled as you like."
+msgstr ""
+
+#: templates/faq.html:29
+msgid "Why do I have to sign up to enable savegame sharing?"
+msgstr ""
+
+#: templates/faq.html:30
+msgid ""
+"If other people could download your savegame without you having claimed "
+"the page, they could upload it, <a href='#cantfind'>take control</a> of "
+"it, and then delete it or claim it themselves. So, for the extra "
+"functionality, you have to register."
+msgstr ""
+
+#: templates/faq.html:32
+msgid "Can I make uploads private, so only I can see them?"
+msgstr ""
+
+#: templates/faq.html:33
+msgid ""
+"You can unlist farms if you are registered and logged in. You can also "
+"set your account to automatically make uploads unlisted on your account "
+"page."
+msgstr ""
+
+#: templates/faq.html:35
+msgid "What is the stardew.info planner?"
+msgstr ""
+
+#: templates/faq.html:36
+msgid ""
+"The <a href='https://stardew.info/planner/'' target='_blank'>Stardew "
+"planner</a> by <a href='https://github.com/hpeinar/stardewplanner' "
+"target='_blank'>Henrik Peinar</a> is a tool that allows you to plan your "
+"farm. We have integrated support for the planner to the site for uploads "
+"you own. To use this feature, click the blueprint icon in the control "
+"panel on your farm's profile page to load it into the planner. In "
+"addition, we have worked with Henrik to allow rendering of farms from the"
+" planner. These are separate to normal savegame uploads, and are accessed"
+" from the planner itself."
+msgstr ""
+
+#: templates/faq.html:38
+msgid "How do I use downloaded savegames?"
+msgstr ""
+
+#: templates/faq.html:39
+#, python-format
+msgid ""
+"Saves go in %(appdata)s where you can place the extracted folder and "
+"contents. This is normally %(windir)s."
+msgstr ""
+
+#: templates/faq.html:41
+msgid "How can I delete my upload(s)?"
+msgstr ""
+
+#: templates/faq.html:42
+#, python-format
+msgid ""
+"When you upload a savegame a cookie is set to indicate ownership. Below "
+"the farm name should be a 'delete this page' button. If you are "
+"%(logged_in)s and have uploaded multiple farms from the same playthrough "
+"you will also have an option to delete 'all for this farm'. Both ask for "
+"confirmation before deleting."
+msgstr ""
+
+#: templates/faq.html:44
+msgid "Do you support [modname]?"
+msgstr ""
+
+#: templates/faq.html:45
+msgid ""
+"At present we don't explicitly support any mods, but mods that don't add "
+"new assets or structurally change your savegame too much will probably "
+"work. Once we've got the core site functionality sorted we'll look at mod"
+" support!"
+msgstr ""
+
+#: templates/index.html:40
+msgid "Upload your farm"
+msgstr ""
+
+#: templates/index.html:44
+msgid "Upload!"
+msgstr ""
+
+#: templates/index.html:47
+#, python-format
+msgid ""
+"%(stardew_valley)s save files can be found under %(appdata)s and are "
+"named after your character, plus an ID number"
+msgstr ""
+
+#: templates/index.html:64
+msgid "Recently uploaded farms"
+msgstr ""
+
+#: templates/index.html:65
+msgid "Recent uploads"
+msgstr ""
+
+#: templates/index.html:68
+msgid "more"
+msgstr ""
+
+#: templates/login.html:2
+msgid "Login"
+msgstr ""
+
+#: templates/login.html:37
+msgid "Log in to a user account on upload.farm"
+msgstr ""
+
+#: templates/login.html:40 templates/reset.html:27 templates/reset.html:43
+#: templates/signup.html:20
+msgid "Email address"
+msgstr ""
+
+#: templates/login.html:41 templates/reset.html:44 templates/signup.html:21
+msgid "email"
+msgstr ""
+
+#: templates/login.html:45 templates/signup.html:25
+msgid "Password"
+msgstr ""
+
+#: templates/login.html:46 templates/reset.html:33 templates/signup.html:26
+msgid "password"
+msgstr ""
+
+#: templates/login.html:49
+msgid "Sign in!"
+msgstr ""
+
+#: templates/login.html:57
+msgid "Need to register?"
+msgstr ""
+
+#: templates/login.html:57 templates/signup.html:33
+msgid "Sign up!"
+msgstr ""
+
+#: templates/login.html:57
+msgid "Forgot password?"
+msgstr ""
+
+#: templates/login.html:57
+msgid "Reset it!"
+msgstr ""
+
+#: templates/plan.html:5 templates/plan.html:9 templates/plan.html:16
+#: templates/plan.html:26
+msgid "Render of stardew.info farm plan (Stardew Valley)"
+msgstr ""
+
+#: templates/plan.html:8 templates/plan.html:15 templates/plan.html:22
+msgid "Farm plan render - upload.farm"
+msgstr ""
+
+#: templates/plan.html:79
+#, python-format
+msgid "Farm plan in %(season)s"
+msgstr ""
+
+#: templates/plan.html:87
+msgid "view plan"
+msgstr ""
+
+#: templates/plan.html:93
+msgid "Plan re-rendering, will automatically load when complete"
 msgstr ""
 
 #: templates/profile.html:5 templates/profile.html:9 templates/profile.html:16
@@ -288,10 +747,6 @@ msgstr ""
 #: templates/profile.html:169
 #, python-format
 msgid "Go forward to %(next)s (right arrow on keyboard also works)"
-msgstr ""
-
-#: templates/profile.html:178
-msgid "Error:"
 msgstr ""
 
 #: templates/profile.html:181
@@ -437,7 +892,567 @@ msgstr ""
 msgid "%(n)s days old"
 msgstr ""
 
+#: templates/profile.html:314
+#, python-format
+msgid "Animal Products worth 10%% more."
+msgstr ""
+
+#: templates/profile.html:315
+#, python-format
+msgid "Crops worth 10%% more."
+msgstr ""
+
+#: templates/profile.html:316
+msgid "Befriend Coop animals quicker."
+msgstr ""
+
+#: templates/profile.html:316
+msgid "Incubation time cut in half."
+msgstr ""
+
+#: templates/profile.html:317
+msgid "Befriend barn animals quicker."
+msgstr ""
+
+#: templates/profile.html:317
+msgid "Sheep produce wool faster."
+msgstr ""
+
+#: templates/profile.html:318
+#, python-format
+msgid "Artisan Goods (wine, cheese, oil, etc.) worth 50%% more."
+msgstr ""
+
+#: templates/profile.html:319
+#, python-format
+msgid "All crops grow 10%% faster."
+msgstr ""
+
+#: templates/profile.html:320
+msgid "+1 ore per vein."
+msgstr ""
+
+#: templates/profile.html:321
+msgid "Chance for Gems to appear in pairs."
+msgstr ""
+
+#: templates/profile.html:322
+#, python-format
+msgid "Metal bars worth 25%% more."
+msgstr ""
+
+#: templates/profile.html:323
+msgid "Geode find doubled."
+msgstr ""
+
+#: templates/profile.html:324
+msgid "Coal find doubled."
+msgstr ""
+
+#: templates/profile.html:325
+#, python-format
+msgid "Gems worth 30%% more."
+msgstr ""
+
+#: templates/profile.html:326
+#, python-format
+msgid "Wood worth 50%% more."
+msgstr ""
+
+#: templates/profile.html:327
+msgid "Chance for double harvest of foraged items."
+msgstr ""
+
+#: templates/profile.html:328
+msgid "Normal trees occasionally drop hardwood."
+msgstr ""
+
+#: templates/profile.html:329
+msgid "Foraged items are always gold quality."
+msgstr ""
+
+#: templates/profile.html:330
+#, python-format
+msgid "Syrup is worth 25%% more."
+msgstr ""
+
+#: templates/profile.html:331
+msgid "Locations of foragable items are revealed."
+msgstr ""
+
+#: templates/profile.html:332
+#, python-format
+msgid "Fish worth 25%% more."
+msgstr ""
+
+#: templates/profile.html:333
+msgid "Resources required to craft crab pots reduced."
+msgstr ""
+
+#: templates/profile.html:334
+#, python-format
+msgid "Fish worth 50%% more."
+msgstr ""
+
+#: templates/profile.html:335
+msgid "Chance to find treasure doubled."
+msgstr ""
+
+#: templates/profile.html:336
+msgid "Crab pots never catch trash."
+msgstr ""
+
+#: templates/profile.html:337
+msgid "Crab pots no longer need to be baited."
+msgstr ""
+
+#: templates/profile.html:338
+#, python-format
+msgid "All attacks deal 10%% more damage."
+msgstr ""
+
+#: templates/profile.html:338
+msgid "+15 HP."
+msgstr ""
+
+#: templates/profile.html:339
+#, python-format
+msgid "Critical strike chance increased by 50%%."
+msgstr ""
+
+#: templates/profile.html:340
+#, python-format
+msgid "Damage is increased by 15%%."
+msgstr ""
+
+#: templates/profile.html:341
+msgid "HP is increased by 25."
+msgstr ""
+
+#: templates/profile.html:342
+msgid "Cooldown on special moves is cut in half."
+msgstr ""
+
+#: templates/profile.html:343
+msgid "Critical hits are deadly."
+msgstr ""
+
 #: templates/profile.html:385
 msgid "(Hover for professions)"
 msgstr ""
+
+#: templates/profile.html:403 templates/profile.html:405
+msgid "This will claim"
+msgstr ""
+
+#: templates/profile.html:403 templates/profile.html:427
+msgid "only this"
+msgstr ""
+
+#: templates/profile.html:403
+msgid "upload"
+msgstr ""
+
+#: templates/profile.html:403
+msgid "Claim&nbsp;it!"
+msgstr ""
+
+#: templates/profile.html:403
+msgid "Claim this farm (link it to your account)"
+msgstr ""
+
+#: templates/profile.html:405
+msgid "all unclaimed uploads"
+msgstr ""
+
+#: templates/profile.html:405
+msgid "made from this browser."
+msgstr ""
+
+#: templates/profile.html:405
+msgid "Claim&nbsp;all!"
+msgstr ""
+
+#: templates/profile.html:405
+msgid "Claim all unclaimed farms (link them to your account)"
+msgstr ""
+
+#: templates/profile.html:409
+msgid "Send to"
+msgstr ""
+
+#: templates/profile.html:409
+msgid "stardew.info planner"
+msgstr ""
+
+#: templates/profile.html:409
+msgid "?"
+msgstr ""
+
+#: templates/profile.html:409
+msgid "(this is a separate site not part of upload.farm)"
+msgstr ""
+
+#: templates/profile.html:409
+msgid "Plan&nbsp;my&nbsp;farm!"
+msgstr ""
+
+#: templates/profile.html:409
+msgid "Plan my farm (send to stardew.info planner)"
+msgstr ""
+
+#: templates/profile.html:412
+msgid "Disable downloads?"
+msgstr ""
+
+#: templates/profile.html:412
+msgid "Disables sharing of the savegame you uploaded"
+msgstr ""
+
+#: templates/profile.html:412
+msgid "Disable!"
+msgstr ""
+
+#: templates/profile.html:412
+msgid "Downloads currently enabled"
+msgstr ""
+
+#: templates/profile.html:415
+msgid "Enable downloads?"
+msgstr ""
+
+#: templates/profile.html:415
+msgid "Enables download of the savegame you uploaded by yourself and others"
+msgstr ""
+
+#: templates/profile.html:415
+msgid "Enable!"
+msgstr ""
+
+#: templates/profile.html:415
+msgid "Downloads currently disabled"
+msgstr ""
+
+#: templates/profile.html:417
+msgid "To enable savegame download please first"
+msgstr ""
+
+#: templates/profile.html:417
+msgid "sign up"
+msgstr ""
+
+#: templates/profile.html:417
+msgid "sign in"
+msgstr ""
+
+#: templates/profile.html:417
+msgid ", then"
+msgstr ""
+
+#: templates/profile.html:417
+msgid "claim this page."
+msgstr ""
+
+#: templates/profile.html:417
+msgid "Sign up or sign in to enable downloads!"
+msgstr ""
+
+#: templates/profile.html:421
+msgid "List your farm?"
+msgstr ""
+
+#: templates/profile.html:421
+msgid "Allows it to appear in searches on the site"
+msgstr ""
+
+#: templates/profile.html:421
+msgid "List!"
+msgstr ""
+
+#: templates/profile.html:421
+msgid "Farm currently unlisted"
+msgstr ""
+
+#: templates/profile.html:423
+msgid "Unlist your farm?"
+msgstr ""
+
+#: templates/profile.html:423
+msgid "Prevents it appearing on the site except to you and people with the URL"
+msgstr ""
+
+#: templates/profile.html:423
+msgid "Unlist!"
+msgstr ""
+
+#: templates/profile.html:423
+msgid "Farm currently listed"
+msgstr ""
+
+#: templates/profile.html:427
+msgid "Delete this farm?"
+msgstr ""
+
+#: templates/profile.html:427 templates/profile.html:429
+msgid "This will delete "
+msgstr ""
+
+#: templates/profile.html:427
+msgid " upload"
+msgstr ""
+
+#: templates/profile.html:427
+msgid "Delete&nbsp;it!"
+msgstr ""
+
+#: templates/profile.html:427
+msgid "Delete farm"
+msgstr ""
+
+#: templates/profile.html:429
+msgid "Delete all for this farm?"
+msgstr ""
+
+#: templates/profile.html:429
+msgid "all uploads in this series."
+msgstr ""
+
+#: templates/profile.html:429
+msgid ""
+"This will remove this farm and all associated farms, be sure you mean to "
+"do this!"
+msgstr ""
+
+#: templates/profile.html:429
+msgid "Delete&nbsp;entire&nbsp;series!"
+msgstr ""
+
+#: templates/profile.html:429
+msgid "Delete entire farm series"
+msgstr ""
+
+#: templates/profile.html:442
+msgid "You use the contents of this zip at your own risk!"
+msgstr ""
+
+#: templates/profile.html:442
+msgid "I understand, download!"
+msgstr ""
+
+#: templates/profile.html:442
+msgid "download savegame"
+msgstr ""
+
+#: templates/profile.html:452
+msgid "Friendships"
+msgstr ""
+
+#: templates/profile.html:465
+msgid "Armored Bug"
+msgstr ""
+
+#: templates/profile.html:466
+msgid "Bat"
+msgstr ""
+
+#: templates/profile.html:467
+msgid "Big Slime"
+msgstr ""
+
+#: templates/profile.html:468
+msgid "Bug"
+msgstr ""
+
+#: templates/profile.html:469
+msgid "Duggy"
+msgstr ""
+
+#: templates/profile.html:470
+msgid "Dust Sprite"
+msgstr ""
+
+#: templates/profile.html:471
+msgid "Fly"
+msgstr ""
+
+#: templates/profile.html:472
+msgid "Frost Bat"
+msgstr ""
+
+#: templates/profile.html:473
+msgid "Frost Jelly"
+msgstr ""
+
+#: templates/profile.html:474
+msgid "Ghost"
+msgstr ""
+
+#: templates/profile.html:475
+msgid "Green Slime"
+msgstr ""
+
+#: templates/profile.html:476
+msgid "Grub"
+msgstr ""
+
+#: templates/profile.html:477
+msgid "Lava Bat"
+msgstr ""
+
+#: templates/profile.html:478
+msgid "Lava Crab"
+msgstr ""
+
+#: templates/profile.html:479
+msgid "Metal Head"
+msgstr ""
+
+#: templates/profile.html:480
+msgid "Mummy"
+msgstr ""
+
+#: templates/profile.html:481
+msgid "Purple Slime"
+msgstr ""
+
+#: templates/profile.html:482
+msgid "Sludge"
+msgstr ""
+
+#: templates/profile.html:483
+msgid "Rock Crab"
+msgstr ""
+
+#: templates/profile.html:484
+msgid "Serpent"
+msgstr ""
+
+#: templates/profile.html:485
+msgid "Shadow Brute"
+msgstr ""
+
+#: templates/profile.html:486
+msgid "Skeleton"
+msgstr ""
+
+#: templates/profile.html:487
+msgid "Squid Kid"
+msgstr ""
+
+#: templates/profile.html:488
+msgid "Stone Golem"
+msgstr ""
+
+#: templates/profile.html:489
+msgid "Transparent Slime"
+msgstr ""
+
+#: templates/profile.html:490
+msgid "Void Spirit"
+msgstr ""
+
+#: templates/profile.html:491
+msgid "Yellow Slime"
+msgstr ""
+
+#: templates/profile.html:495
+msgid "Monster Kills"
+msgstr ""
+
+#: templates/profile.html:508
+#, python-format
+msgid "%(name)s has not killed any monsters yet."
+msgstr ""
+
+#: templates/profile.html:518
+#, python-format
+msgid "Map of %(farmname)s Farm"
+msgstr ""
+
+#: templates/profile.html:523
+msgid "Click to open farm gallery"
+msgstr ""
+
+#: templates/profile.html:532
+msgid "view on imgur"
+msgstr ""
+
+#: templates/profile.html:539
+msgid "reupload to imgur"
+msgstr ""
+
+#: templates/profile.html:539
+msgid "upload to imgur"
+msgstr ""
+
+#: templates/reset.html:8 templates/reset.html:47
+msgid "Reset password"
+msgstr ""
+
+#: templates/reset.html:32
+msgid "New password"
+msgstr ""
+
+#: templates/reset.html:33 templates/signup.html:26
+#, python-format
+msgid "Passcode must be at least %(password_min_length)s characters long!"
+msgstr ""
+
+#: templates/reset.html:36
+msgid "Set new password"
+msgstr ""
+
+#: templates/reset.html:40
+msgid "Reset password for user account on upload.farm"
+msgstr ""
+
+#: templates/reset.html:54
+msgid "Error"
+msgstr ""
+
+#: templates/signup.html:2 templates/signup.html:8 templates/titlebar.html:25
+msgid "Sign up"
+msgstr "Regístrate"
+
+#: templates/signup.html:11
+msgid ""
+"Registration allows enabling of savegame sharing, quick imgur upload, and"
+" creation and curation of farm series."
+msgstr ""
+
+#: templates/signup.html:12
+msgid "Already got an account? Sign in!"
+msgstr ""
+
+#: templates/signup.html:17
+msgid "Register a user account on upload.farm"
+msgstr ""
+
+#: templates/titlebar.html:9
+msgid "upload.farm"
+msgstr ""
+
+#: templates/titlebar.html:14
+msgid "Stardew Valley Summary Generator"
+msgstr "Resumen Generador de Stardew"
+
+#: templates/titlebar.html:18
+msgid "Upload"
+msgstr "Subir"
+
+#: templates/titlebar.html:19
+msgid "Browse"
+msgstr "Explorar"
+
+#: templates/titlebar.html:20
+msgid "Blog"
+msgstr "Blog"
+
+#: templates/titlebar.html:23
+msgid "Logout"
+msgstr "Salir"
+
+#: templates/titlebar.html:24
+msgid "Sign in"
+msgstr "Iniciar"
 

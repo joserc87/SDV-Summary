@@ -12,11 +12,11 @@
 			<div class="col-md-12" style="padding-left:2%;padding-right:2%;">
 				<div class="form-group">
 					<form enctype="multipart/form-data" action="" method="get">
-						<label for="searchControl"><h2><a class="titlelink mainTitle" href="/all">Browse</a></h2></label>
+						<label for="searchControl"><h2><a class="titlelink mainTitle" href="/all">{{_("Browse")}}</a></h2></label>
 						<div class="input-group">
 							<input class="form-control input-lg" id="searchControl" type="text" name="search" describedby="helpBlock" value="{%if request.args.get('search')%}{{request.args.get('search') }}{%endif%}">
 							<span class="input-group-btn">
-								<button class="btn btn-primary btn-lg" type="submit" describedby="helpBlock">Search</button>
+								<button class="btn btn-primary btn-lg" type="submit" describedby="helpBlock">{{_("Search")}}</button>
 							</span>
 						</div>
 						{% for key in request.args.keys() %}
@@ -24,14 +24,14 @@
 								<input type="hidden" type="text" name="{{key}}" value="{{request.args.get(key)}}">
 							{%endif%}
 						{% endfor %}
-						<span id="helpBlock" class="help-block sr-only">Search for farms by user or farm name, or change sort type</span>
+						<span id="helpBlock" class="help-block sr-only">{{_("Search for farms by user or farm name, or change sort type")}}</span>
 					</form>
 				</div>
 				<div class="text-center">
-					<p class="pull-left browsetext">Sorting {{recents.total}} result{%if recents.total!=1%}s{%endif%} by </p>
-					{% set sort_types = {'rating':'top rated','views':'most views','recent':'most recent'} %}
+					<p class="pull-left browsetext">{{_("Sorting %(number)s results by ",number=recents.total)}}</p>
+					{% set sort_types = {'rating':_('top rated'),'views':_('most views'),'recent':_('most recent')} %}
 					<div class="btn-group pull-left dropdown">
-						<button class="btn btn-primary dropdown-toggle btn-link browsebutton" type="button" data-toggle="dropdown">{{sort_types.get(request.args.get('sort'),'most recent')}}<span class="caret"></span></button>
+						<button class="btn btn-primary dropdown-toggle btn-link browsebutton" type="button" data-toggle="dropdown">{{sort_types.get(request.args.get('sort'),_('most recent'))}}<span class="caret"></span></button>
 						<ul class="dropdown-menu">
 						{% set url_args = dict(request.args) %}
 							{% do url_args.update({'sort':'rating'}) %}
@@ -42,26 +42,26 @@
 							<li><a href="{{url_for('allmain',**url_args)}}">{{sort_types.get('recent')}}</a></li>
 						</ul>
 					</div>
-					<p class="pull-left browsetext">showing</p>
-					{% set dl_types = {'True':'only downloadable'} %}
+					<p class="pull-left browsetext">{{_("showing")}}</p>
+					{% set dl_types = {'True':_('only downloadable')} %}
 					<div class="btn-group pull-left dropdown">
-						<button class="btn btn-primary dropdown-toggle btn-link browsebutton" type="button" data-toggle="dropdown">{{dl_types.get(request.args.get('dl'),'all farms')}}<span class="caret"></span></button>
+						<button class="btn btn-primary dropdown-toggle btn-link browsebutton" type="button" data-toggle="dropdown">{{dl_types.get(request.args.get('dl'),_('all farms'))}}<span class="caret"></span></button>
 						<ul class="dropdown-menu">
 						{% set url_args = dict(request.args) %}
 							{% do url_args.pop('dl',None) %}
-							<li><a href="{{url_for('allmain',**url_args)}}">all farms</a></li>
+							<li><a href="{{url_for('allmain',**url_args)}}">{{_("all farms")}}</a></li>
 							{% do url_args.update({'dl':True}) %}
 							<li><a href="{{url_for('allmain',**url_args)}}">{{dl_types.get('True')}}</a></li>
 						</ul>
 					</div>
-					<p class="pull-left browsetext">with</p>
-					{% set thumb_types = {'True':'full'} %}
+					<p class="pull-left browsetext">{{_("with")}}</p>
+					{% set thumb_types = {'True':_('full')} %}
 					<div class="btn-group pull-left dropdown">
-						<button class="btn btn-primary dropdown-toggle btn-link browsebutton" type="button" data-toggle="dropdown">{{thumb_types.get(request.args.get('full_thumbnail'),'minimap')}}<span class="caret"></span></button>
+						<button class="btn btn-primary dropdown-toggle btn-link browsebutton" type="button" data-toggle="dropdown">{{thumb_types.get(request.args.get('full_thumbnail'),_('minimap'))}}<span class="caret"></span></button>
 						<ul class="dropdown-menu">
 						{% set url_args = dict(request.args) %}
 							{% do url_args.pop('full_thumbnail',None) %}
-							<li><a href="{{url_for('allmain',**url_args)}}">minimap</a></li>
+							<li><a href="{{url_for('allmain',**url_args)}}">{{_("minimap")}}</a></li>
 							{% do url_args.update({'full_thumbnail':True}) %}
 							<li><a href="{{url_for('allmain',**url_args)}}">{{thumb_types.get('True')}}</a></li>
 						</ul>
@@ -80,7 +80,7 @@
 						{% if (request.args.get('liked')=='True' and logged_in()) %}
 							{% set url_args = dict(request.args) %}
 							{% do url_args.pop('liked',None) %}
-							<p class="pull-left browsetext">farms I upvoted (<a href="{{url_for('allmain',**url_args)}}">remove limit</a>)</p>
+							<p class="pull-left browsetext">farms I upvoted (<a href="{{url_for('allmain',**url_args)}}">{{_("remove limit")}}</a>)</p>
 						{% endif %}
 
 					{% endif %}
@@ -90,7 +90,7 @@
 		{% if error %}
 			<div class="row">
 				<div class="col-md-12">
-					<p class="text-danger text-center"><strong>Error:</strong> {{ error }}</p>
+					<p class="text-danger text-center"><strong>{{_("Error:")}}</strong> {{ error }}</p>
 				</div>
 			</div>
 		{% endif %}
@@ -101,15 +101,15 @@
 				<p>
 				{% if request.args.get('p')!=None and request.args.get('p')|int>1 %}
 					{% do url_args.update({'p':0}) %}
-					<a href="{{url_for('allmain',**url_args)}}">newest</a>
+					<a href="{{url_for('allmain',**url_args)}}">{{_("newest")}}</a>
 				{% else %}
-					<span class="text-muted">newest</span>
+					<span class="text-muted">{{_("newest")}}</span>
 				{% endif %}
 				{% if request.args.get('p')!=None and request.args.get('p')|int>0 %}
 					{% do url_args.update({'p':request.args.get('p')|int-1}) %}
-					<a href="{{url_for('allmain',**url_args)}}">previous</a>
+					<a href="{{url_for('allmain',**url_args)}}">{{_("previous")}}</a>
 				{% else %}
-					<span class="text-muted">previous</span>
+					<span class="text-muted">{{_("previous")}}</span>
 				{% endif %}
 				{% if request.args.get('p')!=None %}
 					{{request.args.get('p')}}
@@ -122,15 +122,15 @@
 					{%else%}
 						{% do url_args.update({'p':1}) %}
 					{%endif%}
-					<a href="{{url_for('allmain',**url_args)}}">next</a>
+					<a href="{{url_for('allmain',**url_args)}}">{{_("next")}}</a>
 				{% else %}
-					<span class="text-muted">next</span>
+					<span class="text-muted">{{_("next")}}</span>
 				{% endif %}
 				{% if offset + (recents.posts|length * 2) < recents.total %}
 					{% do url_args.update({'p':(recents.total/recents.posts|length)|round(0,'ceil')|int - 1 }) %}
-					<a href="{{url_for('allmain',**url_args)}}">oldest</a>
+					<a href="{{url_for('allmain',**url_args)}}">{{_("oldest")}}</a>
 				{% else %}
-					<span class="text-muted">oldest</span>
+					<span class="text-muted">{{_("oldest")}}</span>
 				{% endif %}
 				</p>
 			</div>

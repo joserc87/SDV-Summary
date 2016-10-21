@@ -4,20 +4,20 @@
 {% include "titlebar.html" %}
 <div class="row center-block panel">
 	<div class="interiorpanel">
-		<h2><a href="/blog" class="titlelink mainTitle">Development blog</a></h2>
+		<h2><a href="/blog" class="titlelink mainTitle">{{_("Development blog")}}</a></h2>
 		{% include "blogcontent.html" %}
 		<div class="row">
 			<div class="col-md-12 text-center">
 				<p>
 				{% if request.args.get('p')!=None and request.args.get('p')|int>1 %}
-				<a href="/blog?p=0">newest</a>
+				<a href="/blog?p=0">{{_("newest")}}</a>
 				{% else %}
-				<span class="text-muted">newest</span>
+				<span class="text-muted">{{_("newest")}}</span>
 				{% endif %}
 				{% if request.args.get('p')!=None and request.args.get('p')|int>0 %}
-				<a href="/blog?p={{request.args.get('p')|int-1}}">previous</a>
+				<a href="/blog?p={{request.args.get('p')|int-1}}">{{_("previous")}}</a>
 				{% else %}
-				<span class="text-muted">previous</span>
+				<span class="text-muted">{{_("previous")}}</span>
 				{% endif %}
 				{% if request.args.get('p')!=None %}
 					{{request.args.get('p')}}
@@ -25,14 +25,14 @@
 					0
 				{%endif%}
 				{% if offset + blogposts.posts|length < blogposts.total %}
-				<a href="/blog?p={%if request.args.get('p')!= None%}{{request.args.get('p')|int+1}}{%else%}{{1}}{%endif%}">next</a>
+				<a href="/blog?p={%if request.args.get('p')!= None%}{{request.args.get('p')|int+1}}{%else%}{{1}}{%endif%}">{{_("next")}}</a>
 				{% else %}
-				<span class="text-muted">next</span>
+				<span class="text-muted">{{_("next")}}</span>
 				{% endif %}
 				{% if offset + (blogposts.posts|length * 2) < blogposts.total %}
-				<a href="/blog?p={{(blogposts.total/blogposts.posts|length)|round(0,'ceil')|int - 1}}">oldest</a>
+				<a href="/blog?p={{(blogposts.total/blogposts.posts|length)|round(0,'ceil')|int - 1}}">{{_("oldest")}}</a>
 				{% else %}
-				<span class="text-muted">oldest</span>
+				<span class="text-muted">{{_("oldest")}}</span>
 				{% endif %}
 				</p>
 			</div>
