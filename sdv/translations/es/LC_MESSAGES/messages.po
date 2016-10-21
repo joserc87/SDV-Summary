@@ -415,7 +415,7 @@ msgstr "Más información"
 #: templates/base.html:57
 #, python-format
 msgid "Took %(processtime)s seconds to process request"
-msgstr "Tomó %(processtime)s s para procesar solicitud"
+msgstr "Tomó %(processtime)s seg para procesar solicitud"
 
 #: templates/base.html:57
 #, python-format
@@ -1367,23 +1367,23 @@ msgstr ""
 #: templates/profile.html:518
 #, python-format
 msgid "Map of %(farmname)s Farm"
-msgstr ""
+msgstr "Mapa de la Granja de %(farmname)s"
 
 #: templates/profile.html:523
 msgid "Click to open farm gallery"
-msgstr ""
+msgstr "Haga clic para abrir la galeria de granja"
 
 #: templates/profile.html:532
 msgid "view on imgur"
-msgstr ""
+msgstr "ver en imgur"
 
 #: templates/profile.html:539
 msgid "reupload to imgur"
-msgstr ""
+msgstr "subir a imgur otra vez"
 
 #: templates/profile.html:539
 msgid "upload to imgur"
-msgstr ""
+msgstr "subir a imgur"
 
 #: templates/reset.html:8 templates/reset.html:47
 msgid "Reset password"
@@ -1408,7 +1408,7 @@ msgstr ""
 
 #: templates/reset.html:54
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: templates/signup.html:2 templates/signup.html:8 templates/titlebar.html:25
 msgid "Sign up"
@@ -1422,15 +1422,15 @@ msgstr ""
 
 #: templates/signup.html:12
 msgid "Already got an account? Sign in!"
-msgstr ""
+msgstr "¿Ya tiene una cuenta? ¡Iniciar sesión!"
 
 #: templates/signup.html:17
 msgid "Register a user account on upload.farm"
-msgstr ""
+msgstr "Registrate una cuenta en upload.farm"
 
 #: templates/titlebar.html:9
 msgid "upload.farm"
-msgstr ""
+msgstr "upload.farm"
 
 #: templates/titlebar.html:14
 msgid "Stardew Valley Summary Generator"
