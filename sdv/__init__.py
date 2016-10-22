@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify, make_response, send_from_directory, abort
-from flask_babel import Babel, _, gettext, ngettext
+from flask_babel import Babel, _, gettext, ngettext, Locale
 from flask_recaptcha import ReCaptcha
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail, Message
@@ -84,11 +84,27 @@ babel = Babel(app)
 
 @babel.localeselector
 def get_locale():
-    return 'es'
+    default = request.accept_languages.best_match(app.config['LANGUAGES'])
+    if '_language' in session:
+        language = session['_language'] if session['_language'] in app.config['LANGUAGES'] else default
+    else:
+        language = default
+        session['_language'] = language
+    return language
 
 @babel.timezoneselector
 def get_timezone():
     return None
+
+app.jinja_env.globals.update(Locale=Locale)
+
+@app.route('/lang/<code>')
+def set_lang(code):
+    if code in app.config['LANGUAGES']:
+        session['_language'] = code
+    else:
+        session['_language'] = request.accept_languages.best_match(app.config['LANGUAGES'])
+    return redirect(request.referrer)
 
 def connect_db():
     return psycopg2.connect(app.database)
@@ -100,6 +116,7 @@ def legacy_location(location):
     reapplied later when that filename is read, and you'll end up with LEGACY_ROOT_FOLDER being prepended twice...
     '''
     return os.path.join(app.config['LEGACY_ROOT_FOLDER'],location)
+
 app.jinja_env.globals.update(legacy_location=legacy_location)
 
 import sdv.imageDrone  # noqa

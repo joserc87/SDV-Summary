@@ -687,3 +687,14 @@ p .cc_message {
 .cpanel-state-off {
 	opacity: 0.5;
 }
+
+.language-menu {
+	min-width: 24px;
+}
+
+.languages-button {
+	display: block;
+	position:absolute;
+	right:15px;
+	top: 15px;
+}

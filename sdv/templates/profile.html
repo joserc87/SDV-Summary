@@ -141,6 +141,7 @@ $(document).ready(function() {
 				<div class="col-md-12 col-sm-12 panel">
 					<div class="interiorpanel">
 						{% if data.private %}<div class="private-banner"><img src="{{url_for('static',filename='css/cpanel/private.png')}}"></div>{%endif%}
+						{% include "language.html" %}
 						<div class="col-sm-2 hidden-xs text-center">
 							<a href="/"><img src="{{url_for('static', filename='logo.png')}}" class="logo"></a>
 						</div>
