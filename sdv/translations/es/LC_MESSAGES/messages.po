@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2016-10-21 16:15+0100\n"
-"PO-Revision-Date: 2016-10-22 17:20+0100\n"
+"PO-Revision-Date: 2016-10-22 22:10+0100\n"
 "Last-Translator: \n"
 "Language: es\n"
 "Language-Team: es <LL@li.org>\n"
@@ -37,7 +37,7 @@ msgstr "Falta el correo electrónico o la contraseña para iniciar sesión"
 
 #: __init__.py:215
 msgid "Logged in successfully!"
-msgstr "Conectado con éxito"
+msgstr "Sesión iniciada con éxito"
 
 #: __init__.py:232
 msgid ""
@@ -361,7 +361,7 @@ msgstr "¿Cambia a no listada?"
 #: templates/account.html:33
 msgid "This will prevent new uploads appearing to others on the site by default"
 msgstr ""
-"Esto prevenir que las nuevas subidas que aparezca a otros en el sitio por defecto"
+"Esto previene las nuevas subidos a aparecer a otros en el sitio por defecto"
 
 #: templates/account.html:33
 msgid "Change&nbsp;to&nbsp;unlisted!"
@@ -755,7 +755,7 @@ msgstr "¡Iniciar sesión!"
 
 #: templates/login.html:57
 msgid "Need to register?"
-msgstr "¿Necesitas que regístrate?"
+msgstr "¿Necesitas regístrarse?"
 
 #: templates/login.html:57 templates/signup.html:33
 msgid "Sign up!"
@@ -1144,7 +1144,7 @@ msgstr "Reclame todos granjas sin reclamación (enlacerlos a su cuenta)"
 
 #: templates/profile.html:409
 msgid "Send to"
-msgstr "Enviarlo al"
+msgstr "Envia al"
 
 #: templates/profile.html:409
 msgid "stardew.info planner"
@@ -1307,7 +1307,7 @@ msgstr "Estoy de acuerdo, ¡descargar!"
 
 #: templates/profile.html:442
 msgid "download savegame"
-msgstr "descargar partida guardada"
+msgstr "descarga archivo"
 
 #: templates/profile.html:452
 msgid "Friendships"
@@ -1503,7 +1503,7 @@ msgstr "upload.farm"
 
 #: templates/titlebar.html:14
 msgid "Stardew Valley Summary Generator"
-msgstr "Resumen Generador de Stardew"
+msgstr "Subir tu Granja Stardew Valley"
 
 #: templates/titlebar.html:18
 msgid "Upload"

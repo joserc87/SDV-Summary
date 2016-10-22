@@ -159,15 +159,23 @@ def md5(md5file):
     return h.hexdigest()
 
 
-@app.route('/_get_recents')
+@app.route('/_mini_recents')
 def jsonifyRecents():
-    recents = get_recents()['posts']
+    mini_recents = [str(post[0])+str(post[6])+str(post[8])+str(get_votes(post[0])) for post in get_recents()['posts']]
+    return jsonify(mini_recents)
+
+@app.route('/_full_recents')
+def get_formatted_recents():
+    recents = get_recents()
+    vote = None
     votes = None
     if logged_in():
+        vote = json.dumps({entry[0]:get_votes(entry[0]) for entry in recents['posts']})
         votes = {}
-        for recent in recents:
+        for recent in recents['posts']:
             votes[recent[0]] = get_votes(recent[0])
-    return jsonify(recents=recents,votes=votes)
+    text = render_template('recents.html',recents=recents,vote=vote)
+    return jsonify(text=text,votes=votes)
 
 
 def check_user_pw(email,password_attempt):

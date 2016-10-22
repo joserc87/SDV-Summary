@@ -2,7 +2,7 @@
 {% block header %}
 {{ super() }}
 {% include "votesetup.html" %}
-<script src="{{ url_for('static', filename='js/ajaxRequest.js') }}"></script>
+<script src="{{ url_for('static', filename='js/get_recents.js') }}"></script>
 <script src="{{url_for('static',filename='js/flashedmessages.js')}}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}
 {%block bodycontent %}
