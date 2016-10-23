@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-10-23 20:32+0100\n"
-"PO-Revision-Date: 2016-10-23 20:34+0100\n"
+"POT-Creation-Date: 2016-10-23 21:31+0100\n"
+"PO-Revision-Date: 2016-10-23 21:35+0100\n"
 "Last-Translator: \n"
 "Language: es\n"
 "Language-Team: es <LL@li.org>\n"
@@ -70,7 +70,7 @@ msgstr "¡Este enlace de restablecimiento ya se ha utilizado!</p>"
 msgid "Password reset, please log in!"
 msgstr "¡Contraseña restablecida, ya puede iniciar sesión!"
 
-#: sdv/__init__.py:288 sdv/__init__.py:308 sdv/__init__.py:1609
+#: sdv/__init__.py:288 sdv/__init__.py:308 sdv/__init__.py:1612
 msgid "Malformed verification string!"
 msgstr "¡Secuencia de verificación de formato incorrecto!"
 
@@ -148,19 +148,25 @@ msgstr ""
 msgid "Not well-formed xml"
 msgstr "No XML bien formado"
 
-#: sdv/__init__.py:488
+#: sdv/__init__.py:467
+msgid "Savegame failed an internal check (often caused by mods) sorry :("
+msgstr ""
+"La partida guardada ha fallado una prueba interna (frecuente causada por mods) "
+"lo siento :("
+
+#: sdv/__init__.py:491
 msgid "Error occurred inserting information into the database!"
 msgstr "¡Un error ocurrió la inserción de información en la base de datos!"
 
-#: sdv/__init__.py:900
+#: sdv/__init__.py:903
 msgid "Save file incompatible with current database: error is "
 msgstr "Guardar archivo incompatible con la base de datos actual: error es "
 
-#: sdv/__init__.py:912 sdv/__init__.py:965
+#: sdv/__init__.py:915 sdv/__init__.py:968
 msgid "There is nothing here... is this URL correct?"
 msgstr "No hay nada aquí... ¿es este URL correcta?"
 
-#: sdv/__init__.py:953
+#: sdv/__init__.py:956
 msgid ""
 "It looks like you have uploaded multiple files, but are not logged in: if you <a "
 "href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, "
@@ -171,7 +177,7 @@ msgstr ""
 "estos archivos, habilitar el uso \" \"compartido de partidas guardadas, y la "
 "granja de un solo clic post presta a imgur!"
 
-#: sdv/__init__.py:985
+#: sdv/__init__.py:988
 msgid ""
 "This plan failed to render, probably because of a bug. It's logged and we'll "
 "look into it as soon as possible! Sorry!"
@@ -179,31 +185,31 @@ msgstr ""
 "Este plan no se pudo presentar, probablemente debido a un error. Se registra y "
 "vamos a mirar en él tan pronto como sea posible! ¡Lo siento!"
 
-#: sdv/__init__.py:1071
+#: sdv/__init__.py:1074
 msgid "Unknown or insufficient credentials"
 msgstr "Credenciales desconocida o insuficiente"
 
-#: sdv/__init__.py:1102
+#: sdv/__init__.py:1105
 msgid "You do not own this farm"
 msgstr "Usted no es dueño de esta granja"
 
-#: sdv/__init__.py:1113
+#: sdv/__init__.py:1116
 msgid "You do not own at least one of the farms"
 msgstr "Usted no es dueño de al menos una de estas granjas"
 
-#: sdv/__init__.py:1134
+#: sdv/__init__.py:1137
 msgid "You do not have sufficient credentials to claim this page"
 msgstr "Usted no tiene credenciales suficientes para reclamar esta página"
 
-#: sdv/__init__.py:1144
+#: sdv/__init__.py:1147
 msgid "You do not have sufficient credentials to claim one of these pages"
 msgstr "Usted no tiene credenciales suficientes para reclamar una de estas páginas"
 
-#: sdv/__init__.py:1159
+#: sdv/__init__.py:1162
 msgid "You do not have sufficient credentials to perform this action"
 msgstr "Usted no tiene credenciales suficientes para realizar esta acción"
 
-#: sdv/__init__.py:1174
+#: sdv/__init__.py:1177
 msgid ""
 "You have uploaded this page to imgur in the last 2 hours: please wait to upload "
 "again"
@@ -211,14 +217,14 @@ msgstr ""
 "Ha cargado esta página a imgur en las últimas 2 horas: por favor espere a cargar "
 "de nuevo"
 
-#: sdv/__init__.py:1176
+#: sdv/__init__.py:1179
 msgid ""
 "There was an issue with uploading the file to imgur. Please try again later!"
 msgstr ""
 "Hubo un problema con la posibilidad de subir el archivo a Imgur. ¡Por favor, "
 "inténtelo de nuevo más tarde!"
 
-#: sdv/__init__.py:1183
+#: sdv/__init__.py:1186
 msgid ""
 "Either you or upload.farm are out of imgur credits for the day! Sorry :( Try "
 "again tomorrow"
@@ -226,11 +232,11 @@ msgstr ""
 "Usted o upload.farm está fuera de Imgur créditos para el día! Lo sentimos :"
 "( Inténtelo de nuevo mañana"
 
-#: sdv/__init__.py:1186
+#: sdv/__init__.py:1189
 msgid "You must be logged in to post your farm to imgur!"
 msgstr "Usted debe ser conectado para publicar su granja para imgur!"
 
-#: sdv/__init__.py:1194
+#: sdv/__init__.py:1197
 msgid ""
 "Sorry, the stardew.info planner API is over its rate limit: please try again in "
 "a few minutes!"
@@ -238,63 +244,63 @@ msgstr ""
 "Lo sentimos, la API planificador stardew.info está por encima de su límite de "
 "velocidad: por favor intente nuevamente en unos minutos!"
 
-#: sdv/__init__.py:1198
+#: sdv/__init__.py:1201
 msgid "There was a problem accessing the planner. Error was: {}"
 msgstr "Hubo un problema de acceso al planificador. Hubo un error: {}"
 
-#: sdv/__init__.py:1227
+#: sdv/__init__.py:1230
 msgid "You do not have the correct session information to perform this action!"
 msgstr "No tiene la información de sesión correcto para realizar esta acción!"
 
-#: sdv/__init__.py:1265
+#: sdv/__init__.py:1268
 msgid "Problem authenticating!"
 msgstr "Autentica problema!"
 
-#: sdv/__init__.py:1267
+#: sdv/__init__.py:1270
 msgid "You are not logged in!"
 msgstr "No esta autenticada!"
 
-#: sdv/__init__.py:1404
+#: sdv/__init__.py:1407
 msgid "No browse with that ID!"
 msgstr "No hay explora con ese numero de identificación!"
 
-#: sdv/__init__.py:1423
+#: sdv/__init__.py:1426
 msgid "Malformed request for entries!"
 msgstr "Solicitud mal formada para las entradas"
 
-#: sdv/__init__.py:1531 sdv/__init__.py:1533
+#: sdv/__init__.py:1534 sdv/__init__.py:1536
 msgid "No blog with that ID!"
 msgstr "No hay blog con ese numero de identificación!"
 
-#: sdv/__init__.py:1559
+#: sdv/__init__.py:1562
 msgid "URL does not exist"
 msgstr "URL no existe"
 
-#: sdv/__init__.py:1561
+#: sdv/__init__.py:1564
 msgid "You are unable to download this farm data at this time."
 msgstr "No puede descargar este granja en este momento."
 
-#: sdv/__init__.py:1582
+#: sdv/__init__.py:1585
 msgid "Problem authenticating at imgur!"
 msgstr "Problema autenticar al imgur!"
 
-#: sdv/__init__.py:1585
+#: sdv/__init__.py:1588
 msgid "Cannot connect to imgur if not logged in!"
 msgstr "No puede conectar con imgur si no está autenticada!"
 
-#: sdv/__init__.py:1598
+#: sdv/__init__.py:1601
 msgid "Account does not exist!"
 msgstr "Cuenta no existe"
 
-#: sdv/__init__.py:1601
+#: sdv/__init__.py:1604
 msgid "Already confirmed email address!"
 msgstr "Dirección de correo electrónico ya esta confirmada!"
 
-#: sdv/__init__.py:1607
+#: sdv/__init__.py:1610
 msgid "Account email address confirmed!"
 msgstr "Dirección de correo electrónico confirmada!"
 
-#: sdv/__init__.py:1620
+#: sdv/__init__.py:1623
 msgid "not logged in"
 msgstr "sesión no iniciada"
 
@@ -889,6 +895,11 @@ msgstr "Resumen de la granja de %(farmname)s por %(name)s (Stardew Valley)"
 #, python-format
 msgid "%(farmname)s Farm Summary - upload.farm"
 msgstr "Resumen de la granja de %(farmname)s - upload.farm"
+
+#: sdv/templates/profile.html:138 sdv/templates/profile.html:159
+#, python-format
+msgid "%(farmname)s Farm"
+msgstr "Granja de %(farmname)s"
 
 #: sdv/templates/profile.html:168
 #, python-format

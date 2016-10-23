@@ -135,7 +135,7 @@ $(document).ready(function() {
 </script>
 {% endblock %}
 
-{% block title %}{{data.farmName}} Farm - {{super()}}{% endblock %}
+{% block title %}{{ _("%(farmname)s Farm",farmname = data.farmName)}} - {{super()}}{% endblock %}
 {% block bodycontent %}
 			<div class="row center-block">
 				<div class="col-md-12 col-sm-12 panel">
@@ -156,7 +156,7 @@ $(document).ready(function() {
 											</div>
 										{% endif %}
 										<div class="title-title">
-											<h1 class="text-center" style="margin-bottom:0px;">{{ data.farmName }} Farm</h1>
+											<h1 class="text-center" style="margin-bottom:0px;">{{ _("%(farmname)s Farm",farmname = data.farmName)}}</h1>
 										</div>
 									</div>
 								</div>
