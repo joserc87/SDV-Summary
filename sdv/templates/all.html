@@ -66,13 +66,13 @@
 							<li><a href="{{url_for('allmain',**url_args)}}">{{thumb_types.get('True')}}</a></li>
 						</ul>
 					</div>
-					<p class="pull-left browsetext">thumbnail&nbsp;</p>
+					<p class="pull-left browsetext">{{_("thumbnail")}}&nbsp;</p>
 					{% if 'series' in request.args or (request.args.get('liked')=='True' and logged_in()) %}
-						<p class="pull-left browsetext">limiting results to&nbsp;</p>
+						<p class="pull-left browsetext">{{_("limiting results to")}}&nbsp;</p>
 						{% if 'series' in request.args %}
 							{% set url_args = dict(request.args) %}
 							{% do url_args.pop('series',None) %}
-							<p class="pull-left browsetext">farms in same series as <a href="{{request.args.get('series')}}">{{request.args.get('series')}}</a> (<a href="{{url_for('allmain',**url_args)}}">remove limit</a>)&nbsp;</p>
+							<p class="pull-left browsetext">{{_("farms in same series as")}} <a href="{{request.args.get('series')}}">{{request.args.get('series')}}</a> (<a href="{{url_for('allmain',**url_args)}}">{{_("remove limit")}}</a>)&nbsp;</p>
 						{% endif %}
 						{% if 'series' in request.args and (request.args.get('liked')=='True' and logged_in()) %}
 							<p class="pull-left browsetext">and&nbsp;</p>
@@ -80,7 +80,7 @@
 						{% if (request.args.get('liked')=='True' and logged_in()) %}
 							{% set url_args = dict(request.args) %}
 							{% do url_args.pop('liked',None) %}
-							<p class="pull-left browsetext">farms I upvoted (<a href="{{url_for('allmain',**url_args)}}">{{_("remove limit")}}</a>)</p>
+							<p class="pull-left browsetext">{{_("farms I upvoted")}} (<a href="{{url_for('allmain',**url_args)}}">{{_("remove limit")}}</a>)</p>
 						{% endif %}
 
 					{% endif %}

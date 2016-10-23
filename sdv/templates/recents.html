@@ -8,16 +8,16 @@
 				<img src="{{ recent[4] }}" class="headimg" >
 			</div>
 			<div class="previewtext">
-				{{ recent[1] }}, {{ recent[2] }} Farm <br/>  {{ recent[3] }}
+				{{ _("%(name)s, %(farmname)s Farm",name=recent[1],farmname=recent[2]) }} <br/> {{ recent[3] }}
 			</div>
 			{% if recent[6] %}
 				<div class="previewdl">
-					<img title="This farm has a downloadable savegame available" src="{{url_for('static',filename='css/cpanel/dl32.png')}}">
+					<img title="{{_('This farm has a downloadable savegame available')}}" src="{{url_for('static',filename='css/cpanel/dl32.png')}}">
 				</div>
 			{%endif%}
 			{%if recent[8] == True %}
 				<div class="indicate-private">
-					<img title="This farm is unlisted and will not show up in searches nor on the front page except to you. It can still be viewed by people with a direct link." src="{{url_for('static',filename='css/cpanel/private.png')}}">
+					<img title="{{_('This farm is unlisted and will not show up in searches nor on the front page except to you. It can still be viewed by people with a direct link.')}}" src="{{url_for('static',filename='css/cpanel/private.png')}}">
 				</div>
 			{%endif%}
 		</a>

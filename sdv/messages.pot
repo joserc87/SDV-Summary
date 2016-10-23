@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-10-21 16:15+0100\n"
+"POT-Creation-Date: 2016-10-23 20:32+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,136 +17,136 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: __init__.py:163 __init__.py:230
+#: sdv/__init__.py:188 sdv/__init__.py:255
 msgid "Username not found!"
 msgstr ""
 
-#: __init__.py:175
+#: sdv/__init__.py:200
 msgid "Unable to interpret stored password hash!"
 msgstr ""
 
-#: __init__.py:186
+#: sdv/__init__.py:211
 msgid "Incorrect password!"
 msgstr ""
 
-#: __init__.py:209
+#: sdv/__init__.py:234
 msgid "Missing email or password for login!"
 msgstr ""
 
-#: __init__.py:215
+#: sdv/__init__.py:240
 msgid "Logged in successfully!"
 msgstr ""
 
-#: __init__.py:232
+#: sdv/__init__.py:257
 msgid ""
 "Email address not verified; please verify your account using the "
 "verification email sent when you registered before attempting to reset "
 "password!"
 msgstr ""
 
-#: __init__.py:241
+#: sdv/__init__.py:266
 msgid "Password reset email sent!"
 msgstr ""
 
-#: __init__.py:243
+#: sdv/__init__.py:268
 msgid "Previous password reset email still waiting to be sent... (sorry)"
 msgstr ""
 
-#: __init__.py:251 __init__.py:275
+#: sdv/__init__.py:276 sdv/__init__.py:300
 msgid "Cannot reset password: account does not exist"
 msgstr ""
 
-#: __init__.py:254
+#: sdv/__init__.py:279
 msgid "This reset link has already been used!</p>"
 msgstr ""
 
-#: __init__.py:261
+#: sdv/__init__.py:286
 msgid "Password reset, please log in!"
 msgstr ""
 
-#: __init__.py:263 __init__.py:283 __init__.py:1584
+#: sdv/__init__.py:288 sdv/__init__.py:308 sdv/__init__.py:1609
 msgid "Malformed verification string!"
 msgstr ""
 
-#: __init__.py:266
+#: sdv/__init__.py:291
 msgid "Password insufficiently long, please try again"
 msgstr ""
 
-#: __init__.py:268
+#: sdv/__init__.py:293
 msgid "Please enter the email address you used to register"
 msgstr ""
 
-#: __init__.py:278
+#: sdv/__init__.py:303
 msgid "This reset link has already been used!"
 msgstr ""
 
-#: __init__.py:292
+#: sdv/__init__.py:317
 msgid "You are already logged in!"
 msgstr ""
 
-#: __init__.py:295
+#: sdv/__init__.py:320
 msgid "Missing email or password!"
 msgstr ""
 
-#: __init__.py:297
+#: sdv/__init__.py:322
 msgid "Password too short!"
 msgstr ""
 
-#: __init__.py:312
+#: sdv/__init__.py:337
 msgid ""
 "You have successfully registered. A verification email has been sent to "
 "you. Now, please sign in!"
 msgstr ""
 
-#: __init__.py:315
+#: sdv/__init__.py:340
 msgid "Invalid email address!"
 msgstr ""
 
-#: __init__.py:317
+#: sdv/__init__.py:342
 msgid "This email address has already registered"
 msgstr ""
 
-#: __init__.py:319
+#: sdv/__init__.py:344
 msgid "Captcha failed! If you are human, please try again!"
 msgstr ""
 
-#: __init__.py:327
+#: sdv/__init__.py:352
 msgid "You must be signed in to view your profile!"
 msgstr ""
 
-#: __init__.py:425
+#: sdv/__init__.py:450
 msgid "I don't think that's very funny"
 msgstr ""
 
-#: __init__.py:428
+#: sdv/__init__.py:453
 msgid ""
 "Savegame failed sanity check (if you think this is in error please let us"
 " know)"
 msgstr ""
 
-#: __init__.py:435
+#: sdv/__init__.py:460
 msgid ""
 "Not valid save file - did you select file 'SaveGameInfo' instead of "
 "'playername_number'?"
 msgstr ""
 
-#: __init__.py:439
+#: sdv/__init__.py:464
 msgid "Not well-formed xml"
 msgstr ""
 
-#: __init__.py:463
+#: sdv/__init__.py:488
 msgid "Error occurred inserting information into the database!"
 msgstr ""
 
-#: __init__.py:875
+#: sdv/__init__.py:900
 msgid "Save file incompatible with current database: error is "
 msgstr ""
 
-#: __init__.py:887 __init__.py:940
+#: sdv/__init__.py:912 sdv/__init__.py:965
 msgid "There is nothing here... is this URL correct?"
 msgstr ""
 
-#: __init__.py:928
+#: sdv/__init__.py:953
 msgid ""
 "It looks like you have uploaded multiple files, but are not logged in: if"
 " you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link "
@@ -154,308 +154,386 @@ msgid ""
 "to imgur!"
 msgstr ""
 
-#: __init__.py:960
+#: sdv/__init__.py:985
 msgid ""
 "This plan failed to render, probably because of a bug. It's logged and "
 "we'll look into it as soon as possible! Sorry!"
 msgstr ""
 
-#: __init__.py:1046
+#: sdv/__init__.py:1071
 msgid "Unknown or insufficient credentials"
 msgstr ""
 
-#: __init__.py:1077
+#: sdv/__init__.py:1102
 msgid "You do not own this farm"
 msgstr ""
 
-#: __init__.py:1088
+#: sdv/__init__.py:1113
 msgid "You do not own at least one of the farms"
 msgstr ""
 
-#: __init__.py:1109
+#: sdv/__init__.py:1134
 msgid "You do not have sufficient credentials to claim this page"
 msgstr ""
 
-#: __init__.py:1119
+#: sdv/__init__.py:1144
 msgid "You do not have sufficient credentials to claim one of these pages"
 msgstr ""
 
-#: __init__.py:1134
+#: sdv/__init__.py:1159
 msgid "You do not have sufficient credentials to perform this action"
 msgstr ""
 
-#: __init__.py:1149
+#: sdv/__init__.py:1174
 msgid ""
 "You have uploaded this page to imgur in the last 2 hours: please wait to "
 "upload again"
 msgstr ""
 
-#: __init__.py:1151
+#: sdv/__init__.py:1176
 msgid ""
 "There was an issue with uploading the file to imgur. Please try again "
 "later!"
 msgstr ""
 
-#: __init__.py:1158
+#: sdv/__init__.py:1183
 msgid ""
 "Either you or upload.farm are out of imgur credits for the day! Sorry :( "
 "Try again tomorrow"
 msgstr ""
 
-#: __init__.py:1161
+#: sdv/__init__.py:1186
 msgid "You must be logged in to post your farm to imgur!"
 msgstr ""
 
-#: __init__.py:1169
+#: sdv/__init__.py:1194
 msgid ""
 "Sorry, the stardew.info planner API is over its rate limit: please try "
 "again in a few minutes!"
 msgstr ""
 
-#: __init__.py:1173
+#: sdv/__init__.py:1198
 msgid "There was a problem accessing the planner. Error was: {}"
 msgstr ""
 
-#: __init__.py:1202
+#: sdv/__init__.py:1227
 msgid "You do not have the correct session information to perform this action!"
 msgstr ""
 
-#: __init__.py:1240
+#: sdv/__init__.py:1265
 msgid "Problem authenticating!"
 msgstr ""
 
-#: __init__.py:1242
+#: sdv/__init__.py:1267
 msgid "You are not logged in!"
 msgstr ""
 
-#: __init__.py:1379
+#: sdv/__init__.py:1404
 msgid "No browse with that ID!"
 msgstr ""
 
-#: __init__.py:1398
+#: sdv/__init__.py:1423
 msgid "Malformed request for entries!"
 msgstr ""
 
-#: __init__.py:1506 __init__.py:1508
+#: sdv/__init__.py:1531 sdv/__init__.py:1533
 msgid "No blog with that ID!"
 msgstr ""
 
-#: __init__.py:1534
+#: sdv/__init__.py:1559
 msgid "URL does not exist"
 msgstr ""
 
-#: __init__.py:1536
+#: sdv/__init__.py:1561
 msgid "You are unable to download this farm data at this time."
 msgstr ""
 
-#: __init__.py:1557
+#: sdv/__init__.py:1582
 msgid "Problem authenticating at imgur!"
 msgstr ""
 
-#: __init__.py:1560
+#: sdv/__init__.py:1585
 msgid "Cannot connect to imgur if not logged in!"
 msgstr ""
 
-#: __init__.py:1573
+#: sdv/__init__.py:1598
 msgid "Account does not exist!"
 msgstr ""
 
-#: __init__.py:1576
+#: sdv/__init__.py:1601
 msgid "Already confirmed email address!"
 msgstr ""
 
-#: __init__.py:1582
+#: sdv/__init__.py:1607
 msgid "Account email address confirmed!"
 msgstr ""
 
-#: __init__.py:1595
+#: sdv/__init__.py:1620
 msgid "not logged in"
 msgstr ""
 
-#: templates/account.html:13 templates/titlebar.html:22
+#: sdv/templates/account.html:13 sdv/templates/titlebar.html:24
 msgid "Account"
 msgstr ""
 
-#: templates/account.html:21
+#: sdv/templates/account.html:21
 msgid "Account info"
 msgstr ""
 
-#: templates/account.html:22
+#: sdv/templates/account.html:22
 #, python-format
 msgid "Email: %(email)s"
 msgstr ""
 
-#: templates/account.html:23
+#: sdv/templates/account.html:23
 msgid "Imgur: "
 msgstr ""
 
-#: templates/account.html:24
+#: sdv/templates/account.html:24
 #, python-format
 msgid "Logged in as %(username)s"
 msgstr ""
 
-#: templates/account.html:25
+#: sdv/templates/account.html:25
 msgid "connect to imgur"
 msgstr ""
 
-#: templates/account.html:27
+#: sdv/templates/account.html:27
 msgid "Browse my liked farms"
 msgstr ""
 
-#: templates/account.html:32
+#: sdv/templates/account.html:32
 msgid "Preferences"
 msgstr ""
 
-#: templates/account.html:33
+#: sdv/templates/account.html:33
 msgid "Upload default: "
 msgstr ""
 
-#: templates/account.html:33
+#: sdv/templates/account.html:33
 msgid "Change to listed?"
 msgstr ""
 
-#: templates/account.html:33
+#: sdv/templates/account.html:33
 msgid ""
 "This will allow new uploads it to appear in searches on the site by "
 "default"
 msgstr ""
 
-#: templates/account.html:33
+#: sdv/templates/account.html:33
 msgid "Change&nbsp;to&nbsp;listed!"
 msgstr ""
 
-#: templates/account.html:33
+#: sdv/templates/account.html:33
 msgid "New uploads will not appear on the site by default"
 msgstr ""
 
-#: templates/account.html:33
+#: sdv/templates/account.html:33
 msgid "Change to unlisted?"
 msgstr ""
 
-#: templates/account.html:33
+#: sdv/templates/account.html:33
 msgid "This will prevent new uploads appearing to others on the site by default"
 msgstr ""
 
-#: templates/account.html:33
+#: sdv/templates/account.html:33
 msgid "Change&nbsp;to&nbsp;unlisted!"
 msgstr ""
 
-#: templates/account.html:33
+#: sdv/templates/account.html:33
 msgid "New uploads will appear listed on the site by default"
 msgstr ""
 
-#: templates/account.html:39 templates/account.html:84 templates/error.html:9
-#: templates/index.html:55 templates/login.html:55 templates/profile.html:178
-#: templates/signup.html:39
+#: sdv/templates/account.html:39 sdv/templates/account.html:84
+#: sdv/templates/all.html:93 sdv/templates/error.html:9
+#: sdv/templates/index.html:55 sdv/templates/login.html:55
+#: sdv/templates/profile.html:179 sdv/templates/signup.html:39
 msgid "Error:"
 msgstr ""
 
-#: templates/account.html:50
+#: sdv/templates/account.html:50
 msgid "Claimable farms"
 msgstr ""
 
-#: templates/account.html:51
+#: sdv/templates/account.html:51
 msgid ""
 "The following farms are not associated with your user account, but were "
 "uploaded from your computer:"
 msgstr ""
 
-#: templates/account.html:59
+#: sdv/templates/account.html:59
 msgid "Or, claim all"
 msgstr ""
 
-#: templates/account.html:62
+#: sdv/templates/account.html:62
 msgid "Your farm series"
 msgstr ""
 
-#: templates/account.html:63
+#: sdv/templates/account.html:63
 msgid "Linked series of farms you have uploaded:"
 msgstr ""
 
-#: templates/account.html:67
+#: sdv/templates/account.html:67 sdv/templates/recents.html:11
 #, python-format
 msgid "%(name)s, %(farmname)s Farm"
 msgstr ""
 
-#: templates/account.html:71
+#: sdv/templates/account.html:71
 msgid "imgur"
 msgstr ""
 
-#: templates/base.html:4
+#: sdv/templates/all.html:15 sdv/templates/titlebar.html:21
+msgid "Browse"
+msgstr ""
+
+#: sdv/templates/all.html:19
+msgid "Search"
+msgstr ""
+
+#: sdv/templates/all.html:27
+msgid "Search for farms by user or farm name, or change sort type"
+msgstr ""
+
+#: sdv/templates/all.html:31
+#, python-format
+msgid "Sorting %(number)s results by "
+msgstr ""
+
+#: sdv/templates/all.html:32
+msgid "top rated"
+msgstr ""
+
+#: sdv/templates/all.html:32
+msgid "most views"
+msgstr ""
+
+#: sdv/templates/all.html:32 sdv/templates/all.html:34
+msgid "most recent"
+msgstr ""
+
+#: sdv/templates/all.html:45
+msgid "showing"
+msgstr ""
+
+#: sdv/templates/all.html:46
+msgid "only downloadable"
+msgstr ""
+
+#: sdv/templates/all.html:48 sdv/templates/all.html:52
+msgid "all farms"
+msgstr ""
+
+#: sdv/templates/all.html:57
+msgid "with"
+msgstr ""
+
+#: sdv/templates/all.html:58
+msgid "full"
+msgstr ""
+
+#: sdv/templates/all.html:60 sdv/templates/all.html:64
+msgid "minimap"
+msgstr ""
+
+#: sdv/templates/all.html:69
+msgid "thumbnail"
+msgstr ""
+
+#: sdv/templates/all.html:71
+msgid "limiting results to"
+msgstr ""
+
+#: sdv/templates/all.html:75
+msgid "farms in same series as"
+msgstr ""
+
+#: sdv/templates/all.html:75 sdv/templates/all.html:83
+msgid "remove limit"
+msgstr ""
+
+#: sdv/templates/all.html:83
+msgid "farms I upvoted"
+msgstr ""
+
+#: sdv/templates/all.html:104 sdv/templates/all.html:106
+#: sdv/templates/blog.html:13 sdv/templates/blog.html:15
+msgid "newest"
+msgstr ""
+
+#: sdv/templates/all.html:110 sdv/templates/all.html:112
+#: sdv/templates/blog.html:18 sdv/templates/blog.html:20
+msgid "previous"
+msgstr ""
+
+#: sdv/templates/all.html:125 sdv/templates/all.html:127
+#: sdv/templates/blog.html:28 sdv/templates/blog.html:30
+msgid "next"
+msgstr ""
+
+#: sdv/templates/all.html:131 sdv/templates/all.html:133
+#: sdv/templates/blog.html:33 sdv/templates/blog.html:35
+msgid "oldest"
+msgstr ""
+
+#: sdv/templates/base.html:4
 msgid "upload.farm Stardew Valley Summary Generator"
 msgstr ""
 
-#: templates/base.html:41
+#: sdv/templates/base.html:41
 msgid ""
 "This website uses cookies when you upload a savegame to determine "
 "ownership"
 msgstr ""
 
-#: templates/base.html:41
+#: sdv/templates/base.html:41
 msgid "Okay!"
 msgstr ""
 
-#: templates/base.html:41
+#: sdv/templates/base.html:41
 msgid "More info"
 msgstr ""
 
-#: templates/base.html:57
+#: sdv/templates/base.html:57
 #, python-format
 msgid "Took %(processtime)s seconds to process request"
 msgstr ""
 
-#: templates/base.html:57
+#: sdv/templates/base.html:57
 #, python-format
 msgid "source at %(github)s"
 msgstr ""
 
-#: templates/base.html:57
+#: sdv/templates/base.html:57
 #, python-format
 msgid "All Stardew Valley assets copyright %(concerned_ape)s"
 msgstr ""
 
-#: templates/blog.html:7 templates/index.html:77
+#: sdv/templates/blog.html:7 sdv/templates/index.html:77
 msgid "Development blog"
 msgstr ""
 
-#: templates/blog.html:13 templates/blog.html:15
-msgid "newest"
-msgstr ""
-
-#: templates/blog.html:18 templates/blog.html:20
-msgid "previous"
-msgstr ""
-
-#: templates/blog.html:28 templates/blog.html:30
-msgid "next"
-msgstr ""
-
-#: templates/blog.html:33 templates/blog.html:35
-msgid "oldest"
-msgstr ""
-
-#: templates/blogcontent.html:7
+#: sdv/templates/blogcontent.html:7
 #, python-format
 msgid "by %(name)s at %(time)s"
 msgstr ""
 
-#: templates/error.html:7
+#: sdv/templates/error.html:7
 msgid "Error!"
 msgstr ""
 
-#: templates/faq.html:7
+#: sdv/templates/faq.html:7
 msgid "Frequently Asked Questions"
 msgstr ""
 
-#: templates/faq.html:8 templates/titlebar.html:21
+#: sdv/templates/faq.html:8 sdv/templates/titlebar.html:23
 msgid "FAQ"
 msgstr ""
 
-#: templates/faq.html:11
+#: sdv/templates/faq.html:11
 msgid "What does this site do?"
 msgstr ""
 
-#: templates/faq.html:12
+#: sdv/templates/faq.html:12
 #, python-format
 msgid ""
 "It generates a map and summary of a Stardew Valley farm, with your player"
@@ -463,11 +541,11 @@ msgid ""
 "tools like %(gedosato)s."
 msgstr ""
 
-#: templates/faq.html:14
+#: sdv/templates/faq.html:14
 msgid "Where do I find the savegame?"
 msgstr ""
 
-#: templates/faq.html:15
+#: sdv/templates/faq.html:15
 #, python-format
 msgid ""
 "Savegames are in %(appdata)s. This can be pasted into the file upload box"
@@ -476,11 +554,11 @@ msgid ""
 "not named SaveGameInfo)."
 msgstr ""
 
-#: templates/faq.html:17
+#: sdv/templates/faq.html:17
 msgid "Why register for an upload.farm account?"
 msgstr ""
 
-#: templates/faq.html:18
+#: sdv/templates/faq.html:18
 msgid ""
 "To add <a href='#whysignin'>certain features such as savegame sharing</a>"
 " to the site it became necessary to introduce user accounts, so that page"
@@ -489,11 +567,11 @@ msgid ""
 "imgur, and the ability to link up series of farms."
 msgstr ""
 
-#: templates/faq.html:20
+#: sdv/templates/faq.html:20
 msgid "Can I upload multiple farms from the same playthrough?"
 msgstr ""
 
-#: templates/faq.html:21
+#: sdv/templates/faq.html:21
 #, python-format
 msgid ""
 "Yes. If you are %(signed_up)s and %(logged_in)s, your uploads's series is"
@@ -503,19 +581,19 @@ msgid ""
 "to register, they can be claimed."
 msgstr ""
 
-#: templates/faq.html:21 templates/faq.html:27
+#: sdv/templates/faq.html:21 sdv/templates/faq.html:27
 msgid "signed up"
 msgstr ""
 
-#: templates/faq.html:21 templates/faq.html:42
+#: sdv/templates/faq.html:21 sdv/templates/faq.html:42
 msgid "logged in"
 msgstr ""
 
-#: templates/faq.html:23
+#: sdv/templates/faq.html:23
 msgid "I can't find my farm!"
 msgstr ""
 
-#: templates/faq.html:24
+#: sdv/templates/faq.html:24
 #, python-format
 msgid ""
 "If you are registered, check your %(account)s page. If you are not and "
@@ -523,15 +601,15 @@ msgid ""
 "redirect you to the existing data, and re-set your ownership."
 msgstr ""
 
-#: templates/faq.html:24
+#: sdv/templates/faq.html:24
 msgid "account"
 msgstr ""
 
-#: templates/faq.html:26
+#: sdv/templates/faq.html:26
 msgid "How do I enable savegame sharing?"
 msgstr ""
 
-#: templates/faq.html:27
+#: sdv/templates/faq.html:27
 #, python-format
 msgid ""
 "If you are %(signed_up)s and own the page, beneath the minimap is a "
@@ -539,11 +617,11 @@ msgid ""
 "users of the site, and may be enabled or disabled as you like."
 msgstr ""
 
-#: templates/faq.html:29
+#: sdv/templates/faq.html:29
 msgid "Why do I have to sign up to enable savegame sharing?"
 msgstr ""
 
-#: templates/faq.html:30
+#: sdv/templates/faq.html:30
 msgid ""
 "If other people could download your savegame without you having claimed "
 "the page, they could upload it, <a href='#cantfind'>take control</a> of "
@@ -551,22 +629,22 @@ msgid ""
 "functionality, you have to register."
 msgstr ""
 
-#: templates/faq.html:32
+#: sdv/templates/faq.html:32
 msgid "Can I make uploads private, so only I can see them?"
 msgstr ""
 
-#: templates/faq.html:33
+#: sdv/templates/faq.html:33
 msgid ""
 "You can unlist farms if you are registered and logged in. You can also "
 "set your account to automatically make uploads unlisted on your account "
 "page."
 msgstr ""
 
-#: templates/faq.html:35
+#: sdv/templates/faq.html:35
 msgid "What is the stardew.info planner?"
 msgstr ""
 
-#: templates/faq.html:36
+#: sdv/templates/faq.html:36
 msgid ""
 "The <a href='https://stardew.info/planner/'' target='_blank'>Stardew "
 "planner</a> by <a href='https://github.com/hpeinar/stardewplanner' "
@@ -579,22 +657,22 @@ msgid ""
 " from the planner itself."
 msgstr ""
 
-#: templates/faq.html:38
+#: sdv/templates/faq.html:38
 msgid "How do I use downloaded savegames?"
 msgstr ""
 
-#: templates/faq.html:39
+#: sdv/templates/faq.html:39
 #, python-format
 msgid ""
 "Saves go in %(appdata)s where you can place the extracted folder and "
 "contents. This is normally %(windir)s."
 msgstr ""
 
-#: templates/faq.html:41
+#: sdv/templates/faq.html:41
 msgid "How can I delete my upload(s)?"
 msgstr ""
 
-#: templates/faq.html:42
+#: sdv/templates/faq.html:42
 #, python-format
 msgid ""
 "When you upload a savegame a cookie is set to indicate ownership. Below "
@@ -604,11 +682,11 @@ msgid ""
 "confirmation before deleting."
 msgstr ""
 
-#: templates/faq.html:44
+#: sdv/templates/faq.html:44
 msgid "Do you support [modname]?"
 msgstr ""
 
-#: templates/faq.html:45
+#: sdv/templates/faq.html:45
 msgid ""
 "At present we don't explicitly support any mods, but mods that don't add "
 "new assets or structurally change your savegame too much will probably "
@@ -616,825 +694,836 @@ msgid ""
 " support!"
 msgstr ""
 
-#: templates/index.html:40
+#: sdv/templates/index.html:40
 msgid "Upload your farm"
 msgstr ""
 
-#: templates/index.html:44
+#: sdv/templates/index.html:44
 msgid "Upload!"
 msgstr ""
 
-#: templates/index.html:47
+#: sdv/templates/index.html:47
 #, python-format
 msgid ""
 "%(stardew_valley)s save files can be found under %(appdata)s and are "
 "named after your character, plus an ID number"
 msgstr ""
 
-#: templates/index.html:64
+#: sdv/templates/index.html:64
 msgid "Recently uploaded farms"
 msgstr ""
 
-#: templates/index.html:65
+#: sdv/templates/index.html:65
 msgid "Recent uploads"
 msgstr ""
 
-#: templates/index.html:68
+#: sdv/templates/index.html:68
 msgid "more"
 msgstr ""
 
-#: templates/login.html:2
+#: sdv/templates/login.html:2
 msgid "Login"
 msgstr ""
 
-#: templates/login.html:37
+#: sdv/templates/login.html:32 sdv/templates/titlebar.html:26
+msgid "Sign in"
+msgstr ""
+
+#: sdv/templates/login.html:37
 msgid "Log in to a user account on upload.farm"
 msgstr ""
 
-#: templates/login.html:40 templates/reset.html:27 templates/reset.html:43
-#: templates/signup.html:20
+#: sdv/templates/login.html:40 sdv/templates/reset.html:27
+#: sdv/templates/reset.html:43 sdv/templates/signup.html:20
 msgid "Email address"
 msgstr ""
 
-#: templates/login.html:41 templates/reset.html:44 templates/signup.html:21
+#: sdv/templates/login.html:41 sdv/templates/reset.html:44
+#: sdv/templates/signup.html:21
 msgid "email"
 msgstr ""
 
-#: templates/login.html:45 templates/signup.html:25
+#: sdv/templates/login.html:45 sdv/templates/signup.html:25
 msgid "Password"
 msgstr ""
 
-#: templates/login.html:46 templates/reset.html:33 templates/signup.html:26
+#: sdv/templates/login.html:46 sdv/templates/reset.html:33
+#: sdv/templates/signup.html:26
 msgid "password"
 msgstr ""
 
-#: templates/login.html:49
+#: sdv/templates/login.html:49
 msgid "Sign in!"
 msgstr ""
 
-#: templates/login.html:57
+#: sdv/templates/login.html:57
 msgid "Need to register?"
 msgstr ""
 
-#: templates/login.html:57 templates/signup.html:33
+#: sdv/templates/login.html:57 sdv/templates/signup.html:33
 msgid "Sign up!"
 msgstr ""
 
-#: templates/login.html:57
+#: sdv/templates/login.html:57
 msgid "Forgot password?"
 msgstr ""
 
-#: templates/login.html:57
+#: sdv/templates/login.html:57
 msgid "Reset it!"
 msgstr ""
 
-#: templates/plan.html:5 templates/plan.html:9 templates/plan.html:16
-#: templates/plan.html:26
+#: sdv/templates/plan.html:5 sdv/templates/plan.html:9
+#: sdv/templates/plan.html:16 sdv/templates/plan.html:26
 msgid "Render of stardew.info farm plan (Stardew Valley)"
 msgstr ""
 
-#: templates/plan.html:8 templates/plan.html:15 templates/plan.html:22
+#: sdv/templates/plan.html:8 sdv/templates/plan.html:15
+#: sdv/templates/plan.html:22
 msgid "Farm plan render - upload.farm"
 msgstr ""
 
-#: templates/plan.html:79
+#: sdv/templates/plan.html:79
 #, python-format
 msgid "Farm plan in %(season)s"
 msgstr ""
 
-#: templates/plan.html:87
+#: sdv/templates/plan.html:87
 msgid "view plan"
 msgstr ""
 
-#: templates/plan.html:93
+#: sdv/templates/plan.html:93
 msgid "Plan re-rendering, will automatically load when complete"
 msgstr ""
 
-#: templates/profile.html:5 templates/profile.html:9 templates/profile.html:16
-#: templates/profile.html:28
+#: sdv/templates/profile.html:5 sdv/templates/profile.html:9
+#: sdv/templates/profile.html:16 sdv/templates/profile.html:28
 #, python-format
 msgid "Summary of %(farmname)s Farm by %(name)s (Stardew Valley)"
 msgstr ""
 
-#: templates/profile.html:8 templates/profile.html:15 templates/profile.html:22
+#: sdv/templates/profile.html:8 sdv/templates/profile.html:15
+#: sdv/templates/profile.html:22
 #, python-format
 msgid "%(farmname)s Farm Summary - upload.farm"
 msgstr ""
 
-#: templates/profile.html:167
+#: sdv/templates/profile.html:168
 #, python-format
 msgid "Go back to %(previous)s (left arrow on keyboard also works)"
 msgstr ""
 
-#: templates/profile.html:169
+#: sdv/templates/profile.html:170
 #, python-format
 msgid "Go forward to %(next)s (right arrow on keyboard also works)"
 msgstr ""
 
-#: templates/profile.html:181
+#: sdv/templates/profile.html:182
 msgid "Warning:"
 msgstr ""
 
-#: templates/profile.html:181
+#: sdv/templates/profile.html:182
 msgid ""
 "This farm failed image processing, which means the savegame had "
 "unexpected contents. It might be modded, or malicious. Be aware if "
 "downloading the savegame."
 msgstr ""
 
-#: templates/profile.html:217
+#: sdv/templates/profile.html:218
 msgid "Stats"
 msgstr ""
 
-#: templates/profile.html:218
+#: sdv/templates/profile.html:219
 msgid "Summary"
 msgstr ""
 
-#: templates/profile.html:219
+#: sdv/templates/profile.html:220
 msgid "Skills"
 msgstr ""
 
-#: templates/profile.html:231
+#: sdv/templates/profile.html:232
 msgid "Current Funds"
 msgstr ""
 
-#: templates/profile.html:232
+#: sdv/templates/profile.html:233
 msgid "Total Earnings"
 msgstr ""
 
-#: templates/profile.html:233
+#: sdv/templates/profile.html:234
 msgid "Gender"
 msgstr ""
 
-#: templates/profile.html:233
+#: sdv/templates/profile.html:234
 msgid "Male"
 msgstr ""
 
-#: templates/profile.html:233
+#: sdv/templates/profile.html:234
 msgid "Female"
 msgstr ""
 
-#: templates/profile.html:235
+#: sdv/templates/profile.html:236
 msgid "Favorite Thing"
 msgstr ""
 
-#: templates/profile.html:236
+#: sdv/templates/profile.html:237
 msgid "Health"
 msgstr ""
 
-#: templates/profile.html:237
+#: sdv/templates/profile.html:238
 msgid "Stamina"
 msgstr ""
 
-#: templates/profile.html:238
+#: sdv/templates/profile.html:239
 msgid "Steps Taken"
 msgstr ""
 
-#: templates/profile.html:240
+#: sdv/templates/profile.html:241
 msgid "Mines Depth"
 msgstr ""
 
-#: templates/profile.html:240 templates/profile.html:241
-#: templates/profile.html:243
+#: sdv/templates/profile.html:241 sdv/templates/profile.html:242
+#: sdv/templates/profile.html:244
 msgid "level"
 msgstr ""
 
-#: templates/profile.html:241
+#: sdv/templates/profile.html:242
 msgid "Cavern Depth"
 msgstr ""
 
-#: templates/profile.html:243
+#: sdv/templates/profile.html:244
 msgid "Mine Depth"
 msgstr ""
 
-#: templates/profile.html:245
+#: sdv/templates/profile.html:246
 msgid "Time Played"
 msgstr ""
 
-#: templates/profile.html:245
+#: sdv/templates/profile.html:246
 msgid "hours"
 msgstr ""
 
-#: templates/profile.html:259
+#: sdv/templates/profile.html:260
 msgid "is married to"
 msgstr ""
 
-#: templates/profile.html:259 templates/profile.html:262
-#: templates/profile.html:266
+#: sdv/templates/profile.html:260 sdv/templates/profile.html:262
+#: sdv/templates/profile.html:266
 msgid "and"
 msgstr ""
 
-#: templates/profile.html:262
+#: sdv/templates/profile.html:262
 msgid "is unmarried"
 msgstr ""
 
-#: templates/profile.html:266
+#: sdv/templates/profile.html:266
 msgid "has"
 msgstr ""
 
-#: templates/profile.html:266
+#: sdv/templates/profile.html:266
 #, python-format
 msgid "a %(n)s day old"
 msgstr ""
 
-#: templates/profile.html:266
+#: sdv/templates/profile.html:266
 msgid "son"
 msgstr ""
 
-#: templates/profile.html:266
+#: sdv/templates/profile.html:266
 msgid "daughter"
 msgstr ""
 
-#: templates/profile.html:266 templates/profile.html:271
+#: sdv/templates/profile.html:266 sdv/templates/profile.html:271
 msgid "named"
 msgstr ""
 
-#: templates/profile.html:268
+#: sdv/templates/profile.html:268
 msgid "has no children"
 msgstr ""
 
-#: templates/profile.html:271
+#: sdv/templates/profile.html:271
 msgid "and has a pet"
 msgstr ""
 
-#: templates/profile.html:271
+#: sdv/templates/profile.html:271
 msgid "cat"
 msgstr ""
 
-#: templates/profile.html:271
+#: sdv/templates/profile.html:271
 msgid "dog"
 msgstr ""
 
-#: templates/profile.html:280
+#: sdv/templates/profile.html:280
 msgid "Farm horse:"
 msgstr ""
 
-#: templates/profile.html:286
+#: sdv/templates/profile.html:286
 #, python-format
 msgid "%(n)s days old"
 msgstr ""
 
-#: templates/profile.html:314
+#: sdv/templates/profile.html:314
 #, python-format
 msgid "Animal Products worth 10%% more."
 msgstr ""
 
-#: templates/profile.html:315
+#: sdv/templates/profile.html:315
 #, python-format
 msgid "Crops worth 10%% more."
 msgstr ""
 
-#: templates/profile.html:316
+#: sdv/templates/profile.html:316
 msgid "Befriend Coop animals quicker."
 msgstr ""
 
-#: templates/profile.html:316
+#: sdv/templates/profile.html:316
 msgid "Incubation time cut in half."
 msgstr ""
 
-#: templates/profile.html:317
+#: sdv/templates/profile.html:317
 msgid "Befriend barn animals quicker."
 msgstr ""
 
-#: templates/profile.html:317
+#: sdv/templates/profile.html:317
 msgid "Sheep produce wool faster."
 msgstr ""
 
-#: templates/profile.html:318
+#: sdv/templates/profile.html:318
 #, python-format
 msgid "Artisan Goods (wine, cheese, oil, etc.) worth 50%% more."
 msgstr ""
 
-#: templates/profile.html:319
+#: sdv/templates/profile.html:319
 #, python-format
 msgid "All crops grow 10%% faster."
 msgstr ""
 
-#: templates/profile.html:320
+#: sdv/templates/profile.html:320
 msgid "+1 ore per vein."
 msgstr ""
 
-#: templates/profile.html:321
+#: sdv/templates/profile.html:321
 msgid "Chance for Gems to appear in pairs."
 msgstr ""
 
-#: templates/profile.html:322
+#: sdv/templates/profile.html:322
 #, python-format
 msgid "Metal bars worth 25%% more."
 msgstr ""
 
-#: templates/profile.html:323
+#: sdv/templates/profile.html:323
 msgid "Geode find doubled."
 msgstr ""
 
-#: templates/profile.html:324
+#: sdv/templates/profile.html:324
 msgid "Coal find doubled."
 msgstr ""
 
-#: templates/profile.html:325
+#: sdv/templates/profile.html:325
 #, python-format
 msgid "Gems worth 30%% more."
 msgstr ""
 
-#: templates/profile.html:326
+#: sdv/templates/profile.html:326
 #, python-format
 msgid "Wood worth 50%% more."
 msgstr ""
 
-#: templates/profile.html:327
+#: sdv/templates/profile.html:327
 msgid "Chance for double harvest of foraged items."
 msgstr ""
 
-#: templates/profile.html:328
+#: sdv/templates/profile.html:328
 msgid "Normal trees occasionally drop hardwood."
 msgstr ""
 
-#: templates/profile.html:329
+#: sdv/templates/profile.html:329
 msgid "Foraged items are always gold quality."
 msgstr ""
 
-#: templates/profile.html:330
+#: sdv/templates/profile.html:330
 #, python-format
 msgid "Syrup is worth 25%% more."
 msgstr ""
 
-#: templates/profile.html:331
+#: sdv/templates/profile.html:331
 msgid "Locations of foragable items are revealed."
 msgstr ""
 
-#: templates/profile.html:332
+#: sdv/templates/profile.html:332
 #, python-format
 msgid "Fish worth 25%% more."
 msgstr ""
 
-#: templates/profile.html:333
+#: sdv/templates/profile.html:333
 msgid "Resources required to craft crab pots reduced."
 msgstr ""
 
-#: templates/profile.html:334
+#: sdv/templates/profile.html:334
 #, python-format
 msgid "Fish worth 50%% more."
 msgstr ""
 
-#: templates/profile.html:335
+#: sdv/templates/profile.html:335
 msgid "Chance to find treasure doubled."
 msgstr ""
 
-#: templates/profile.html:336
+#: sdv/templates/profile.html:336
 msgid "Crab pots never catch trash."
 msgstr ""
 
-#: templates/profile.html:337
+#: sdv/templates/profile.html:337
 msgid "Crab pots no longer need to be baited."
 msgstr ""
 
-#: templates/profile.html:338
+#: sdv/templates/profile.html:338
 #, python-format
 msgid "All attacks deal 10%% more damage."
 msgstr ""
 
-#: templates/profile.html:338
+#: sdv/templates/profile.html:338
 msgid "+15 HP."
 msgstr ""
 
-#: templates/profile.html:339
+#: sdv/templates/profile.html:339
 #, python-format
 msgid "Critical strike chance increased by 50%%."
 msgstr ""
 
-#: templates/profile.html:340
+#: sdv/templates/profile.html:340
 #, python-format
 msgid "Damage is increased by 15%%."
 msgstr ""
 
-#: templates/profile.html:341
+#: sdv/templates/profile.html:341
 msgid "HP is increased by 25."
 msgstr ""
 
-#: templates/profile.html:342
+#: sdv/templates/profile.html:342
 msgid "Cooldown on special moves is cut in half."
 msgstr ""
 
-#: templates/profile.html:343
+#: sdv/templates/profile.html:343
 msgid "Critical hits are deadly."
 msgstr ""
 
-#: templates/profile.html:385
+#: sdv/templates/profile.html:385
 msgid "(Hover for professions)"
 msgstr ""
 
-#: templates/profile.html:403 templates/profile.html:405
+#: sdv/templates/profile.html:403 sdv/templates/profile.html:405
 msgid "This will claim"
 msgstr ""
 
-#: templates/profile.html:403 templates/profile.html:427
+#: sdv/templates/profile.html:403 sdv/templates/profile.html:427
 msgid "only this"
 msgstr ""
 
-#: templates/profile.html:403
+#: sdv/templates/profile.html:403
 msgid "upload"
 msgstr ""
 
-#: templates/profile.html:403
+#: sdv/templates/profile.html:403
 msgid "Claim&nbsp;it!"
 msgstr ""
 
-#: templates/profile.html:403
+#: sdv/templates/profile.html:403
 msgid "Claim this farm (link it to your account)"
 msgstr ""
 
-#: templates/profile.html:405
+#: sdv/templates/profile.html:405
 msgid "all unclaimed uploads"
 msgstr ""
 
-#: templates/profile.html:405
+#: sdv/templates/profile.html:405
 msgid "made from this browser."
 msgstr ""
 
-#: templates/profile.html:405
+#: sdv/templates/profile.html:405
 msgid "Claim&nbsp;all!"
 msgstr ""
 
-#: templates/profile.html:405
+#: sdv/templates/profile.html:405
 msgid "Claim all unclaimed farms (link them to your account)"
 msgstr ""
 
-#: templates/profile.html:409
+#: sdv/templates/profile.html:409
 msgid "Send to"
 msgstr ""
 
-#: templates/profile.html:409
+#: sdv/templates/profile.html:409
 msgid "stardew.info planner"
 msgstr ""
 
-#: templates/profile.html:409
+#: sdv/templates/profile.html:409
 msgid "?"
 msgstr ""
 
-#: templates/profile.html:409
+#: sdv/templates/profile.html:409
 msgid "(this is a separate site not part of upload.farm)"
 msgstr ""
 
-#: templates/profile.html:409
+#: sdv/templates/profile.html:409
 msgid "Plan&nbsp;my&nbsp;farm!"
 msgstr ""
 
-#: templates/profile.html:409
+#: sdv/templates/profile.html:409
 msgid "Plan my farm (send to stardew.info planner)"
 msgstr ""
 
-#: templates/profile.html:412
+#: sdv/templates/profile.html:412
 msgid "Disable downloads?"
 msgstr ""
 
-#: templates/profile.html:412
+#: sdv/templates/profile.html:412
 msgid "Disables sharing of the savegame you uploaded"
 msgstr ""
 
-#: templates/profile.html:412
+#: sdv/templates/profile.html:412
 msgid "Disable!"
 msgstr ""
 
-#: templates/profile.html:412
+#: sdv/templates/profile.html:412
 msgid "Downloads currently enabled"
 msgstr ""
 
-#: templates/profile.html:415
+#: sdv/templates/profile.html:415
 msgid "Enable downloads?"
 msgstr ""
 
-#: templates/profile.html:415
+#: sdv/templates/profile.html:415
 msgid "Enables download of the savegame you uploaded by yourself and others"
 msgstr ""
 
-#: templates/profile.html:415
+#: sdv/templates/profile.html:415
 msgid "Enable!"
 msgstr ""
 
-#: templates/profile.html:415
+#: sdv/templates/profile.html:415
 msgid "Downloads currently disabled"
 msgstr ""
 
-#: templates/profile.html:417
+#: sdv/templates/profile.html:417
 msgid "To enable savegame download please first"
 msgstr ""
 
-#: templates/profile.html:417
+#: sdv/templates/profile.html:417
 msgid "sign up"
 msgstr ""
 
-#: templates/profile.html:417
+#: sdv/templates/profile.html:417
 msgid "sign in"
 msgstr ""
 
-#: templates/profile.html:417
+#: sdv/templates/profile.html:417
 msgid ", then"
 msgstr ""
 
-#: templates/profile.html:417
+#: sdv/templates/profile.html:417
 msgid "claim this page."
 msgstr ""
 
-#: templates/profile.html:417
+#: sdv/templates/profile.html:417
 msgid "Sign up or sign in to enable downloads!"
 msgstr ""
 
-#: templates/profile.html:421
+#: sdv/templates/profile.html:421
 msgid "List your farm?"
 msgstr ""
 
-#: templates/profile.html:421
+#: sdv/templates/profile.html:421
 msgid "Allows it to appear in searches on the site"
 msgstr ""
 
-#: templates/profile.html:421
+#: sdv/templates/profile.html:421
 msgid "List!"
 msgstr ""
 
-#: templates/profile.html:421
+#: sdv/templates/profile.html:421
 msgid "Farm currently unlisted"
 msgstr ""
 
-#: templates/profile.html:423
+#: sdv/templates/profile.html:423
 msgid "Unlist your farm?"
 msgstr ""
 
-#: templates/profile.html:423
+#: sdv/templates/profile.html:423
 msgid "Prevents it appearing on the site except to you and people with the URL"
 msgstr ""
 
-#: templates/profile.html:423
+#: sdv/templates/profile.html:423
 msgid "Unlist!"
 msgstr ""
 
-#: templates/profile.html:423
+#: sdv/templates/profile.html:423
 msgid "Farm currently listed"
 msgstr ""
 
-#: templates/profile.html:427
+#: sdv/templates/profile.html:427
 msgid "Delete this farm?"
 msgstr ""
 
-#: templates/profile.html:427 templates/profile.html:429
+#: sdv/templates/profile.html:427 sdv/templates/profile.html:429
 msgid "This will delete "
 msgstr ""
 
-#: templates/profile.html:427
+#: sdv/templates/profile.html:427
 msgid " upload"
 msgstr ""
 
-#: templates/profile.html:427
+#: sdv/templates/profile.html:427
 msgid "Delete&nbsp;it!"
 msgstr ""
 
-#: templates/profile.html:427
+#: sdv/templates/profile.html:427
 msgid "Delete farm"
 msgstr ""
 
-#: templates/profile.html:429
+#: sdv/templates/profile.html:429
 msgid "Delete all for this farm?"
 msgstr ""
 
-#: templates/profile.html:429
+#: sdv/templates/profile.html:429
 msgid "all uploads in this series."
 msgstr ""
 
-#: templates/profile.html:429
+#: sdv/templates/profile.html:429
 msgid ""
 "This will remove this farm and all associated farms, be sure you mean to "
 "do this!"
 msgstr ""
 
-#: templates/profile.html:429
+#: sdv/templates/profile.html:429
 msgid "Delete&nbsp;entire&nbsp;series!"
 msgstr ""
 
-#: templates/profile.html:429
+#: sdv/templates/profile.html:429
 msgid "Delete entire farm series"
 msgstr ""
 
-#: templates/profile.html:442
+#: sdv/templates/profile.html:442
 msgid "You use the contents of this zip at your own risk!"
 msgstr ""
 
-#: templates/profile.html:442
+#: sdv/templates/profile.html:442
 msgid "I understand, download!"
 msgstr ""
 
-#: templates/profile.html:442
+#: sdv/templates/profile.html:442
 msgid "download savegame"
 msgstr ""
 
-#: templates/profile.html:452
+#: sdv/templates/profile.html:452
 msgid "Friendships"
 msgstr ""
 
-#: templates/profile.html:465
+#: sdv/templates/profile.html:465
 msgid "Armored Bug"
 msgstr ""
 
-#: templates/profile.html:466
+#: sdv/templates/profile.html:466
 msgid "Bat"
 msgstr ""
 
-#: templates/profile.html:467
+#: sdv/templates/profile.html:467
 msgid "Big Slime"
 msgstr ""
 
-#: templates/profile.html:468
+#: sdv/templates/profile.html:468
 msgid "Bug"
 msgstr ""
 
-#: templates/profile.html:469
+#: sdv/templates/profile.html:469
 msgid "Duggy"
 msgstr ""
 
-#: templates/profile.html:470
+#: sdv/templates/profile.html:470
 msgid "Dust Sprite"
 msgstr ""
 
-#: templates/profile.html:471
+#: sdv/templates/profile.html:471
 msgid "Fly"
 msgstr ""
 
-#: templates/profile.html:472
+#: sdv/templates/profile.html:472
 msgid "Frost Bat"
 msgstr ""
 
-#: templates/profile.html:473
+#: sdv/templates/profile.html:473
 msgid "Frost Jelly"
 msgstr ""
 
-#: templates/profile.html:474
+#: sdv/templates/profile.html:474
 msgid "Ghost"
 msgstr ""
 
-#: templates/profile.html:475
+#: sdv/templates/profile.html:475
 msgid "Green Slime"
 msgstr ""
 
-#: templates/profile.html:476
+#: sdv/templates/profile.html:476
 msgid "Grub"
 msgstr ""
 
-#: templates/profile.html:477
+#: sdv/templates/profile.html:477
 msgid "Lava Bat"
 msgstr ""
 
-#: templates/profile.html:478
+#: sdv/templates/profile.html:478
 msgid "Lava Crab"
 msgstr ""
 
-#: templates/profile.html:479
+#: sdv/templates/profile.html:479
 msgid "Metal Head"
 msgstr ""
 
-#: templates/profile.html:480
+#: sdv/templates/profile.html:480
 msgid "Mummy"
 msgstr ""
 
-#: templates/profile.html:481
+#: sdv/templates/profile.html:481
 msgid "Purple Slime"
 msgstr ""
 
-#: templates/profile.html:482
+#: sdv/templates/profile.html:482
 msgid "Sludge"
 msgstr ""
 
-#: templates/profile.html:483
+#: sdv/templates/profile.html:483
 msgid "Rock Crab"
 msgstr ""
 
-#: templates/profile.html:484
+#: sdv/templates/profile.html:484
 msgid "Serpent"
 msgstr ""
 
-#: templates/profile.html:485
+#: sdv/templates/profile.html:485
 msgid "Shadow Brute"
 msgstr ""
 
-#: templates/profile.html:486
+#: sdv/templates/profile.html:486
 msgid "Skeleton"
 msgstr ""
 
-#: templates/profile.html:487
+#: sdv/templates/profile.html:487
 msgid "Squid Kid"
 msgstr ""
 
-#: templates/profile.html:488
+#: sdv/templates/profile.html:488
 msgid "Stone Golem"
 msgstr ""
 
-#: templates/profile.html:489
+#: sdv/templates/profile.html:489
 msgid "Transparent Slime"
 msgstr ""
 
-#: templates/profile.html:490
+#: sdv/templates/profile.html:490
 msgid "Void Spirit"
 msgstr ""
 
-#: templates/profile.html:491
+#: sdv/templates/profile.html:491
 msgid "Yellow Slime"
 msgstr ""
 
-#: templates/profile.html:495
+#: sdv/templates/profile.html:495
 msgid "Monster Kills"
 msgstr ""
 
-#: templates/profile.html:508
+#: sdv/templates/profile.html:508
 #, python-format
 msgid "%(name)s has not killed any monsters yet."
 msgstr ""
 
-#: templates/profile.html:518
+#: sdv/templates/profile.html:518
 #, python-format
 msgid "Map of %(farmname)s Farm"
 msgstr ""
 
-#: templates/profile.html:523
+#: sdv/templates/profile.html:523
 msgid "Click to open farm gallery"
 msgstr ""
 
-#: templates/profile.html:532
+#: sdv/templates/profile.html:532
 msgid "view on imgur"
 msgstr ""
 
-#: templates/profile.html:539
+#: sdv/templates/profile.html:539
 msgid "reupload to imgur"
 msgstr ""
 
-#: templates/profile.html:539
+#: sdv/templates/profile.html:539
 msgid "upload to imgur"
 msgstr ""
 
-#: templates/reset.html:8 templates/reset.html:47
+#: sdv/templates/recents.html:15
+msgid "This farm has a downloadable savegame available"
+msgstr ""
+
+#: sdv/templates/recents.html:20
+msgid ""
+"This farm is unlisted and will not show up in searches nor on the front "
+"page except to you. It can still be viewed by people with a direct link."
+msgstr ""
+
+#: sdv/templates/reset.html:8 sdv/templates/reset.html:47
 msgid "Reset password"
 msgstr ""
 
-#: templates/reset.html:32
+#: sdv/templates/reset.html:32
 msgid "New password"
 msgstr ""
 
-#: templates/reset.html:33 templates/signup.html:26
+#: sdv/templates/reset.html:33 sdv/templates/signup.html:26
 #, python-format
 msgid "Passcode must be at least %(password_min_length)s characters long!"
 msgstr ""
 
-#: templates/reset.html:36
+#: sdv/templates/reset.html:36
 msgid "Set new password"
 msgstr ""
 
-#: templates/reset.html:40
+#: sdv/templates/reset.html:40
 msgid "Reset password for user account on upload.farm"
 msgstr ""
 
-#: templates/reset.html:54
+#: sdv/templates/reset.html:54
 msgid "Error"
 msgstr ""
 
-#: templates/signup.html:2 templates/signup.html:8 templates/titlebar.html:25
+#: sdv/templates/signup.html:2 sdv/templates/signup.html:8
+#: sdv/templates/titlebar.html:27
 msgid "Sign up"
 msgstr ""
 
-#: templates/signup.html:11
+#: sdv/templates/signup.html:11
 msgid ""
 "Registration allows enabling of savegame sharing, quick imgur upload, and"
 " creation and curation of farm series."
 msgstr ""
 
-#: templates/signup.html:12
+#: sdv/templates/signup.html:12
 msgid "Already got an account? Sign in!"
 msgstr ""
 
-#: templates/signup.html:17
+#: sdv/templates/signup.html:17
 msgid "Register a user account on upload.farm"
 msgstr ""
 
-#: templates/titlebar.html:9
+#: sdv/templates/titlebar.html:11
 msgid "upload.farm"
 msgstr ""
 
-#: templates/titlebar.html:14
+#: sdv/templates/titlebar.html:16
 msgid "Stardew Valley Summary Generator"
 msgstr ""
 
-#: templates/titlebar.html:18
+#: sdv/templates/titlebar.html:20
 msgid "Upload"
 msgstr ""
 
-#: templates/titlebar.html:19
-msgid "Browse"
-msgstr ""
-
-#: templates/titlebar.html:20
+#: sdv/templates/titlebar.html:22
 msgid "Blog"
 msgstr ""
 
-#: templates/titlebar.html:23
+#: sdv/templates/titlebar.html:25
 msgid "Logout"
-msgstr ""
-
-#: templates/titlebar.html:24
-msgid "Sign in"
 msgstr ""
 
