@@ -125,8 +125,8 @@ def playerInfo(saveFile):
                 s = []
                 for a in profs.iter("int"):
                     a = int(a.text)
-                    assert a < len(professions)
-                    s.append(professions[a])
+                    if a < len(professions):
+                        s.append(professions[a])
             if tag == "friendships":
                 s = {}
                 fship = player.find(tag)

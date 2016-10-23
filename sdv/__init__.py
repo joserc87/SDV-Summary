@@ -463,6 +463,9 @@ def file_uploaded(inputfile):
     except ParseError as e:
         g.error = _("Not well-formed xml")
         return {'type':'render','target':'index.html','parameters':{"error":g.error}}
+    except AssertionError as e:
+        g.error = _("Savegame failed an internal check (often caused by mods) sorry :(")
+        return {'type':'render','target':'index.html','parameters':{"error":g.error}}
     dupe = is_duplicate(md5_info,player_info)
     if dupe != False:
         session[dupe[0]] = md5_info
