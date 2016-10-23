@@ -508,7 +508,7 @@ def home():
             if result['type'] == 'redirect':
                 return redirect(url_for(result['target'],**result['parameters']))
             elif result['type'] == 'render':
-                params = {'blogposts':get_blogposts(5),'recents':get_recents()}
+                params = {'blogposts':get_blogposts(5),'recents':get_recents(), 'vote':json.dumps({entry[0]:get_votes(entry[0]) for entry in get_recents()['posts']})}
                 if 'parameters' in result:
                     for key in result['parameters'].keys():
                         params[key] = result['parameters'][key]
