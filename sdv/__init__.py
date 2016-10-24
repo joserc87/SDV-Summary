@@ -89,6 +89,8 @@ def get_locale():
         language = session['_language'] if session['_language'] in app.config['LANGUAGES'] else default
     else:
         language = default
+        if language == None:
+            language = 'en'
         session['_language'] = language
     return language
 
@@ -118,6 +120,7 @@ def legacy_location(location):
     return os.path.join(app.config['LEGACY_ROOT_FOLDER'],location)
 
 app.jinja_env.globals.update(legacy_location=legacy_location)
+app.jinja_env.globals.update(get_locale=get_locale)
 
 import sdv.imageDrone  # noqa
 import sdv.emailDrone  # noqa
