@@ -368,7 +368,7 @@ def account_page():
         r = c.fetchall()
         claimed_ids = {}
         for row in r:
-            c.execute('SELECT url,date,imgur_json FROM playerinfo WHERE series_id='+app.sqlesc+' AND owner_id='+app.sqlesc,(row[0],user))
+            c.execute('SELECT url,date,imgur_json FROM playerinfo WHERE series_id='+app.sqlesc+' AND owner_id='+app.sqlesc+' ORDER BY statsDaysPlayed ASC',(row[0],user))
             s = c.fetchall()
             s = [list(part[:2])+[json.loads(part[2]) if part[2] != None else None] + list(part[3:]) for part in s]
             claimed_ids[row[0]] = {'auto_key_json':json.loads(row[1]),'data':s}
