@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2016-10-23 21:31+0100\n"
-"PO-Revision-Date: 2016-10-23 21:35+0100\n"
+"PO-Revision-Date: 2016-10-28 17:31+0200\n"
 "Last-Translator: \n"
 "Language: es\n"
 "Language-Team: es <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr "¡Usuario no encontrado!"
 
 #: sdv/__init__.py:200
 msgid "Unable to interpret stored password hash!"
-msgstr "¡Incapaz de interpretar hash de la contraseña almacenada!"
+msgstr "¡Incapaz de interpretar hash de la contraseña guardada!"
 
 #: sdv/__init__.py:211
 msgid "Incorrect password!"
@@ -44,23 +44,23 @@ msgid ""
 "Email address not verified; please verify your account using the verification "
 "email sent when you registered before attempting to reset password!"
 msgstr ""
-"El correo electronico no ha sido verificada; por favor, ¡verifica su cuenta "
-"usando el correo electrónico de verificación enviado cuando se registró antes de "
-"intentar restablecer la contraseña!"
+"El correo electronico no ha sido confirmado. Por favor, antes de restablecer la "
+"contraseña, confirma tu cuenta usando el enlace de verificación enviado a tu "
+"correo tras el registro."
 
 #: sdv/__init__.py:266
 msgid "Password reset email sent!"
-msgstr "¡Correo electrónico de restablecimiento enviada!"
+msgstr "¡Mensaje de restablecimiento de contraseña enviado!"
 
 #: sdv/__init__.py:268
 msgid "Previous password reset email still waiting to be sent... (sorry)"
 msgstr ""
-"Anterior contraseña de correo electrónico de restablecimiento en espera de ser "
-"enviado"
+"Mensaje de restablecimiento anterior en espera de ser enviado... (disculpa las "
+"molestias)"
 
 #: sdv/__init__.py:276 sdv/__init__.py:300
 msgid "Cannot reset password: account does not exist"
-msgstr "No se puede restablecer la contraseña: cuenta no existe"
+msgstr "No se puede restablecer la contraseña: la cuenta no existe"
 
 #: sdv/__init__.py:279
 msgid "This reset link has already been used!</p>"
@@ -68,7 +68,7 @@ msgstr "¡Este enlace de restablecimiento ya se ha utilizado!</p>"
 
 #: sdv/__init__.py:286
 msgid "Password reset, please log in!"
-msgstr "¡Contraseña restablecida, ya puede iniciar sesión!"
+msgstr "¡Contraseña restablecida, inicia sesión!"
 
 #: sdv/__init__.py:288 sdv/__init__.py:308 sdv/__init__.py:1612
 msgid "Malformed verification string!"
@@ -76,13 +76,13 @@ msgstr "¡Secuencia de verificación de formato incorrecto!"
 
 #: sdv/__init__.py:291
 msgid "Password insufficiently long, please try again"
-msgstr "Contraseña suficientemente largo, por favor intente de nuevo"
+msgstr "Contraseña demasiado corta, por favor intentalo de nuevo"
 
 #: sdv/__init__.py:293
 msgid "Please enter the email address you used to register"
 msgstr ""
-"Por favor, introduzca la dirección de correo electrónico que utilizó para "
-"registrarse"
+"Por favor, introduce la dirección de correo electrónico que usaste para "
+"registrarte"
 
 #: sdv/__init__.py:303
 msgid "This reset link has already been used!"
@@ -90,11 +90,11 @@ msgstr "¡Este enlace de restablecimiento ya se ha utilizado!"
 
 #: sdv/__init__.py:317
 msgid "You are already logged in!"
-msgstr "¡Ya se ha autentificado!"
+msgstr "¡Ya has iniciado sesión!"
 
 #: sdv/__init__.py:320
 msgid "Missing email or password!"
-msgstr "¡Falta el dirección de correo electrónico o contraseña!"
+msgstr "¡Falta la dirección de correo electrónico o contraseña!"
 
 #: sdv/__init__.py:322
 msgid "Password too short!"
@@ -105,66 +105,67 @@ msgid ""
 "You have successfully registered. A verification email has been sent to you. "
 "Now, please sign in!"
 msgstr ""
-"Se ha registrado con éxito. Un mensaje de verificación ha sido enviada a usted. "
-"Ahora, por favor, ¡inicie sesión!"
+"Registro realizado con éxito. Recibiras un mensaje de verificación en tu cuenta "
+"de correo. Ahora, por favor, inicia la sesión."
 
 #: sdv/__init__.py:340
 msgid "Invalid email address!"
-msgstr "Dirección de correo electrónico invalida"
+msgstr "Dirección de correo electrónico no válida"
 
 #: sdv/__init__.py:342
 msgid "This email address has already registered"
-msgstr "Esta dirección de correo electrónico ya ha registrado"
+msgstr "Esta dirección de correo electrónico ya ha sido registrada"
 
 #: sdv/__init__.py:344
 msgid "Captcha failed! If you are human, please try again!"
 msgstr ""
-"¡Código de imagen erroneo! Si eres un ser humano, por favor intente de nuevo!"
+"¡Código de imagen erroneo! Si eres un ser humano, por favor intentalo de nuevo!"
 
 #: sdv/__init__.py:352
 msgid "You must be signed in to view your profile!"
-msgstr "¡Debe estar autenticado para ver tu perfil!"
+msgstr "¡Debes iniciar sesión para ver tu perfil!"
 
 #: sdv/__init__.py:450
 msgid "I don't think that's very funny"
-msgstr "No creo que eso es muy divertido"
+msgstr "No creo que eso sea muy divertido"
 
 #: sdv/__init__.py:453
 msgid ""
 "Savegame failed sanity check (if you think this is in error please let us know)"
 msgstr ""
-"Guardar archivo partida no comprobación de validez (si usted piensa que esto es "
-"un error, por favor sepamos)"
+"Archivo de partida guardado no válido (si piensas que es un error, por favor "
+"avísanos)"
 
 #: sdv/__init__.py:460
 msgid ""
 "Not valid save file - did you select file 'SaveGameInfo' instead of "
 "'playername_number'?"
 msgstr ""
-"Archivo no es válido - ¿Ha seleccionado 'SaveGameInfo' en lugar de "
-"'jugador_numeros'?"
+"Archivo no es válido - ¿Has seleccionado 'SaveGameInfo' en lugar de "
+"'playername_number'?"
 
 #: sdv/__init__.py:464
 msgid "Not well-formed xml"
-msgstr "No XML bien formado"
+msgstr "XML no informado correctamente "
 
 #: sdv/__init__.py:467
 msgid "Savegame failed an internal check (often caused by mods) sorry :("
 msgstr ""
-"La partida guardada ha fallado una prueba interna (frecuente causada por mods) "
-"lo siento :("
+"La partida guardada no ha superado la comprobación interna (suele pasar con "
+"mods) lo sentimos :("
 
 #: sdv/__init__.py:491
 msgid "Error occurred inserting information into the database!"
-msgstr "¡Un error ocurrió la inserción de información en la base de datos!"
+msgstr ""
+"¡Ha ocurrido un error mientras se copiaba la información a la base de datos!"
 
 #: sdv/__init__.py:903
 msgid "Save file incompatible with current database: error is "
-msgstr "Guardar archivo incompatible con la base de datos actual: error es "
+msgstr "Guardar archivo es incompatible con la base de datos actual: error "
 
 #: sdv/__init__.py:915 sdv/__init__.py:968
 msgid "There is nothing here... is this URL correct?"
-msgstr "No hay nada aquí... ¿es este URL correcta?"
+msgstr "No hay nada aquí... ¿es este URL correcto?"
 
 #: sdv/__init__.py:956
 msgid ""
@@ -172,77 +173,77 @@ msgid ""
 "href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, "
 "enable savegame sharing, and one-click-post farm renders to imgur!"
 msgstr ""
-"Parece que has subido varios archivos, pero no está conectado: si <a "
-"href='{}'>regístrate</a> o <a href='{}'>iniciar sesión</a> que pueda vincular "
-"estos archivos, habilitar el uso \" \"compartido de partidas guardadas, y la "
-"granja de un solo clic post presta a imgur!"
+"Parece que has subido varios archivos, pero no estás conectado: si accedes a <a "
+"href='{}'>regístrate</a> o <a href='{}'>iniciar sesión</a> puedes vincular estos "
+"archivos, habilitar el uso \"compartir partidas guardadas\", y subir tu granja a "
+"imgur con un sólo click!"
 
 #: sdv/__init__.py:988
 msgid ""
 "This plan failed to render, probably because of a bug. It's logged and we'll "
 "look into it as soon as possible! Sorry!"
 msgstr ""
-"Este plan no se pudo presentar, probablemente debido a un error. Se registra y "
-"vamos a mirar en él tan pronto como sea posible! ¡Lo siento!"
+"Este plano no se pudo cargar, probablemente debido a un error. Ha sido "
+"registrado, echaremos un vistazo al problema lo antes posible! ¡Lo sentimos!"
 
 #: sdv/__init__.py:1074
 msgid "Unknown or insufficient credentials"
-msgstr "Credenciales desconocida o insuficiente"
+msgstr "Credenciales desconocidas o insuficientes"
 
 #: sdv/__init__.py:1105
 msgid "You do not own this farm"
-msgstr "Usted no es dueño de esta granja"
+msgstr "No eres dueño de esta granja"
 
 #: sdv/__init__.py:1116
 msgid "You do not own at least one of the farms"
-msgstr "Usted no es dueño de al menos una de estas granjas"
+msgstr "No eres dueño de al menos una de estas granjas"
 
 #: sdv/__init__.py:1137
 msgid "You do not have sufficient credentials to claim this page"
-msgstr "Usted no tiene credenciales suficientes para reclamar esta página"
+msgstr "No tienes credenciales suficientes para reclamar esta página"
 
 #: sdv/__init__.py:1147
 msgid "You do not have sufficient credentials to claim one of these pages"
-msgstr "Usted no tiene credenciales suficientes para reclamar una de estas páginas"
+msgstr "No tienes credenciales suficientes para reclamar una de estas páginas"
 
 #: sdv/__init__.py:1162
 msgid "You do not have sufficient credentials to perform this action"
-msgstr "Usted no tiene credenciales suficientes para realizar esta acción"
+msgstr "No tienes credenciales suficientes para realizar esta acción"
 
 #: sdv/__init__.py:1177
 msgid ""
 "You have uploaded this page to imgur in the last 2 hours: please wait to upload "
 "again"
 msgstr ""
-"Ha cargado esta página a imgur en las últimas 2 horas: por favor espere a cargar "
-"de nuevo"
+"Has cargado esta página a imgur en las últimas 2 horas: por favor espera a "
+"cargar de nuevo"
 
 #: sdv/__init__.py:1179
 msgid ""
 "There was an issue with uploading the file to imgur. Please try again later!"
 msgstr ""
-"Hubo un problema con la posibilidad de subir el archivo a Imgur. ¡Por favor, "
-"inténtelo de nuevo más tarde!"
+"Hubo un problema al subir el archivo a Imgur. ¡Por favor, inténtalo de nuevo más "
+"tarde!"
 
 #: sdv/__init__.py:1186
 msgid ""
 "Either you or upload.farm are out of imgur credits for the day! Sorry :( Try "
 "again tomorrow"
 msgstr ""
-"Usted o upload.farm está fuera de Imgur créditos para el día! Lo sentimos :"
-"( Inténtelo de nuevo mañana"
+"¡Tú o upload.farm se ha quedado sin créditos de Imgur por hoy! Lo sentimos :"
+"( Inténtalo de nuevo mañana"
 
 #: sdv/__init__.py:1189
 msgid "You must be logged in to post your farm to imgur!"
-msgstr "Usted debe ser conectado para publicar su granja para imgur!"
+msgstr "Debes estar conectado para publicar tu granja en imgur!"
 
 #: sdv/__init__.py:1197
 msgid ""
 "Sorry, the stardew.info planner API is over its rate limit: please try again in "
 "a few minutes!"
 msgstr ""
-"Lo sentimos, la API planificador stardew.info está por encima de su límite de "
-"velocidad: por favor intente nuevamente en unos minutos!"
+"Lo sentimos, la API del planificador stardew.info está por encima de su límite "
+"de velocidad: por favor intentalo nuevamente en unos minutos!"
 
 #: sdv/__init__.py:1201
 msgid "There was a problem accessing the planner. Error was: {}"
@@ -250,19 +251,19 @@ msgstr "Hubo un problema de acceso al planificador. Hubo un error: {}"
 
 #: sdv/__init__.py:1230
 msgid "You do not have the correct session information to perform this action!"
-msgstr "No tiene la información de sesión correcto para realizar esta acción!"
+msgstr "No tienes la información de sesión correcta para realizar esta acción!"
 
 #: sdv/__init__.py:1268
 msgid "Problem authenticating!"
-msgstr "Autentica problema!"
+msgstr "Problema de autentificación!"
 
 #: sdv/__init__.py:1270
 msgid "You are not logged in!"
-msgstr "No esta autenticada!"
+msgstr "¡No has iniciado sesión!"
 
 #: sdv/__init__.py:1407
 msgid "No browse with that ID!"
-msgstr "No hay explora con ese numero de identificación!"
+msgstr "No hay exploración con ese número de identificación!"
 
 #: sdv/__init__.py:1426
 msgid "Malformed request for entries!"
@@ -270,7 +271,7 @@ msgstr "Solicitud mal formada para las entradas"
 
 #: sdv/__init__.py:1534 sdv/__init__.py:1536
 msgid "No blog with that ID!"
-msgstr "No hay blog con ese numero de identificación!"
+msgstr "No hay blog con ese número de identificación!"
 
 #: sdv/__init__.py:1562
 msgid "URL does not exist"
@@ -278,19 +279,19 @@ msgstr "URL no existe"
 
 #: sdv/__init__.py:1564
 msgid "You are unable to download this farm data at this time."
-msgstr "No puede descargar este granja en este momento."
+msgstr "No puede descargar esta granja en estos momento."
 
 #: sdv/__init__.py:1585
 msgid "Problem authenticating at imgur!"
-msgstr "Problema autenticar al imgur!"
+msgstr "Problema de autentificación con imgur!"
 
 #: sdv/__init__.py:1588
 msgid "Cannot connect to imgur if not logged in!"
-msgstr "No puede conectar con imgur si no está autenticada!"
+msgstr "No se puede conectar con imgur si no se ha iniciado sesión!"
 
 #: sdv/__init__.py:1601
 msgid "Account does not exist!"
-msgstr "Cuenta no existe"
+msgstr "La cuenta no existe"
 
 #: sdv/__init__.py:1604
 msgid "Already confirmed email address!"
@@ -328,11 +329,11 @@ msgstr "Sesión iniciada como %(username)s"
 
 #: sdv/templates/account.html:25
 msgid "connect to imgur"
-msgstr "conecta a imgur"
+msgstr "conectar con imgur"
 
 #: sdv/templates/account.html:27
 msgid "Browse my liked farms"
-msgstr "Explorar mis granjas gustado"
+msgstr "Explorar mis granjas preferidas"
 
 #: sdv/templates/account.html:32
 msgid "Preferences"
@@ -344,38 +345,39 @@ msgstr "Subir por defecto: "
 
 #: sdv/templates/account.html:33
 msgid "Change to listed?"
-msgstr "¿Cambia a listada?"
+msgstr "¿Cambiar a visible?"
 
 #: sdv/templates/account.html:33
 msgid "This will allow new uploads it to appear in searches on the site by default"
 msgstr ""
-"Esto permitirá que las nuevas subidas que aparezca en las búsquedas en el sitio "
+"Esto permitirá que las subidas nuevas aparezcan en las búsquedas de la página "
 "por defecto"
 
 #: sdv/templates/account.html:33
 msgid "Change&nbsp;to&nbsp;listed!"
-msgstr "¡Cambia&nbsp;a&nbsp;listada!"
+msgstr "¡Cambiar&nbsp;a&nbsp;visible!"
 
 #: sdv/templates/account.html:33
 msgid "New uploads will not appear on the site by default"
-msgstr "Las nuevas subidas no aparezca en el sitio por defecto"
+msgstr "Las subidas nuevas no aparecerán en la página por defecto"
 
 #: sdv/templates/account.html:33
 msgid "Change to unlisted?"
-msgstr "¿Cambia a no listada?"
+msgstr "¿Cambiar a oculto?"
 
 #: sdv/templates/account.html:33
 msgid "This will prevent new uploads appearing to others on the site by default"
 msgstr ""
-"Esto previene las nuevas subidos a aparecer a otros en el sitio por defecto"
+"Esto previene que las subidas nuevas a la página sean visibles a otros por "
+"defecto"
 
 #: sdv/templates/account.html:33
 msgid "Change&nbsp;to&nbsp;unlisted!"
-msgstr "¡Cambia&nbsp;a&nbsp;no&nbsp;listada!"
+msgstr "¡Cambiar&nbsp;a&nbsp;oculto!"
 
 #: sdv/templates/account.html:33
 msgid "New uploads will appear listed on the site by default"
-msgstr "Las nuevas subidas aparezca en el sitio por defecto"
+msgstr "Las subidas nuevas aparecerán en la página por defecto"
 
 #: sdv/templates/account.html:39 sdv/templates/account.html:84
 #: sdv/templates/all.html:93 sdv/templates/error.html:9 sdv/templates/index.html:55
@@ -393,20 +395,20 @@ msgid ""
 "The following farms are not associated with your user account, but were uploaded "
 "from your computer:"
 msgstr ""
-"Los siguientes granjas no están asociados con su cuenta de usuario, sino que "
-"eran cargada desde este ordenador:"
+"Las siguientes granjas no están asociadas con tu cuenta de usuario, pero han "
+"sido cargadas desde este ordenador:"
 
 #: sdv/templates/account.html:59
 msgid "Or, claim all"
-msgstr "O, reclama todos"
+msgstr "O, reclama todas"
 
 #: sdv/templates/account.html:62
 msgid "Your farm series"
-msgstr "Series de sus granjas"
+msgstr "Series de tus granjas"
 
 #: sdv/templates/account.html:63
 msgid "Linked series of farms you have uploaded:"
-msgstr "Enlace de series de granjas que ha subido:"
+msgstr "Enlace de series de granjas que has subido:"
 
 #: sdv/templates/account.html:67 sdv/templates/recents.html:11
 #, python-format
@@ -428,7 +430,7 @@ msgstr "Buscar"
 #: sdv/templates/all.html:27
 msgid "Search for farms by user or farm name, or change sort type"
 msgstr ""
-"Busca las granjas por usuario o nombre de la granja, o cambia el tipo de ordenar"
+"Busca las granjas por usuario o nombre de la granja, o cambia el tipo de orden"
 
 #: sdv/templates/all.html:31
 #, python-format
@@ -437,7 +439,7 @@ msgstr "Ordenando los %(number)s resultados por"
 
 #: sdv/templates/all.html:32
 msgid "top rated"
-msgstr "más valorado"
+msgstr "mejor valorado"
 
 #: sdv/templates/all.html:32
 msgid "most views"
@@ -477,24 +479,24 @@ msgstr "miniatura"
 
 #: sdv/templates/all.html:71
 msgid "limiting results to"
-msgstr "limitando resultados a"
+msgstr "limitando los resultados a"
 
 #: sdv/templates/all.html:75
 msgid "farms in same series as"
-msgstr "las granjas el mismo serie como"
+msgstr "las granjas están en la misma serie que"
 
 #: sdv/templates/all.html:75 sdv/templates/all.html:83
 msgid "remove limit"
-msgstr "elimina límite"
+msgstr "elimina el límite"
 
 #: sdv/templates/all.html:83
 msgid "farms I upvoted"
-msgstr "las granjas que he votada arriba"
+msgstr "las granjas que he votado en positivo"
 
 #: sdv/templates/all.html:104 sdv/templates/all.html:106 sdv/templates/blog.html:13
 #: sdv/templates/blog.html:15
 msgid "newest"
-msgstr "más nuevo"
+msgstr "más reciente"
 
 #: sdv/templates/all.html:110 sdv/templates/all.html:112 sdv/templates/blog.html:18
 #: sdv/templates/blog.html:20
@@ -513,12 +515,12 @@ msgstr "más antigua"
 
 #: sdv/templates/base.html:4
 msgid "upload.farm Stardew Valley Summary Generator"
-msgstr "upload.farm Resumen Generador de Stardew Valley"
+msgstr "upload.farm Generador de Resumen de Stardew Valley"
 
 #: sdv/templates/base.html:41
 msgid "This website uses cookies when you upload a savegame to determine ownership"
 msgstr ""
-"Este sitio web utiliza cookies al cargar un juego guardado para determinar la "
+"Este sitio web utiliza cookies al cargar un juego guardado para establecer la "
 "propiedad"
 
 #: sdv/templates/base.html:41
@@ -532,7 +534,7 @@ msgstr "Más información"
 #: sdv/templates/base.html:57
 #, python-format
 msgid "Took %(processtime)s seconds to process request"
-msgstr "Tomó %(processtime)s seg para procesar solicitud"
+msgstr "Se ha procesado la solicitud en %(processtime)s segs"
 
 #: sdv/templates/base.html:57
 #, python-format
@@ -542,7 +544,7 @@ msgstr "fuente en %(github)s"
 #: sdv/templates/base.html:57
 #, python-format
 msgid "All Stardew Valley assets copyright %(concerned_ape)s"
-msgstr "Todos activos de Stardew Valley copyright de %(concerned_ape)s"
+msgstr "Componentes con copyright (propiedad) de Stardew Valley %(concerned_ape)s"
 
 #: sdv/templates/blog.html:7 sdv/templates/index.html:77
 msgid "Development blog"
@@ -576,9 +578,9 @@ msgid ""
 "and portrait of your family. It's an alternative to screenshot tools like "
 "%(gedosato)s."
 msgstr ""
-"Se genera un mapa y resumen de una granja Stardew Valley, con su reproductor "
-"avatar y retrato de su familia. Es una alternativa a herramientas para la "
-"captura de pantalla como %(gedosato)s."
+"Se genera un mapa y resumen de una granja Stardew Valley, con su avatar y "
+"retrato de su familia. Es una alternativa a herramientas para la captura de "
+"pantalla como %(gedosato)s."
 
 #: sdv/templates/faq.html:14
 msgid "Where do I find the savegame?"
@@ -592,10 +594,10 @@ msgid ""
 "The file you should upload is named after your player (i.e. not named "
 "SaveGameInfo)."
 msgstr ""
-"Partidas guardadas están en %(appdata)s. Esto se puede pegar en la caja de carga "
-"de archivos para encontrar la carpeta correcta. Dentro de esto son las "
-"subcarpetas de partidas guardadas individuales. El archivo deberá cargar lleva "
-"el nombre de su reproductor (es decir, que no se llame SaveGameInfo)."
+"Las partidas guardadas están en %(appdata)s. Esto se puede copiar a la caja de "
+"carga de archivos para encontrar la carpeta correcta. Dentro de la cual están "
+"las subcarpetas de partidas guardadas individuales. El archivo que hay que "
+"cargar lleva el nombre de tu personaje (es decir, que no se llame SaveGameInfo)."
 
 #: sdv/templates/faq.html:17
 msgid "Why register for an upload.farm account?"
@@ -609,16 +611,15 @@ msgid ""
 "features to the site very easily, such as quick upload-to-imgur, and the ability "
 "to link up series of farms."
 msgstr ""
-"Para añadir <a href='#whysignin'>ciertas características tales como el reparto "
-"de partidas guardadas</a> al sitio se hizo necesario introducir cuentas de "
-"usuario, por lo que se pudo establecer que la propiedad de la página. La parte "
-"positiva de esto es que nos son capaces de añadir otras características al sitio "
-"con mucha facilidad, tales como carga a imgur rápida, y la capacidad de "
-"vincularse serie de granjas."
+"Para añadir <a href='#whysignin'>ciertas características tales como compartir "
+"partidas guardadas</a> en la página, fué necesario introducir cuentas de usuario "
+"para establecer la propiedad de la página. Lo bueno de esto es que nos permite "
+"añadir otras características a la página con mucha facilidad, por ejemplo "
+"compartir con imgur y vincular series de granjas."
 
 #: sdv/templates/faq.html:20
 msgid "Can I upload multiple farms from the same playthrough?"
-msgstr "¿Puedo subir varias granjas de la misma apuesta?"
+msgstr "¿Puedo subir varias granjas de la misma partida?"
 
 #: sdv/templates/faq.html:21
 #, python-format
@@ -629,15 +630,15 @@ msgid ""
 "not automatically linked, but if you later choose to register, they can be "
 "claimed."
 msgstr ""
-"Sí. Si estás %(signed_up)s y estás %(logged_in)s, serie de tus subidas "
-"automáticamente está ligada a abajo el nombre de la granja. También se puede "
-"desplazar entre estas granjas utilizando las teclas del teclado izquierda y "
-"derecha. Si usted no está registrado, las granjas no se vinculan "
-"automáticamente, pero si más tarde decide registrarse, puede ser reclamados."
+"Sí. Si estás %(signed_up)s y estás %(logged_in)s, tus series cargadas están "
+"vinculadas automáticamente bajo el nombre de la granja. Puedes desplazarte entre "
+"granjas usando las teclas de posición del teclado. Si no estás registrado, las "
+"granjas no se vinculan automáticamente, pero si te registras más adelante, "
+"puedes reclamarlas."
 
 #: sdv/templates/faq.html:21 sdv/templates/faq.html:27
 msgid "signed up"
-msgstr "registrada"
+msgstr "registrado"
 
 #: sdv/templates/faq.html:21 sdv/templates/faq.html:42
 msgid "logged in"
@@ -654,9 +655,9 @@ msgid ""
 "original savegame, re-upload your farm and the site will redirect you to the "
 "existing data, and re-set your ownership."
 msgstr ""
-"Si estás registrado, revise su página %(account)s. Si no estás registrado y "
-"tiene su savegame original, volver a cargar su granja y el sitio le redirigirá a "
-"los datos existentes y vuelva a su propiedad."
+"Si estás registrado, revisa tu página %(account)s. Si no estás registrado y "
+"tienes tu savegame original, vuelve a cargar tu granja y el sitio te redirigirá "
+"a los datos existentes y restablecerá la propiedad."
 
 #: sdv/templates/faq.html:24
 msgid "account"
@@ -664,7 +665,7 @@ msgstr "cuenta"
 
 #: sdv/templates/faq.html:26
 msgid "How do I enable savegame sharing?"
-msgstr "¿Como puedo compartir la partida guardada?"
+msgstr "¿Cómo puedo compartir la partida guardada?"
 
 #: sdv/templates/faq.html:27
 #, python-format
@@ -673,15 +674,14 @@ msgid ""
 "enable savegame sharing. This enables them for <em>all</em> users of the site, "
 "and may be enabled or disabled as you like."
 msgstr ""
-"Si estás %(signed_up)s y dueño de la página, bajo el minimapa es un botón para "
-"habilitar la compartición de savegame. Esto les permite a <em>todos</em> los "
-"usuarios del sitio y puede habilitarse o deshabilitarse como usted tiene gusto."
+"Si estás %(signed_up)s y eres dueño de la página, bajo el minimapa encontrarás "
+"un botón para habilitar el poder compartir tu juego. Esto permite a <em>todos</"
+"em> los usuarios ver tu página. Es opcional y puedes cambiar la opción las veces "
+"que quieras."
 
 #: sdv/templates/faq.html:29
 msgid "Why do I have to sign up to enable savegame sharing?"
-msgstr ""
-"¿Por qué tengo que estar registrada para hacer posible compartir la partida "
-"guardada?"
+msgstr "¿Por qué tengo que estar registrado para compartir la partida guardada?"
 
 #: sdv/templates/faq.html:30
 msgid ""
@@ -690,27 +690,28 @@ msgid ""
 "delete it or claim it themselves. So, for the extra functionality, you have to "
 "register."
 msgstr ""
-"Si otras personas podían descargar su savegame sin usted haber reclamado la "
-"página, que podrían subir, <a href='#cantfind'>tomar el control</a> de la misma "
-"y luego borrarlo o afirman ellos mismos. Por lo tanto, para la funcionalidad "
-"adicional, usted tiene que registrar."
+"El registro impide que otras personas se puedan descargar tus partidas no "
+"reclamadas y subirlas como suyas, <a href='#cantfind'>tomar el control</a> de la "
+"misma y luego borrarla. Por ello, para intentar evitar conflictos, es necesario "
+"registrarse."
 
 #: sdv/templates/faq.html:32
 msgid "Can I make uploads private, so only I can see them?"
-msgstr "¿Puedo poner mis subidas privada, por lo que solo puedo verlos?"
+msgstr ""
+"¿Puedo subir partidas de forma privada, para que solamente pueda verlas yo?"
 
 #: sdv/templates/faq.html:33
 msgid ""
 "You can unlist farms if you are registered and logged in. You can also set your "
 "account to automatically make uploads unlisted on your account page."
 msgstr ""
-"Puede ocultar las granjas si estás registrados y logueados. También puede "
-"configurar su cuenta para automáticamente hacer subidas sin apuntar en su página "
-"de cuenta."
+"Puedes ocultar las granjas si estás registrado y has iniciado sesión. También "
+"puedes configurar tu cuenta para que las subidas desde tu cuenta se hagan de "
+"manera oculta automáticamente."
 
 #: sdv/templates/faq.html:35
 msgid "What is the stardew.info planner?"
-msgstr "¿Cuál es el planificador de stardew.info?"
+msgstr "¿Qué es el planificador de stardew.info?"
 
 #: sdv/templates/faq.html:36
 msgid ""
@@ -725,18 +726,17 @@ msgid ""
 msgstr ""
 "El <a href='https://stardew.info/planner/' target='_blank'>planificador de "
 "Stardew.info</a> por <a href='https://github.com/hpeinar/stardewplanner' target "
-"= \"_blank\">Henrik Peinar</a> es una herramienta que le permite planificar su "
-"granja. Hemos integrado el soporte para el planificador con el sitio para la "
-"carga de su propiedad. Para utilizar esta función, haga clic en el icono de "
-"plano en el panel de control en la página de perfil de su granja para cargarlo "
-"en el planificador. Además, se ha trabajado con Henrik para permitir la "
-"prestación de granjas del planificador. Estos son independientes a las cargas "
-"normales de partidas guardadas, y se puede acceder desde el planificador de sí "
-"mismo."
+"= \"_blank\">Henrik Peinar</a> es una herramienta que te permite diseñar tu "
+"granja. Hemos integrado el soporte para el diseñador a la página, para ser usado "
+"con granjas de tu propiedad. Para utilizar esta función, haz clic en el icono de "
+"plano en el panel de control en la página de perfil de tu granja, esto lo cargár "
+"al diseñador. Además, se ha trabajado con Henrik para permitir la carga de "
+"granjas del diseñadorr. Estos archivos son independientes a las cargas normales "
+"de partidas guardadas, y se puede acceder directamente desde el diseñador."
 
 #: sdv/templates/faq.html:38
 msgid "How do I use downloaded savegames?"
-msgstr "¿Cómo puedo usar las partidas guardadas que he descargada del sitio?"
+msgstr "¿Cómo puedo usar las partidas guardadas que he descargado?"
 
 #: sdv/templates/faq.html:39
 #, python-format
@@ -744,7 +744,7 @@ msgid ""
 "Saves go in %(appdata)s where you can place the extracted folder and contents. "
 "This is normally %(windir)s."
 msgstr ""
-"Las partidas guardadas vive en %(appdata)s, de donde se puede colocar la carpeta "
+"Las partidas guardadas están en %(appdata)s, dónde puedes guardar la carpeta "
 "extraída y sus contenidos. Esto es normalmente %(windir)s."
 
 #: sdv/templates/faq.html:41
@@ -759,15 +759,15 @@ msgid ""
 "uploaded multiple farms from the same playthrough you will also have an option "
 "to delete 'all for this farm'. Both ask for confirmation before deleting."
 msgstr ""
-"Al cargar una partida guardada se establece una cookie para indicar propiedad. "
-"Por debajo de la granja de nombre debe ser un botón de 'borrar esta página'. Si "
-"estas %(logged_in)s y han subido varias granjas de la misma apuesta también "
-"tendrá una opción para borrar 'todo para esta granja'. Tanto pedir confirmación "
-"antes de eliminar."
+"Al cargar una partida guardada, se genera una cookie de propiedad. Bajo el "
+"nombre de la granja, encontrarás un botón que te permite borrar la página. Si "
+"has iniciado sesión %(logged_in)s y has subido varias granjas de la misma "
+"partida, también tienes la opción de borrar 'todas las partidas de esta granja'. "
+"Ambas opciones pedirán confirmación antes de borrar un archivo."
 
 #: sdv/templates/faq.html:44
 msgid "Do you support [modname]?"
-msgstr "¿Apoya [nombre del mod]?"
+msgstr "¿Es compatible con [nombre del mod]?"
 
 #: sdv/templates/faq.html:45
 msgid ""
@@ -775,18 +775,19 @@ msgid ""
 "assets or structurally change your savegame too much will probably work. Once "
 "we've got the core site functionality sorted we'll look at mod support!"
 msgstr ""
-"En este momento no apoyamos explícitamente cualquier modificaciones, pero mods "
-"que no añadir nuevos activos o cambiar estructuralmente su partida guardada "
-"demasiado probablemente funcionará. Una vez tenemos la funcionalidad de sitio "
-"clasificada veremos soporte mod!"
+"De momento, no ofrecemos compatibilidad para ningún \"mod\" en concreto, pero "
+"aquellos \"mods\" que no añadan nuevos archivos activos o cambien la estructura "
+"de tu partida guardada probablemente funcionen con esta página. Nos quedan "
+"algunas mejoras por hacer a la página, cuando esten listas seguramente "
+"trabajaremos con la compatibilidad de los mods!"
 
 #: sdv/templates/index.html:40
 msgid "Upload your farm"
-msgstr "Subir su granja"
+msgstr "Cargar tu granja"
 
 #: sdv/templates/index.html:44
 msgid "Upload!"
-msgstr "Subir!"
+msgstr "Cargar!"
 
 #: sdv/templates/index.html:47
 #, python-format
@@ -794,8 +795,9 @@ msgid ""
 "%(stardew_valley)s save files can be found under %(appdata)s and are named after "
 "your character, plus an ID number"
 msgstr ""
-"%(stardew_valley)s partida guardada archivos se pueden encontrar en %(appdata)s "
-"y se nombran después de su carácter, además de un número de identificación"
+" Los archivos de partida guardada de %(stardew_valley)s se encuentran en "
+"%(appdata)s y se nombran usando el nombre del personaje, además de un número de "
+"identidad."
 
 #: sdv/templates/index.html:64
 msgid "Recently uploaded farms"
@@ -819,7 +821,7 @@ msgstr "Iniciar"
 
 #: sdv/templates/login.html:37
 msgid "Log in to a user account on upload.farm"
-msgstr "Iniciar sesión en una cuenta de usuario en upload.farm"
+msgstr "Iniciar sesión de una cuenta de usuario en upload.farm"
 
 #: sdv/templates/login.html:40 sdv/templates/reset.html:27
 #: sdv/templates/reset.html:43 sdv/templates/signup.html:20
@@ -846,7 +848,7 @@ msgstr "¡Iniciar sesión!"
 
 #: sdv/templates/login.html:57
 msgid "Need to register?"
-msgstr "¿Necesitas regístrarse?"
+msgstr "¿Necesitas regístrarte?"
 
 #: sdv/templates/login.html:57 sdv/templates/signup.html:33
 msgid "Sign up!"
@@ -858,31 +860,29 @@ msgstr "¿Olvidaste tu contraseña?"
 
 #: sdv/templates/login.html:57
 msgid "Reset it!"
-msgstr "¡Restablecerlo!"
+msgstr "¡Restablecer!"
 
 #: sdv/templates/plan.html:5 sdv/templates/plan.html:9 sdv/templates/plan.html:16
 #: sdv/templates/plan.html:26
 msgid "Render of stardew.info farm plan (Stardew Valley)"
-msgstr "Render de un plan de granja de stardew.info (Stardew Valley)"
+msgstr "Carga de un plano de granja de stardew.info (Stardew Valley)"
 
 #: sdv/templates/plan.html:8 sdv/templates/plan.html:15 sdv/templates/plan.html:22
 msgid "Farm plan render - upload.farm"
-msgstr "Render de un plan de granja - upload.farm"
+msgstr "Carga de un plano de granja - upload.farm"
 
 #: sdv/templates/plan.html:79
 #, python-format
 msgid "Farm plan in %(season)s"
-msgstr "Plan de granja en %(season)s"
+msgstr "Plano de granja en %(season)s"
 
 #: sdv/templates/plan.html:87
 msgid "view plan"
-msgstr "ver el plan"
+msgstr "ver el plano"
 
 #: sdv/templates/plan.html:93
 msgid "Plan re-rendering, will automatically load when complete"
-msgstr ""
-"Vuelva a rendir el plan, el imagen se carga automáticamente después de la "
-"finalización"
+msgstr "Vuelve a cargar el plano, la imagen se carga automáticamente"
 
 #: sdv/templates/profile.html:5 sdv/templates/profile.html:9
 #: sdv/templates/profile.html:16 sdv/templates/profile.html:28
@@ -904,12 +904,14 @@ msgstr "Granja de %(farmname)s"
 #: sdv/templates/profile.html:168
 #, python-format
 msgid "Go back to %(previous)s (left arrow on keyboard also works)"
-msgstr "Vuelta a %(previous)s (a la izquierda en el teclado también funcióna)"
+msgstr ""
+"Vuelta a %(previous)s (la tecla de dirección izqda. del teclado también funciona)"
 
 #: sdv/templates/profile.html:170
 #, python-format
 msgid "Go forward to %(next)s (right arrow on keyboard also works)"
-msgstr "Adelante a %(next)s (a la derecha en el teclado también funcióna)"
+msgstr ""
+"Sigue a %(next)s (la tecla de dirección drcha. del teclado también funciona)"
 
 #: sdv/templates/profile.html:182
 msgid "Warning:"
@@ -920,9 +922,9 @@ msgid ""
 "This farm failed image processing, which means the savegame had unexpected "
 "contents. It might be modded, or malicious. Be aware if downloading the savegame."
 msgstr ""
-"No pudimos procesar imágenes de este granja, que significa que la partida "
-"guardada tuve contenidos inesperados. Podría ser modificado o maliciosos. Ten "
-"cuidar si descargas la partida guardada."
+"No pudimos procesar imágenes de este granja, significa que la partida guardada "
+"contiene archivos inesperados. Podría tener \"mods\" o ser un archivo dañino. "
+"Ten cuidado si descargas la partida guardada."
 
 #: sdv/templates/profile.html:218
 msgid "Stats"
@@ -934,7 +936,7 @@ msgstr "Resumen"
 
 #: sdv/templates/profile.html:220
 msgid "Skills"
-msgstr "Técnicas"
+msgstr "Habilidades"
 
 #: sdv/templates/profile.html:232
 msgid "Current Funds"
@@ -974,7 +976,7 @@ msgstr "Pasos Tomados"
 
 #: sdv/templates/profile.html:241
 msgid "Mines Depth"
-msgstr "Bajo Minas"
+msgstr "Profundidad de las minas"
 
 #: sdv/templates/profile.html:241 sdv/templates/profile.html:242
 #: sdv/templates/profile.html:244
@@ -983,11 +985,11 @@ msgstr "nivel"
 
 #: sdv/templates/profile.html:242
 msgid "Cavern Depth"
-msgstr "Bajo Caverna"
+msgstr "Profundidad de cuevas"
 
 #: sdv/templates/profile.html:244
 msgid "Mine Depth"
-msgstr "Bajo Minas"
+msgstr "Profundidad de mina"
 
 #: sdv/templates/profile.html:246
 msgid "Time Played"
@@ -999,7 +1001,7 @@ msgstr "horas"
 
 #: sdv/templates/profile.html:260
 msgid "is married to"
-msgstr "está casado con"
+msgstr "se ha casado con"
 
 #: sdv/templates/profile.html:260 sdv/templates/profile.html:262
 #: sdv/templates/profile.html:266
@@ -1008,7 +1010,7 @@ msgstr "y"
 
 #: sdv/templates/profile.html:262
 msgid "is unmarried"
-msgstr "no está casado"
+msgstr "no se ha casado"
 
 #: sdv/templates/profile.html:266
 msgid "has"
@@ -1029,7 +1031,7 @@ msgstr "una hija"
 
 #: sdv/templates/profile.html:266 sdv/templates/profile.html:271
 msgid "named"
-msgstr "con el nombre"
+msgstr "de nombre"
 
 #: sdv/templates/profile.html:268
 msgid "has no children"
@@ -1037,7 +1039,7 @@ msgstr "no tiene hijos"
 
 #: sdv/templates/profile.html:271
 msgid "and has a pet"
-msgstr "y tiene un"
+msgstr "y tiene una mascota"
 
 #: sdv/templates/profile.html:271
 msgid "cat"
@@ -1059,46 +1061,46 @@ msgstr "%(n)s días de edad"
 #: sdv/templates/profile.html:314
 #, python-format
 msgid "Animal Products worth 10%% more."
-msgstr "Productos Animales gana 10%% más."
+msgstr "Productos Animales valorados con un 10%% más."
 
 #: sdv/templates/profile.html:315
 #, python-format
 msgid "Crops worth 10%% more."
-msgstr "Cultivos gana 10%% más."
+msgstr "Cultivos valorados con 10%% más."
 
 #: sdv/templates/profile.html:316
 msgid "Befriend Coop animals quicker."
-msgstr "Hacerse amigo de los animales del coop más rápido."
+msgstr "Hacerse amigo de los animales del granero más rápido."
 
 #: sdv/templates/profile.html:316
 msgid "Incubation time cut in half."
-msgstr "Tiempo de incubación corta por la mitad."
+msgstr "Tiempo de incubación reducido a la mitad."
 
 #: sdv/templates/profile.html:317
 msgid "Befriend barn animals quicker."
-msgstr "Hacerse amigo de los animales del granero más rápido."
+msgstr "Hacerse amigo de los animales del establo más rápido."
 
 #: sdv/templates/profile.html:317
 msgid "Sheep produce wool faster."
-msgstr "Ovejas produce la lana más rápida."
+msgstr "Las Ovejas producen la lana más rápido."
 
 #: sdv/templates/profile.html:318
 #, python-format
 msgid "Artisan Goods (wine, cheese, oil, etc.) worth 50%% more."
-msgstr "Artisan mercancías (vino, queso, aceite, etc.) por valor de 50%% más."
+msgstr "Productos Artesanales (vino, queso, aceite, etc.) por valor de 50%% más."
 
 #: sdv/templates/profile.html:319
 #, python-format
 msgid "All crops grow 10%% faster."
-msgstr "Todos cultivos crecen 10%% más rápido."
+msgstr "Todos los cultivos crecen 10%% más rápido."
 
 #: sdv/templates/profile.html:320
 msgid "+1 ore per vein."
-msgstr "+1 mineral cada vena."
+msgstr "+1 mineral por veta"
 
 #: sdv/templates/profile.html:321
 msgid "Chance for Gems to appear in pairs."
-msgstr "Probabilidad para las Gemas que aparezcan en pares."
+msgstr "Probabilidad de que las Gemas aparezcan en pares."
 
 #: sdv/templates/profile.html:322
 #, python-format
@@ -1107,73 +1109,73 @@ msgstr "Barras de metal por valor de 25%% más."
 
 #: sdv/templates/profile.html:323
 msgid "Geode find doubled."
-msgstr "Geode hallazgo se duplicó."
+msgstr "Hallazgo de Geodas duplicado."
 
 #: sdv/templates/profile.html:324
 msgid "Coal find doubled."
-msgstr "Carbón hallazgo se duplicó."
+msgstr "Hallazgo de Carbón duplicado"
 
 #: sdv/templates/profile.html:325
 #, python-format
 msgid "Gems worth 30%% more."
-msgstr "Las Gemas por valor de 30%% más."
+msgstr "Gemas valoradas un 30%% más."
 
 #: sdv/templates/profile.html:326
 #, python-format
 msgid "Wood worth 50%% more."
-msgstr "Madera por valor de 50%% más."
+msgstr "Madera valorada un 50%% más."
 
 #: sdv/templates/profile.html:327
 msgid "Chance for double harvest of foraged items."
-msgstr "Probabilidad de doble cosecha de artículos forrajearon."
+msgstr "Probabilidad de doble cosecha de forraje."
 
 #: sdv/templates/profile.html:328
 msgid "Normal trees occasionally drop hardwood."
-msgstr "Árboles normales de vez en cuando caen de madura dura."
+msgstr "Árboles normales de vez en cuando dan madera."
 
 #: sdv/templates/profile.html:329
 msgid "Foraged items are always gold quality."
-msgstr "Forrajearon artículos son siempre la calidad del oro."
+msgstr "El Forraje es siempre de calidad oro"
 
 #: sdv/templates/profile.html:330
 #, python-format
 msgid "Syrup is worth 25%% more."
-msgstr "Jarabe por valor de 25%% más."
+msgstr "Jarabe valorado un 25%% más."
 
 #: sdv/templates/profile.html:331
 msgid "Locations of foragable items are revealed."
-msgstr "Emplazamiento de las foragables se revelan."
+msgstr "Revela el lugar del forraje"
 
 #: sdv/templates/profile.html:332
 #, python-format
 msgid "Fish worth 25%% more."
-msgstr "Pescados por valor de 25%% más."
+msgstr "Peces valorados un 25%% más."
 
 #: sdv/templates/profile.html:333
 msgid "Resources required to craft crab pots reduced."
-msgstr "Recursos necesarios para elaborar los potes de cangrejo reducidos."
+msgstr "Se reducen los recursos necesarios para elaborar trampas para cangrejos."
 
 #: sdv/templates/profile.html:334
 #, python-format
 msgid "Fish worth 50%% more."
-msgstr "Pescados por valor de 50%% más."
+msgstr "Peces valorados un 50%% más."
 
 #: sdv/templates/profile.html:335
 msgid "Chance to find treasure doubled."
-msgstr "Probabilidad para encontrar el tesoro se duplicó."
+msgstr "Doblada la probabilidad de encontrar tesoros."
 
 #: sdv/templates/profile.html:336
 msgid "Crab pots never catch trash."
-msgstr "Los potes de cangrejo nunca atrapen la basura."
+msgstr "Las trampas para cangrejos nunca atrapan basura."
 
 #: sdv/templates/profile.html:337
 msgid "Crab pots no longer need to be baited."
-msgstr "Los potes de cangrejo no se necesitan estar cebada."
+msgstr "Las jaulas para cangrejos ya no necesitan cebo."
 
 #: sdv/templates/profile.html:338
 #, python-format
 msgid "All attacks deal 10%% more damage."
-msgstr "Todos los ataques hacen 10%% más daño."
+msgstr "Todos los ataques hacen 10%% más de daño."
 
 #: sdv/templates/profile.html:338
 msgid "+15 HP."
@@ -1191,23 +1193,23 @@ msgstr "El daño aumenta en un 15%%."
 
 #: sdv/templates/profile.html:341
 msgid "HP is increased by 25."
-msgstr "Puntos de vida aumenta en 25."
+msgstr "Puntos de vida aumentados a 25."
 
 #: sdv/templates/profile.html:342
 msgid "Cooldown on special moves is cut in half."
-msgstr "Tiempo de reutilización de movimientos especiales se corta por la mitad."
+msgstr "Tiempo de reutilización de movimientos especiales se acorta a la mitad."
 
 #: sdv/templates/profile.html:343
 msgid "Critical hits are deadly."
-msgstr "Golpes críticos son mortales."
+msgstr "Golpes críticos mortales."
 
 #: sdv/templates/profile.html:385
 msgid "(Hover for professions)"
-msgstr "(Pase por profesion)"
+msgstr "(Mostrar profesiones)"
 
 #: sdv/templates/profile.html:403 sdv/templates/profile.html:405
 msgid "This will claim"
-msgstr "Va a reclamar"
+msgstr "Vas a reclamar"
 
 #: sdv/templates/profile.html:403 sdv/templates/profile.html:427
 msgid "only this"
@@ -1219,35 +1221,35 @@ msgstr "subida"
 
 #: sdv/templates/profile.html:403
 msgid "Claim&nbsp;it!"
-msgstr "¡Lo&nbsp;reclame!"
+msgstr "¡Reclamado!"
 
 #: sdv/templates/profile.html:403
 msgid "Claim this farm (link it to your account)"
-msgstr "Reclame este granja (enlacerlo a su cuenta)"
+msgstr "Reclama esta granja (enlazar a tu cuenta)"
 
 #: sdv/templates/profile.html:405
 msgid "all unclaimed uploads"
-msgstr "todos subidas sin reclamación"
+msgstr "todas las subidas no reclamadas"
 
 #: sdv/templates/profile.html:405
 msgid "made from this browser."
-msgstr "hacen de este navegador"
+msgstr "hecho desde este navegador"
 
 #: sdv/templates/profile.html:405
 msgid "Claim&nbsp;all!"
-msgstr "¡Reclame&nbsp;todo!"
+msgstr "¡Reclamar&nbsp;todo!"
 
 #: sdv/templates/profile.html:405
 msgid "Claim all unclaimed farms (link them to your account)"
-msgstr "Reclame todos granjas sin reclamación (enlacerlos a su cuenta)"
+msgstr "Reclamar todas las granjas sin reclamación (enlazar a tu cuenta)"
 
 #: sdv/templates/profile.html:409
 msgid "Send to"
-msgstr "Envia al"
+msgstr "Enviar a"
 
 #: sdv/templates/profile.html:409
 msgid "stardew.info planner"
-msgstr "planificador de stardew.info"
+msgstr "Diseñador de stardew.info"
 
 #: sdv/templates/profile.html:409
 msgid "?"
@@ -1255,35 +1257,35 @@ msgstr "?"
 
 #: sdv/templates/profile.html:409
 msgid "(this is a separate site not part of upload.farm)"
-msgstr "(es un otro sitio que no forma una parte de upload.farm)"
+msgstr "(esta página no forma parte de upload.farm)"
 
 #: sdv/templates/profile.html:409
 msgid "Plan&nbsp;my&nbsp;farm!"
-msgstr "Planear&nbsp;mi&nbsp;granja!"
+msgstr "Diseñar&nbsp;mi&nbsp;granja!"
 
 #: sdv/templates/profile.html:409
 msgid "Plan my farm (send to stardew.info planner)"
-msgstr "Planear mi granja (enviarlo al planificador de stardew.info)"
+msgstr "Diseñar mi granja (enviarlo al diseñador de stardew.info)"
 
 #: sdv/templates/profile.html:412
 msgid "Disable downloads?"
-msgstr "¿Desactiva descargas?"
+msgstr "¿Desactivar descargas?"
 
 #: sdv/templates/profile.html:412
 msgid "Disables sharing of the savegame you uploaded"
-msgstr "Desactiva el intercambio de la partida guardada que has subido"
+msgstr "Desactivar la opción de compartir la partida que has subido"
 
 #: sdv/templates/profile.html:412
 msgid "Disable!"
-msgstr "¡Desactiva!"
+msgstr "¡Desactivar!"
 
 #: sdv/templates/profile.html:412
 msgid "Downloads currently enabled"
-msgstr "Descargas está desactivada"
+msgstr "Descargas desactivadas"
 
 #: sdv/templates/profile.html:415
 msgid "Enable downloads?"
-msgstr "¿Activa descargas?"
+msgstr "¿Activar descargas?"
 
 #: sdv/templates/profile.html:415
 msgid "Enables download of the savegame you uploaded by yourself and others"
@@ -1295,11 +1297,11 @@ msgstr "¡Activa!"
 
 #: sdv/templates/profile.html:415
 msgid "Downloads currently disabled"
-msgstr "Descargas está activada"
+msgstr "Descargas activadas"
 
 #: sdv/templates/profile.html:417
 msgid "To enable savegame download please first"
-msgstr "Para activar descargas de la partida guardada, por favor primero"
+msgstr "Para activar la descarga de la partida guardada, por favor, primero"
 
 #: sdv/templates/profile.html:417
 msgid "sign up"
@@ -1315,55 +1317,55 @@ msgstr ", entonces"
 
 #: sdv/templates/profile.html:417
 msgid "claim this page."
-msgstr "reclamar este página."
+msgstr "reclamar esta página."
 
 #: sdv/templates/profile.html:417
 msgid "Sign up or sign in to enable downloads!"
-msgstr "Regístrate o iniciar sesión para activar descargas"
+msgstr "Regístrate o inicia sesión para activar descargas"
 
 #: sdv/templates/profile.html:421
 msgid "List your farm?"
-msgstr "Lista tu granja?"
+msgstr "Mostrar tu granja?"
 
 #: sdv/templates/profile.html:421
 msgid "Allows it to appear in searches on the site"
-msgstr "Permite tu granja que aparecer en búsquedas en el sitio"
+msgstr "Permite que tu granja aparezca en búsquedas dentro de la página"
 
 #: sdv/templates/profile.html:421
 msgid "List!"
-msgstr "¡Lista!"
+msgstr "¡Mostrar!"
 
 #: sdv/templates/profile.html:421
 msgid "Farm currently unlisted"
-msgstr "Granja no está listada"
+msgstr "Granja oculta"
 
 #: sdv/templates/profile.html:423
 msgid "Unlist your farm?"
-msgstr "¿Remover de la lista?"
+msgstr "¿Ocultar tu granja?"
 
 #: sdv/templates/profile.html:423
 msgid "Prevents it appearing on the site except to you and people with the URL"
-msgstr "Previene tu granja de aparecer en búsquedas en el sitio"
+msgstr "Hace que tu granja no aparezca en las búsquedas dentro de la página."
 
 #: sdv/templates/profile.html:423
 msgid "Unlist!"
-msgstr "¡Lo&nbsp;remove!"
+msgstr "¡Ocultar!"
 
 #: sdv/templates/profile.html:423
 msgid "Farm currently listed"
-msgstr "Granja listada"
+msgstr "Granja visible"
 
 #: sdv/templates/profile.html:427
 msgid "Delete this farm?"
-msgstr "¿Borra este granja?"
+msgstr "¿Borrar esta granja?"
 
 #: sdv/templates/profile.html:427 sdv/templates/profile.html:429
 msgid "This will delete "
-msgstr "Va a borrar "
+msgstr "Vas a borrar "
 
 #: sdv/templates/profile.html:427
 msgid " upload"
-msgstr "subido"
+msgstr "subir"
 
 #: sdv/templates/profile.html:427
 msgid "Delete&nbsp;it!"
@@ -1371,34 +1373,34 @@ msgstr "¡Borralo!"
 
 #: sdv/templates/profile.html:427
 msgid "Delete farm"
-msgstr "Borra la granja"
+msgstr "Borrar la granja"
 
 #: sdv/templates/profile.html:429
 msgid "Delete all for this farm?"
-msgstr "¿Borra todos de este serie?"
+msgstr "¿Borrar todas de esta serie?"
 
 #: sdv/templates/profile.html:429
 msgid "all uploads in this series."
-msgstr "todos subidos en este serie"
+msgstr "todas las subidas de esta serie"
 
 #: sdv/templates/profile.html:429
 msgid ""
 "This will remove this farm and all associated farms, be sure you mean to do this!"
 msgstr ""
-"Esta acción va a borrar este granja y todos otros en el serie, ¡asegurese que "
-"significas para hacer esto!"
+"Esta acción borrará esta granja y todas las de la serie, ¡Asegurate que quieres "
+"hacer esto!"
 
 #: sdv/templates/profile.html:429
 msgid "Delete&nbsp;entire&nbsp;series!"
-msgstr "¡Borra&nbsp;todo&nbsp;el&nbsp;serie!"
+msgstr "¡Borrar&nbsp;toda&nbsp;la&nbsp;serie!"
 
 #: sdv/templates/profile.html:429
 msgid "Delete entire farm series"
-msgstr "Borra el serie de la granja"
+msgstr "Borrar serie de la granja"
 
 #: sdv/templates/profile.html:442
 msgid "You use the contents of this zip at your own risk!"
-msgstr "Usas los contenidos de este archivo en su propio riesgo"
+msgstr "Usa los contenidos de este archivo bajo tu responsabilidad"
 
 #: sdv/templates/profile.html:442
 msgid "I understand, download!"
@@ -1406,7 +1408,7 @@ msgstr "Estoy de acuerdo, ¡descargar!"
 
 #: sdv/templates/profile.html:442
 msgid "download savegame"
-msgstr "descarga archivo"
+msgstr "descargar archivo"
 
 #: sdv/templates/profile.html:452
 msgid "Friendships"
@@ -1522,12 +1524,12 @@ msgstr "Yellow Slime"
 
 #: sdv/templates/profile.html:495
 msgid "Monster Kills"
-msgstr "Monstruos Matados"
+msgstr "Monstruos Eliminados"
 
 #: sdv/templates/profile.html:508
 #, python-format
 msgid "%(name)s has not killed any monsters yet."
-msgstr "%(name)s ya no ha matado nada."
+msgstr "%(name)s no ha eliminado a ningún monstruo todavía."
 
 #: sdv/templates/profile.html:518
 #, python-format
@@ -1536,7 +1538,7 @@ msgstr "Mapa de la Granja de %(farmname)s"
 
 #: sdv/templates/profile.html:523
 msgid "Click to open farm gallery"
-msgstr "Haga clic para abrir la galeria de granja"
+msgstr "Haz clic para abrir la galeria de granja"
 
 #: sdv/templates/profile.html:532
 msgid "view on imgur"
@@ -1552,15 +1554,15 @@ msgstr "subir a imgur"
 
 #: sdv/templates/recents.html:15
 msgid "This farm has a downloadable savegame available"
-msgstr "Este granja tiene una partida guardada descargable disponible"
+msgstr "Este granja tiene disponible una partida guardada descargable"
 
 #: sdv/templates/recents.html:20
 msgid ""
 "This farm is unlisted and will not show up in searches nor on the front page "
 "except to you. It can still be viewed by people with a direct link."
 msgstr ""
-"Este granja no está listada y no aparece en búsquedas y no aparece en la página "
-"principal del sitio. Las personas con un enlace directo todavía pueden verlo."
+"Este granja está oculta y no aparece ni en las búsquedas y ni en la página "
+"principal. Las personas con un enlace directo todavía pueden verla."
 
 #: sdv/templates/reset.html:8 sdv/templates/reset.html:47
 msgid "Reset password"
@@ -1582,7 +1584,7 @@ msgstr "Establecer nueva contraseña"
 
 #: sdv/templates/reset.html:40
 msgid "Reset password for user account on upload.farm"
-msgstr "Restablecer contraseña por una cuenta de upload.farm"
+msgstr "Restablecer contraseña para una cuenta de upload.farm"
 
 #: sdv/templates/reset.html:54
 msgid "Error"
@@ -1598,16 +1600,16 @@ msgid ""
 "Registration allows enabling of savegame sharing, quick imgur upload, and "
 "creation and curation of farm series."
 msgstr ""
-"El registro permite a usted a compartir tus partidas guardadas, subir a imgur "
-"rapidamente, y crear y ver series de tus granjas."
+"Al registrate puedes compartir tus partidas, subirlas a imgur de forma rápida y "
+"sencilla, crear granjas y gestionar tus granjas en serie."
 
 #: sdv/templates/signup.html:12
 msgid "Already got an account? Sign in!"
-msgstr "¿Ya tiene una cuenta? ¡Iniciar sesión!"
+msgstr "¿Ya tienes una cuenta? ¡Inicia sesión!"
 
 #: sdv/templates/signup.html:17
 msgid "Register a user account on upload.farm"
-msgstr "Registrate una cuenta en upload.farm"
+msgstr "Registra una cuenta en upload.farm"
 
 #: sdv/templates/titlebar.html:11
 msgid "upload.farm"
@@ -1615,7 +1617,7 @@ msgstr "upload.farm"
 
 #: sdv/templates/titlebar.html:16
 msgid "Stardew Valley Summary Generator"
-msgstr "Subir tu Granja Stardew Valley"
+msgstr "Cargar tu Granja Stardew Valley"
 
 #: sdv/templates/titlebar.html:20
 msgid "Upload"
