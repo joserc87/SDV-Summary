@@ -229,9 +229,15 @@ users_structure_dict = {'id':idcode,
 'privacy_default':'BOOLEAN DEFAULT FALSE'}
 
 database_fields = ''
+database_fields_less_farminfo = ''
 for key in sorted(database_structure_dict.keys()):
 	database_fields+=key+','
+	if key != 'farm_info':
+		database_fields_less_farminfo+=key+','
 database_fields = database_fields[:-1]
+database_fields_less_farminfo = database_fields_less_farminfo[:-1]
+
+capitalization_map = {key.lower():key for key in database_structure_dict.keys()}
 
 if sys.version_info >= (3, 0):
 	raw_input = input
@@ -309,6 +315,15 @@ def generate_plans():
 	c = connection.cursor()
 	statement = 'CREATE TABLE plans(id '+idcode+', failed_render BOOLEAN, added_time BIGINT, source_json TEXT, url TEXT, image_url TEXT, base_path TEXT, planner_url TEXT, views INT, owner_id TEXT, last_visited BIGINT, season TEXT, md5 TEXT, render_deleted BOOL);'
 	c.execute(statement)
+	connection.commit()
+	connection.close()
+	print('done')
+
+def set_indexes():
+	connection=connect_db()
+	c = connection.cursor()
+	c.execute('CREATE INDEX series_id_index ON playerinfo (series_id)')
+	c.execute('CREATE INDEX url_index ON playerinfo (url)')
 	connection.commit()
 	connection.close()
 	print('done')
@@ -479,6 +494,9 @@ def init_db(drop_all=False):
 	a = raw_input('Generate plans database? (y/n): ')
 	if a == 'y':
 		generate_plans()
+	a = raw_input('Set indexes for optimized db access? (y/n): ')
+	if a == 'y':
+		set_indexes()
 	print('--------')
 	a = raw_input('Update playerinfo database? (y/n): ')
 	if a == 'y':
