@@ -1,12 +1,13 @@
 # creates db for SDV-Summary
-import config
+from config import config
 from flask import Flask
 import os
 import sys
 from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
-app.config.from_object(os.environ['SDV_APP_SETTINGS'].strip('"'))
+config_name = os.environ.get('SDV_APP_SETTINGS', 'development')
+app.config.from_object(config[config_name])
 
 if sys.version_info >= (3, 0):
     raw_input = input
@@ -35,7 +36,7 @@ def generate_admin():
     c.execute('CREATE TABLE admin (id '+idcode+', username TEXT, password TEXT)')
     connection.commit()
 
-if __name__ == "__main__":
+def init_admin():
     a = raw_input('Generate database? (y/n): ')
     if a == 'y':
         generate_admin()
@@ -50,4 +51,7 @@ if __name__ == "__main__":
         if d == 'y':
             c.execute("INSERT INTO admin (username, password) VALUES ("+sqlesc+","+sqlesc+")",(user, generate_password_hash(password)))
             connection.commit()
+
+if __name__ == "__main__":
+    init_admin()
 

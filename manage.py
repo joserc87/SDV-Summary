@@ -4,6 +4,7 @@ import subprocess
 from flask_script import Manager
 from sdv import app
 from sdv.createdb import init_db
+from sdv.createadmin import init_admin
 from tools import copy_assets
 import os
 
@@ -15,6 +16,10 @@ def createdb(drop_all=False):
     """Initialise Database."""
     init_db(drop_all)
 
+@manager.command
+def createadmin(drop_all=False):
+    """Initialise Admin DB."""
+    init_admin()
 
 @manager.command
 def test():
