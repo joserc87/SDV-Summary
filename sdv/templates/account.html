@@ -20,9 +20,10 @@ $(function () {
 				<div class="col-md-12" style="padding-left:2%;padding-right:2%;">
 					<h3>{{_("Account info")}}</h3>
 					<p>{{_("Email: %(email)s", email=acc_info.email)}}</p>
-					<p>{{_("Imgur: ")}}{%if acc_info.imgur %}{{
+					<p>{{_("Imgur: ")}}{%if acc_info.imgur %}
+					{% autoescape false %} {{
 					_("Logged in as %(username)s",username="<a href='http://{}.imgur.com'>{}</a>".format(acc_info.imgur.account_username,acc_info.imgur.account_username))
-					}}{%else%}<a href="{{url_for('get_imgur_auth_code')}}">{{_("connect to imgur")}}</a>{%endif%}</p>
+					}}{% endautoescape %}{%else%}<a href="{{url_for('get_imgur_auth_code')}}">{{_("connect to imgur")}}</a>{%endif%}</p>
 					{% if has_liked %}
 						<p><a href="{{url_for('allmain',liked=True)}}">{{_("Browse my liked farms")}}</a></p>
 					{% endif %}
