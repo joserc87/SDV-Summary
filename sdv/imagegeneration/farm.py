@@ -218,7 +218,7 @@ def generateFarm(season, data, assets=None):
 
         if item.name == "Building":
             try:
-                if item.type == "junimo hut":
+                if item.type.lower() == "junimo hut":
                     offsety = assets['buildings'][item.type.lower()][season].height - (item.h)*16
                     farm_base.paste(assets['buildings'][item.type.lower()][season], (item.x * 16, item.y * 16 - offsety),
                                     assets['buildings'][item.type.lower()][season])
