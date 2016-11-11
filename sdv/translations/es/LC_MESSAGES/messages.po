@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2016-10-23 21:31+0100\n"
-"PO-Revision-Date: 2016-10-28 17:31+0200\n"
+"PO-Revision-Date: 2016-11-10 22:33+0000\n"
 "Last-Translator: \n"
 "Language: es\n"
 "Language-Team: es <LL@li.org>\n"
@@ -985,11 +985,11 @@ msgstr "nivel"
 
 #: sdv/templates/profile.html:242
 msgid "Cavern Depth"
-msgstr "Profundidad de cuevas"
+msgstr "Cuevas"
 
 #: sdv/templates/profile.html:244
 msgid "Mine Depth"
-msgstr "Profundidad de mina"
+msgstr "Mina"
 
 #: sdv/templates/profile.html:246
 msgid "Time Played"
