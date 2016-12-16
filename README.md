@@ -1,6 +1,6 @@
 # SDV-Summary
 
-A Flask webapp using Python Image Library to reconstruct and display a summary of the player and farm from a Stardew Valley save file.
+A Flask webapp using Python Image Library to reconstruct and display a summary of the player and farm from a Stardew Valley save file. A deployed instance is hosted at [upload.farm](http://upload.farm).
 
 ## config.py
 
@@ -61,3 +61,7 @@ Once the config file has been written, run createadmin.py and createdb.py and fo
 To run, the templating engine jinja2 needs `sdv\templates\analytics.html` to exist.
 
 Assets for image generation go in `sdv\assets\[subfolder]`. Assets used as-is go in `sdv\static\assets\[subfolder]`.
+
+## Acknowledgements
+
+Thanks to Leonardo Francisco (icantbewrong@outlook.com) for contributing the Brazilian Portuguese translation.
