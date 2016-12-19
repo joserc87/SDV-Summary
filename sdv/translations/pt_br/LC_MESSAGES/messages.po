@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2016-10-23 21:31+0100\n"
-"PO-Revision-Date: 2016-12-16 19:30-0200\n"
+"PO-Revision-Date: 2016-12-16 23:45-0200\n"
 "Language: pt_BR\n"
 "Language-Team: pt_BR <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -407,7 +407,7 @@ msgstr "Séries linkadas de fazendas que você enviou"
 #: sdv/templates/account.html:67 sdv/templates/recents.html:11
 #, python-format
 msgid "%(name)s, %(farmname)s Farm"
-msgstr "%(name)s, %(farmname)s Fazenda"
+msgstr "%(name)s, Fazenda %(farmname)s "
 
 #: sdv/templates/account.html:71
 msgid "imgur"
@@ -668,7 +668,7 @@ msgid ""
 "enable savegame sharing. This enables them for <em>all</em> users of the "
 "site, and may be enabled or disabled as you like."
 msgstr ""
-"Se vcoê está %(signed_up)s e possuir a página, abaixo do mini mapa tem um "
+"Se você está %(signed_up)s e possuir a página, abaixo do mini mapa tem um "
 "botão que ativa o compartilhamento de jogo salvo. Isso ativa para <em>all</"
 "em> usuários do site, e pode ser ativado e desativado quando você quiser."
 
@@ -970,7 +970,7 @@ msgstr "Passos dados"
 
 #: sdv/templates/profile.html:241
 msgid "Mines Depth"
-msgstr "Profundidade das Minas"
+msgstr "Level das Minas"
 
 #: sdv/templates/profile.html:241 sdv/templates/profile.html:242
 #: sdv/templates/profile.html:244
@@ -979,11 +979,11 @@ msgstr "level"
 
 #: sdv/templates/profile.html:242
 msgid "Cavern Depth"
-msgstr "Profundidade da Caverna"
+msgstr "Level da Caverna"
 
 #: sdv/templates/profile.html:244
 msgid "Mine Depth"
-msgstr "Profundidade da Mina"
+msgstr "Level da Mina"
 
 #: sdv/templates/profile.html:246
 msgid "Time Played"
@@ -1025,7 +1025,7 @@ msgstr "filha"
 
 #: sdv/templates/profile.html:266 sdv/templates/profile.html:271
 msgid "named"
-msgstr "chamado(a)"
+msgstr "com o nome de"
 
 #: sdv/templates/profile.html:268
 msgid "has no children"
@@ -1033,7 +1033,7 @@ msgstr "não possui filhos"
 
 #: sdv/templates/profile.html:271
 msgid "and has a pet"
-msgstr "e tem um animal de estimação"
+msgstr "e tem um "
 
 #: sdv/templates/profile.html:271
 msgid "cat"
