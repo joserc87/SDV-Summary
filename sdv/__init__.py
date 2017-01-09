@@ -37,6 +37,8 @@ from sdv.savefile import savefile
 from sdv.zipuploads import zopen, zwrite
 import sdv.validate
 
+from raven.contrib.flask import Sentry
+
 if sys.version_info >= (3, 0):
     unicode = str
     from urllib.parse import urlparse
@@ -50,6 +52,7 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
 recaptcha = ReCaptcha()
 bcrypt = Bcrypt()
 mail = Mail()
+sentry = Sentry()
 
 
 def create_app(config_name=None):
@@ -62,6 +65,7 @@ def create_app(config_name=None):
     recaptcha.init_app(app=app)
     bcrypt.init_app(app)
     mail.init_app(app)
+    sentry.init_app(app, dsn=app.config.get('SENTRY_DSN'))
 
     app.secret_key = app.config['SECRET_KEY']
     app.jinja_env.trim_blocks = True
