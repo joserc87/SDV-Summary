@@ -75,7 +75,10 @@ def getFarmInfo(saveFile):
         x = int(item.find('key').find('Vector2').find('X').text)
         y = int(item.find('key').find('Vector2').find('Y').text)
         i = int(obj.find('parentSheetIndex').text)
-        t = obj.find('type').text
+        try:
+            t = obj.find('type').text
+        except:
+            continue
         a = False
         other = obj.find('name').text
         if name == 'Chest':
