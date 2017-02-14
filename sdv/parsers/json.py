@@ -45,7 +45,51 @@ def parse_json(data):
         'stone': 450
     }
 
-    random.seed(502)
+    crops = {
+        'blue-jazz': 27,
+        'cauliflower': 2,
+        'garlic': 4,
+        'green-bean': (1, 6),
+        'kale': 5,
+        'parsnip': 0,
+        'potato': (3, 6),
+        'rhubarb': (6, 6),
+        'strawberry': (36, 6),
+        'tulip': 26,
+        'blueberry': (9, 6),
+        'corn': (15, 6),
+        'hops': (37, 6),
+        'hot-pepper': (10, 6),
+        'melon': (7, 6),
+        'poppy': 28,
+        'radish': 20,
+        'red-cabbage': (13, 6),
+        'starfruit': (14, 6),
+        'summer-spangle': 29,
+        'tomato': (8, 6),
+        'wheat': 11,
+        'amaranth': 39,
+        'ancient-fruit': (24, 6),
+        'artichoke': (17, 6),
+        'beet': 22,
+        'bok-choy': 19,
+        'cranberry': (21, 6),
+        'eggplant': (16, 6),
+        'fairy-rose': 31,
+        'grape': (38, 6),
+        'pumpkin': (18, 6),
+        'sunflower': 30,
+        'yam': 12
+    }
+
+    plant_colours = {
+        'poppy': [(252, 0, 0), (252, 168, 0), (251, 251, 253)],
+        'tulip': [(226, 73, 10), (255, 162, 194), (255, 191, 255), (233, 195, 255), (255, 250, 10)],
+        'fairy-rose': [(255, 127, 144), (199, 173, 248), (136, 116, 247), (166, 133, 248), (182, 0, 249), (69, 220, 247)],
+        'summer-spangle': [(226, 0, 211), (255, 144, 122), (255, 212, 0), (99, 255, 210), (0, 2008, 255), (206, 91, 255)],
+        'blue-jazz': [(94, 121, 255), (109, 131, 255), (35, 127, 255), (40, 150, 255), (112, 207, 255), (191, 228, 255)]
+    }
+
     objects = []
     tree_types = ['apricot', 'cherry-tree', 'orange-tree', 'peach', 'apple', 'pomegranate', 'tree']
     fence_types = ['fence', 'stone-fence', 'iron-fence', 'hardwood-fence']
@@ -59,33 +103,33 @@ def parse_json(data):
     buildings7 = ['slime-hutch']
 
     for tile in tiles:
-        type = tile['type']
+        obj = tile['type']
         x = int(int(tile['x']) / 16)
         y = int(int(tile['y']) / 16)
 
-        if type == 'grass':
+        if obj == 'grass':
             objects.append(
                 sprite('Grass', x, y, 1, 1, 20, 1, random.randint(2, 4), random.randint(0, 1), None)
             )
-        if type == 'weeds':
+        if obj == 'weeds':
             objects.append(
                 sprite('Object', x, y, 1, 1, 313 + random.randint(0, 2), 'Crafting', 0, None, 'Weeds')
             )
-        elif type == 'farmland':
+        elif obj == 'farmland':
             objects.append(
                 addhoedirt(x, y)
             )
             objects.append(
                 sprite('HoeDirtCrop', x, y, 1, 1, 0, 0, random.randint(4, 5), random.randint(0, 1), None)
             )
-        elif type == 'trellis':
+        elif obj == 'trellis':
             objects.append(
                 addhoedirt(x, y)
             )
             objects.append(
                 sprite('HoeDirtCrop', x, y, 1, 1, 0, 1, random.randint(4, 6), random.randint(0, 1), None)
             )
-        elif type == 'tulips':
+        elif obj == 'tulips':
             objects.append(
                 addhoedirt(x, y)
             )
@@ -94,123 +138,139 @@ def parse_json(data):
             objects.append(
                 sprite('HoeDirtCrop', x, y, 1, 1, 0, 26, random.randint(4, 5), random.randint(0, 1), (colour, days))
             )
-        elif type in buildings2:
+        elif obj in buildings2:
             objects.append(
-                sprite('Building', x, y, 4, 2, None, type.replace('-', ' '), None, None, None)
+                sprite('Building', x, y, 4, 2, None, obj.replace('-', ' '), None, None, None)
             )
-        elif type in buildings3:
+        elif obj in buildings3:
             objects.append(
-                sprite('Building', x, y, 4, 3, None, type.replace('-', ' '), None, None, None)
+                sprite('Building', x, y, 4, 3, None, obj.replace('-', ' '), None, None, None)
             )
-        elif type in buildings4:
+        elif obj in buildings4:
             objects.append(
-                sprite('Building', x, y, 4, 4, None, type.replace('-', ' '), None, None, None)
+                sprite('Building', x, y, 4, 4, None, obj.replace('-', ' '), None, None, None)
             )
-        elif type in buildings7:
+        elif obj in buildings7:
             objects.append(
-                sprite('Building', x, y-1, 4, 7, None, type.replace('-', ' '), None, None, None)
+                sprite('Building', x, y-1, 4, 7, None, obj.replace('-', ' '), None, None, None)
             )
-        elif type in craftable_index:
+        elif obj in craftable_index:
             objects.append(
-                sprite('Object', x, y, 1, 1, craftable_index[type], 'Crafting', 0, 0, 0)
+                sprite('Object', x, y, 1, 1, craftable_index[obj], 'Crafting', 0, 0, 0)
             )
-        elif type == 'gate':
+        elif obj == 'gate':
             objects.append(
-                sprite('Fence', x, y, 0, 0, 0, 0, True, 0, type)
+                sprite('Fence', x, y, 0, 0, 0, 0, True, 0, obj)
             )
-        elif type == 'large-rock':
+        elif obj == 'large-rock':
             objects.append(
                 sprite('ResourceClump', x, y, 0, 0, None, 672, None, None, None)
             )
-        elif type == 'large-log':
+        elif obj == 'large-log':
             objects.append(
                 sprite('ResourceClump', x, y, 0, 0, None, 602, None, None, None)
             )
-        elif type == 'large-stump':
+        elif obj == 'large-stump':
             objects.append(
                 sprite('ResourceClump', x, y, 0, 0, None, 600, None, None, None)
             )
-        elif type in object_index:
-            if type == 'torch':
-                name = 'Torch'
-            elif type == 'sprinkler':
-                name = 'Sprinkler'
-            elif type == 'q-sprinkler':
-                name = 'Quality Sprinkler'
-            elif type == 'irid-sprinkler':
-                name = 'Iridium Sprinkler'
-            elif type == 'twig' or type == 'stone':
-                name = type.title()
+        elif obj in crops:
+            if type(crops[obj]) is tuple:
+                t, s = crops[obj]
+            else:
+                t, s = crops[obj], 5
+
+            o = None
+            if t in [26, 27, 28, 29, 31]:
+                o = (
+                    plant_colours[obj][random.randint(0, len(plant_colours) - 1)],
+                    5
+                )
+
             objects.append(
-                sprite('Object', x, y, 1, 1, object_index[type], 'Crafting', 0, 0, name)
+                sprite('Crop', x, y, 1, 1, None, t, s, random.randint(0, 1), o)
             )
-        elif type in fence_types:
+        elif obj in object_index:
+            if obj == 'torch':
+                name = 'Torch'
+            elif obj == 'sprinkler':
+                name = 'Sprinkler'
+            elif obj == 'q-sprinkler':
+                name = 'Quality Sprinkler'
+            elif obj == 'irid-sprinkler':
+                name = 'Iridium Sprinkler'
+            elif obj == 'twig' or obj == 'stone':
+                name = obj.title()
+            objects.append(
+                sprite('Object', x, y, 1, 1, object_index[obj], 'Crafting', 0, 0, name)
+            )
+        elif obj in fence_types:
             t = 1
-            if 'stone' in type:
+            if 'stone' in obj:
                 t = 2
-            elif 'iron' in type:
+            elif 'iron' in obj:
                 t = 3
-            elif 'hardwood' in type:
+            elif 'hardwood' in obj:
                 t = 5
             objects.append(
                 sprite('Fence', x, y, 1, 1, 0, t, False, 0, 0)
             )
-        elif type in tree_types:
+        elif obj in tree_types:
             T = random.randint(1, 3)
             name = 'FruitTree'
-            if 'apple' in type:
+            if 'apple' in obj:
                 T = 5
-            elif 'apricot' in type:
+            elif 'apricot' in obj:
                 T = 1
-            elif 'cherry' in type:
+            elif 'cherry' in obj:
                 T = 0
-            elif 'orange' in type:
+            elif 'orange' in obj:
                 T = 2
-            elif 'peach' in type:
+            elif 'peach' in obj:
                 T= 3
-            elif 'pomegranate' in type:
+            elif 'pomegranate' in obj:
                 T = 4
 
-            if type == 'tree':
+            if obj == 'tree':
                 name = 'Tree'
 
-            if type != 'tree':
+            if obj != 'tree':
                 x += 1
                 y += 2
 
             objects.append(
                 sprite(name, x, y, 1, 1, 0, T, 5, random.randint(0, 1), 0)
             )
-        elif type in path_types:
-            if 'gravel' in type:
+        elif obj in path_types:
+            if 'gravel' in obj:
                 T = 5
-            elif 'wood' in type:
+            elif 'wood' in obj:
                 T = 6
-            elif 'crystal' in type:
+            elif 'crystal' in obj:
                 T = 7
-            elif 'road' in type:
+            elif 'road' in obj:
                 T = 8
-            elif 'steppingstone' in type:
+            elif 'steppingstone' in obj:
                 T = 9
             objects.append(
                 sprite('Flooring', x, y, 1, 1, None, T, 0, False, None)
             )
-        elif type in floor_types:
-            if 'straw' in type:
+        elif obj in floor_types:
+            if 'straw' in obj:
                 T = 4
-            elif 'wood' in type:
+            elif 'wood' in obj:
                 T = 0
-            elif 'crystal' in type:
+            elif 'crystal' in obj:
                 T = 3
-            elif 'weathered' in type:
+            elif 'weathered' in obj:
                 T = 2
-            elif 'stone' in type:
+            elif 'stone' in obj:
                 T = 1
             objects.append(
                 sprite('Flooring', x, y, 1, 1, None, T, 0, False, None)
             )
         else:
-            print('json input: type not in known types: {} coords {}, {}'.format(type,x,y))
+            print('json input: obj not in known types: {} coords {}, {}'.format(obj,x,y))
 
     farm = {k.name: [a for a in objects if a.name == k.name] for k in objects}
 
