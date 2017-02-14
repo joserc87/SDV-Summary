@@ -3,6 +3,7 @@ import time
 import sqlite3
 import psycopg2
 import json
+import math
 
 from PIL import Image
 from flask import Flask
@@ -39,9 +40,10 @@ def process_queue():
                 data['newEyeColor'] = [data['newEyeColor0'],data['newEyeColor1'],data['newEyeColor2'],data['newEyeColor3']]
                 data['hairstyleColor'] = [data['hairstyleColor0'],data['hairstyleColor1'],data['hairstyleColor2'],data['hairstyleColor3']]
 
-                base_path = os.path.join(app.config.get('IMAGE_FOLDER'), data['url'])
+                base_subfolder = str(int(math.floor(int(task[2])/app.config.get('IMAGE_MAX_PER_FOLDER'))))
+                base_path = os.path.join(app.config.get('IMAGE_FOLDER'), base_subfolder, data['url'])
                 try:
-                    os.mkdir(legacy_location(base_path))
+                    os.makedirs(legacy_location(base_path))
                 except OSError:
                     pass
 
