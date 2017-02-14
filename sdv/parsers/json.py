@@ -90,6 +90,8 @@ def parse_json(data):
         'blue-jazz': [(94, 121, 255), (109, 131, 255), (35, 127, 255), (40, 150, 255), (112, 207, 255), (191, 228, 255)]
     }
 
+    random.seed(502)
+
     objects = []
     tree_types = ['apricot', 'cherry-tree', 'orange-tree', 'peach', 'apple', 'pomegranate', 'tree']
     fence_types = ['fence', 'stone-fence', 'iron-fence', 'hardwood-fence']
