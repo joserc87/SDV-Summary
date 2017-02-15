@@ -185,12 +185,15 @@ def parse_json(data):
             o = None
             if t in [26, 27, 28, 29, 31]:
                 o = (
-                    plant_colours[obj][random.randint(0, len(plant_colours) - 1)],
+                    plant_colours[obj][random.randint(0, len(plant_colours[obj]) - 1)],
                     5
                 )
 
-            objects.append(
-                sprite('Crop', x, y, 1, 1, None, t, s, random.randint(0, 1), o)
+            objects.extend(
+                [
+                    sprite('Crop', x, y, 1, 1, None, t, s, random.randint(0, 1), o),
+                    addhoedirt(x, y)
+                ]
             )
         elif obj in object_index:
             if obj == 'torch':
