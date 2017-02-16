@@ -202,7 +202,9 @@ database_structure_dict = {'md5':'TEXT',
 'base_path':'TEXT',
 'thumb_url':'TEXT',
 'private':'BOOLEAN',
-'planner_url':'TEXT'}
+'planner_url':'TEXT',
+'statsGoodFriends':'BIGINT',
+'statsItemsForaged':'BIGINT'}
 
 if app.config['USE_SQLITE']==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'
