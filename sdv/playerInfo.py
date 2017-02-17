@@ -117,6 +117,7 @@ def playerInfo(saveFile):
 
     # Collect information stored in the player tag
     for tag in playerTags:
+        print(tag)
         if player.find(tag).text != None:
             s = player.find(tag).text
         else:

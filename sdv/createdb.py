@@ -7,7 +7,7 @@ from werkzeug import check_password_hash
 from config import config
 
 app = Flask(__name__)
-config_name = os.environ.get('SDV_APP_SETTINGS', 'development')
+config_name = os.environ.get('SDV_APP_SETTINGS',None)
 app.config.from_object(config[config_name])
 
 database_structure_dict = {'md5':'TEXT',
@@ -204,7 +204,10 @@ database_structure_dict = {'md5':'TEXT',
 'private':'BOOLEAN',
 'planner_url':'TEXT',
 'statsGoodFriends':'BIGINT',
-'statsItemsForaged':'BIGINT'}
+'statsItemsForaged':'BIGINT',
+'dayOfMonthForSaveGame':'TEXT',
+'seasonForSaveGame':'TEXT',
+'yearForSaveGame':'TEXT'}
 
 if app.config['USE_SQLITE']==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'

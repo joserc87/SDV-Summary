@@ -36,6 +36,7 @@ from config import config
 from sdv.createdb import database_structure_dict, database_fields
 from sdv.savefile import savefile
 from sdv.zipuploads import zopen, zwrite
+from sdv.getDate import get_date
 import sdv.validate
 
 if sys.version_info >= (3, 0):
@@ -85,7 +86,7 @@ babel = Babel(app)
 @babel.localeselector
 def get_locale():
     default = request.accept_languages.best_match(app.config['LANGUAGES'])
-    if '_language' in session:
+    if '_language' in session and session.get('_language') in app.config['LANGUAGES']:
         language = session['_language'] if session['_language'] in app.config['LANGUAGES'] else default
     else:
         language = default
@@ -459,10 +460,10 @@ def file_uploaded(inputfile):
         cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(secure_filename(inputfile.filename))))
         db.commit()
         return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
-    except AttributeError as e:
-        g.error = _("Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?")
-        # print(e)
-        return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
+    # except AttributeError as e:
+    #     g.error = _("Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?")
+    #     # print(e)
+    #     return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
     except ParseError as e:
         g.error = _("Not well-formed xml")
         return {'type':'render','target':'index.html','parameters':{"error":g.error}}
