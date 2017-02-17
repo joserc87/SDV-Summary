@@ -216,9 +216,9 @@ def check_user_pw(email,password_attempt):
 
 
 def _get_hash_type(hashed_pw):
-    print(hashed_pw)
+    # print(hashed_pw)
     split_hash = hashed_pw.split('$')
-    print(split_hash)
+    # print(split_hash)
     if split_hash[0] == 'pbkdf2:sha1:1000':
         return 'sha1'
     elif split_hash[1] == '2b' and split_hash[0] == '':
@@ -460,10 +460,10 @@ def file_uploaded(inputfile):
         cur.execute('INSERT INTO errors (ip, time, notes) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.environ['REMOTE_ADDR'],time.time(),'failed sanity check '+str(secure_filename(inputfile.filename))))
         db.commit()
         return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
-    # except AttributeError as e:
-    #     g.error = _("Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?")
-    #     # print(e)
-    #     return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
+    except AttributeError as e:
+        g.error = _("Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?")
+        # print(e)
+        return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
     except ParseError as e:
         g.error = _("Not well-formed xml")
         return {'type':'render','target':'index.html','parameters':{"error":g.error}}
@@ -939,7 +939,8 @@ def display_data(url):
         elif logged_in() and str(datadict['owner_id']) == str(get_logged_in_user()):
             deletable = True
 
-        other_saves, gallery_set = get_others(datadict['url'],datadict['date'],datadict['map_url'])
+        # other_saves, gallery_set = get_others(datadict['url'],datadict['date'],datadict['map_url'])
+        other_saves, gallery_set = get_others(datadict['url'],get_date(datadict),datadict['map_url'])
         for item in ['money','totalMoneyEarned','statsStepsTaken','millisecondsPlayed']:
             if item == 'millisecondsPlayed':
                 datadict[item] = "{:,}".format(round(float((int(datadict[item])/1000)/3600.0),1))
@@ -1309,8 +1310,10 @@ def admin_panel():
                 cur.execute('DELETE FROM blog WHERE id='+app.sqlesc,(request.form['id'],))
                 db.commit()
                 return 'Success'
-        cur.execute('SELECT url,name,farmName,date FROM playerinfo')
+        cur.execute('SELECT url,name,farmName,statsDaysPlayed,dayOfMonthForSaveGame,seasonForSaveGame,yearForSaveGame FROM playerinfo')
         entries = cur.fetchall()
+        for i, entry in enumerate(entries):
+            entries[i] = entry[:3] + [get_date({'statsDaysPlayed':entry[3],'dayOfMonthForSaveGame':entry[4],'seasonForSaveGame':entry[5],'yearForSaveGame':entry[6]})]
         return render_template('adminpanel.html',returned_blog_data=returned_blog_data,blogposts=get_blogposts(include_hidden=True),entries=entries,**page_args())
     else:
         if request.method == 'POST':
@@ -1452,7 +1455,7 @@ def get_entries(n=6,**kwargs):
                    'views':'ORDER BY views ',
                    'recent':'ORDER BY id ',
                    'chronological':'ORDER BY millisecondsPlayed '}
-    search_fields = ('name','farmName','date')
+    search_fields = ('name','farmName') #removed 'date'; too complex at this point in time (and field is deprecated)
     db = get_db()
     cur = db.cursor()
     where_contents = []
@@ -1501,7 +1504,7 @@ def get_entries(n=6,**kwargs):
             where+='AND '+contents+' '
     order = 'ORDER BY id ' if 'sort_by' not in kwargs else order_types[kwargs['sort_by']]
     thumbtype = 'thumb_url' if 'full_thumbnail' in kwargs and kwargs['full_thumbnail']==True else 'farm_url'
-    query = 'SELECT url, name, farmName, date, avatar_url, '+thumbtype+', download_enabled, map_url, private FROM playerinfo '+where+order+'DESC LIMIT '+app.sqlesc
+    query = 'SELECT url, name, farmName, statsDaysPlayed,dayOfMonthForSaveGame,seasonForSaveGame,yearForSaveGame, avatar_url, '+thumbtype+', download_enabled, map_url, private FROM playerinfo '+where+order+'DESC LIMIT '+app.sqlesc #removed 'date'
     # print('query:',query)
     offset = 0
     if 'offset' in kwargs:
@@ -1513,6 +1516,10 @@ def get_entries(n=6,**kwargs):
         cur.execute(query,(n,))
     entries = {}
     entries['posts'] = cur.fetchall()
+
+    for i, entry in enumerate(entries['posts']):
+        entries['posts'][i] = list(entry[:3]) + [get_date({'statsDaysPlayed':entry[3],'dayOfMonthForSaveGame':entry[4],'seasonForSaveGame':entry[5],'yearForSaveGame':entry[6]})] + list(entry[7:])
+
     cur.execute('SELECT count(*) FROM playerinfo '+where)
     entries['total'] = cur.fetchone()[0]
     if len(entries)==0:

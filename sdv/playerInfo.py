@@ -103,7 +103,8 @@ def playerInfo(saveFile):
     playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel',
                 'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina',
                 'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin',
-                'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor','dateStringForSaveGame']
+                'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor','dayOfMonthForSaveGame','seasonForSaveGame','yearForSaveGame']
+                # 'dateStringForSaveGame' removed
     professions = ['Rancher', 'Tiller', 'Coopmaster', 'Shepherd', 'Artisan', 'Agriculturist', 'Fisher', 'Trapper',
                 'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist',
                 'Tracker','Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout',
@@ -117,48 +118,50 @@ def playerInfo(saveFile):
 
     # Collect information stored in the player tag
     for tag in playerTags:
-        print(tag)
-        if player.find(tag).text != None:
-            s = player.find(tag).text
-        else:
-            if tag == "professions":
-                profs = player.find(tag)
-                s = []
-                for a in profs.iter("int"):
-                    a = int(a.text)
-                    if a < len(professions) and len(s) < 10:
-                        s.append(professions[a])
-            if tag == "friendships":
-                s = {}
-                fship = player.find(tag)
-                for item in fship:
-                    name = item.find("key").find('string').text
-                    if name not in child_names:
-                        if name in validate.giftable_npcs:
-                            rating = int(item.find('value').find('ArrayOfInt').find('int').text)
-                            assert rating >= 0 and rating < 14*250
-                            s[name] = rating
+        try:
+            if player.find(tag).text != None:
+                s = player.find(tag).text
+            else:
+                if tag == "professions":
+                    profs = player.find(tag)
+                    s = []
+                    for a in profs.iter("int"):
+                        a = int(a.text)
+                        if a < len(professions) and len(s) < 10:
+                            s.append(professions[a])
+                if tag == "friendships":
+                    s = {}
+                    fship = player.find(tag)
+                    for item in fship:
+                        name = item.find("key").find('string').text
+                        if name not in child_names:
+                            if name in validate.giftable_npcs:
+                                rating = int(item.find('value').find('ArrayOfInt').find('int').text)
+                                assert rating >= 0 and rating < 14*250
+                                s[name] = rating
 
-            if tag in ['hairstyleColor', 'pantsColor', 'newEyeColor']:
-                red = int(player.find(tag).find('R').text)
-                assert red >= 0 and red <= 255
+                if tag in ['hairstyleColor', 'pantsColor', 'newEyeColor']:
+                    red = int(player.find(tag).find('R').text)
+                    assert red >= 0 and red <= 255
 
-                green = int(player.find(tag).find('G').text)
-                assert green >= 0 and green <= 255
+                    green = int(player.find(tag).find('G').text)
+                    assert green >= 0 and green <= 255
 
-                blue = int(player.find(tag).find('B').text)
-                assert blue >= 0 and blue <= 255
+                    blue = int(player.find(tag).find('B').text)
+                    assert blue >= 0 and blue <= 255
 
-                alpha = int(player.find(tag).find('A').text)
-                assert alpha >= 0 and alpha <= 255
+                    alpha = int(player.find(tag).find('A').text)
+                    assert alpha >= 0 and alpha <= 255
 
-                s = [red, green, blue, alpha]
+                    s = [red, green, blue, alpha]
 
-        if tag in ['name', 'farmName', 'favoriteThing']:
-            assert len(tag) <= 32
-        if tag == 'dateStringForSaveGame':
-            tag = 'date'
-        info[tag] = s
+            if tag in ['name', 'farmName', 'favoriteThing']:
+                assert len(tag) <= 32
+            # if tag == 'dateStringForSaveGame':
+            #     tag = 'date'
+            info[tag] = s
+        except AttributeError:
+            pass
 
     # Information from elsewhere
     # UID for save file
@@ -184,7 +187,7 @@ def playerInfo(saveFile):
     partners = getPartners(root)
     if partners:
         partner_name = partners[0].find('name').text
-        print(partner_name)
+        # print(partner_name)
         assert partner_name in validate.marriage_candidates
         p['partner'] = partner_name
     else:
