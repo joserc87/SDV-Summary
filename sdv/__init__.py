@@ -1313,7 +1313,7 @@ def admin_panel():
         cur.execute('SELECT url,name,farmName,statsDaysPlayed,dayOfMonthForSaveGame,seasonForSaveGame,yearForSaveGame FROM playerinfo')
         entries = cur.fetchall()
         for i, entry in enumerate(entries):
-            entries[i] = entry[:3] + [get_date({'statsDaysPlayed':entry[3],'dayOfMonthForSaveGame':entry[4],'seasonForSaveGame':entry[5],'yearForSaveGame':entry[6]})]
+            entries[i] = list(entry[:3]) + [get_date({'statsDaysPlayed':entry[3],'dayOfMonthForSaveGame':entry[4],'seasonForSaveGame':entry[5],'yearForSaveGame':entry[6]})]
         return render_template('adminpanel.html',returned_blog_data=returned_blog_data,blogposts=get_blogposts(include_hidden=True),entries=entries,**page_args())
     else:
         if request.method == 'POST':
