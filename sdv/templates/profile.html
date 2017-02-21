@@ -263,7 +263,12 @@ $(document).ready(function() {
 									{%endif%}
 									{% if data.portrait_info['children']|length > 0 %}
 										{% for child in data.portrait_info['children'] %}
-										{%if loop.index0 == 0 %}{{ _('has') }}{%else%}{{ _('and') }}{%endif%} {{ _('a %(n)s day old',n=child[2])}} {% if child[0] == 0 %}{{ _('son') }}{%else%}{{ _('daughter') }}{%endif%} {{ _('named') }} <b>{{ child[3] }}</b>{%if not loop.last %} {%endif%}{% endfor %}{%if loop.last and data.petName!=None%},{%endif%} 
+											{%if loop.index0 == 0 %}{{ _('has') }}{%else%}{{ _('and') }}{%endif%} 
+											{{ _('a %(n)s day old',n=child[2])}}
+											{% if child[0] == 0 %}{{ _('son') }}{%else%}{{ _('daughter') }}{%endif%} 
+											{{ _('named') }} <b>{{ child[3] }}</b>{%if not loop.last %} {%endif%}
+											{%if loop.last and data.petName!=None%},{%endif%} 
+										{% endfor %}
 									{% else %}
 										{{ _('has no children') }}{%if data.petName!=None%},{%else%}.{%endif%} 
 									{%endif%}
