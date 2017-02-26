@@ -369,14 +369,17 @@ def account_page():
         r = c.fetchall()
         claimed_ids = {}
         for row in r:
-            c.execute('SELECT url,date,imgur_json FROM playerinfo WHERE series_id='+app.sqlesc+' AND owner_id='+app.sqlesc+' ORDER BY statsDaysPlayed ASC',(row[0],user))
+            c.execute('SELECT url,statsDaysPlayed,dayOfMonthForSaveGame,seasonForSaveGame,yearForSaveGame,imgur_json FROM playerinfo WHERE series_id='+app.sqlesc+' AND owner_id='+app.sqlesc+' ORDER BY statsDaysPlayed ASC',(row[0],user))
             s = c.fetchall()
+            for i, entry in enumerate(s):
+                s[i] = list(entry[:1]) + [get_date({'statsDaysPlayed':entry[1],'dayOfMonthForSaveGame':entry[2],'seasonForSaveGame':entry[3],'yearForSaveGame':entry[4]})] + list(entry[5:])
             s = [list(part[:2])+[json.loads(part[2]) if part[2] != None else None] + list(part[3:]) for part in s]
             claimed_ids[row[0]] = {'auto_key_json':json.loads(row[1]),'data':s}
         claimable_ids = {}
         for row in claimables:
-            c.execute('SELECT date FROM playerinfo WHERE id='+app.sqlesc,(row[0],))
-            d = c.fetchone()[0]
+            c.execute('SELECT statsDaysPlayed,dayOfMonthForSaveGame,seasonForSaveGame,yearForSaveGame FROM playerinfo WHERE id='+app.sqlesc,(row[0],))
+            d_data = c.fetchone()
+            d = get_date({'statsDaysPlayed':d_data[0],'dayOfMonthForSaveGame':d_data[1],'seasonForSaveGame':d_data[2],'yearForSaveGame':d_data[3]})
             c.execute('SELECT auto_key_json FROM series WHERE id=(SELECT series_id FROM playerinfo WHERE id='+app.sqlesc+')',(row[0],))
             a = json.loads(c.fetchone()[0])
             claimable_ids[row[0]] = {'auto_key_json':a,'data':(row[1],d)}
