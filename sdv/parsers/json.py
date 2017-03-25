@@ -93,7 +93,7 @@ def parse_json(data):
     random.seed(502)
 
     objects = []
-    tree_types = ['apricot', 'cherry-tree', 'orange-tree', 'peach', 'apple', 'pomegranate', 'tree']
+    tree_types = ['apricot', 'cherry-tree', 'orange-tree', 'peach', 'apple', 'pomegranate', 'tree','maple-tree','oak-tree','pine-tree','mushroom']
     fence_types = ['fence', 'stone-fence', 'iron-fence', 'hardwood-fence']
     path_types = ['gravel-path', 'wood-path', 'steppingstone-path', 'crystal-path', 'road']
     floor_types = ['wood-floor', 'straw-floor', 'weathered-floor', 'stone-floor', 'crystal-floor']
@@ -235,8 +235,16 @@ def parse_json(data):
                 T= 3
             elif 'pomegranate' in obj:
                 T = 4
+            elif 'maple-tree' in obj:
+                T = 2
+            elif 'oak-tree' in obj:
+                T = 1
+            elif 'pine-tree' in obj:
+                T = 3
+            elif 'mushroom' in obj:
+                T = 7
 
-            if obj == 'tree':
+            if obj in ['tree','maple-tree','oak-tree','pine-tree','mushroom']:
                 name = 'Tree'
 
             if obj != 'tree':
