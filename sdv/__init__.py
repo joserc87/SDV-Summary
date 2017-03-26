@@ -38,6 +38,7 @@ from sdv.savefile import savefile
 from sdv.zipuploads import zopen, zwrite
 from sdv.getDate import get_date
 import sdv.validate
+import sdv.achievements.checker
 
 if sys.version_info >= (3, 0):
     unicode = str
@@ -944,11 +945,6 @@ def display_data(url):
 
         # other_saves, gallery_set = get_others(datadict['url'],datadict['date'],datadict['map_url'])
         other_saves, gallery_set = get_others(datadict['url'],get_date(datadict),datadict['map_url'])
-        for item in ['money','totalMoneyEarned','statsStepsTaken','millisecondsPlayed']:
-            if item == 'millisecondsPlayed':
-                datadict[item] = "{:,}".format(round(float((int(datadict[item])/1000)/3600.0),1))
-            else:
-                datadict[item] = "{:,}".format(datadict[item])
 
         datadict['animals'] = None if datadict['animals']=='{}' else json.loads(datadict['animals'])
         datadict['portrait_info'] = json.loads(datadict['portrait_info'])
@@ -958,6 +954,16 @@ def display_data(url):
             datadict['imgur_json'] = json.loads(datadict['imgur_json'])
         # passworded = True if datadict['del_password'] != None else False
         # passworded=passworded, removed from next line
+
+        # testing!!!!
+        print(achievements.checker.main(datadict,friendships))
+
+        for item in ['money','totalMoneyEarned','statsStepsTaken','millisecondsPlayed']:
+            if item == 'millisecondsPlayed':
+                datadict[item] = "{:,}".format(round(float((int(datadict[item])/1000)/3600.0),1))
+            else:
+                datadict[item] = "{:,}".format(datadict[item])
+
         claimables = find_claimables()
         vote = json.dumps({url:get_votes(url)})
         if logged_in() == False and len(claimables) > 1 and request.cookies.get('no_signup')!='true':

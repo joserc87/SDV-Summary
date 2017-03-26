@@ -207,7 +207,15 @@ database_structure_dict = {'md5':'TEXT',
 'statsItemsForaged':'BIGINT',
 'dayOfMonthForSaveGame':'TEXT',
 'seasonForSaveGame':'TEXT',
-'yearForSaveGame':'TEXT'}
+'yearForSaveGame':'TEXT',
+'fish_json':'TEXT',
+'recipes_json':'TEXT',
+'craftables_json':'TEXT',
+'museum_json':'TEXT',
+'shipping_json':'TEXT',
+'community_json':'TEXT',
+'prairieking_json':'TEXT'
+}
 
 if app.config['USE_SQLITE']==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'

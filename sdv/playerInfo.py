@@ -1,6 +1,7 @@
 import json
 from sdv import validate
 import sdv.savefile
+from sdv.achievements.checker import fish_ids, recipe_ids, craftable_items, museum_ids, shipping_ids, crop_ids
 
 ns = "{http://www.w3.org/2001/XMLSchema-instance}"
 animal_habitable_buildings = ['Coop', 'Barn', 'SlimeHutch']
@@ -197,6 +198,20 @@ def playerInfo(saveFile):
 
     info['portrait_info'] = json.dumps(p)
     info['animals'] = json.dumps(getAnimals(root))
+
+    caught_ids = {}
+    for item in player.find('fishCaught').findall('item'):
+        caught_ids[item.find('key').find('int').text] = int(item.find('value').find('ArrayOfInt').find('int').text)
+    info['fish_json'] = json.dumps(caught_ids)
+
+    recipes = {'known':set(),'cooked':set()}
+    for item in player.find('recipesCooked').findall('item'):
+        recipes['cooked'].add(item.find('key').find('int').text)
+    for item in player.find('cookingRecipes').findall('item'):
+        recipes['known'].add(item.find('key').find('string').text)
+    recipes['known'] = list(recipes['known'])
+    recipes['cooked'] = list(recipes['cooked'])
+    info['recipes_json'] = json.dumps(recipes)
 
     return info
 
