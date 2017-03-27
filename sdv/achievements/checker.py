@@ -92,22 +92,68 @@ shipping_ids = {'300': 'Amaranth', '274': 'Artichoke', '284': 'Beet', '278': 'Bo
 
 crop_ids = {'300': 'Amaranth', '274': 'Artichoke', '188': 'Green Bean', '284': 'Beet', '258': 'Blueberry',
 			'278': 'Bok Choy', '190': 'Cauliflower', '270': 'Corn', '282': 'Cranberries', '272': 'Eggplant',
-			'595': 'Fairy Rose', '248': 'Garlic', '398': 'Grape', '304': 'Hops', '597': 'Blue Jazz', '250': 'Kale',
-			'254': 'Melon', '24': 'Parsnip', '260': 'Hot Pepper', '376': 'Poppy', '192': 'Potato', '276': 'Pumpkin',
-			'264': 'Radish', '266': 'Red Cabbage', '252': 'Rhubarb', '593': 'Summer Spangle', '268': 'Starfruit',
-			'400': 'Strawberry', '421': 'Sunflower', '417': 'Sweet Gem Berry', '256': 'Tomato', '591': 'Tulip',
-			'262': 'Wheat', '280': 'Yam'}
+			'248': 'Garlic', '398': 'Grape', '304': 'Hops', '250': 'Kale',
+			'254': 'Melon', '24': 'Parsnip', '260': 'Hot Pepper', '192': 'Potato', '276': 'Pumpkin',
+			'264': 'Radish', '266': 'Red Cabbage', '252': 'Rhubarb', '268': 'Starfruit',
+			'400': 'Strawberry', '256': 'Tomato', '262': 'Wheat', '280': 'Yam'}
+			# missing: COFFEE ID NOT KNOWN
+			# not included: '417': 'Sweet Gem Berry', '591': 'Tulip', '421': 'Sunflower', '593': 'Summer Spangle',  '376': 'Poppy','597': 'Blue Jazz','595': 'Fairy Rose', 
+
+achievements = {
+	'Greenhorn':'Earn 15,000g',
+	'Cowpoke':'Earn 50,000g',
+	'Homesteader':'Earn 250,000g',
+	'Millionaire':'Earn 1,000,000g',
+	'Legend':'Earn 10,000,000g',
+	'A Complete Collection':'Complete the museum collection.',
+	'A New Friend':'Reach a 5-heart friendship level with someone.',
+	'Best Friends':'Reach a 10-heart friendship level with someone.',
+	'The Beloved Farmer':'Reach a 10-heart friendship level with 8 people.',
+	'Cliques':'Reach a 5-heart friendship level with 4 people.',
+	'Networking':'Reach a 5-heart friendship level with 10 people.',
+	'Popular':'Reach a 5-heart friendship level with 20 people.',
+	'Cook':'Cook 10 different recipes.',
+	'Sous Chef':'Cook 25 different recipes.',
+	'Gourmet Chef':'Cook every recipe.',
+	# 'Moving Up':'Upgrade your house.', 
+	# 'Living Large':'Upgrade your house to the maximum size. (2nd upgrade, not cellar)',
+	'D.I.Y.':'Craft 15 different items.',
+	'Artisan':'Craft 30 different items.',
+	'Craft Master':'Craft every item.',
+	'Fisherman':'Catch 10 different fish.',
+	'Ol\' Mariner':'Catch 24 different fish.',
+	'Master Angler':'Catch every fish.',
+	'Mother Catch':'Catch 100 fish.',
+	'Treasure Trove':'Donate 40 different items to the museum.',
+	'Gofer':'Complete 10 \'Help Wanted\' requests.',
+	'A Big Help':'Complete 40 \'Help Wanted\' requests.',
+	'Polyculture':'Ship 15 of each crop.(note)',
+	'Monoculture':'Ship 300 of one crop.',
+	'Full Shipment':'Ship every item.',
+	# 'Prairie King':'Beat \'Journey Of The Prairie King\'.',
+	'The Bottom':'Reach the lowest level of the mines.',
+	# 'Local Legend':'Restore the Pelican Town Community Center.',
+	# 'Joja Co. Member Of The Year':'Become a Joja Co. member and purchase all the community development perks.',
+	# 'Mystery Of The Stardrops':'Find every stardrop.',
+	# 'Full House':'Get married and have two kids.',
+	'Singular Talent':'Reach level 10 in a skill.',
+	'Master Of The Five Ways':'Reach level 10 in every skill.',
+	'Protector Of The Valley':'Complete all of the Adventure Guild Monster Slayer goals.'
+	# 'Fector\'s Challenge':'Beat \'Journey Of The Prairie King\' without dying.'
+}
 
 def main(datadict,friendships):
 	missing_achievements = {}
 
-	missing_achievements['Money'] = []
+	missing_achievements['Money'] = {'missing-achievements':[]}
 	earned = int(datadict['totalMoneyEarned'])
-	for threshold in [10000000,1000000,250000,50000,15000]:
+	levels = ['Greenhorn','Cowpoke','Homesteader','Millionaire','Legend']
+	for t,threshold in enumerate([15000,50000,250000,1000000,10000000]):
 		if earned < threshold:
-			missing_achievements['Money'].append(threshold)
+			missing_achievements['Money']['missing-achievements'].append(levels[t])
 
-	missing_achievements['Friendship'] = []
+
+	missing_achievements['Friendship'] = {'missing-achievements':[]}
 	num_5 = 0
 	num_10 = 0
 	for friendship in friendships:
@@ -118,114 +164,122 @@ def main(datadict,friendships):
 			num_5 += 1
 	if num_10 < 8:
 		if num_5 < 20:
-			missing_achievements['Friendship'].append('5-heart friendship with 20 people')
+			missing_achievements['Friendship']['missing-achievements'].append('Popular')
 			if num_5 < 10:
-				missing_achievements['Friendship'].append('5-heart friendship with 10 people')
-				if num_5 == 0:
-					missing_achievements['Friendship'].append('5-heart friendship with 1 person')
-		missing_achievements['Friendship'].append('10-heart friendship with 8 people')
+				missing_achievements['Friendship']['missing-achievements'].append('Networking')
+				if num_5 < 4:
+					missing_achievements['Friendship']['missing-achievements'].append('Cliques')
+					if num_5 == 0:
+						missing_achievements['Friendship']['missing-achievements'].append('A New Friend')
+		missing_achievements['Friendship']['missing-achievements'].append('The Beloved Farmer')
 		if num_10 == 0:
-			missing_achievements['Friendship'].append('10-heart friendship with 1 person')
+			missing_achievements['Friendship']['missing-achievements'].append('Best Friends')
 
-	missing_achievements['Fish'] = []
+
+	missing_achievements['Fish'] = {'missing-achievements':[],'missing-fish':None}
 	try:
 		fish = json.loads(datadict['fish_json'])
 		num_caught = sum(fish.values())
 		caught_ids = set(fish.keys())
 		if num_caught < 100:
-			missing_achievements['Fish'].append('Catch 100 fish')
+			missing_achievements['Fish']['missing-achievements'].append('Mother Catch')
 		if len(caught_ids) < len(fish_ids.keys()):
-			missing_achievements['Fish'].append('Catch all types of fish')
+			missing_achievements['Fish']['missing-achievements'].append('Master Angler')
 			if len(caught_ids) < 24:
-				missing_achievements['Fish'].append('Catch 24 different types of fish')
+				missing_achievements['Fish']['missing-achievements'].append('Ol\' Mariner')
 				if len(caught_ids) < 10:
-					missing_achievements['Fish'].append('Catch 10 different types of fish')
-			missing = {'missing':[fish_ids[id] for id in list(set(fish_ids.keys()) - caught_ids)]}
-			missing_achievements['Fish'].append(missing)
+					missing_achievements['Fish']['missing-achievements'].append('Fisherman')
+			missing = [fish_ids[id] for id in list(set(fish_ids.keys()) - caught_ids)]
+			missing_achievements['Fish']['missing-fish'] = missing
 	except TypeError:
 		pass
 
-	missing_achievements['Recipes'] = []
+
+	missing_achievements['Recipes'] = {'missing-achievements':[],'missing-known':None,'missing-unknown':None}
 	try:
 		recipes = json.loads(datadict['recipes_json'])
 		known_recipes = set(recipes['known'])
 		cooked_recipes = set(recipes['cooked'])
 		if len(cooked_recipes) < len(recipe_ids.keys()):
-			missing_achievements['Recipes'].append('Cook all recipes')
+			missing_achievements['Recipes']['missing-achievements'].append('Gourmet Chef')
 			if len(cooked_recipes) < 25:
-				missing_achievements['Recipes'].append('Cook 25 different recipes')
+				missing_achievements['Recipes']['missing-achievements'].append('Sous Chef')
 				if len(cooked_recipes) < 10:
-					missing_achievements['Recipes'].append('Cook 10 different recipes')
+					missing_achievements['Recipes']['missing-achievements'].append('Cook')
 			missing = set(recipe_ids.keys()) - cooked_recipes
 			missing = set(recipe_ids[id] for id in missing)
 			unknown_missing = missing - known_recipes
 			known_missing = list(missing - unknown_missing)
 			unknown_missing = list(unknown_missing)
 			if len(known_missing) > 0:
-				missing_achievements['Recipes'].append({'missing-known':known_missing})
+				missing_achievements['Recipes']['missing-known'] = known_missing
 			if len(unknown_missing) > 0:
-				missing_achievements['Recipes'].append({'missing-unknown':unknown_missing})
+				missing_achievements['Recipes']['missing-unknown'] = unknown_missing
 	except TypeError:
 		pass
 
-	missing_achievements['Craftables'] = []
+
+	missing_achievements['Craftables'] = {'missing-achievements':[],'missing-known':None,'missing-unknown':None}
 	try:
 		craftables = json.loads(datadict['craftables_json'])
 		crafted = set(craftables['crafted'].keys())
 		known_recipes = set(craftables['known'])
 
 		if len(crafted) < len(craftable_items):
-			missing_achievements['Craftables'].append('Craft all items')
+			missing_achievements['Craftables']['missing-achievements'].append('Craft Master')
 			if len(crafted) < 30:
-				missing_achievements['Craftables'].append('Craft 30 different items')
+				missing_achievements['Craftables']['missing-achievements'].append('Artisan')
 				if len(crafted) < 15:
-					missing_achievements['Craftables'].append('Craft 15 different items')
+					missing_achievements['Craftables']['missing-achievements'].append('D.I.Y.')
 
 			missing = craftable_items - crafted
 			unknown_missing = missing - known_recipes
 			known_missing = list(missing - unknown_missing)
 			unknown_missing = list(unknown_missing)
 			if len(known_missing) > 0:
-				missing_achievements['Craftables'].append({'missing-known':known_missing})
+				missing_achievements['Craftables']['missing-known'] = known_missing
 			if len(unknown_missing) > 0:
-				missing_achievements['Craftables'].append({'missing-unknown':unknown_missing})
+				missing_achievements['Craftables']['missing-unknown'] = unknown_missing
 	except TypeError:
 		pass
 
-	missing_achievements['Museum'] = []
+
+	missing_achievements['Museum'] = {'missing-achievements':[],'missing-items':None}
 	try:
 		museum = json.loads(datadict['museum_json'])
 		donated = set(museum)
 		if len(set(museum_ids.keys()) - donated) > 0:
-			missing_achievements['Museum'].append('Complete the museum collection')
+			missing_achievements['Museum']['missing-achievements'].append('A Complete Collection')
 			if len(donated) < 40:
-				missing_achievements['Museum'].append('Donate 40 items to the museum')
+				missing_achievements['Museum']['missing-achievements'].append('Treasure Trove')
 			missing = list(set(museum_ids.keys()) - donated)
 			missing = [museum_ids[id] for id in missing]
-			missing_achievements['Museum'].append({'missing':missing})
+			missing_achievements['Museum']['missing-items'] = missing
 	except TypeError:
 		pass
 
-	missing_achievements['Quests'] = []
+
+	missing_achievements['Quests'] = {'missing-achievements':[]}
 	try:
 		num_quests = int(datadict['statsQuestsCompleted'])
 		if num_quests < 40:
-			missing_achievements['Quests'].append('Do 40 quests')
+			missing_achievements['Quests']['missing-achievements'].append('A Big Help')
 			if num_quests < 10:
-				missing_achievements['Quests'].append('Do 10 quests')
+				missing_achievements['Quests']['missing-achievements'].append('Gofer')
 	except TypeError:
 		pass
 
-	missing_achievements['Shipping'] = []
+
+	missing_achievements['Shipping'] = {'missing-achievements':[],'missing-all':None,'missing-crops':None,'missing-max':None}
 	try:
 		shipping = json.loads(datadict['shipping_json'])
 		shipped = shipping['all']
 		shipped_crops = shipping['crops']
 		if len(set(shipping_ids.keys()) - set(shipped.keys())) > 0:
-			missing_achievements['Shipping'].append('Ship every item')
+			missing_achievements['Shipping']['missing-achievements'].append('Full Shipment')
 			missing = list(set(shipping_ids.keys()) - set(shipped.keys()))
 			missing = [shipping_ids[id] for id in missing]
-			missing_achievements['Shipping'].append({'missing-all':missing})
+			missing_achievements['Shipping']['missing-all'] = missing
 
 			missing = []
 			for crop in list(crop_ids):
@@ -235,19 +289,20 @@ def main(datadict,friendships):
 				except KeyError:
 					missing.append(crop_ids[crop])
 			if len(missing) > 0:
-				missing_achievements['Shipping'].append('Ship 15 of every crop')
-				missing_achievements['Shipping'].append({'missing-crops':missing})
+				missing_achievements['Shipping']['missing-achievements'].append('Polyculture')
+				missing_achievements['Shipping']['missing-crops'] = missing
 			if len(shipped_crops) > 0:
 				max_shipped = max(shipped_crops, key=shipped_crops.get)
 				if shipped_crops[max_shipped] < 300:
-					missing_achievements['Shipping'].append('Ship 300 of one crop')
-					missing_achievements['Shipping'].append({'missing-max':{'type':crop_ids[max_shipped],'number':shipped_crops[max_shipped]}})
+					missing_achievements['Shipping']['missing-achievements'].append('Monoculture')
+					missing_achievements['Shipping']['missing-max'] = {'type':crop_ids[max_shipped],'number':shipped_crops[max_shipped]}
 			else:
-				missing_achievements['Shipping'].append('Ship 300 of one crop')
+				missing_achievements['Shipping']['missing-achievements'].append('Monoculture')
 	except TypeError:
 		pass
 
-	missing_achievements['Skills'] = []
+
+	missing_achievements['Skills'] = {'missing-achievements':[],'missing-progress':{}}
 	skill_exp = dict()
 	skill_exp['Farming'] = datadict['farmingLevel']
 	skill_exp['Mining'] = datadict['miningLevel']
@@ -258,19 +313,19 @@ def main(datadict,friendships):
 	max_skill = max(skill_exp, key=skill_exp.get)
 	min_skill = min(skill_exp, key=skill_exp.get)
 	if skill_exp[max_skill] < 15000:
-		missing_achievements['Skills'].append('Level 10 in a skill')
+		missing_achievements['Skills']['missing-achievements'].append('Singular Talent')
 	if skill_exp[min_skill] < 15000:
-		missing_achievements['Skills'].append('Level 10 in every skill')
+		missing_achievements['Skills']['missing-achievements'].append('Master Of The Five Ways')
 		missing = []
 		for skill in skill_exp:
 			if skill_exp[skill] < 15000:
-				missing.append([skill,str(skill_exp[skill]) + '/15000'])
-		missing_achievements['Skills'].append({'missing':missing})
+				missing_achievements['Skills']['missing-progress'][skill] = skill_exp[skill]
+
 
 	## Mining
-	missing_achievements['Other'] = []
+	missing_achievements['Other'] = {'missing-achievements':[]}
 	if datadict['deepestMineLevel'] < 100:
-		missing_achievements['Other'].append('Reach level 100 in the mines')
+		missing_achievements['Other']['missing-achievements'].append('The Bottom')
 
 	def nz(value):
 		if value == None:
@@ -288,25 +343,26 @@ def main(datadict,friendships):
 	dust = nz(datadict['statsSpecificMonstersKilledDust_Spirit'])
 
 	if slime < 1000 or void < 150 or bat < 200 or skeleton < 50 or bug < 125 or duggy < 30 or dust < 500:
-		missing_achievements['Other'].append({'monster':['Complete Adventue Guild Monster Slayer goals']})
-		missing = []
+		missing_achievements['Other']['missing-achievements'].append('Protector Of The Valley')
+		missing = {}
 		if slime < 1000:
-			missing.append({'slime':str(slime) + '/1000'})
+			missing['slime'] = str(slime) + '/1000'
 		if void < 150:
-			missing.append({'void':str(void) + '/150'})
+			missing['void'] = str(void) + '/150'
 		if bat < 200:
-			missing.append({'bat':str(bat) + '/200'})
+			missing['bat'] = str(bat) + '/200'
 		if skeleton < 50:
-			missing.append({'skeleton':str(skeleton) + '/50'})
+			missing['skeleton'] = str(skeleton) + '/50'
 		if bug < 125:
-			missing.append({'bug':str(bug) + '/125'})
+			missing['bug'] = str(bug) + '/125'
 		if duggy < 30:
-			missing.append({'duggy':str(duggy) + '/30'})
+			missing['duggy'] = str(duggy) + '/30'
 		if dust < 500:
-			missing.append({'dust':str(dust) + '/500'})
-		missing_achievements['Other'][-1]['monster']+= missing
+			missing['dust'] = str(dust) + '/500'
+		missing_achievements['Other']['missing-protector'] = missing
 
 	return missing_achievements
+
 
 	## Fullhouse
 	kids = 0
@@ -316,6 +372,7 @@ def main(datadict,friendships):
 			kids += 1
 	if kids < 2:
 		print(RED + '\t*** Spouse and two children ***' + END)
+
 
 	## Community Center
 	locations = root.find('locations').findall('GameLocation')

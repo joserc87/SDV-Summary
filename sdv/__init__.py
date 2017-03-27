@@ -956,7 +956,9 @@ def display_data(url):
         # passworded=passworded, removed from next line
 
         # testing!!!!
-        print(achievements.checker.main(datadict,friendships))
+        missed_achievements = achievements.checker.main(datadict,friendships)
+        for key in missed_achievements:
+            print('Key \'{}\' has contents {}\n'.format(key,missed_achievements[key]))
 
         for item in ['money','totalMoneyEarned','statsStepsTaken','millisecondsPlayed']:
             if item == 'millisecondsPlayed':
