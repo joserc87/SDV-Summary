@@ -213,6 +213,35 @@ def playerInfo(saveFile):
     recipes['cooked'] = list(recipes['cooked'])
     info['recipes_json'] = json.dumps(recipes)
 
+    craftables = {'known':set(),'crafted':{}}
+    for item in player.find('craftingRecipes').findall('item'):
+        name = item.find('key').find('string').text
+        craftables['known'].add(name)
+        if int(item.find('value').find('int').text) > 0:
+            craftables['crafted'][name] = int(item.find('value').find('int').text)
+    craftables['known'] = list(craftables['known'])
+    info['craftables_json'] = json.dumps(craftables)
+
+    museum = set()
+    locations = root.find('locations').findall('GameLocation')
+    for location in locations:
+        if location.get('{http://www.w3.org/2001/XMLSchema-instance}type') == 'LibraryMuseum':
+            items = location.find('museumPieces')
+            for item in items:
+                museum.add(item.find('value').find('int').text)
+            break
+    info['museum_json'] = json.dumps(list(museum))
+
+    shipped = {}
+    shipped_crops = {}
+    for item in player.find('basicShipped'):
+        id = item.find('key').find('int').text
+        num = int(item.find('value').find('int').text)
+        shipped[id] = num
+        if id in crop_ids.keys():
+            shipped_crops[id] = num
+    info['shipping_json'] = json.dumps({'all':shipped,'crops':shipped_crops})
+
     return info
 
 

@@ -168,183 +168,149 @@ def main(datadict,friendships):
 	except TypeError:
 		pass
 
-	return missing_achievements
+	missing_achievements['Craftables'] = []
+	try:
+		craftables = json.loads(datadict['craftables_json'])
+		crafted = set(craftables['crafted'].keys())
+		known_recipes = set(craftables['known'])
 
-	print_heading('Craftables')
-	crafted = set()
-	known_recipes = set()
-	for item in player.find('craftingRecipes').findall('item'):
-		name = item.find('key').find('string').text
-		known_recipes.add(name)
-		if int(item.find('value').find('int').text) > 0:
-			crafted.add(name)
-	if len(crafted) < len(craftable_items):
-		print('Have crafted ' + str(len(crafted)) + ' different items. Achievement(s) at:')
-		print(RED + '\t*** Craft all items. ***' + END)
-		if len(crafted) < 30:
-			print(RED + '\t*** Craft 30 different items. ***' + END)
-			if len(crafted) < 15:
-				print(RED + '\t*** Craft 15 different items. ***' + END)
+		if len(crafted) < len(craftable_items):
+			missing_achievements['Craftables'].append('Craft all items')
+			if len(crafted) < 30:
+				missing_achievements['Craftables'].append('Craft 30 different items')
+				if len(crafted) < 15:
+					missing_achievements['Craftables'].append('Craft 15 different items')
 
-		missing = craftable_items - crafted
-		unknown_missing = missing - known_recipes
-		known_missing = list(missing - unknown_missing)
-		unknown_missing = list(unknown_missing)
-		if len(known_missing) > 0:
-			print('\t\tMissing (recipe known):')
-			print_missing(known_missing)
-		if len(unknown_missing) > 0:
-			print('\t\tMissing (recipe unknown):')
-			print_missing(unknown_missing)
+			missing = craftable_items - crafted
+			unknown_missing = missing - known_recipes
+			known_missing = list(missing - unknown_missing)
+			unknown_missing = list(unknown_missing)
+			if len(known_missing) > 0:
+				missing_achievements['Craftables'].append({'missing-known':known_missing})
+			if len(unknown_missing) > 0:
+				missing_achievements['Craftables'].append({'missing-unknown':unknown_missing})
+	except TypeError:
+		pass
 
-	print_heading('Museum')
-	donated = set()
-	locations = tree.find('locations').findall('GameLocation')
-	for location in locations:
-		if location.get('{http://www.w3.org/2001/XMLSchema-instance}type') == 'LibraryMuseum':
-			items = location.find('museumPieces')
-			for item in items:
-				donated.add(item.find('value').find('int').text)
-			break
-	if len(set(museum_ids.keys()) - donated) > 0:
-		print(RED + '\t*** Complete the museum collection ***' + END)
-		if len(donated) < 40:
-			print(RED + '\t*** Donate 40 items to the museum ***' + END)
-		print('\t\tMissing:')
-		missing = list(set(museum_ids.keys()) - donated)
-		missing = [museum_ids[id] for id in missing]
-		print_missing(missing)
-	else:
-		print('All museum achievements obtained.')
+	missing_achievements['Museum'] = []
+	try:
+		museum = json.loads(datadict['museum_json'])
+		donated = set(museum)
+		if len(set(museum_ids.keys()) - donated) > 0:
+			missing_achievements['Museum'].append('Complete the museum collection')
+			if len(donated) < 40:
+				missing_achievements['Museum'].append('Donate 40 items to the museum')
+			missing = list(set(museum_ids.keys()) - donated)
+			missing = [museum_ids[id] for id in missing]
+			missing_achievements['Museum'].append({'missing':missing})
+	except TypeError:
+		pass
 
-	print_heading('Quests')
-	num_quests = int(tree.find('stats').find('questsCompleted').text)
-	if num_quests < 40:
-		print('Have done ' + str(num_quests) + ' quests. Achievement(s) at:')
-		print(RED + '\t*** 40 quests. ***' + END)
-		if num_quests < 10:
-			print(RED + '\t*** 10 quests. ***' + END)
-	else:
-		print('All quest achievements obtained.')
+	missing_achievements['Quests'] = []
+	try:
+		num_quests = int(datadict['statsQuestsCompleted'])
+		if num_quests < 40:
+			missing_achievements['Quests'].append('Do 40 quests')
+			if num_quests < 10:
+				missing_achievements['Quests'].append('Do 10 quests')
+	except TypeError:
+		pass
 
-	print_heading('Shipping')
-	shipped = {}
-	shipped_crops = {}
-	for item in player.find('basicShipped'):
-		id = item.find('key').find('int').text
-		num = int(item.find('value').find('int').text)
-		shipped[id] = num
-		if id in crop_ids.keys():
-			shipped_crops[id] = num
-	if len(set(shipping_ids.keys()) - set(shipped.keys())) > 0:
-		print(RED + '\t*** Ship every item ***' + END + '\n\t\tMissing:')
-		missing = list(set(shipping_ids.keys()) - set(shipped.keys()))
-		missing = [shipping_ids[id] for id in missing]
-		print_missing(missing)
+	missing_achievements['Shipping'] = []
+	try:
+		shipping = json.loads(datadict['shipping_json'])
+		shipped = shipping['all']
+		shipped_crops = shipping['crops']
+		if len(set(shipping_ids.keys()) - set(shipped.keys())) > 0:
+			missing_achievements['Shipping'].append('Ship every item')
+			missing = list(set(shipping_ids.keys()) - set(shipped.keys()))
+			missing = [shipping_ids[id] for id in missing]
+			missing_achievements['Shipping'].append({'missing-all':missing})
 
-		missing = []
-		for crop in list(crop_ids):
-			try:
-				if shipped_crops[crop] < 15:
+			missing = []
+			for crop in list(crop_ids):
+				try:
+					if shipped_crops[crop] < 15:
+						missing.append(crop_ids[crop])
+				except KeyError:
 					missing.append(crop_ids[crop])
-			except KeyError:
-				missing.append(crop_ids[crop])
-		if len(missing) > 0:
-			print(RED + '\t*** Ship 15 of every crop ***' + END + '\n\t\tMissing:')
-			split = [missing[i:int(math.ceil(i + len(missing) / 4))] for i in
-					 range(0, len(missing), int(math.ceil(len(missing) / 4)))]
-			blanks = len(split[0]) - len(split[-1])
-			if blanks > 0:
-				split[3].extend([' ' for i in range(blanks)])
-			for row in zip(*split):
-				print('\t\t\t' + ''.join(str.ljust(item, 20) for item in row))
-		if len(shipped_crops) > 0:
-			max_shipped = max(shipped_crops, key=shipped_crops.get)
-			if shipped_crops[max_shipped] < 300:
-				print(RED + '\t*** Ship 300 of one crop ***' + END)
-				print('\t\tHighest number: ' + crop_ids[max_shipped] + ' (' + str(shipped_crops[max_shipped]) + ')')
-		else:
-			print(RED + '\t*** Ship 300 of one crop ***' + END)
-	else:
-		print('All shipping achievements obtained.')
+			if len(missing) > 0:
+				missing_achievements['Shipping'].append('Ship 15 of every crop')
+				missing_achievements['Shipping'].append({'missing-crops':missing})
+			if len(shipped_crops) > 0:
+				max_shipped = max(shipped_crops, key=shipped_crops.get)
+				if shipped_crops[max_shipped] < 300:
+					missing_achievements['Shipping'].append('Ship 300 of one crop')
+					missing_achievements['Shipping'].append({'missing-max':{'type':crop_ids[max_shipped],'number':shipped_crops[max_shipped]}})
+			else:
+				missing_achievements['Shipping'].append('Ship 300 of one crop')
+	except TypeError:
+		pass
 
-	print_heading('Skills')
+	missing_achievements['Skills'] = []
 	skill_exp = dict()
-	exp = player.find('experiencePoints').findall('int')
-	skill_exp['Farming'] = int(exp[0].text)
-	skill_exp['Mining'] = int(exp[1].text)
-	skill_exp['Foraging'] = int(exp[2].text)
-	skill_exp['Fishing'] = int(exp[3].text)
-	skill_exp['Combat'] = int(exp[4].text)
+	skill_exp['Farming'] = datadict['farmingLevel']
+	skill_exp['Mining'] = datadict['miningLevel']
+	skill_exp['Foraging'] = datadict['foragingLevel']
+	skill_exp['Fishing'] = datadict['fishingLevel']
+	skill_exp['Combat'] = datadict['combatLevel']
 
 	max_skill = max(skill_exp, key=skill_exp.get)
 	min_skill = min(skill_exp, key=skill_exp.get)
 	if skill_exp[max_skill] < 15000:
-		print(RED + '\t*** Level 10 in a skill ***' + END)
+		missing_achievements['Skills'].append('Level 10 in a skill')
 	if skill_exp[min_skill] < 15000:
-		print(RED + '\t*** Level 10 in every skill ***' + END)
-		print('\t\tMissing:')
+		missing_achievements['Skills'].append('Level 10 in every skill')
+		missing = []
 		for skill in skill_exp:
 			if skill_exp[skill] < 15000:
-				print('\t\t\t' + skill + ' (' + str(skill_exp[skill]) + '/15000)')
-	if skill_exp[min_skill] == '10':
-		print('All skill achievements obtained.')
-
-	print_heading('Other')
+				missing.append([skill,str(skill_exp[skill]) + '/15000'])
+		missing_achievements['Skills'].append({'missing':missing})
 
 	## Mining
-	deepestMineLevel = int(player.find('deepestMineLevel').text)
-	if deepestMineLevel < 100:
-		print(RED + '\t*** Level ' + str(deepestMineLevel) + '/100 reached in the mines ***')
+	missing_achievements['Other'] = []
+	if datadict['deepestMineLevel'] < 100:
+		missing_achievements['Other'].append('Reach level 100 in the mines')
+
+	def nz(value):
+		if value == None:
+			return 0
+		else:
+			return value
 
 	## Protector of the Valley
-	monsters_killed = tree.find('stats').find('specificMonstersKilled').findall('item')
-	slime = 0
-	void = 0
-	bat = 0
-	skeleton = 0
-	bug = 0
-	duggy = 0
-	dust = 0
-	for monster in monsters_killed:
-		name = monster.find('key').find('string').text
-		number = int(monster.find('value').find('int').text)
-		if name == 'Green Slime' or name == 'Sludge' or name == 'Frost Jelly':
-			slime += number
-		if name == 'Bug' or name == 'Fly' or name == 'Grub':
-			bug += number
-		if name == 'Bat' or name == 'Frost Bat' or name == 'Lava Bat':
-			bat += number
-		if name == 'Dust Spirit':
-			dust += number
-		if name == 'Skeleton':
-			skeleton += number
-		if name == 'Shadow Brute' or name == 'Shadow Shaman':
-			void += number
-		if name == 'Duggy':
-			duggy += number
+	slime = nz(datadict['statsSlimesKilled']) + nz(datadict['statsSpecificMonstersKilledSludge']) + nz(datadict['statsSpecificMonstersKilledFrost_Jelly'])
+	void = nz(datadict['statsSpecificMonstersKilledShadow_Brute']) + nz(datadict['statsSpecificMonstersKilledShadow_Shaman'])
+	bat =  nz(datadict['statsSpecificMonstersKilledBat']) + nz(datadict['statsSpecificMonstersKilledFrost_Bat']) + nz(datadict['statsSpecificMonstersKilledLava_Bat'])
+	skeleton = nz(datadict['statsSpecificMonstersKilledSkeleton'])
+	bug =  nz(datadict['statsSpecificMonstersKilledBug']) + nz(datadict['statsSpecificMonstersKilledFly']) + nz(datadict['statsSpecificMonstersKilledGrub'])
+	duggy = nz(datadict['statsSpecificMonstersKilledDuggy'])
+	dust = nz(datadict['statsSpecificMonstersKilledDust_Spirit'])
 
-	if slime < 1000 or void < 150 or bat < 200 or skeleton < 50 or bug < 150 or duggy < 30 or dust < 500:
-		print(RED + '\t*** All monster eradication goals. ***' + END)
-		print('\t\tMissing:')
+	if slime < 1000 or void < 150 or bat < 200 or skeleton < 50 or bug < 125 or duggy < 30 or dust < 500:
+		missing_achievements['Other'].append({'monster':['Complete Adventue Guild Monster Slayer goals']})
+		missing = []
 		if slime < 1000:
-			print('\t\t\t' + str(slime) + '/1000 slimes.')
+			missing.append({'slime':str(slime) + '/1000'})
 		if void < 150:
-			print('\t\t\t' + str(void) + '/150 void spirits.')
+			missing.append({'void':str(void) + '/150'})
 		if bat < 200:
-			print('\t\t\t' + str(bat) + '/200 bats.')
+			missing.append({'bat':str(bat) + '/200'})
 		if skeleton < 50:
-			print('\t\t\t' + str(skeleton) + '/50 skeletons.')
-		if bug < 150:
-			print('\t\t\t' + str(bug) + '/150 cave insects.')
+			missing.append({'skeleton':str(skeleton) + '/50'})
+		if bug < 125:
+			missing.append({'bug':str(bug) + '/125'})
 		if duggy < 30:
-			print('\t\t\t' + str(duggy) + '/30 duggies.')
+			missing.append({'duggy':str(duggy) + '/30'})
 		if dust < 500:
-			print('\t\t\t' + str(dust) + '/500 dust spirits.')
+			missing.append({'dust':str(dust) + '/500'})
+		missing_achievements['Other'][-1]['monster']+= missing
+
+	return missing_achievements
 
 	## Fullhouse
 	kids = 0
-	npcs = tree.find('locations').find('GameLocation').find('characters').findall('NPC')
+	npcs = root.find('locations').find('GameLocation').find('characters').findall('NPC')
 	for npc in npcs:
 		if npc.get('{http://www.w3.org/2001/XMLSchema-instance}type') == 'Child':
 			kids += 1
@@ -352,7 +318,7 @@ def main(datadict,friendships):
 		print(RED + '\t*** Spouse and two children ***' + END)
 
 	## Community Center
-	locations = tree.find('locations').findall('GameLocation')
+	locations = root.find('locations').findall('GameLocation')
 	for location in locations:
 		if location.get('{http://www.w3.org/2001/XMLSchema-instance}type') == 'CommunityCenter':
 			for bool in location.find('areasComplete').findall('boolean'):
