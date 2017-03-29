@@ -930,8 +930,8 @@ def display_data(url):
         db.commit()
         datadict = {}
         for k, key in enumerate(sorted(database_structure_dict.keys())):
-            if key != 'farm_info':
-                datadict[key] = data[0][k]
+            # if key != 'farm_info':
+            datadict[key] = data[0][k]
         claimable = False
         deletable = False
         if datadict['owner_id'] == None:

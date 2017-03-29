@@ -223,14 +223,24 @@ def playerInfo(saveFile):
     info['craftables_json'] = json.dumps(craftables)
 
     museum = set()
+    community_center = {}
     locations = root.find('locations').findall('GameLocation')
     for location in locations:
-        if location.get('{http://www.w3.org/2001/XMLSchema-instance}type') == 'LibraryMuseum':
+        placename = location.get(ns+'type')
+        if placename == 'LibraryMuseum':
             items = location.find('museumPieces')
             for item in items:
                 museum.add(item.find('value').find('int').text)
-            break
+        elif placename == 'CommunityCenter':
+            incomplete = 0
+            for boole in location.find('areasComplete').findall('boolean'):
+                if boole.text == 'false':
+                    incomplete += 1
+            community_center['complete'] = True if incomplete == 0 else False
+            if incomplete != 0:
+                community_center['remaining-areas'] = incomplete
     info['museum_json'] = json.dumps(list(museum))
+    info['community_json'] = json.dumps(community_center)
 
     shipped = {}
     shipped_crops = {}

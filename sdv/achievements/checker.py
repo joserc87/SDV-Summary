@@ -115,8 +115,8 @@ achievements = {
 	'Cook':'Cook 10 different recipes.',
 	'Sous Chef':'Cook 25 different recipes.',
 	'Gourmet Chef':'Cook every recipe.',
-	# 'Moving Up':'Upgrade your house.', 
-	# 'Living Large':'Upgrade your house to the maximum size. (2nd upgrade, not cellar)',
+	'Moving Up':'Upgrade your house.', 
+	'Living Large':'Upgrade your house to the maximum size. (2nd upgrade, not cellar)',
 	'D.I.Y.':'Craft 15 different items.',
 	'Artisan':'Craft 30 different items.',
 	'Craft Master':'Craft every item.',
@@ -132,10 +132,10 @@ achievements = {
 	'Full Shipment':'Ship every item.',
 	# 'Prairie King':'Beat \'Journey Of The Prairie King\'.',
 	'The Bottom':'Reach the lowest level of the mines.',
-	# 'Local Legend':'Restore the Pelican Town Community Center.',
+	'Local Legend':'Restore the Pelican Town Community Center.',
 	# 'Joja Co. Member Of The Year':'Become a Joja Co. member and purchase all the community development perks.',
 	# 'Mystery Of The Stardrops':'Find every stardrop.',
-	# 'Full House':'Get married and have two kids.',
+	'Full House':'Get married and have two kids.',
 	'Singular Talent':'Reach level 10 in a skill.',
 	'Master Of The Five Ways':'Reach level 10 in every skill.',
 	'Protector Of The Valley':'Complete all of the Adventure Guild Monster Slayer goals.'
@@ -361,27 +361,33 @@ def main(datadict,friendships):
 			missing['dust'] = str(dust) + '/500'
 		missing_achievements['Other']['missing-protector'] = missing
 
-	return missing_achievements
+	## Full house
+	try:
+		if len(datadict['portrait_info']['children']) < 2:
+			missing_achievements['Other']['missing-achievements'].append('Full House')
+	except TypeError:
+		pass
 
-
-	## Fullhouse
-	kids = 0
-	npcs = root.find('locations').find('GameLocation').find('characters').findall('NPC')
-	for npc in npcs:
-		if npc.get('{http://www.w3.org/2001/XMLSchema-instance}type') == 'Child':
-			kids += 1
-	if kids < 2:
-		print(RED + '\t*** Spouse and two children ***' + END)
-
+	# house upgrade level
+	try:
+		farmhouse_level = json.loads(datadict['farm_info'])['data']['misc'][0][5]
+		if farmhouse_level < 2:
+			missing_achievements['Other']['missing-achievements'].append('Living Large')
+			if farmhouse_level < 1:
+				missing_achievements['Other']['missing-achievements'].append('Moving Up')
+	except TypeError:
+		pass
 
 	## Community Center
-	locations = root.find('locations').findall('GameLocation')
-	for location in locations:
-		if location.get('{http://www.w3.org/2001/XMLSchema-instance}type') == 'CommunityCenter':
-			for bool in location.find('areasComplete').findall('boolean'):
-				if bool.text == 'false':
-					print(RED + '\t*** Complete all community center bundles. ***' + END)
-					break
+	try:
+		community_center = json.loads(datadict['community_json'])
+		if community_center['complete'] == False:
+			missing_achievements['Other']['missing-achievements'].append('Local Legend')
+			missing_achievements['Other']['missing-community'] = {'remaining-areas':community_center['remaining-areas']}
+	except:
+		pass
+
+	return missing_achievements
 
 
 	## Joja Mart
