@@ -228,7 +228,7 @@ $(document).ready(function() {
 								</div>
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
 									<dl class="dl-horizontal">
-										<dt><b>Name</b></dt><dd><b>{{ data.name }}</b></dd>
+										<dt><b>{{ _('Name') }}</b></dt><dd><b>{{ data.name }}</b></dd>
 										<dt>{{ _('Current Funds') }}</dt><dd>{{ data.money }}g</dd>
 										<dt>{{ _('Total Earnings') }}</dt><dd>{{ data.totalMoneyEarned }}g</dd>
 										<dt>{{ _('Gender') }}</dt><dd>{% if data.isMale == 'true' %} {{_('Male')}} {% else %} {{_('Female')}} {% endif %}</dd>
@@ -278,6 +278,32 @@ $(document).ready(function() {
 									</p>
 								</div>
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
+									{% set translated_animals = {
+										'Brown Chicken':_('Brown Chicken'),
+										'Brown Chickens':_('Brown Chickens'),
+										'White Chicken':_('White Chicken'),
+										'White Chickens':_('White Chickens'),
+										'Blue Chicken':_('Blue Chicken'),
+										'Blue Chickens':_('Blue Chickens'),
+										'Void Chicken':_('Void Chicken'),
+										'Void Chickens':_('Void Chickens'),
+										'White Cow':_('White Cow'),
+										'White Cows':_('White Cows'),
+										'Brown Cow':_('Brown Cow'),
+										'Brown Cows':_('Brown Cows'),
+										'Duck':_('Duck'),
+										'Ducks':_('Ducks'),
+										'Rabbit':_('Rabbit'),
+										'Rabbits':_('Rabbits'),
+										'Dinosaur':_('Dinosaur'),
+										'Dinosaurs':_('Dinosaurs'),
+										'Goat':_('Goat'),
+										'Goats':_('Goats'),
+										'Sheep':_('Sheep'),
+										'Sheeps':_('Sheeps'),
+										'Pig':_('Pig'),
+										'Pigs':_('Pigs')
+									} %}
 									{% if data.animals %}
 										<!--<h3>Farm Animals</h3>-->
 										<br>
@@ -286,7 +312,7 @@ $(document).ready(function() {
 										{%endif%}
 										{% for key in data.animals.keys() %}
 											{%if key != 'horse' %}
-												<p>{{data.animals[key]|length}} {{key}}{% if data.animals[key]|length>1 and key!='Sheep' %}s{% endif %}:
+												<p>{{data.animals[key]|length}} {% if data.animals[key]|length>1%}{{translated_animals[key+'s']}}{% else %}{{translated_animals[key]}}{% endif %}:
 													{% for row in data.animals[key] %}
 														<span class="clickable" data-toggle="tooltip" title="{{ _('%(n)s days old',n=row[1]) }}">{{row[0]}}</span>{%if not loop.last%},{%endif%}
 													{% endfor %}
@@ -346,8 +372,46 @@ $(document).ready(function() {
 									'Defender':_('HP is increased by 25.'),
 									'Acrobat':_('Cooldown on special moves is cut in half.'),
 									'Desperado':_('Critical hits are deadly.')} %}
+									{% set translated_titles = {
+									'Rancher':_('Rancher'),
+									'Tiller':_('Tiller'),
+									'Coopmaster':_('Coopmaster'),
+									'Shepherd':_('Shepherd'),
+									'Artisan':_('Artisan'),
+									'Agriculturist':_('Agriculturist'),
+									'Miner':_('Miner'),
+									'Geologist':_('Geologist'),
+									'Blacksmith':_('Blacksmith'),
+									'Excavator':_('Excavator'),
+									'Prospector':_('Prospector'),
+									'Gemologist':_('Gemologist'),
+									'Forester':_('Forester'),
+									'Gatherer':_('Gatherer'),
+									'Lumberjack':_('Lumberjack'),
+									'Botanist':_('Botanist'),
+									'Tapper':_('Tapper'),
+									'Tracker':_('Tracker'),
+									'Fisher':_('Fisher'),
+									'Trapper':_('Trapper'),
+									'Angler':_('Angler'),
+									'Pirate':_('Pirate'),
+									'Mariner':_('Mariner'),
+									'Luremaster':_('Luremaster'),
+									'Fighter':_('Fighter'),
+									'Scout':_('Scout'),
+									'Brute':_('Brute'),
+									'Defender':_('Defender'),
+									'Acrobat':_('Acrobat'),
+									'Desperado':_('Desperado')} %}
+									{% set translated_skills = {
+									'Farming':_('Farming'),
+									'Mining':_('Mining'),
+									'Foraging':_('Foraging'),
+									'Fishing':_('Fishing'),
+									'Combat':_('Combat')}
+									%}
 									{% for skill in [('Farming',data.farmingLevel),('Mining',data.miningLevel),('Foraging',data.foragingLevel),('Fishing',data.fishingLevel),('Combat',data.combatLevel)] %}
-										<dt>{{skill[0]}}</dt>
+										<dt>{{translated_skills[skill[0]]}}</dt>
 										<dd>
 											<div class="col-sm-12">
 													<div class="pipdivhalf">
@@ -356,7 +420,7 @@ $(document).ready(function() {
 																{% if (level + 1) % 5 != 0 %}
 																<img class="pip" src="{{url_for('static', filename='assets/skills/point_active.png')}}">
 																{% else %}
-																<a style="text-decoration: none;" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-container="body" data-html="true" {% for value in profindex[skill[0]][level] %}{% if value in professions %}title="<img src='{{url_for('static', filename='assets/professions/'+value+'.png')}}'>{{value}}" data-content="{{blurbs[value]}}"{%endif%}{%endfor%}>
+																<a style="text-decoration: none;" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-container="body" data-html="true" {% for value in profindex[skill[0]][level] %}{% if value in professions %}title="<img src='{{url_for('static', filename='assets/professions/'+value+'.png')}}'>{{translated_titles[value]}}" data-content="{{blurbs[value]}}"{%endif%}{%endfor%}>
 																<img class="pip" src="{{url_for('static', filename='assets/skills/profession_active.png')}}">
 																</a>
 																{% endif %}
@@ -456,9 +520,45 @@ $(document).ready(function() {
 						<div class="col-md-12 text-center">
 							<h3>{{_("Friendships")}}</h3>
 						</div>
+						{% set translated_friends = {
+									'Willy':_('Willy'),
+									'Clint':_('Clint'),
+									'Jodi':_('Jodi'),
+									'Harvey':_('Harvey'),
+									'Leah':_('Leah'),
+									'Wizard':_('Wizard'),
+									'Jas':_('Jas'),
+									'Abigail':_('Abigail'),
+									'Maru':_('Maru'),
+									'Elliott':_('Elliott'),
+									'Caroline':_('Caroline'),
+									'Pam':_('Pam'),
+									'Dwarf':_('Dwarf'),
+									'Shane':_('Shane'),
+									'Demetrius':_('Demetrius'),
+									'Alex':_('Alex'),
+									'Gus':_('Gus'),
+									'Vincent':_('Vincent'),
+									'Sebastian':_('Sebastian'),
+									'Robin':_('Robin'),
+									'Sam':_('Sam'),
+									'Lewis':_('Lewis'),
+									'Marnie':_('Marnie'),
+									'Penny':_('Penny'),
+									'Haley':_('Haley'),
+									'Pierre':_('Pierre'),
+									'Evelyn':_('Evelyn'),
+									'Linus':_('Linus'),
+									'George':_('George'),
+									'Emily':_('Emily'),
+									'Kent':_('Kent'),
+									'Krobus':_('Krobus'),
+									'Sandy':_('Sandy'),
+									'Henchman':_('Henchman')}
+									%}
 						{% for i in friendships %}
 							<div class="npc-container text-center">
-								<button type="button" class="btn-link npc-button" data-animation="false" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title='<img src="{{url_for('static',filename='assets/npcs/'+i.0+'.png')}}"><br>{{i.0}}: {{ i.1 // 250 }}/10'>
+								<button type="button" class="btn-link npc-button" data-animation="false" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title='<img src="{{url_for('static',filename='assets/npcs/'+i.0+'.png')}}"><br>{{translated_friends[i.0]}}: {{ i.1 // 250 }}/10'>
 									<div class="npc-profile npc-{{i.1//250}}">						
 										<img class="img-responsive" src="{{url_for('static',filename='assets/npc_icon/'+i.0+'.png')}}">
 									</div>

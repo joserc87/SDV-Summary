@@ -1,4 +1,4 @@
-# Spanish translations for PROJECT.
+# Chinese (Simplified, China) translations for PROJECT.
 # Copyright (C) 2016 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2017-04-04 00:11+0100\n"
-"PO-Revision-Date: 2017-04-03 23:56+0100\n"
-"Last-Translator: \n"
-"Language: es\n"
-"Language-Team: es <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"PO-Revision-Date: 2017-04-01 19:54+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_Hans_CN\n"
+"Language-Team: zh_Hans_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,155 +20,136 @@ msgstr ""
 
 #: __init__.py:192 __init__.py:259
 msgid "Username not found!"
-msgstr "¡Usuario no encontrado!"
+msgstr "不存在此用户名！"
 
 #: __init__.py:204
 msgid "Unable to interpret stored password hash!"
-msgstr "¡Incapaz de interpretar hash de la contraseña guardada!"
+msgstr "无法解析密码哈希值！"
 
 #: __init__.py:215
 msgid "Incorrect password!"
-msgstr "¡Contraseña incorrecta!"
+msgstr "密码错误！"
 
 #: __init__.py:238
 msgid "Missing email or password for login!"
-msgstr "Falta el correo electrónico o la contraseña para iniciar sesión"
+msgstr "缺少邮箱地址或密码！"
 
 #: __init__.py:244
 msgid "Logged in successfully!"
-msgstr "Sesión iniciada con éxito"
+msgstr "成功登录！"
 
 #: __init__.py:261
 msgid ""
 "Email address not verified; please verify your account using the "
 "verification email sent when you registered before attempting to reset "
 "password!"
-msgstr ""
-"El correo electronico no ha sido confirmado. Por favor, antes de "
-"restablecer la contraseña, confirma tu cuenta usando el enlace de "
-"verificación enviado a tu correo tras el registro."
+msgstr "邮箱地址尚未验证，重设密码之前请先利用注册确认邮件中的链接确认账户！"
 
 #: __init__.py:270
 msgid "Password reset email sent!"
-msgstr "¡Mensaje de restablecimiento de contraseña enviado!"
+msgstr "密码重设邮件已发送！"
 
 #: __init__.py:272
 msgid "Previous password reset email still waiting to be sent... (sorry)"
-msgstr ""
-"Mensaje de restablecimiento anterior en espera de ser enviado... "
-"(disculpa las molestias)"
+msgstr "之前那封重设邮件还没发出去...（抱歉~）"
 
 #: __init__.py:280 __init__.py:304
 msgid "Cannot reset password: account does not exist"
-msgstr "No se puede restablecer la contraseña: la cuenta no existe"
+msgstr "无法重设密码：账户不存在"
 
 #: __init__.py:283
 msgid "This reset link has already been used!</p>"
-msgstr "¡Este enlace de restablecimiento ya se ha utilizado!</p>"
+msgstr "这个重设链接已过期！"
 
 #: __init__.py:290
 msgid "Password reset, please log in!"
-msgstr "¡Contraseña restablecida, inicia sesión!"
+msgstr "密码重设成功，请登录！"
 
 #: __init__.py:292 __init__.py:312 __init__.py:1626
 msgid "Malformed verification string!"
-msgstr "¡Secuencia de verificación de formato incorrecto!"
+msgstr "不完整的验证密钥！"
 
 #: __init__.py:295
 msgid "Password insufficiently long, please try again"
-msgstr "Contraseña demasiado corta, por favor intentalo de nuevo"
+msgstr "密码长度不足，请重试"
 
 #: __init__.py:297
 msgid "Please enter the email address you used to register"
-msgstr ""
-"Por favor, introduce la dirección de correo electrónico que usaste para "
-"registrarte"
+msgstr "请输入注册时使用的邮箱地址"
 
 #: __init__.py:307
 msgid "This reset link has already been used!"
-msgstr "¡Este enlace de restablecimiento ya se ha utilizado!"
+msgstr "这个重设链接已经被使用过！"
 
 #: __init__.py:321
 msgid "You are already logged in!"
-msgstr "¡Ya has iniciado sesión!"
+msgstr "您已登录！"
 
 #: __init__.py:324
 msgid "Missing email or password!"
-msgstr "¡Falta la dirección de correo electrónico o contraseña!"
+msgstr "缺少邮箱地址或密码！"
 
 #: __init__.py:326
 msgid "Password too short!"
-msgstr "¡Contraseña demasiado corta!"
+msgstr "密码长度不足！"
 
 #: __init__.py:341
 msgid ""
 "You have successfully registered. A verification email has been sent to "
 "you. Now, please sign in!"
-msgstr ""
-"Registro realizado con éxito. Recibiras un mensaje de verificación en tu "
-"cuenta de correo. Ahora, por favor, inicia la sesión."
+msgstr "您已成功注册，确认邮件已发送至您的邮箱，现在请登录！"
 
 #: __init__.py:344
 msgid "Invalid email address!"
-msgstr "¡Dirección de correo electrónico no válida!"
+msgstr "邮箱地址无效！"
 
 #: __init__.py:346
 msgid "This email address has already registered"
-msgstr "Esta dirección de correo electrónico ya ha sido registrada"
+msgstr "这个邮箱地址已经被使用过"
 
 #: __init__.py:348
 msgid "Captcha failed! If you are human, please try again!"
-msgstr ""
-"¡Código de imagen erroneo! Si eres un ser humano, por favor intentalo de "
-"nuevo!"
+msgstr "验证码错误！如果您是人类，请重试一次！"
 
 #: __init__.py:356
 msgid "You must be signed in to view your profile!"
-msgstr "¡Debes iniciar sesión para ver tu perfil!"
+msgstr "登录之后才能查看您的资料！"
 
 #: __init__.py:457
 msgid "I don't think that's very funny"
-msgstr "No creo que eso sea muy divertido"
+msgstr "这一点都不好笑"
 
 #: __init__.py:460
 msgid ""
 "Savegame failed sanity check (if you think this is in error please let us"
 " know)"
-msgstr ""
-"Archivo de partida guardado no válido (si piensas que es un error, por "
-"favor avísanos)"
+msgstr "存档文件初步校验失败（如果您觉得这不应发生，请与我们联系）"
 
 #: __init__.py:467
 msgid ""
 "Not valid save file - did you select file 'SaveGameInfo' instead of "
 "'playername_number'?"
-msgstr ""
-"Archivo no es válido - ¿Has seleccionado 'SaveGameInfo' en lugar de "
-"'playername_number'?"
+msgstr "存档文件无效，您是不是选择了'SaveGameInfo'文件而不是'玩家名称_id编号'文件？"
 
 #: __init__.py:471
 msgid "Not well-formed xml"
-msgstr "XML no informado correctamente"
+msgstr "xml编码错误"
 
 #: __init__.py:474
 msgid "Savegame failed an internal check (often caused by mods) sorry :("
-msgstr ""
-"La partida guardada no ha superado la comprobación interna (suele pasar "
-"con mods) lo sentimos :("
+msgstr "存档文件读取失败（可能是因为使用了mod），抱歉:("
 
 #: __init__.py:498
 msgid "Error occurred inserting information into the database!"
-msgstr ""
-"¡Ha ocurrido un error mientras se copiaba la información a la base de "
-"datos!"
+msgstr "写入数据库时发生错误！"
 
 #: __init__.py:910
 msgid "Save file incompatible with current database: error is "
-msgstr "Guardar archivo es incompatible con la base de datos actual: error "
+msgstr "存档文件与数据库不兼容，错误"
 
 #: __init__.py:922 __init__.py:976
 msgid "There is nothing here... is this URL correct?"
-msgstr "No hay nada aquí... ¿es este URL correcto?"
+msgstr "这儿啥也没有...没有把地址搞错吗？"
 
 #: __init__.py:964
 msgid ""
@@ -177,386 +158,367 @@ msgid ""
 "these uploads, enable savegame sharing, and one-click-post farm renders "
 "to imgur!"
 msgstr ""
-"Parece que has subido varios archivos, pero no estás conectado: si "
-"accedes a <a href='{}'>regístrate</a> o <a href='{}'>iniciar sesión</a> "
-"puedes vincular estos archivos, habilitar el uso \"compartir partidas "
-"guardadas\", y subir tu granja a imgur con un sólo click!"
+"您似乎在没有登录的情况下上传了多个文件，如果您<a href='{}'>注册</a>或<a "
+"href='{}'>登录</a>的话可以将这些文件编为一个系列，共享您的存档，并且可以讲农场的图片一键上传至imgur！"
 
 #: __init__.py:996
 msgid ""
 "This plan failed to render, probably because of a bug. It's logged and "
 "we'll look into it as soon as possible! Sorry!"
-msgstr ""
-"Este plano no se pudo cargar, probablemente debido a un error. Ha sido "
-"registrado, echaremos un vistazo al problema lo antes posible! ¡Lo "
-"sentimos!"
+msgstr "这个规划无法正常渲染，这应该是个bug，我们已经将其记录在案并会尽快修正，抱歉！"
 
 #: __init__.py:1082
 msgid "Unknown or insufficient credentials"
-msgstr "Credenciales desconocidas o insuficientes"
+msgstr "未知或不充分的身份验证"
 
 #: __init__.py:1113
 msgid "You do not own this farm"
-msgstr "No eres dueño de esta granja"
+msgstr "您并不拥有这个农场"
 
 #: __init__.py:1124
 msgid "You do not own at least one of the farms"
-msgstr "No eres dueño de al menos una de estas granjas"
+msgstr "您并不拥有其中一个或多个农场"
 
 #: __init__.py:1145
 msgid "You do not have sufficient credentials to claim this page"
-msgstr "No tienes credenciales suficientes para reclamar esta página"
+msgstr "您缺乏认领这个农场需要的身份验证"
 
 #: __init__.py:1155
 msgid "You do not have sufficient credentials to claim one of these pages"
-msgstr "No tienes credenciales suficientes para reclamar una de estas páginas"
+msgstr "您缺乏认领其中至少一个农场需要的身份验证"
 
 #: __init__.py:1170
 msgid "You do not have sufficient credentials to perform this action"
-msgstr "No tienes credenciales suficientes para realizar esta acción"
+msgstr "您缺乏这个操作需要的身份验证"
 
 #: __init__.py:1185
 msgid ""
 "You have uploaded this page to imgur in the last 2 hours: please wait to "
 "upload again"
-msgstr ""
-"Has cargado esta página a imgur en las últimas 2 horas: por favor espera "
-"a cargar de nuevo"
+msgstr "2小时之前您已经将这个页面上传至imgur，再次上传需要等待一段时间"
 
 #: __init__.py:1187
 msgid ""
 "There was an issue with uploading the file to imgur. Please try again "
 "later!"
-msgstr ""
-"Hubo un problema al subir el archivo a Imgur. ¡Por favor, inténtalo de "
-"nuevo más tarde!"
+msgstr "上传至imgur的过程中出现错误，请稍候再试！"
 
 #: __init__.py:1194
 msgid ""
 "Either you or upload.farm are out of imgur credits for the day! Sorry :( "
 "Try again tomorrow"
-msgstr ""
-"¡Tú o upload.farm se ha quedado sin créditos de Imgur por hoy! Lo "
-"sentimos :( Inténtalo de nuevo mañana"
+msgstr "您或者我们的imgur账户已经用完今天的上传限额，请明天再试"
 
 #: __init__.py:1197
 msgid "You must be logged in to post your farm to imgur!"
-msgstr "Debes estar conectado para publicar tu granja en imgur!"
+msgstr "您需要登录才能将农场上传至imgur！"
 
 #: __init__.py:1205
 msgid ""
 "Sorry, the stardew.info planner API is over its rate limit: please try "
 "again in a few minutes!"
-msgstr ""
-"Lo sentimos, la API del planificador stardew.info está por encima de su "
-"límite de velocidad: por favor intentalo nuevamente en unos minutos!"
+msgstr "stardew.info农场规划器API超出流量限额，请等几分钟再试！"
 
 #: __init__.py:1209
 msgid "There was a problem accessing the planner. Error was: {}"
-msgstr "Hubo un problema de acceso al planificador. Hubo un error: {}"
+msgstr "访问农场规划器失败，错误为{}"
 
 #: __init__.py:1238
 msgid "You do not have the correct session information to perform this action!"
-msgstr "No tienes la información de sesión correcta para realizar esta acción!"
+msgstr "您没有执行这个操作所需的正确的会话信息！"
 
 #: __init__.py:1276
 msgid "Problem authenticating!"
-msgstr "Problema de autentificación!"
+msgstr "身份验证错误！"
 
 #: __init__.py:1278
 msgid "You are not logged in!"
-msgstr "¡No has iniciado sesión!"
+msgstr "您尚未登录！"
 
 #: __init__.py:1417
 msgid "No browse with that ID!"
-msgstr "No hay exploración con ese número de identificación!"
+msgstr "不存在与ID对应的农场浏览页！"
 
 #: __init__.py:1436
 msgid "Malformed request for entries!"
-msgstr "¡Solicitud mal formada para las entradas!"
+msgstr "不完整的条目请求！"
 
 #: __init__.py:1548 __init__.py:1550
 msgid "No blog with that ID!"
-msgstr "No hay blog con ese número de identificación!"
+msgstr "不存在与ID对应的博客文章！"
 
 #: __init__.py:1576
 msgid "URL does not exist"
-msgstr "URL no existe"
+msgstr "地址不存在"
 
 #: __init__.py:1578
 msgid "You are unable to download this farm data at this time."
-msgstr "No puede descargar esta granja en estos momento."
+msgstr "您现在无法下载这个农场的数据。"
 
 #: __init__.py:1599
 msgid "Problem authenticating at imgur!"
-msgstr "Problema de autentificación con imgur!"
+msgstr "imgur身份验证错误！"
 
 #: __init__.py:1602
 msgid "Cannot connect to imgur if not logged in!"
-msgstr "No se puede conectar con imgur si no se ha iniciado sesión!"
+msgstr "未登录时无法连接至imgur！"
 
 #: __init__.py:1615
 msgid "Account does not exist!"
-msgstr "¡La cuenta no existe!"
+msgstr "账户不存在！"
 
 #: __init__.py:1618
 msgid "Already confirmed email address!"
-msgstr "Dirección de correo electrónico ya esta confirmada!"
+msgstr "此邮箱地址已经确认！"
 
 #: __init__.py:1624
 msgid "Account email address confirmed!"
-msgstr "Dirección de correo electrónico confirmada!"
+msgstr "邮箱地址确认！"
 
 #: __init__.py:1637
 msgid "not logged in"
-msgstr "sesión no iniciada"
+msgstr "未登录"
 
 #: getDate.py:4
 msgid "1st"
-msgstr "1º"
+msgstr ""
 
 #: getDate.py:5
 msgid "2nd"
-msgstr "2º"
+msgstr ""
 
 #: getDate.py:6
 msgid "3rd"
-msgstr "3º"
+msgstr ""
 
 #: getDate.py:7
 msgid "4th"
-msgstr "4º"
+msgstr ""
 
 #: getDate.py:8
 msgid "5th"
-msgstr "5º"
+msgstr ""
 
 #: getDate.py:9
 msgid "6th"
-msgstr "6º"
+msgstr ""
 
 #: getDate.py:10
 msgid "7th"
-msgstr "7º"
+msgstr ""
 
 #: getDate.py:11
 msgid "8th"
-msgstr "8º"
+msgstr ""
 
 #: getDate.py:12
 msgid "9th"
-msgstr "9º"
+msgstr ""
 
 #: getDate.py:13
 msgid "10th"
-msgstr "10º"
+msgstr ""
 
 #: getDate.py:14
 msgid "11th"
-msgstr "11º"
+msgstr ""
 
 #: getDate.py:15
 msgid "12th"
-msgstr "12º"
+msgstr ""
 
 #: getDate.py:16
 msgid "13th"
-msgstr "13º"
+msgstr ""
 
 #: getDate.py:17
 msgid "14th"
-msgstr "14º"
+msgstr ""
 
 #: getDate.py:18
 msgid "15th"
-msgstr "15º"
+msgstr ""
 
 #: getDate.py:19
 msgid "16th"
-msgstr "16"
+msgstr ""
 
 #: getDate.py:20
 msgid "17th"
-msgstr "17º"
+msgstr ""
 
 #: getDate.py:21
 msgid "18th"
-msgstr "18º"
+msgstr ""
 
 #: getDate.py:22
 msgid "19th"
-msgstr "19º"
+msgstr ""
 
 #: getDate.py:23
 msgid "20th"
-msgstr "20º"
+msgstr ""
 
 #: getDate.py:24
 msgid "21st"
-msgstr "21º"
+msgstr ""
 
 #: getDate.py:25
 msgid "22nd"
-msgstr "22º"
+msgstr ""
 
 #: getDate.py:26
 msgid "23rd"
-msgstr "23º"
+msgstr ""
 
 #: getDate.py:27
 msgid "24th"
-msgstr "24º"
+msgstr ""
 
 #: getDate.py:28
 msgid "25th"
-msgstr "25º"
+msgstr ""
 
 #: getDate.py:29
 msgid "26th"
-msgstr "26º"
+msgstr ""
 
 #: getDate.py:30
 msgid "27th"
-msgstr "27º"
+msgstr ""
 
 #: getDate.py:31
 msgid "28th"
-msgstr "28º"
+msgstr ""
 
 #: getDate.py:33
 msgid "Spring"
-msgstr "primavera"
+msgstr ""
 
 #: getDate.py:34
 msgid "Summer"
-msgstr "verano"
+msgstr ""
 
 #: getDate.py:35
 msgid "Autumn"
-msgstr "otoño"
+msgstr ""
 
 #: getDate.py:36
 msgid "Winter"
-msgstr "invierno"
+msgstr ""
 
 #: getDate.py:41
 msgid " of "
-msgstr " de "
+msgstr ""
 
 #: getDate.py:41
 msgid ", Year "
-msgstr ", año "
+msgstr ""
 
 #: templates/account.html:13 templates/titlebar.html:24
 msgid "Account"
-msgstr "Cuenta"
+msgstr "账户"
 
 #: templates/account.html:21
 msgid "Account info"
-msgstr "Información de cuenta"
+msgstr "账户信息"
 
 #: templates/account.html:22
 #, python-format
 msgid "Email: %(email)s"
-msgstr "Correo electrónico: %(email)s"
+msgstr "邮箱:%(email)s"
 
 #: templates/account.html:23
 msgid "Imgur: "
-msgstr "Imgur: "
+msgstr "Imgur账户："
 
 #: templates/account.html:25
 #, python-format
 msgid "Logged in as %(username)s"
-msgstr "Sesión iniciada como %(username)s"
+msgstr "以%(username)s名义登录"
 
 #: templates/account.html:26
 msgid "connect to imgur"
-msgstr "conectar con imgur"
+msgstr "连接至imgur"
 
 #: templates/account.html:28
 msgid "Browse my liked farms"
-msgstr "Explorar mis granjas preferidas"
+msgstr "浏览我喜欢过的农场"
 
 #: templates/account.html:33
 msgid "Preferences"
-msgstr "Preferencias"
+msgstr "偏好设置"
 
 #: templates/account.html:34
 msgid "Upload default: "
-msgstr "Subir por defecto: "
+msgstr "上传默认："
 
 #: templates/account.html:34
 msgid "Change to listed?"
-msgstr "¿Cambiar a visible?"
+msgstr "更改至公开展示？"
 
 #: templates/account.html:34
 msgid ""
 "This will allow new uploads it to appear in searches on the site by "
 "default"
-msgstr ""
-"Esto permitirá que las subidas nuevas aparezcan en las búsquedas de la "
-"página por defecto"
+msgstr "这会默认允许新的上传出现在网站的搜索中"
 
 #: templates/account.html:34
 msgid "Change&nbsp;to&nbsp;listed!"
-msgstr "¡Cambiar&nbsp;a&nbsp;visible!"
+msgstr "更改至公开展示！"
 
 #: templates/account.html:34
 msgid "New uploads will not appear on the site by default"
-msgstr "Las subidas nuevas no aparecerán en la página por defecto"
+msgstr "新的上传文件将不会默认出现在网站中"
 
 #: templates/account.html:34
 msgid "Change to unlisted?"
-msgstr "¿Cambiar a oculto?"
+msgstr "更改至不公开展示？"
 
 #: templates/account.html:34
 msgid "This will prevent new uploads appearing to others on the site by default"
-msgstr ""
-"Esto previene que las subidas nuevas a la página sean visibles a otros "
-"por defecto"
+msgstr "这会默认使您新上传的文件对他人不可见"
 
 #: templates/account.html:34
 msgid "Change&nbsp;to&nbsp;unlisted!"
-msgstr "¡Cambiar&nbsp;a&nbsp;oculto!"
+msgstr "更改至不公开展示！"
 
 #: templates/account.html:34
 msgid "New uploads will appear listed on the site by default"
-msgstr "Las subidas nuevas aparecerán en la página por defecto"
+msgstr "新的上传文件将会默认出现在网站中"
 
 #: templates/account.html:40 templates/account.html:85 templates/all.html:93
 #: templates/error.html:9 templates/index.html:55 templates/login.html:55
 #: templates/profile.html:179 templates/signup.html:39
 msgid "Error:"
-msgstr "Error:"
+msgstr "错误："
 
 #: templates/account.html:51
 msgid "Claimable farms"
-msgstr "Granjas reclamables"
+msgstr "可认领的农场"
 
 #: templates/account.html:52
 msgid ""
 "The following farms are not associated with your user account, but were "
 "uploaded from your computer:"
-msgstr ""
-"Las siguientes granjas no están asociadas con tu cuenta de usuario, pero "
-"han sido cargadas desde este ordenador:"
+msgstr "这些农场与您的账户无关，但却是从您的电脑上传的："
 
 #: templates/account.html:60
 msgid "Or, claim all"
-msgstr "O, reclama todas"
+msgstr "干脆认领全部"
 
 #: templates/account.html:63
 msgid "Your farm series"
-msgstr "Series de tus granjas"
+msgstr "您的农场系列"
 
 #: templates/account.html:64
 msgid "Linked series of farms you have uploaded:"
-msgstr "Enlace de series de granjas que has subido:"
+msgstr "将您上传的一个系列的农场排列出来"
 
 #: templates/account.html:68 templates/recents.html:11
 #, python-format
 msgid "%(name)s, %(farmname)s Farm"
-msgstr "%(name)s, Granja de %(farmname)s"
+msgstr "%(name)s的%(farmname)s农场"
 
 #: templates/account.html:72
 msgid "imgur"
@@ -564,150 +526,146 @@ msgstr "imgur"
 
 #: templates/all.html:15 templates/titlebar.html:21
 msgid "Browse"
-msgstr "Explorar"
+msgstr "浏览"
 
 #: templates/all.html:19
 msgid "Search"
-msgstr "Buscar"
+msgstr "搜索"
 
 #: templates/all.html:27
 msgid "Search for farms by user or farm name, or change sort type"
-msgstr ""
-"Busca las granjas por usuario o nombre de la granja, o cambia el tipo de "
-"orden"
+msgstr "搜索用户名或农场名，或者改变筛选条件"
 
 #: templates/all.html:31
 #, python-format
 msgid "Sorting %(number)s results by "
-msgstr "Ordenando los %(number)s resultados por "
+msgstr "有%(number)s农场是"
 
 #: templates/all.html:32
 msgid "top rated"
-msgstr "mejor valorado"
+msgstr "最受好评"
 
 #: templates/all.html:32
 msgid "most views"
-msgstr "más visto"
+msgstr "最多查看"
 
 #: templates/all.html:32 templates/all.html:34
 msgid "most recent"
-msgstr "más reciente"
+msgstr "最新上传"
 
 #: templates/all.html:45
 msgid "showing"
-msgstr "mostrando"
+msgstr "显示"
 
 #: templates/all.html:46
 msgid "only downloadable"
-msgstr "sólo descargable"
+msgstr "可下载的"
 
 #: templates/all.html:48 templates/all.html:52
 msgid "all farms"
-msgstr "todas"
+msgstr "所有农场"
 
 #: templates/all.html:57
 msgid "with"
-msgstr "con"
+msgstr "以及"
 
 #: templates/all.html:58
 msgid "full"
-msgstr "completo"
+msgstr "全景图"
 
 #: templates/all.html:60 templates/all.html:64
 msgid "minimap"
-msgstr "minimapa"
+msgstr "小地图"
 
 #: templates/all.html:69
 msgid "thumbnail"
-msgstr "miniatura"
+msgstr "的缩略图"
 
 #: templates/all.html:71
 msgid "limiting results to"
-msgstr "limitando los resultados a"
+msgstr "限制结果为"
 
 #: templates/all.html:75
 msgid "farms in same series as"
-msgstr "las granjas están en la misma serie que"
+msgstr "在一个系列中的农场"
 
 #: templates/all.html:75 templates/all.html:83
 msgid "remove limit"
-msgstr "elimina el límite"
+msgstr "去除限制"
 
 #: templates/all.html:83
 msgid "farms I upvoted"
-msgstr "las granjas que he votado en positivo"
+msgstr "我喜欢的农场"
 
 #: templates/all.html:104 templates/all.html:106 templates/blog.html:13
 #: templates/blog.html:15
 msgid "newest"
-msgstr "más reciente"
+msgstr "最新的"
 
 #: templates/all.html:110 templates/all.html:112 templates/blog.html:18
 #: templates/blog.html:20
 msgid "previous"
-msgstr "anterior"
+msgstr "前一页"
 
 #: templates/all.html:125 templates/all.html:127 templates/blog.html:28
 #: templates/blog.html:30
 msgid "next"
-msgstr "siguiente"
+msgstr "下一页"
 
 #: templates/all.html:131 templates/all.html:133 templates/blog.html:33
 #: templates/blog.html:35
 msgid "oldest"
-msgstr "más antigua"
+msgstr "最老的"
 
 #: templates/base.html:4
 msgid "upload.farm Stardew Valley Summary Generator"
-msgstr "upload.farm Generador de Resumen de Stardew Valley"
+msgstr "upload.farm 星露谷物语摘要生成器"
 
 #: templates/base.html:41
 msgid ""
 "This website uses cookies when you upload a savegame to determine "
 "ownership"
-msgstr ""
-"Este sitio web utiliza cookies al cargar un juego guardado para "
-"establecer la propiedad"
+msgstr "这个网站使用cookie来确认游戏存档的拥有者"
 
 #: templates/base.html:41
 msgid "Okay!"
-msgstr "¡De acuerdo!"
+msgstr "好的！"
 
 #: templates/base.html:41
 msgid "More info"
-msgstr "Más información"
+msgstr "更多信息"
 
 #: templates/base.html:57
 #, python-format
 msgid "Took %(processtime)s seconds to process request"
-msgstr "Se ha procesado la solicitud en %(processtime)s segs"
+msgstr "处理用时%(processtime)s秒"
 
 #: templates/base.html:57
 #, python-format
 msgid "source at %(github)s"
-msgstr "fuente en %(github)s"
+msgstr "源代码：%(github)s"
 
 #: templates/base.html:57
 #, python-format
 msgid "All Stardew Valley assets copyright %(concerned_ape)s"
-msgstr "Componentes con copyright (propiedad) de Stardew Valley %(concerned_ape)s"
+msgstr "所有星露谷物语的资源为%(concerned_ape)s所有"
 
 #: templates/blog.html:7 templates/index.html:77
 msgid "Development blog"
-msgstr "Blog de desarrollo"
+msgstr "开发博客"
 
 #: templates/blogcontent.html:7
 #, python-format
 msgid "by %(name)s at %(time)s"
-msgstr "por %(name)s a las %(time)s"
+msgstr "作者%(name)s，时间%(time)s"
 
 #: templates/error.html:7
 msgid "Error!"
-msgstr "Error!"
+msgstr "错误！"
 
 #: templates/faq.html:7
 msgid "Frequently Asked Questions"
-msgstr "Preguntas Frecuentes"
+msgstr "常见问题集"
 
 #: templates/faq.html:8 templates/titlebar.html:23
 msgid "FAQ"
@@ -715,7 +673,7 @@ msgstr "FAQ"
 
 #: templates/faq.html:11
 msgid "What does this site do?"
-msgstr "¿Qué hace este sitio?"
+msgstr "这网站是干啥的？"
 
 #: templates/faq.html:12
 #, python-format
@@ -723,14 +681,11 @@ msgid ""
 "It generates a map and summary of a Stardew Valley farm, with your player"
 " avatar and portrait of your family. It's an alternative to screenshot "
 "tools like %(gedosato)s."
-msgstr ""
-"Se genera un mapa y resumen de una granja Stardew Valley, con su avatar y"
-" retrato de su familia. Es una alternativa a herramientas para la captura"
-" de pantalla como %(gedosato)s."
+msgstr "这个网站自动产生一份星露谷中农场的地图和摘要，及玩家形象和家庭的头像图。是%(gedosato)s及类似工具的替代品。"
 
 #: templates/faq.html:14
 msgid "Where do I find the savegame?"
-msgstr "¿Dónde se encuentra la partida guardada?"
+msgstr "我在哪里可以找到游戏存档？"
 
 #: templates/faq.html:15
 #, python-format
@@ -739,16 +694,11 @@ msgid ""
 " to find the correct folder. Within this are subfolders for individual "
 "savegames. The file you should upload is named after your player (i.e. "
 "not named SaveGameInfo)."
-msgstr ""
-"Las partidas guardadas están en %(appdata)s. Esto se puede copiar a la "
-"caja de carga de archivos para encontrar la carpeta correcta. Dentro de "
-"la cual están las subcarpetas de partidas guardadas individuales. El "
-"archivo que hay que cargar lleva el nombre de tu personaje (es decir, que"
-" no se llame SaveGameInfo)."
+msgstr "游戏存档在%(appdata)s目录下，把这个地址粘贴在上传框中并按回车就可以找到，文件夹中的目录为游戏存档。存档文件夹以玩家名称命名，应上传的是文件夹中玩家名称_随机ID的文件，并非SaveGameInfo文件。"
 
 #: templates/faq.html:17
 msgid "Why register for an upload.farm account?"
-msgstr "¿Por qué registrar una cuenta upload.farm?"
+msgstr "为什么要注册一个upload.farm账户？"
 
 #: templates/faq.html:18
 msgid ""
@@ -757,17 +707,11 @@ msgid ""
 " ownership could be established. The up-side of this is that we are able "
 "to add other features to the site very easily, such as quick upload-to-"
 "imgur, and the ability to link up series of farms."
-msgstr ""
-"Para añadir <a href='#whysignin'>ciertas características tales como "
-"compartir partidas guardadas</a> en la página, fué necesario introducir "
-"cuentas de usuario para establecer la propiedad de la página. Lo bueno de"
-" esto es que nos permite añadir otras características a la página con "
-"mucha facilidad, por ejemplo compartir con imgur y vincular series de "
-"granjas."
+msgstr "账户是诸多有趣功能的基础，它可以确认您的拥有者身份，这样您就可以使用共享存档等功能。我们也很容易在以账户系统为基础的网站中加入新功能，例如上传农场至imgur，和将农场系列化等。"
 
 #: templates/faq.html:20
 msgid "Can I upload multiple farms from the same playthrough?"
-msgstr "¿Puedo subir varias granjas de la misma partida?"
+msgstr "我可以上传同一次游戏中的多个农场吗？"
 
 #: templates/faq.html:21
 #, python-format
@@ -777,24 +721,19 @@ msgid ""
 "these farms using left and right keyboard keys. If you are not "
 "registered, farms are not automatically linked, but if you later choose "
 "to register, they can be claimed."
-msgstr ""
-"Sí. Si estás %(signed_up)s y estás %(logged_in)s, tus series cargadas "
-"están vinculadas automáticamente bajo el nombre de la granja. Puedes "
-"desplazarte entre granjas usando las teclas de posición del teclado. Si "
-"no estás registrado, las granjas no se vinculan automáticamente, pero si "
-"te registras más adelante, puedes reclamarlas."
+msgstr "当然可以。只要您已经%(signed_up)s并%(logged_in)s，您上传的这些农场就会被自动归类为一个系列，您可以使用键盘的左右键快速切换。若是没有登录，这些农场就不会被自动归类，您可以登录并认领它们。"
 
 #: templates/faq.html:21 templates/faq.html:27
 msgid "signed up"
-msgstr "registrado"
+msgstr "注册"
 
 #: templates/faq.html:21 templates/faq.html:42
 msgid "logged in"
-msgstr "sesión iniciada"
+msgstr "登录"
 
 #: templates/faq.html:23
 msgid "I can't find my farm!"
-msgstr "¡No puedo encontrar mi granja!"
+msgstr "我找不到我的农场了！"
 
 #: templates/faq.html:24
 #, python-format
@@ -802,18 +741,15 @@ msgid ""
 "If you are registered, check your %(account)s page. If you are not and "
 "have your original savegame, re-upload your farm and the site will "
 "redirect you to the existing data, and re-set your ownership."
-msgstr ""
-"Si estás registrado, revisa tu página %(account)s. Si no estás registrado"
-" y tienes tu savegame original, vuelve a cargar tu granja y el sitio te "
-"redirigirá a los datos existentes y restablecerá la propiedad."
+msgstr "如果您已经注册，检查一下%(account)s页面。如果您没注册，只需要重新上传您的农场，您将会被引导至先前上传的农场，这样就可以重设拥有权。"
 
 #: templates/faq.html:24
 msgid "account"
-msgstr "cuenta"
+msgstr "账户"
 
 #: templates/faq.html:26
 msgid "How do I enable savegame sharing?"
-msgstr "¿Cómo puedo compartir la partida guardada?"
+msgstr "我怎么开启存档共享功能？"
 
 #: templates/faq.html:27
 #, python-format
@@ -821,15 +757,11 @@ msgid ""
 "If you are %(signed_up)s and own the page, beneath the minimap is a "
 "button to enable savegame sharing. This enables them for <em>all</em> "
 "users of the site, and may be enabled or disabled as you like."
-msgstr ""
-"Si estás %(signed_up)s y eres dueño de la página, bajo el minimapa "
-"encontrarás un botón para habilitar el poder compartir tu juego. Esto "
-"permite a <em>todos</em> los usuarios ver tu página. Es opcional y puedes"
-" cambiar la opción las veces que quieras."
+msgstr "如果您已经%(signed_up)s并拥有这个农场，网页右侧小地图上方有一个软盘图标状按键。您可以用这个按键选择是否与<em>全体</em>网站用户共享，此功能可随时关闭。"
 
 #: templates/faq.html:29
 msgid "Why do I have to sign up to enable savegame sharing?"
-msgstr "¿Por qué tengo que estar registrado para compartir la partida guardada?"
+msgstr "为什么我必须注册才能共享存档？"
 
 #: templates/faq.html:30
 msgid ""
@@ -838,30 +770,23 @@ msgid ""
 "it, and then delete it or claim it themselves. So, for the extra "
 "functionality, you have to register."
 msgstr ""
-"El registro impide que otras personas se puedan descargar tus partidas no"
-" reclamadas y subirlas como suyas, <a href='#cantfind'>tomar el "
-"control</a> de la misma y luego borrarla. Por ello, para intentar evitar "
-"conflictos, es necesario registrarse."
+"如果其他用户下载了您尚未认领的农场的存档，他们就可以重新上传这个存档并<a "
+"href='#cantfind'>控制</a>这个农场。为了保障您成果的安全，注册一个账户是必需的。"
 
 #: templates/faq.html:32
 msgid "Can I make uploads private, so only I can see them?"
-msgstr ""
-"¿Puedo subir partidas de forma privada, para que solamente pueda verlas "
-"yo?"
+msgstr "我可以把我上传的农场私有化/改为不公开展示吗？"
 
 #: templates/faq.html:33
 msgid ""
 "You can unlist farms if you are registered and logged in. You can also "
 "set your account to automatically make uploads unlisted on your account "
 "page."
-msgstr ""
-"Puedes ocultar las granjas si estás registrado y has iniciado sesión. "
-"También puedes configurar tu cuenta para que las subidas desde tu cuenta "
-"se hagan de manera oculta automáticamente."
+msgstr "如果您已经注册并登录，在账户页面可以选择不公开展示农场。您也可以在账户页里更改设置，使您的农场默认不公开展示。"
 
 #: templates/faq.html:35
 msgid "What is the stardew.info planner?"
-msgstr "¿Qué es el planificador de stardew.info?"
+msgstr "stardew.info规划器是什么？"
 
 #: templates/faq.html:36
 msgid ""
@@ -875,34 +800,24 @@ msgid ""
 " planner. These are separate to normal savegame uploads, and are accessed"
 " from the planner itself."
 msgstr ""
-"El <a href='https://stardew.info/planner/' target='_blank'>planificador "
-"de Stardew.info</a> por <a "
-"href='https://github.com/hpeinar/stardewplanner' target = "
-"\"_blank\">Henrik Peinar</a> es una herramienta que te permite diseñar tu"
-" granja. Hemos integrado el soporte para el diseñador a la página, para "
-"ser usado con granjas de tu propiedad. Para utilizar esta función, haz "
-"clic en el icono de plano en el panel de control en la página de perfil "
-"de tu granja, esto lo cargár al diseñador. Además, se ha trabajado con "
-"Henrik para permitir la carga de granjas del diseñadorr. Estos archivos "
-"son independientes a las cargas normales de partidas guardadas, y se "
-"puede acceder directamente desde el diseñador."
+"<a href='https://stardew.info/planner/'' target='_blank'>星露谷物语规划器</a>是由<a"
+" href='https://github.com/hpeinar/stardewplanner'target='_blank'>Henrik "
+"Peinar</a>编写的程序，您可以使用它规划您的农场，我们已经集成对规划器的支持。如果您想规划您的农场，点击网页右侧小地图上方的蓝图图标即可。另外，我们也可以将规划器的成果渲染成农场的图片，这与上传存档的系统是分开的，可以在规划器中使用这项功能。"
 
 #: templates/faq.html:38
 msgid "How do I use downloaded savegames?"
-msgstr "¿Cómo puedo usar las partidas guardadas que he descargado?"
+msgstr "我怎么使用下载来的存档？"
 
 #: templates/faq.html:39
 #, python-format
 msgid ""
 "Saves go in %(appdata)s where you can place the extracted folder and "
 "contents. This is normally %(windir)s."
-msgstr ""
-"Las partidas guardadas están en %(appdata)s, dónde puedes guardar la "
-"carpeta extraída y sus contenidos. Esto es normalmente %(windir)s."
+msgstr "下载的存档是zip格式，应解压至%(appdata)s文件夹下。一般路径为%(windir)s。"
 
 #: templates/faq.html:41
 msgid "How can I delete my upload(s)?"
-msgstr "¿Cómo puedo borrar mis archivo(s)?"
+msgstr "我怎么能删除我上传的农场？"
 
 #: templates/faq.html:42
 #, python-format
@@ -912,17 +827,11 @@ msgid ""
 "%(logged_in)s and have uploaded multiple farms from the same playthrough "
 "you will also have an option to delete 'all for this farm'. Both ask for "
 "confirmation before deleting."
-msgstr ""
-"Al cargar una partida guardada, se genera una cookie de propiedad. Bajo "
-"el nombre de la granja, encontrarás un botón que te permite borrar la "
-"página. Si has iniciado sesión %(logged_in)s y has subido varias granjas "
-"de la misma partida, también tienes la opción de borrar 'todas las "
-"partidas de esta granja'. Ambas opciones pedirán confirmación antes de "
-"borrar un archivo."
+msgstr "在您%(logged_in)s之后，您拥有的农场页面右侧小地图上方有两个垃圾桶图标状按键，灰色为删除此农场，红色为删除整个系列。删除前需要确认。"
 
 #: templates/faq.html:44
 msgid "Do you support [modname]?"
-msgstr "¿Es compatible con [nombre del mod]?"
+msgstr "您们支持[插入mod名]吗？"
 
 #: templates/faq.html:45
 msgid ""
@@ -930,886 +839,869 @@ msgid ""
 "new assets or structurally change your savegame too much will probably "
 "work. Once we've got the core site functionality sorted we'll look at mod"
 " support!"
-msgstr ""
-"De momento, no ofrecemos compatibilidad para ningún \"mod\" en concreto, "
-"pero aquellos \"mods\" que no añadan nuevos archivos activos o cambien la"
-" estructura de tu partida guardada probablemente funcionen con esta "
-"página. Nos quedan algunas mejoras por hacer a la página, cuando esten "
-"listas seguramente trabajaremos con la compatibilidad de los mods!"
+msgstr "目前我们并不会特别支持任何mod，并未向游戏加入新资源或改变存档文件结构的mod应该都是支持的。我们在网站本身开发完成之后会研究mod支持功能。"
 
 #: templates/index.html:40
 msgid "Upload your farm"
-msgstr "Cargar tu granja"
+msgstr "上传您的农场"
 
 #: templates/index.html:44
 msgid "Upload!"
-msgstr "Cargar!"
+msgstr "上传！"
 
 #: templates/index.html:47
 #, python-format
 msgid ""
 "%(stardew_valley)s save files can be found under %(appdata)s and are "
 "named after your character, plus an ID number"
-msgstr ""
-" Los archivos de partida guardada de %(stardew_valley)s se encuentran en "
-"%(appdata)s y se nombran usando el nombre del personaje, además de un "
-"número de identidad"
+msgstr "%(stardew_valley)s的存档文件在%(appdata)s目录中，为您的角色名_ID号的文件"
 
 #: templates/index.html:64
 msgid "Recently uploaded farms"
-msgstr "Granjas subidas recientemente"
+msgstr "最近上传的农场"
 
 #: templates/index.html:65
 msgid "Recent uploads"
-msgstr "Recién subidas"
+msgstr "最新上传"
 
 #: templates/index.html:68
 msgid "more"
-msgstr "más"
+msgstr "更多农场"
 
 #: templates/login.html:2
 msgid "Login"
-msgstr "Iniciar sesión"
+msgstr "登录"
 
 #: templates/login.html:32 templates/titlebar.html:26
 msgid "Sign in"
-msgstr "Iniciar"
+msgstr "登录"
 
 #: templates/login.html:37
 msgid "Log in to a user account on upload.farm"
-msgstr "Iniciar sesión de una cuenta de usuario en upload.farm"
+msgstr "登录upload.farm账户"
 
 #: templates/login.html:40 templates/reset.html:27 templates/reset.html:43
 #: templates/signup.html:20
 msgid "Email address"
-msgstr "Dirección de correo electrónico"
+msgstr "邮箱地址"
 
 #: templates/login.html:41 templates/reset.html:44 templates/signup.html:21
 msgid "email"
-msgstr "correo electrónico"
+msgstr "电子邮箱"
 
 #: templates/login.html:45 templates/signup.html:25
 msgid "Password"
-msgstr "Contraseña"
+msgstr "密码"
 
 #: templates/login.html:46 templates/reset.html:33 templates/signup.html:26
 msgid "password"
-msgstr "contraseña"
+msgstr "密码"
 
 #: templates/login.html:49
 msgid "Sign in!"
-msgstr "¡Iniciar sesión!"
+msgstr "登录！"
 
 #: templates/login.html:57
 msgid "Need to register?"
-msgstr "¿Necesitas regístrarte?"
+msgstr "需要注册吗？"
 
 #: templates/login.html:57 templates/signup.html:33
 msgid "Sign up!"
-msgstr "¡Regístrate!"
+msgstr "注册！"
 
 #: templates/login.html:57
 msgid "Forgot password?"
-msgstr "¿Olvidaste tu contraseña?"
+msgstr "忘记密码了？"
 
 #: templates/login.html:57
 msgid "Reset it!"
-msgstr "¡Restablecer!"
+msgstr "重设密码！"
 
 #: templates/plan.html:5 templates/plan.html:9 templates/plan.html:16
 #: templates/plan.html:26
 msgid "Render of stardew.info farm plan (Stardew Valley)"
-msgstr "Carga de un plano de granja de stardew.info (Stardew Valley)"
+msgstr "stardew.info农场规划渲染图（星露谷物语）"
 
 #: templates/plan.html:8 templates/plan.html:15 templates/plan.html:22
 msgid "Farm plan render - upload.farm"
-msgstr "Carga de un plano de granja - upload.farm"
+msgstr "农场规划渲染-upload.farm"
 
 #: templates/plan.html:79
 #, python-format
 msgid "Farm plan in %(season)s"
-msgstr "Plano de granja en %(season)s"
+msgstr "%(season)s的农场规划"
 
 #: templates/plan.html:87
 msgid "view plan"
-msgstr "ver el plano"
+msgstr "查看规划"
 
 #: templates/plan.html:93
 msgid "Plan re-rendering, will automatically load when complete"
-msgstr "Vuelve a cargar el plano, la imagen se carga automáticamente"
+msgstr "规划重新渲染中，完成后会自动加载"
 
 #: templates/profile.html:5 templates/profile.html:9 templates/profile.html:16
 #: templates/profile.html:28
 #, python-format
 msgid "Summary of %(farmname)s Farm by %(name)s (Stardew Valley)"
-msgstr "Resumen de la granja de %(farmname)s por %(name)s (Stardew Valley)"
+msgstr "%(name)s的%(farmname)s农场的摘要（星露谷物语）"
 
 #: templates/profile.html:8 templates/profile.html:15 templates/profile.html:22
 #, python-format
 msgid "%(farmname)s Farm Summary - upload.farm"
-msgstr "Resumen de la granja de %(farmname)s - upload.farm"
+msgstr "%(farmname)s农场摘要-upload.farm"
 
 #: templates/profile.html:138 templates/profile.html:159
 #, python-format
 msgid "%(farmname)s Farm"
-msgstr "Granja de %(farmname)s"
+msgstr "%(farmname)s的农场"
 
 #: templates/profile.html:168
 #, python-format
 msgid "Go back to %(previous)s (left arrow on keyboard also works)"
-msgstr ""
-"Vuelta a %(previous)s (la tecla de dirección izqda. del teclado también "
-"funciona)"
+msgstr "后退至%(previous)s（也可以使用键盘左键）"
 
 #: templates/profile.html:170
 #, python-format
 msgid "Go forward to %(next)s (right arrow on keyboard also works)"
-msgstr ""
-"Sigue a %(next)s (la tecla de dirección drcha. del teclado también "
-"funciona)"
+msgstr "前进至%(next)s（也可以使用键盘右键）"
 
 #: templates/profile.html:182
 msgid "Warning:"
-msgstr "Advertencia:"
+msgstr "警告："
 
 #: templates/profile.html:182
 msgid ""
 "This farm failed image processing, which means the savegame had "
 "unexpected contents. It might be modded, or malicious. Be aware if "
 "downloading the savegame."
-msgstr ""
-"No pudimos procesar imágenes de este granja, significa que la partida "
-"guardada contiene archivos inesperados. Podría tener \"mods\" o ser un "
-"archivo dañino. Ten cuidado si descargas la partida guardada."
+msgstr "这个农场无法生成图片，这说明存档内有非正常内容。可能是因为mod，也可能因为是恶意的存档，下载此存档时要小心。"
 
 #: templates/profile.html:218
 msgid "Stats"
-msgstr "Estadísticas"
+msgstr "状态"
 
 #: templates/profile.html:219
 msgid "Summary"
-msgstr "Resumen"
+msgstr "摘要"
 
 #: templates/profile.html:220
 msgid "Skills"
-msgstr "Habilidades"
+msgstr "技能"
 
 #: templates/profile.html:231
 msgid "Name"
-msgstr "Nombre"
+msgstr ""
 
 #: templates/profile.html:232
 msgid "Current Funds"
-msgstr "Fondos"
+msgstr "现有资金"
 
 #: templates/profile.html:233
 msgid "Total Earnings"
-msgstr "Ganancias"
+msgstr "总计收入"
 
 #: templates/profile.html:234
 msgid "Gender"
-msgstr "Género"
+msgstr "性别"
 
 #: templates/profile.html:234
 msgid "Male"
-msgstr "Masculino"
+msgstr "男性"
 
 #: templates/profile.html:234
 msgid "Female"
-msgstr "Femenino"
+msgstr "女性"
 
 #: templates/profile.html:236
 msgid "Favorite Thing"
-msgstr "Cosa Favorita"
+msgstr "最喜欢的东西"
 
 #: templates/profile.html:237
 msgid "Health"
-msgstr "Salud"
+msgstr "健康"
 
 #: templates/profile.html:238
 msgid "Stamina"
-msgstr "Aguante"
+msgstr "耐久"
 
 #: templates/profile.html:239
 msgid "Steps Taken"
-msgstr "Pasos Tomados"
+msgstr "步数"
 
 #: templates/profile.html:241
 msgid "Mines Depth"
-msgstr "Minas"
+msgstr "矿洞层数"
 
 #: templates/profile.html:241 templates/profile.html:242
 #: templates/profile.html:244
 msgid "level"
-msgstr "nivel"
+msgstr ""
 
 #: templates/profile.html:242
 msgid "Cavern Depth"
-msgstr "Cuevas"
+msgstr "骷髅洞窟层数"
 
 #: templates/profile.html:244
 msgid "Mine Depth"
-msgstr "Minas"
+msgstr "矿洞层数"
 
 #: templates/profile.html:246
 msgid "Time Played"
-msgstr "Tiempo Jugado"
+msgstr "游戏时间"
 
 #: templates/profile.html:246
 msgid "hours"
-msgstr "horas"
+msgstr "小时"
 
 #: templates/profile.html:260
 msgid "is married to"
-msgstr "se ha casado con"
+msgstr "的伴侣是"
 
 #: templates/profile.html:260 templates/profile.html:262
 #: templates/profile.html:266
 msgid "and"
-msgstr "y"
+msgstr "和"
 
 #: templates/profile.html:262
 msgid "is unmarried"
-msgstr "no se ha casado"
+msgstr "暂时未婚"
 
 #: templates/profile.html:266
 msgid "has"
-msgstr "tiene"
+msgstr "有"
 
 #: templates/profile.html:267
 #, python-format
 msgid "a %(n)s day old"
-msgstr "desde hace %(n)s días"
+msgstr "一个%(n)s天大的"
 
 #: templates/profile.html:268
 msgid "son"
-msgstr "un hijo"
+msgstr "儿子"
 
 #: templates/profile.html:268
 msgid "daughter"
-msgstr "una hija"
+msgstr "女儿"
 
 #: templates/profile.html:269 templates/profile.html:276
 msgid "named"
-msgstr "de nombre"
+msgstr "叫做"
 
 #: templates/profile.html:273
 msgid "has no children"
-msgstr "no tiene hijos"
+msgstr "暂时没有孩子"
 
 #: templates/profile.html:276
 msgid "and has a pet"
-msgstr "y tiene una mascota"
+msgstr "有一个宠物"
 
 #: templates/profile.html:276
 msgid "cat"
-msgstr "gato"
+msgstr "猫"
 
 #: templates/profile.html:276
 msgid "dog"
-msgstr "perro"
+msgstr "狗"
 
 #: templates/profile.html:282
 msgid "Brown Chicken"
-msgstr "Gallina marrón"
+msgstr ""
 
 #: templates/profile.html:283
 msgid "Brown Chickens"
-msgstr "Gallinas marrones"
+msgstr ""
 
 #: templates/profile.html:284
 msgid "White Chicken"
-msgstr "Gallina blanca"
+msgstr ""
 
 #: templates/profile.html:285
 msgid "White Chickens"
-msgstr "Gallinas blancas"
+msgstr ""
 
 #: templates/profile.html:286
 msgid "Blue Chicken"
-msgstr "Gallina azul"
+msgstr ""
 
 #: templates/profile.html:287
 msgid "Blue Chickens"
-msgstr "Gallinas azules"
+msgstr ""
 
 #: templates/profile.html:288
 msgid "Void Chicken"
-msgstr "Gallina sombría"
+msgstr ""
 
 #: templates/profile.html:289
 msgid "Void Chickens"
-msgstr "Gallinas sombrías"
+msgstr ""
 
 #: templates/profile.html:290
 msgid "White Cow"
-msgstr "Vaca blanca"
+msgstr ""
 
 #: templates/profile.html:291
 msgid "White Cows"
-msgstr "Vacas blancas"
+msgstr ""
 
 #: templates/profile.html:292
 msgid "Brown Cow"
-msgstr "Vaca marrón"
+msgstr ""
 
 #: templates/profile.html:293
 msgid "Brown Cows"
-msgstr "Vacas marrones"
+msgstr ""
 
 #: templates/profile.html:294
 msgid "Duck"
-msgstr "Pato"
+msgstr ""
 
 #: templates/profile.html:295
 msgid "Ducks"
-msgstr "Patos"
+msgstr ""
 
 #: templates/profile.html:296
 msgid "Rabbit"
-msgstr "Conejo"
+msgstr ""
 
 #: templates/profile.html:297
 msgid "Rabbits"
-msgstr "Conejos"
+msgstr ""
 
 #: templates/profile.html:298
 msgid "Dinosaur"
-msgstr "Dinosaurio"
+msgstr ""
 
 #: templates/profile.html:299
 msgid "Dinosaurs"
-msgstr "Dinosaurios"
+msgstr ""
 
 #: templates/profile.html:300
 msgid "Goat"
-msgstr "Cabra"
+msgstr ""
 
 #: templates/profile.html:301
 msgid "Goats"
-msgstr "Cabras"
+msgstr ""
 
 #: templates/profile.html:302
 msgid "Sheep"
-msgstr "Oveja"
+msgstr ""
 
 #: templates/profile.html:303
 msgid "Sheeps"
-msgstr "Ovejas"
+msgstr ""
 
 #: templates/profile.html:304
 msgid "Pig"
-msgstr "Cerdo"
+msgstr ""
 
 #: templates/profile.html:305
 msgid "Pigs"
-msgstr "Cerdos"
+msgstr ""
 
 #: templates/profile.html:311
 msgid "Farm horse:"
-msgstr "Caballo de la granja:"
+msgstr "农场的马"
 
 #: templates/profile.html:317
 #, python-format
 msgid "%(n)s days old"
-msgstr "%(n)s días de edad"
+msgstr "%(n)s天大"
 
 #: templates/profile.html:345
 #, python-format
 msgid "Animal Products worth 10%% more."
-msgstr "Productos Animales valorados con un 10%% más."
+msgstr "动物产物价格增加10%%。"
 
 #: templates/profile.html:346
 #, python-format
 msgid "Crops worth 10%% more."
-msgstr "Cultivos valorados con 10%% más."
+msgstr "庄稼价格增加10%%。"
 
 #: templates/profile.html:347
 msgid "Befriend Coop animals quicker."
-msgstr "Hacerse amigo de los animales del granero más rápido."
+msgstr "更容易受鸡舍中动物的喜欢。"
 
 #: templates/profile.html:347
 msgid "Incubation time cut in half."
-msgstr "Tiempo de incubación reducido a la mitad."
+msgstr "蛋孵化时间减半。"
 
 #: templates/profile.html:348
 msgid "Befriend barn animals quicker."
-msgstr "Hacerse amigo de los animales del establo más rápido."
+msgstr "更容易受畜棚中动物的喜欢。"
 
 #: templates/profile.html:348
 msgid "Sheep produce wool faster."
-msgstr "Las Ovejas producen la lana más rápido."
+msgstr "绵羊产生羊毛的速度更快。"
 
 #: templates/profile.html:349
 #, python-format
 msgid "Artisan Goods (wine, cheese, oil, etc.) worth 50%% more."
-msgstr "Productos Artesanales (vino, queso, aceite, etc.) por valor de 50%% más."
+msgstr "加工产品（酒，奶酪，油等）价格增加50%%。"
 
 #: templates/profile.html:350
 #, python-format
 msgid "All crops grow 10%% faster."
-msgstr "Todos los cultivos crecen 10%% más rápido."
+msgstr "所有庄稼生长速度增加10%%。"
 
 #: templates/profile.html:351
 msgid "+1 ore per vein."
-msgstr "+1 mineral por veta."
+msgstr "矿脉多出一个矿石。"
 
 #: templates/profile.html:352
 msgid "Chance for Gems to appear in pairs."
-msgstr "Probabilidad de que las Gemas aparezcan en pares."
+msgstr "宝石可能会成对出现。"
 
 #: templates/profile.html:353
 #, python-format
 msgid "Metal bars worth 25%% more."
-msgstr "Barras de metal por valor de 25%% más."
+msgstr "金属条价格增加25%%。"
 
 #: templates/profile.html:354
 msgid "Geode find doubled."
-msgstr "Hallazgo de Geodas duplicado."
+msgstr "晶洞掉落加倍。"
 
 #: templates/profile.html:355
 msgid "Coal find doubled."
-msgstr "Hallazgo de Carbón duplicado."
+msgstr "煤炭掉落加倍。"
 
 #: templates/profile.html:356
 #, python-format
 msgid "Gems worth 30%% more."
-msgstr "Gemas valoradas un 30%% más."
+msgstr "宝石价格增加30%%。"
 
 #: templates/profile.html:357
 #, python-format
 msgid "Wood worth 50%% more."
-msgstr "Madera valorada un 50%% más."
+msgstr "木材价格增加50%%。"
 
 #: templates/profile.html:358
 msgid "Chance for double harvest of foraged items."
-msgstr "Probabilidad de doble cosecha de forraje."
+msgstr "可采集的物品可能成对出现。"
 
 #: templates/profile.html:359
 msgid "Normal trees occasionally drop hardwood."
-msgstr "Árboles normales de vez en cuando dan madera."
+msgstr "一般的树偶尔掉落硬木。"
 
 #: templates/profile.html:360
 msgid "Foraged items are always gold quality."
-msgstr "El Forraje es siempre de calidad oro."
+msgstr "可采集的物品总是最高质量。"
 
 #: templates/profile.html:361
 #, python-format
 msgid "Syrup is worth 25%% more."
-msgstr "Jarabe valorado un 25%% más."
+msgstr "糖浆价格增加25%%。"
 
 #: templates/profile.html:362
 msgid "Locations of foragable items are revealed."
-msgstr "Revela el lugar del forraje."
+msgstr "显示可采集物品的地点。"
 
 #: templates/profile.html:363
 #, python-format
 msgid "Fish worth 25%% more."
-msgstr "Peces valorados un 25%% más."
+msgstr "鱼类价格增加25%%。"
 
 #: templates/profile.html:364
 msgid "Resources required to craft crab pots reduced."
-msgstr "Se reducen los recursos necesarios para elaborar trampas para cangrejos."
+msgstr "制造捕蟹笼需要的材料减少。"
 
 #: templates/profile.html:365
 #, python-format
 msgid "Fish worth 50%% more."
-msgstr "Peces valorados un 50%% más."
+msgstr "鱼类价格增加50%%。"
 
 #: templates/profile.html:366
 msgid "Chance to find treasure doubled."
-msgstr "Doblada la probabilidad de encontrar tesoros."
+msgstr "钓到宝藏的概率加倍。"
 
 #: templates/profile.html:367
 msgid "Crab pots never catch trash."
-msgstr "Las trampas para cangrejos nunca atrapan basura."
+msgstr "捕蟹笼中不出现垃圾。"
 
 #: templates/profile.html:368
 msgid "Crab pots no longer need to be baited."
-msgstr "Las jaulas para cangrejos ya no necesitan cebo."
+msgstr "捕蟹笼不再需要诱饵。"
 
 #: templates/profile.html:369
 #, python-format
 msgid "All attacks deal 10%% more damage."
-msgstr "Todos los ataques hacen 10%% más de daño."
+msgstr "所有攻击增加10%%伤害。"
 
 #: templates/profile.html:369
 msgid "+15 HP."
-msgstr "+15 puntos de vida."
+msgstr "增加15点健康值。"
 
 #: templates/profile.html:370
 #, python-format
 msgid "Critical strike chance increased by 50%%."
-msgstr "Probabilidad de golpe crítico aumenta en un 50%%."
+msgstr "会心一击的概率增加50%%。"
 
 #: templates/profile.html:371
 #, python-format
 msgid "Damage is increased by 15%%."
-msgstr "El daño aumenta en un 15%%."
+msgstr "攻击伤害增加15%%。"
 
 #: templates/profile.html:372
 msgid "HP is increased by 25."
-msgstr "Puntos de vida aumentados a 25."
+msgstr "增加25点健康值。"
 
 #: templates/profile.html:373
 msgid "Cooldown on special moves is cut in half."
-msgstr "Tiempo de reutilización de movimientos especiales se acorta a la mitad."
+msgstr "特殊招式的冷却时间减半。"
 
 #: templates/profile.html:374
 msgid "Critical hits are deadly."
-msgstr "Golpes críticos mortales."
+msgstr "会心一击伤害大大增加。"
 
 #: templates/profile.html:376
 msgid "Rancher"
-msgstr "Ranchero"
+msgstr ""
 
 #: templates/profile.html:377
 msgid "Tiller"
-msgstr "Labrador"
+msgstr ""
 
 #: templates/profile.html:378
 msgid "Coopmaster"
-msgstr "Corralero"
+msgstr ""
 
 #: templates/profile.html:379
 msgid "Shepherd"
-msgstr "Pastor"
+msgstr ""
 
 #: templates/profile.html:380
 msgid "Artisan"
-msgstr "Artesano"
+msgstr ""
 
 #: templates/profile.html:381
 msgid "Agriculturist"
-msgstr "Agricultor"
+msgstr ""
 
 #: templates/profile.html:382
 msgid "Miner"
-msgstr "Minero"
+msgstr ""
 
 #: templates/profile.html:383
 msgid "Geologist"
-msgstr "Geólogo"
+msgstr ""
 
 #: templates/profile.html:384
 msgid "Blacksmith"
-msgstr "Herrero"
+msgstr ""
 
 #: templates/profile.html:385
 msgid "Excavator"
-msgstr "Excavador"
+msgstr ""
 
 #: templates/profile.html:386
 msgid "Prospector"
-msgstr "Buscador"
+msgstr ""
 
 #: templates/profile.html:387
 msgid "Gemologist"
-msgstr "Gemólogo"
+msgstr ""
 
 #: templates/profile.html:388
 msgid "Forester"
-msgstr "Guardabosques"
+msgstr ""
 
 #: templates/profile.html:389
 msgid "Gatherer"
-msgstr "Recolector"
+msgstr ""
 
 #: templates/profile.html:390
 msgid "Lumberjack"
-msgstr "Leñador"
+msgstr ""
 
 #: templates/profile.html:391
 msgid "Botanist"
-msgstr "Botánico"
+msgstr ""
 
 #: templates/profile.html:392
 msgid "Tapper"
-msgstr "Resinador"
+msgstr ""
 
 #: templates/profile.html:393
 msgid "Tracker"
-msgstr "Rastreador"
+msgstr ""
 
 #: templates/profile.html:394
 msgid "Fisher"
-msgstr "Pescador"
+msgstr ""
 
 #: templates/profile.html:395
 msgid "Trapper"
-msgstr "Trampero"
+msgstr ""
 
 #: templates/profile.html:396
 msgid "Angler"
-msgstr "Pesquero"
+msgstr ""
 
 #: templates/profile.html:397
 msgid "Pirate"
-msgstr "Pirata"
+msgstr ""
 
 #: templates/profile.html:398
 msgid "Mariner"
-msgstr "Marino"
+msgstr ""
 
 #: templates/profile.html:399
 msgid "Luremaster"
-msgstr "As del señuelo"
+msgstr ""
 
 #: templates/profile.html:400
 msgid "Fighter"
-msgstr "Luchador"
+msgstr ""
 
 #: templates/profile.html:401
 msgid "Scout"
-msgstr "Explorador"
+msgstr ""
 
 #: templates/profile.html:402
 msgid "Brute"
-msgstr "Bestia"
+msgstr ""
 
 #: templates/profile.html:403
 msgid "Defender"
-msgstr "Defensor"
+msgstr ""
 
 #: templates/profile.html:404
 msgid "Acrobat"
-msgstr "Acróbata"
+msgstr ""
 
 #: templates/profile.html:405
 msgid "Desperado"
-msgstr "Berserker"
+msgstr ""
 
 #: templates/profile.html:407
 msgid "Farming"
-msgstr "Agricultura"
+msgstr ""
 
 #: templates/profile.html:408
 msgid "Mining"
-msgstr "Minería"
+msgstr ""
 
 #: templates/profile.html:409
 msgid "Foraging"
-msgstr "Recolección"
+msgstr ""
 
 #: templates/profile.html:410
 msgid "Fishing"
-msgstr "Pesca"
+msgstr ""
 
 #: templates/profile.html:411
 msgid "Combat"
-msgstr "Combate"
+msgstr ""
 
 #: templates/profile.html:454
 msgid "(Hover for professions)"
-msgstr "(Mostrar profesiones)"
+msgstr "滑动可见技术名称"
 
 #: templates/profile.html:472 templates/profile.html:474
 msgid "This will claim"
-msgstr "Vas a reclamar"
+msgstr "仅认领"
 
 #: templates/profile.html:472 templates/profile.html:496
 msgid "only this"
-msgstr "solamente esto"
+msgstr "仅这个"
 
 #: templates/profile.html:472
 msgid "upload"
-msgstr "subida"
+msgstr "上传"
 
 #: templates/profile.html:472
 msgid "Claim&nbsp;it!"
-msgstr "¡Reclamado!"
+msgstr "认领了！"
 
 #: templates/profile.html:472
 msgid "Claim this farm (link it to your account)"
-msgstr "Reclama esta granja (enlazar a tu cuenta)"
+msgstr "认领这个农场"
 
 #: templates/profile.html:474
 msgid "all unclaimed uploads"
-msgstr "todas las subidas no reclamadas"
+msgstr "所有未认领的上传"
 
 #: templates/profile.html:474
 msgid "made from this browser."
-msgstr "hecho desde este navegador."
+msgstr "使用此浏览器上传的"
 
 #: templates/profile.html:474
 msgid "Claim&nbsp;all!"
-msgstr "¡Reclamar&nbsp;todo!"
+msgstr "认领全部！"
 
 #: templates/profile.html:474
 msgid "Claim all unclaimed farms (link them to your account)"
-msgstr "Reclamar todas las granjas sin reclamación (enlazar a tu cuenta)"
+msgstr "认领全部农场"
 
 #: templates/profile.html:478
 msgid "Send to"
-msgstr "Enviar a"
+msgstr "发送至"
 
 #: templates/profile.html:478
 msgid "stardew.info planner"
-msgstr "diseñador de stardew.info"
+msgstr "stardew.info规划器"
 
 #: templates/profile.html:478
 msgid "?"
-msgstr "?"
+msgstr "？"
 
 #: templates/profile.html:478
 msgid "(this is a separate site not part of upload.farm)"
-msgstr "(esta página no forma parte de upload.farm)"
+msgstr "（这工具不是upload.farm的一部分）"
 
 #: templates/profile.html:478
 msgid "Plan&nbsp;my&nbsp;farm!"
-msgstr "Diseñar&nbsp;mi&nbsp;granja!"
+msgstr "规划我的农场！"
 
 #: templates/profile.html:478
 msgid "Plan my farm (send to stardew.info planner)"
-msgstr "Diseñar mi granja (enviarlo al diseñador de stardew.info)"
+msgstr "规划我的农场（发送至stardew.info规划器）"
 
 #: templates/profile.html:481
 msgid "Disable downloads?"
-msgstr "¿Desactivar descargas?"
+msgstr "禁止存档下载？"
 
 #: templates/profile.html:481
 msgid "Disables sharing of the savegame you uploaded"
-msgstr "Desactivar la opción de compartir la partida que has subido"
+msgstr "禁止分享您上传的游戏存档"
 
 #: templates/profile.html:481
 msgid "Disable!"
-msgstr "¡Desactivar!"
+msgstr "禁止！"
 
 #: templates/profile.html:481
 msgid "Downloads currently enabled"
-msgstr "Descargas desactivadas"
+msgstr "现在可以下载存档"
 
 #: templates/profile.html:484
 msgid "Enable downloads?"
-msgstr "¿Activar descargas?"
+msgstr "允许下载？"
 
 #: templates/profile.html:484
 msgid "Enables download of the savegame you uploaded by yourself and others"
-msgstr "Activa el intercambio de la partida guardada que has subido"
+msgstr "允许您和他人下载您上传的存档"
 
 #: templates/profile.html:484
 msgid "Enable!"
-msgstr "¡Activa!"
+msgstr "允许！"
 
 #: templates/profile.html:484
 msgid "Downloads currently disabled"
-msgstr "Descargas activadas"
+msgstr "现在不能下载存档。"
 
 #: templates/profile.html:486
 msgid "To enable savegame download please first"
-msgstr "Para activar la descarga de la partida guardada, por favor, primero"
+msgstr "要开启存档分享功能，先"
 
 #: templates/profile.html:486
 msgid "sign up"
-msgstr "regístrate"
+msgstr "注册"
 
 #: templates/profile.html:486
 msgid "sign in"
-msgstr "iniciar sesión"
+msgstr "登录"
 
 #: templates/profile.html:486
 msgid ", then"
-msgstr ", entonces"
+msgstr "，然后"
 
 #: templates/profile.html:486
 msgid "claim this page."
-msgstr "reclamar esta página."
+msgstr "认领这个农场"
 
 #: templates/profile.html:486
 msgid "Sign up or sign in to enable downloads!"
-msgstr "¡Regístrate o inicia sesión para activar descargas!"
+msgstr "注册或登录以允许下载！"
 
 #: templates/profile.html:490
 msgid "List your farm?"
-msgstr "Mostrar tu granja?"
+msgstr "公开展示您的农场？"
 
 #: templates/profile.html:490
 msgid "Allows it to appear in searches on the site"
-msgstr "Permite que tu granja aparezca en búsquedas dentro de la página"
+msgstr "允许您的农场出现在站点搜索结果中"
 
 #: templates/profile.html:490
 msgid "List!"
-msgstr "¡Mostrar!"
+msgstr "公开展示！"
 
 #: templates/profile.html:490
 msgid "Farm currently unlisted"
-msgstr "Granja oculta"
+msgstr "农场并未公开展示"
 
 #: templates/profile.html:492
 msgid "Unlist your farm?"
-msgstr "¿Ocultar tu granja?"
+msgstr "不公开展示您的农场？"
 
 #: templates/profile.html:492
 msgid "Prevents it appearing on the site except to you and people with the URL"
-msgstr "Hace que tu granja no aparezca en las búsquedas dentro de la página"
+msgstr "除了您自己和知道地址的人之外无法访问"
 
 #: templates/profile.html:492
 msgid "Unlist!"
-msgstr "¡Ocultar!"
+msgstr "不公开展示！"
 
 #: templates/profile.html:492
 msgid "Farm currently listed"
-msgstr "Granja visible"
+msgstr "农场在公开展示中"
 
 #: templates/profile.html:496
 msgid "Delete this farm?"
-msgstr "¿Borrar esta granja?"
+msgstr "删除这个农场？"
 
 #: templates/profile.html:496 templates/profile.html:498
 msgid "This will delete "
-msgstr "Vas a borrar "
+msgstr "这会删除"
 
 #: templates/profile.html:496
 msgid " upload"
-msgstr " subir"
+msgstr "上传的农场"
 
 #: templates/profile.html:496
 msgid "Delete&nbsp;it!"
-msgstr "¡Borralo!"
+msgstr "删除！"
 
 #: templates/profile.html:496
 msgid "Delete farm"
-msgstr "Borrar la granja"
+msgstr "删除农场"
 
 #: templates/profile.html:498
 msgid "Delete all for this farm?"
-msgstr "¿Borrar todas de esta serie?"
+msgstr "删除这个农场所有信息？"
 
 #: templates/profile.html:498
 msgid "all uploads in this series."
-msgstr " todas las subidas de esta serie"
+msgstr "这个系列中所有的农场"
 
 #: templates/profile.html:498
 msgid ""
 "This will remove this farm and all associated farms, be sure you mean to "
 "do this!"
-msgstr ""
-"Esta acción borrará esta granja y todas las de la serie, ¡Asegurate que "
-"quieres hacer esto!"
+msgstr "这会移除这个及所有相关的农场，请三思！"
 
 #: templates/profile.html:498
 msgid "Delete&nbsp;entire&nbsp;series!"
-msgstr "¡Borrar&nbsp;toda&nbsp;la&nbsp;serie!"
+msgstr "删除整个系列！"
 
 #: templates/profile.html:498
 msgid "Delete entire farm series"
-msgstr "Borrar serie de la granja"
+msgstr "删除整个农场系列"
 
 #: templates/profile.html:511
 msgid "You use the contents of this zip at your own risk!"
-msgstr "¡Usa los contenidos de este archivo bajo tu responsabilidad!"
+msgstr "使用此存档zip引发的问题责任自负！"
 
 #: templates/profile.html:511
 msgid "I understand, download!"
-msgstr "Estoy de acuerdo, ¡descargar!"
+msgstr "我理解，下载！"
 
 #: templates/profile.html:511
 msgid "download savegame"
-msgstr "descargar archivo"
+msgstr "下载存档"
 
 #: templates/profile.html:521
 msgid "Friendships"
-msgstr "Amistades"
+msgstr "友情关系"
 
 #: templates/profile.html:524
 msgid "Willy"
@@ -1949,201 +1841,194 @@ msgstr ""
 
 #: templates/profile.html:570
 msgid "Armored Bug"
-msgstr "Armored Bug"
+msgstr "装甲飞虫"
 
 #: templates/profile.html:571
 msgid "Bat"
-msgstr "Bat"
+msgstr "蝙蝠"
 
 #: templates/profile.html:572
 msgid "Big Slime"
-msgstr "Big Slime"
+msgstr "大号史莱姆"
 
 #: templates/profile.html:573
 msgid "Bug"
-msgstr "Bug"
+msgstr "小虫"
 
 #: templates/profile.html:574
 msgid "Duggy"
-msgstr "Duggy"
+msgstr "地鼠"
 
 #: templates/profile.html:575
 msgid "Dust Sprite"
-msgstr "Dust Sprite"
+msgstr "尘埃灵"
 
 #: templates/profile.html:576
 msgid "Fly"
-msgstr "Fly"
+msgstr "飞虫"
 
 #: templates/profile.html:577
 msgid "Frost Bat"
-msgstr "Frost Bat"
+msgstr "寒冰蝙蝠"
 
 #: templates/profile.html:578
 msgid "Frost Jelly"
-msgstr "Frost Jelly"
+msgstr "寒霜史莱姆"
 
 #: templates/profile.html:579
 msgid "Ghost"
-msgstr "Ghost"
+msgstr "死灵"
 
 #: templates/profile.html:580
 msgid "Green Slime"
-msgstr "Green Slime"
+msgstr "绿色史莱姆"
 
 #: templates/profile.html:581
 msgid "Grub"
-msgstr "Grub"
+msgstr "爬虫"
 
 #: templates/profile.html:582
 msgid "Lava Bat"
-msgstr "Lava Bat"
+msgstr "熔岩蝙蝠"
 
 #: templates/profile.html:583
 msgid "Lava Crab"
-msgstr "Lava Crab"
+msgstr "熔岩寄居蟹"
 
 #: templates/profile.html:584
 msgid "Metal Head"
-msgstr "Metal Head"
+msgstr "硬脑壳"
 
 #: templates/profile.html:585
 msgid "Mummy"
-msgstr "Mummy"
+msgstr "木乃伊"
 
 #: templates/profile.html:586
 msgid "Purple Slime"
-msgstr "Purple Slime"
+msgstr "紫色史莱姆"
 
 #: templates/profile.html:587
 msgid "Sludge"
-msgstr "Sludge"
+msgstr "史莱姆"
 
 #: templates/profile.html:588
 msgid "Rock Crab"
-msgstr "Rock Crab"
+msgstr "寄居蟹"
 
 #: templates/profile.html:589
 msgid "Serpent"
-msgstr "Serpent"
+msgstr "飞蛇"
 
 #: templates/profile.html:590
 msgid "Shadow Brute"
-msgstr "Shadow Brute"
+msgstr "暗影猎人"
 
 #: templates/profile.html:591
 msgid "Skeleton"
-msgstr "Skeleton"
+msgstr "骷髅"
 
 #: templates/profile.html:592
 msgid "Squid Kid"
-msgstr "Squid Kid"
+msgstr "鱿鱼小子"
 
 #: templates/profile.html:593
 msgid "Stone Golem"
-msgstr "Stone Golem"
+msgstr "石制魔像"
 
 #: templates/profile.html:594
 msgid "Transparent Slime"
-msgstr "Transparent Slime"
+msgstr "透明史莱姆"
 
 #: templates/profile.html:595
 msgid "Void Spirit"
-msgstr "Void Spirit"
+msgstr "虚空灵魂"
 
 #: templates/profile.html:596
 msgid "Yellow Slime"
-msgstr "Yellow Slime"
+msgstr "黄色史莱姆"
 
 #: templates/profile.html:600
 msgid "Monster Kills"
-msgstr "Monstruos Eliminados"
+msgstr "怪物狩猎记录"
 
 #: templates/profile.html:613
 #, python-format
 msgid "%(name)s has not killed any monsters yet."
-msgstr "%(name)s no ha eliminado a ningún monstruo todavía."
+msgstr "%(name)s还没杀过一只怪物。"
 
 #: templates/profile.html:623
 #, python-format
 msgid "Map of %(farmname)s Farm"
-msgstr "Mapa de la Granja de %(farmname)s"
+msgstr "%(farmname)s农场的地图"
 
 #: templates/profile.html:628
 msgid "Click to open farm gallery"
-msgstr "Haz clic para abrir la galeria de granja"
+msgstr "点击打开农场相册"
 
 #: templates/profile.html:637
 msgid "view on imgur"
-msgstr "ver en imgur"
+msgstr "在imgur上查看"
 
 #: templates/profile.html:644
 msgid "reupload to imgur"
-msgstr "subir a imgur otra vez"
+msgstr "重新上传至imgur"
 
 #: templates/profile.html:644
 msgid "upload to imgur"
-msgstr "subir a imgur"
+msgstr "上传至imgur"
 
 #: templates/recents.html:15
 msgid "This farm has a downloadable savegame available"
-msgstr "Este granja tiene disponible una partida guardada descargable"
+msgstr "这个农场对应的存档可以下载"
 
 #: templates/recents.html:20
 msgid ""
 "This farm is unlisted and will not show up in searches nor on the front "
 "page except to you. It can still be viewed by people with a direct link."
-msgstr ""
-"Este granja está oculta y no aparece ni en las búsquedas y ni en la "
-"página principal. Las personas con un enlace directo todavía pueden "
-"verla."
+msgstr "这个农场未公开展示，只有您及有地址的人可以查看。"
 
 #: templates/reset.html:8 templates/reset.html:47
 msgid "Reset password"
-msgstr "Restablecer contraseña"
+msgstr "重设密码"
 
 #: templates/reset.html:32
 msgid "New password"
-msgstr "Nueva contraseña"
+msgstr "新密码"
 
 #: templates/reset.html:33 templates/signup.html:26
 #, python-format
 msgid "Passcode must be at least %(password_min_length)s characters long!"
-msgstr ""
-"Contraseña debe tener al menos %(password_min_length)s caracteres de "
-"longitud!"
+msgstr "密码应至少有%(password_min_length)s个字符长！"
 
 #: templates/reset.html:36
 msgid "Set new password"
-msgstr "Establecer nueva contraseña"
+msgstr "设置新密码"
 
 #: templates/reset.html:40
 msgid "Reset password for user account on upload.farm"
-msgstr "Restablecer contraseña para una cuenta de upload.farm"
+msgstr "重设upload.farm账户的密码"
 
 #: templates/reset.html:54
 msgid "Error"
-msgstr "Error"
+msgstr "错误"
 
 #: templates/signup.html:2 templates/signup.html:8 templates/titlebar.html:27
 msgid "Sign up"
-msgstr "Regístrate"
+msgstr "注册"
 
 #: templates/signup.html:11
 msgid ""
 "Registration allows enabling of savegame sharing, quick imgur upload, and"
 " creation and curation of farm series."
-msgstr ""
-"Al registrate puedes compartir tus partidas, subirlas a imgur de forma "
-"rápida y sencilla, crear granjas y gestionar tus granjas en serie."
+msgstr "注册即可启用分享存档，快速上传农场图片至imgur，创造及维护农场系列等功能。"
 
 #: templates/signup.html:12
 msgid "Already got an account? Sign in!"
-msgstr "¿Ya tienes una cuenta? ¡Inicia sesión!"
+msgstr "已经有账户了？登录！"
 
 #: templates/signup.html:17
 msgid "Register a user account on upload.farm"
-msgstr "Registra una cuenta en upload.farm"
+msgstr "注册upload.farm账户"
 
 #: templates/titlebar.html:11
 msgid "upload.farm"
@@ -2151,20 +2036,17 @@ msgstr "upload.farm"
 
 #: templates/titlebar.html:16
 msgid "Stardew Valley Summary Generator"
-msgstr "Cargar tu Granja Stardew Valley"
+msgstr "星露谷物语摘要生成器"
 
 #: templates/titlebar.html:20
 msgid "Upload"
-msgstr "Subir"
+msgstr "上传"
 
 #: templates/titlebar.html:22
 msgid "Blog"
-msgstr "Blog"
+msgstr "博客"
 
 #: templates/titlebar.html:25
 msgid "Logout"
-msgstr "Salir"
-
-#~ msgid "Todos activos de Stardew Valley copyright de"
-#~ msgstr "más antiguo"
+msgstr "注销"
 
