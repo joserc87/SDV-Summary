@@ -63,6 +63,7 @@ target/
 
 #specifics for sdv-summary
 config.py
+venv/
 saves/
 save/
 sdv/assets/
@@ -84,3 +85,9 @@ logfile
 assets/
 render_test.py
 test
+/sdv/development/
+/migrations/
+/development/
+
+
+*.sqlite3

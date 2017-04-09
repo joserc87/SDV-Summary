@@ -2,24 +2,17 @@
 import sys
 import subprocess
 from flask_script import Manager
-from sdv import app
-from sdv.createdb import init_db
-from sdv.createadmin import init_admin
-from tools import copy_assets
-import os
+from flask_migrate import Migrate, MigrateCommand
+from sdv import create_app
+from sdv.models import db
+
+app = create_app()
 
 manager = Manager(app)
+migrate = Migrate(app, db)
 
+manager.add_command('db', MigrateCommand)
 
-@manager.command
-def createdb(drop_all=False):
-    """Initialise Database."""
-    init_db(drop_all)
-
-@manager.command
-def createadmin(drop_all=False):
-    """Initialise Admin DB."""
-    init_admin()
 
 @manager.command
 def test():
@@ -37,14 +30,5 @@ def lint():
         print('OK')
     sys.exit(lint)
 
-@manager.command
-def init():
-    """Copy game assets from folder"""
-    copy_assets()
-
-if __name__ == "__main__":    
-    # print('os.chdir coming up... if the program refuses to run, comment it out, manage.py runserver, then uncomment and save')
-    # os.chdir(os.path.join(os.path.dirname(__file__),"sdv"))
-    # sys.path.insert(0, './')
-    # sys.path.insert(0, './sdv')
+if __name__ == "__main__":
     manager.run()

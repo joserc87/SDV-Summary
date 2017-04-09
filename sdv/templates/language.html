@@ -1,8 +1,0 @@
-					<div class="btn-group dropdown languages-button">
-						<button class="btn btn-primary dropdown-toggle btn-link" type="button" data-toggle="dropdown"><img src="{{ url_for('static',filename='css/languages/'+get_locale()+'.png') }}"><span class="caret"></span></button>
-						<ul class="dropdown-menu language-menu">
-							{% for language in config.LANGUAGES %}
-								<li><a style="padding:6px 12px;" href="{{url_for('set_lang',code=language)}}"><img title="{{Locale.parse(language).get_display_name(session['_language'])}}" alt="{{Locale.parse(language).get_display_name()}}" src="{{ url_for('static',filename='css/languages/'+language+'.png') }}"></a></li>
-							{% endfor %}
-						</ul>
-					</div>
