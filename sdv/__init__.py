@@ -955,10 +955,8 @@ def display_data(url):
         # passworded = True if datadict['del_password'] != None else False
         # passworded=passworded, removed from next line
 
-        # testing!!!!
-        missed_achievements = achievements.checker.main(datadict,friendships)
-        for key in missed_achievements:
-            print('Key \'{}\' has contents {}\n'.format(key,missed_achievements[key]))
+        missed_achievements = achievements.checker.check(datadict,friendships) if claimable or deletable else None
+        achievement_info = achievements.checker.achievements if claimable or deletable else None
 
         for item in ['money','totalMoneyEarned','statsStepsTaken','millisecondsPlayed']:
             if item == 'millisecondsPlayed':
@@ -970,7 +968,7 @@ def display_data(url):
         vote = json.dumps({url:get_votes(url)})
         if logged_in() == False and len(claimables) > 1 and request.cookies.get('no_signup')!='true':
             flash({'message':'<p>'+_("It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!")+'</p>'.format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
-        return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote,data=datadict, kills=kills, friendships=friendships, others=other_saves, gallery_set=gallery_set, **page_args())
+        return render_template("profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote,data=datadict, kills=kills, friendships=friendships, others=other_saves, gallery_set=gallery_set, missed_achievements=missed_achievements, achievement_info=achievement_info, **page_args())
 
 
 @app.route('/plan/<url>')

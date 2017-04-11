@@ -1,0 +1,10 @@
+							<b>Missing Achievements:</b><br>
+							{% for header in missed_achievements.keys()|sort() %}
+								{% if missed_achievements[header]['missing-achievements']|length > 0 %}
+									<b>- {{header}} -</b><br>
+									{% for achievement in missed_achievements[header]['missing-achievements'] %}
+										<span class="clickable" data-toggle="tooltip" title="{{ achievement_info[achievement] }}">{{achievement}}</span>
+										<br>
+									{% endfor %}
+								{% endif %}
+							{% endfor %}

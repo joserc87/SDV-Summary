@@ -142,7 +142,7 @@ achievements = {
 	# 'Fector\'s Challenge':'Beat \'Journey Of The Prairie King\' without dying.'
 }
 
-def main(datadict,friendships):
+def check(datadict,friendships):
 	missing_achievements = {}
 
 	missing_achievements['Money'] = {'missing-achievements':[]}
@@ -375,7 +375,7 @@ def main(datadict,friendships):
 			missing_achievements['Other']['missing-achievements'].append('Living Large')
 			if farmhouse_level < 1:
 				missing_achievements['Other']['missing-achievements'].append('Moving Up')
-	except TypeError:
+	except (TypeError,KeyError):
 		pass
 
 	## Community Center
