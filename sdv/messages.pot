@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-04 00:11+0100\n"
+"POT-Creation-Date: 2017-04-15 16:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -276,134 +276,6 @@ msgstr ""
 msgid "not logged in"
 msgstr ""
 
-#: getDate.py:4
-msgid "1st"
-msgstr ""
-
-#: getDate.py:5
-msgid "2nd"
-msgstr ""
-
-#: getDate.py:6
-msgid "3rd"
-msgstr ""
-
-#: getDate.py:7
-msgid "4th"
-msgstr ""
-
-#: getDate.py:8
-msgid "5th"
-msgstr ""
-
-#: getDate.py:9
-msgid "6th"
-msgstr ""
-
-#: getDate.py:10
-msgid "7th"
-msgstr ""
-
-#: getDate.py:11
-msgid "8th"
-msgstr ""
-
-#: getDate.py:12
-msgid "9th"
-msgstr ""
-
-#: getDate.py:13
-msgid "10th"
-msgstr ""
-
-#: getDate.py:14
-msgid "11th"
-msgstr ""
-
-#: getDate.py:15
-msgid "12th"
-msgstr ""
-
-#: getDate.py:16
-msgid "13th"
-msgstr ""
-
-#: getDate.py:17
-msgid "14th"
-msgstr ""
-
-#: getDate.py:18
-msgid "15th"
-msgstr ""
-
-#: getDate.py:19
-msgid "16th"
-msgstr ""
-
-#: getDate.py:20
-msgid "17th"
-msgstr ""
-
-#: getDate.py:21
-msgid "18th"
-msgstr ""
-
-#: getDate.py:22
-msgid "19th"
-msgstr ""
-
-#: getDate.py:23
-msgid "20th"
-msgstr ""
-
-#: getDate.py:24
-msgid "21st"
-msgstr ""
-
-#: getDate.py:25
-msgid "22nd"
-msgstr ""
-
-#: getDate.py:26
-msgid "23rd"
-msgstr ""
-
-#: getDate.py:27
-msgid "24th"
-msgstr ""
-
-#: getDate.py:28
-msgid "25th"
-msgstr ""
-
-#: getDate.py:29
-msgid "26th"
-msgstr ""
-
-#: getDate.py:30
-msgid "27th"
-msgstr ""
-
-#: getDate.py:31
-msgid "28th"
-msgstr ""
-
-#: getDate.py:33
-msgid "Spring"
-msgstr ""
-
-#: getDate.py:34
-msgid "Summer"
-msgstr ""
-
-#: getDate.py:35
-msgid "Autumn"
-msgstr ""
-
-#: getDate.py:36
-msgid "Winter"
-msgstr ""
-
 #: getDate.py:41
 msgid " of "
 msgstr ""
@@ -485,7 +357,7 @@ msgid "New uploads will appear listed on the site by default"
 msgstr ""
 
 #: templates/account.html:40 templates/account.html:85 templates/all.html:93
-#: templates/error.html:9 templates/index.html:55 templates/login.html:55
+#: templates/error.html:9 templates/index.html:60 templates/login.html:55
 #: templates/profile.html:179 templates/signup.html:39
 msgid "Error:"
 msgstr ""
@@ -647,7 +519,7 @@ msgstr ""
 msgid "All Stardew Valley assets copyright %(concerned_ape)s"
 msgstr ""
 
-#: templates/blog.html:7 templates/index.html:77
+#: templates/blog.html:7 templates/index.html:82
 msgid "Development blog"
 msgstr ""
 
@@ -684,7 +556,7 @@ msgstr ""
 msgid "Where do I find the savegame?"
 msgstr ""
 
-#: templates/faq.html:15
+#: templates/faq.html:20
 #, python-format
 msgid ""
 "Savegames are in %(appdata)s. This can be pasted into the file upload box"
@@ -693,11 +565,11 @@ msgid ""
 "not named SaveGameInfo)."
 msgstr ""
 
-#: templates/faq.html:17
+#: templates/faq.html:22
 msgid "Why register for an upload.farm account?"
 msgstr ""
 
-#: templates/faq.html:18
+#: templates/faq.html:23
 msgid ""
 "To add <a href='#whysignin'>certain features such as savegame sharing</a>"
 " to the site it became necessary to introduce user accounts, so that page"
@@ -706,11 +578,11 @@ msgid ""
 "imgur, and the ability to link up series of farms."
 msgstr ""
 
-#: templates/faq.html:20
+#: templates/faq.html:25
 msgid "Can I upload multiple farms from the same playthrough?"
 msgstr ""
 
-#: templates/faq.html:21
+#: templates/faq.html:26
 #, python-format
 msgid ""
 "Yes. If you are %(signed_up)s and %(logged_in)s, your uploads's series is"
@@ -720,19 +592,19 @@ msgid ""
 "to register, they can be claimed."
 msgstr ""
 
-#: templates/faq.html:21 templates/faq.html:27
+#: templates/faq.html:26 templates/faq.html:32
 msgid "signed up"
 msgstr ""
 
-#: templates/faq.html:21 templates/faq.html:42
+#: templates/faq.html:26 templates/faq.html:52
 msgid "logged in"
 msgstr ""
 
-#: templates/faq.html:23
+#: templates/faq.html:28
 msgid "I can't find my farm!"
 msgstr ""
 
-#: templates/faq.html:24
+#: templates/faq.html:29
 #, python-format
 msgid ""
 "If you are registered, check your %(account)s page. If you are not and "
@@ -740,15 +612,15 @@ msgid ""
 "redirect you to the existing data, and re-set your ownership."
 msgstr ""
 
-#: templates/faq.html:24
+#: templates/faq.html:29
 msgid "account"
 msgstr ""
 
-#: templates/faq.html:26
+#: templates/faq.html:31
 msgid "How do I enable savegame sharing?"
 msgstr ""
 
-#: templates/faq.html:27
+#: templates/faq.html:32
 #, python-format
 msgid ""
 "If you are %(signed_up)s and own the page, beneath the minimap is a "
@@ -756,11 +628,11 @@ msgid ""
 "users of the site, and may be enabled or disabled as you like."
 msgstr ""
 
-#: templates/faq.html:29
+#: templates/faq.html:34
 msgid "Why do I have to sign up to enable savegame sharing?"
 msgstr ""
 
-#: templates/faq.html:30
+#: templates/faq.html:35
 msgid ""
 "If other people could download your savegame without you having claimed "
 "the page, they could upload it, <a href='#cantfind'>take control</a> of "
@@ -768,22 +640,22 @@ msgid ""
 "functionality, you have to register."
 msgstr ""
 
-#: templates/faq.html:32
+#: templates/faq.html:37
 msgid "Can I make uploads private, so only I can see them?"
 msgstr ""
 
-#: templates/faq.html:33
+#: templates/faq.html:38
 msgid ""
 "You can unlist farms if you are registered and logged in. You can also "
 "set your account to automatically make uploads unlisted on your account "
 "page."
 msgstr ""
 
-#: templates/faq.html:35
+#: templates/faq.html:40
 msgid "What is the stardew.info planner?"
 msgstr ""
 
-#: templates/faq.html:36
+#: templates/faq.html:41
 msgid ""
 "The <a href='https://stardew.info/planner/'' target='_blank'>Stardew "
 "planner</a> by <a href='https://github.com/hpeinar/stardewplanner' "
@@ -796,22 +668,22 @@ msgid ""
 " from the planner itself."
 msgstr ""
 
-#: templates/faq.html:38
+#: templates/faq.html:43
 msgid "How do I use downloaded savegames?"
 msgstr ""
 
-#: templates/faq.html:39
+#: templates/faq.html:49
 #, python-format
 msgid ""
 "Saves go in %(appdata)s where you can place the extracted folder and "
-"contents. This is normally %(windir)s."
+"contents. On Windows this is normally %(windir)s."
 msgstr ""
 
-#: templates/faq.html:41
+#: templates/faq.html:51
 msgid "How can I delete my upload(s)?"
 msgstr ""
 
-#: templates/faq.html:42
+#: templates/faq.html:52
 #, python-format
 msgid ""
 "When you upload a savegame a cookie is set to indicate ownership. Below "
@@ -821,11 +693,11 @@ msgid ""
 "confirmation before deleting."
 msgstr ""
 
-#: templates/faq.html:44
+#: templates/faq.html:54
 msgid "Do you support [modname]?"
 msgstr ""
 
-#: templates/faq.html:45
+#: templates/faq.html:55
 msgid ""
 "At present we don't explicitly support any mods, but mods that don't add "
 "new assets or structurally change your savegame too much will probably "
@@ -841,22 +713,22 @@ msgstr ""
 msgid "Upload!"
 msgstr ""
 
-#: templates/index.html:47
+#: templates/index.html:52
 #, python-format
 msgid ""
 "%(stardew_valley)s save files can be found under %(appdata)s and are "
 "named after your character, plus an ID number"
 msgstr ""
 
-#: templates/index.html:64
+#: templates/index.html:69
 msgid "Recently uploaded farms"
 msgstr ""
 
-#: templates/index.html:65
+#: templates/index.html:70
 msgid "Recent uploads"
 msgstr ""
 
-#: templates/index.html:68
+#: templates/index.html:73
 msgid "more"
 msgstr ""
 

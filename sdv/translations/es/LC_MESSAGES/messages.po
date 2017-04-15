@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-04 00:11+0100\n"
-"PO-Revision-Date: 2017-04-03 23:56+0100\n"
+"POT-Creation-Date: 2017-04-15 16:38+0100\n"
+"PO-Revision-Date: 2017-04-15 16:49+0100\n"
 "Last-Translator: \n"
 "Language: es\n"
 "Language-Team: es <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
+"X-Generator: Poedit 2.0\n"
 
 #: __init__.py:192 __init__.py:259
 msgid "Username not found!"
@@ -40,13 +41,12 @@ msgstr "Sesión iniciada con éxito"
 
 #: __init__.py:261
 msgid ""
-"Email address not verified; please verify your account using the "
-"verification email sent when you registered before attempting to reset "
-"password!"
+"Email address not verified; please verify your account using the verification "
+"email sent when you registered before attempting to reset password!"
 msgstr ""
-"El correo electronico no ha sido confirmado. Por favor, antes de "
-"restablecer la contraseña, confirma tu cuenta usando el enlace de "
-"verificación enviado a tu correo tras el registro."
+"El correo electronico no ha sido confirmado. Por favor, antes de restablecer la "
+"contraseña, confirma tu cuenta usando el enlace de verificación enviado a tu "
+"correo tras el registro."
 
 #: __init__.py:270
 msgid "Password reset email sent!"
@@ -55,8 +55,8 @@ msgstr "¡Mensaje de restablecimiento de contraseña enviado!"
 #: __init__.py:272
 msgid "Previous password reset email still waiting to be sent... (sorry)"
 msgstr ""
-"Mensaje de restablecimiento anterior en espera de ser enviado... "
-"(disculpa las molestias)"
+"Mensaje de restablecimiento anterior en espera de ser enviado... (disculpa las "
+"molestias)"
 
 #: __init__.py:280 __init__.py:304
 msgid "Cannot reset password: account does not exist"
@@ -102,11 +102,11 @@ msgstr "¡Contraseña demasiado corta!"
 
 #: __init__.py:341
 msgid ""
-"You have successfully registered. A verification email has been sent to "
-"you. Now, please sign in!"
+"You have successfully registered. A verification email has been sent to you. "
+"Now, please sign in!"
 msgstr ""
-"Registro realizado con éxito. Recibiras un mensaje de verificación en tu "
-"cuenta de correo. Ahora, por favor, inicia la sesión."
+"Registro realizado con éxito. Recibiras un mensaje de verificación en tu cuenta "
+"de correo. Ahora, por favor, inicia la sesión."
 
 #: __init__.py:344
 msgid "Invalid email address!"
@@ -119,8 +119,7 @@ msgstr "Esta dirección de correo electrónico ya ha sido registrada"
 #: __init__.py:348
 msgid "Captcha failed! If you are human, please try again!"
 msgstr ""
-"¡Código de imagen erroneo! Si eres un ser humano, por favor intentalo de "
-"nuevo!"
+"¡Código de imagen erroneo! Si eres un ser humano, por favor intentalo de nuevo!"
 
 #: __init__.py:356
 msgid "You must be signed in to view your profile!"
@@ -132,11 +131,10 @@ msgstr "No creo que eso sea muy divertido"
 
 #: __init__.py:460
 msgid ""
-"Savegame failed sanity check (if you think this is in error please let us"
-" know)"
+"Savegame failed sanity check (if you think this is in error please let us know)"
 msgstr ""
-"Archivo de partida guardado no válido (si piensas que es un error, por "
-"favor avísanos)"
+"Archivo de partida guardado no válido (si piensas que es un error, por favor "
+"avísanos)"
 
 #: __init__.py:467
 msgid ""
@@ -153,14 +151,13 @@ msgstr "XML no informado correctamente"
 #: __init__.py:474
 msgid "Savegame failed an internal check (often caused by mods) sorry :("
 msgstr ""
-"La partida guardada no ha superado la comprobación interna (suele pasar "
-"con mods) lo sentimos :("
+"La partida guardada no ha superado la comprobación interna (suele pasar con "
+"mods) lo sentimos :("
 
 #: __init__.py:498
 msgid "Error occurred inserting information into the database!"
 msgstr ""
-"¡Ha ocurrido un error mientras se copiaba la información a la base de "
-"datos!"
+"¡Ha ocurrido un error mientras se copiaba la información a la base de datos!"
 
 #: __init__.py:910
 msgid "Save file incompatible with current database: error is "
@@ -172,24 +169,22 @@ msgstr "No hay nada aquí... ¿es este URL correcto?"
 
 #: __init__.py:964
 msgid ""
-"It looks like you have uploaded multiple files, but are not logged in: if"
-" you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link "
-"these uploads, enable savegame sharing, and one-click-post farm renders "
-"to imgur!"
+"It looks like you have uploaded multiple files, but are not logged in: if you "
+"<a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these "
+"uploads, enable savegame sharing, and one-click-post farm renders to imgur!"
 msgstr ""
-"Parece que has subido varios archivos, pero no estás conectado: si "
-"accedes a <a href='{}'>regístrate</a> o <a href='{}'>iniciar sesión</a> "
-"puedes vincular estos archivos, habilitar el uso \"compartir partidas "
-"guardadas\", y subir tu granja a imgur con un sólo click!"
+"Parece que has subido varios archivos, pero no estás conectado: si accedes a <a "
+"href='{}'>regístrate</a> o <a href='{}'>iniciar sesión</a> puedes vincular "
+"estos archivos, habilitar el uso \"compartir partidas guardadas\", y subir tu "
+"granja a imgur con un sólo click!"
 
 #: __init__.py:996
 msgid ""
-"This plan failed to render, probably because of a bug. It's logged and "
-"we'll look into it as soon as possible! Sorry!"
+"This plan failed to render, probably because of a bug. It's logged and we'll "
+"look into it as soon as possible! Sorry!"
 msgstr ""
 "Este plano no se pudo cargar, probablemente debido a un error. Ha sido "
-"registrado, echaremos un vistazo al problema lo antes posible! ¡Lo "
-"sentimos!"
+"registrado, echaremos un vistazo al problema lo antes posible! ¡Lo sentimos!"
 
 #: __init__.py:1082
 msgid "Unknown or insufficient credentials"
@@ -217,27 +212,26 @@ msgstr "No tienes credenciales suficientes para realizar esta acción"
 
 #: __init__.py:1185
 msgid ""
-"You have uploaded this page to imgur in the last 2 hours: please wait to "
-"upload again"
+"You have uploaded this page to imgur in the last 2 hours: please wait to upload "
+"again"
 msgstr ""
-"Has cargado esta página a imgur en las últimas 2 horas: por favor espera "
-"a cargar de nuevo"
+"Has cargado esta página a imgur en las últimas 2 horas: por favor espera a "
+"cargar de nuevo"
 
 #: __init__.py:1187
 msgid ""
-"There was an issue with uploading the file to imgur. Please try again "
-"later!"
+"There was an issue with uploading the file to imgur. Please try again later!"
 msgstr ""
-"Hubo un problema al subir el archivo a Imgur. ¡Por favor, inténtalo de "
-"nuevo más tarde!"
+"Hubo un problema al subir el archivo a Imgur. ¡Por favor, inténtalo de nuevo "
+"más tarde!"
 
 #: __init__.py:1194
 msgid ""
-"Either you or upload.farm are out of imgur credits for the day! Sorry :( "
-"Try again tomorrow"
+"Either you or upload.farm are out of imgur credits for the day! Sorry :( Try "
+"again tomorrow"
 msgstr ""
-"¡Tú o upload.farm se ha quedado sin créditos de Imgur por hoy! Lo "
-"sentimos :( Inténtalo de nuevo mañana"
+"¡Tú o upload.farm se ha quedado sin créditos de Imgur por hoy! Lo sentimos :"
+"( Inténtalo de nuevo mañana"
 
 #: __init__.py:1197
 msgid "You must be logged in to post your farm to imgur!"
@@ -245,11 +239,11 @@ msgstr "Debes estar conectado para publicar tu granja en imgur!"
 
 #: __init__.py:1205
 msgid ""
-"Sorry, the stardew.info planner API is over its rate limit: please try "
-"again in a few minutes!"
+"Sorry, the stardew.info planner API is over its rate limit: please try again in "
+"a few minutes!"
 msgstr ""
-"Lo sentimos, la API del planificador stardew.info está por encima de su "
-"límite de velocidad: por favor intentalo nuevamente en unos minutos!"
+"Lo sentimos, la API del planificador stardew.info está por encima de su límite "
+"de velocidad: por favor intentalo nuevamente en unos minutos!"
 
 #: __init__.py:1209
 msgid "There was a problem accessing the planner. Error was: {}"
@@ -311,134 +305,6 @@ msgstr "Dirección de correo electrónico confirmada!"
 msgid "not logged in"
 msgstr "sesión no iniciada"
 
-#: getDate.py:4
-msgid "1st"
-msgstr "1º"
-
-#: getDate.py:5
-msgid "2nd"
-msgstr "2º"
-
-#: getDate.py:6
-msgid "3rd"
-msgstr "3º"
-
-#: getDate.py:7
-msgid "4th"
-msgstr "4º"
-
-#: getDate.py:8
-msgid "5th"
-msgstr "5º"
-
-#: getDate.py:9
-msgid "6th"
-msgstr "6º"
-
-#: getDate.py:10
-msgid "7th"
-msgstr "7º"
-
-#: getDate.py:11
-msgid "8th"
-msgstr "8º"
-
-#: getDate.py:12
-msgid "9th"
-msgstr "9º"
-
-#: getDate.py:13
-msgid "10th"
-msgstr "10º"
-
-#: getDate.py:14
-msgid "11th"
-msgstr "11º"
-
-#: getDate.py:15
-msgid "12th"
-msgstr "12º"
-
-#: getDate.py:16
-msgid "13th"
-msgstr "13º"
-
-#: getDate.py:17
-msgid "14th"
-msgstr "14º"
-
-#: getDate.py:18
-msgid "15th"
-msgstr "15º"
-
-#: getDate.py:19
-msgid "16th"
-msgstr "16"
-
-#: getDate.py:20
-msgid "17th"
-msgstr "17º"
-
-#: getDate.py:21
-msgid "18th"
-msgstr "18º"
-
-#: getDate.py:22
-msgid "19th"
-msgstr "19º"
-
-#: getDate.py:23
-msgid "20th"
-msgstr "20º"
-
-#: getDate.py:24
-msgid "21st"
-msgstr "21º"
-
-#: getDate.py:25
-msgid "22nd"
-msgstr "22º"
-
-#: getDate.py:26
-msgid "23rd"
-msgstr "23º"
-
-#: getDate.py:27
-msgid "24th"
-msgstr "24º"
-
-#: getDate.py:28
-msgid "25th"
-msgstr "25º"
-
-#: getDate.py:29
-msgid "26th"
-msgstr "26º"
-
-#: getDate.py:30
-msgid "27th"
-msgstr "27º"
-
-#: getDate.py:31
-msgid "28th"
-msgstr "28º"
-
-#: getDate.py:33
-msgid "Spring"
-msgstr "primavera"
-
-#: getDate.py:34
-msgid "Summer"
-msgstr "verano"
-
-#: getDate.py:35
-msgid "Autumn"
-msgstr "otoño"
-
-#: getDate.py:36
-msgid "Winter"
-msgstr "invierno"
-
 #: getDate.py:41
 msgid " of "
 msgstr " de "
@@ -491,11 +357,10 @@ msgstr "¿Cambiar a visible?"
 
 #: templates/account.html:34
 msgid ""
-"This will allow new uploads it to appear in searches on the site by "
-"default"
+"This will allow new uploads it to appear in searches on the site by default"
 msgstr ""
-"Esto permitirá que las subidas nuevas aparezcan en las búsquedas de la "
-"página por defecto"
+"Esto permitirá que las subidas nuevas aparezcan en las búsquedas de la página "
+"por defecto"
 
 #: templates/account.html:34
 msgid "Change&nbsp;to&nbsp;listed!"
@@ -512,8 +377,8 @@ msgstr "¿Cambiar a oculto?"
 #: templates/account.html:34
 msgid "This will prevent new uploads appearing to others on the site by default"
 msgstr ""
-"Esto previene que las subidas nuevas a la página sean visibles a otros "
-"por defecto"
+"Esto previene que las subidas nuevas a la página sean visibles a otros por "
+"defecto"
 
 #: templates/account.html:34
 msgid "Change&nbsp;to&nbsp;unlisted!"
@@ -524,7 +389,7 @@ msgid "New uploads will appear listed on the site by default"
 msgstr "Las subidas nuevas aparecerán en la página por defecto"
 
 #: templates/account.html:40 templates/account.html:85 templates/all.html:93
-#: templates/error.html:9 templates/index.html:55 templates/login.html:55
+#: templates/error.html:9 templates/index.html:60 templates/login.html:55
 #: templates/profile.html:179 templates/signup.html:39
 msgid "Error:"
 msgstr "Error:"
@@ -538,8 +403,8 @@ msgid ""
 "The following farms are not associated with your user account, but were "
 "uploaded from your computer:"
 msgstr ""
-"Las siguientes granjas no están asociadas con tu cuenta de usuario, pero "
-"han sido cargadas desde este ordenador:"
+"Las siguientes granjas no están asociadas con tu cuenta de usuario, pero han "
+"sido cargadas desde este ordenador:"
 
 #: templates/account.html:60
 msgid "Or, claim all"
@@ -573,8 +438,7 @@ msgstr "Buscar"
 #: templates/all.html:27
 msgid "Search for farms by user or farm name, or change sort type"
 msgstr ""
-"Busca las granjas por usuario o nombre de la granja, o cambia el tipo de "
-"orden"
+"Busca las granjas por usuario o nombre de la granja, o cambia el tipo de orden"
 
 #: templates/all.html:31
 #, python-format
@@ -663,11 +527,10 @@ msgstr "upload.farm Generador de Resumen de Stardew Valley"
 
 #: templates/base.html:41
 msgid ""
-"This website uses cookies when you upload a savegame to determine "
-"ownership"
+"This website uses cookies when you upload a savegame to determine ownership"
 msgstr ""
-"Este sitio web utiliza cookies al cargar un juego guardado para "
-"establecer la propiedad"
+"Este sitio web utiliza cookies al cargar un juego guardado para establecer la "
+"propiedad"
 
 #: templates/base.html:41
 msgid "Okay!"
@@ -692,7 +555,7 @@ msgstr "fuente en %(github)s"
 msgid "All Stardew Valley assets copyright %(concerned_ape)s"
 msgstr "Componentes con copyright (propiedad) de Stardew Valley %(concerned_ape)s"
 
-#: templates/blog.html:7 templates/index.html:77
+#: templates/blog.html:7 templates/index.html:82
 msgid "Development blog"
 msgstr "Blog de desarrollo"
 
@@ -720,222 +583,213 @@ msgstr "¿Qué hace este sitio?"
 #: templates/faq.html:12
 #, python-format
 msgid ""
-"It generates a map and summary of a Stardew Valley farm, with your player"
-" avatar and portrait of your family. It's an alternative to screenshot "
-"tools like %(gedosato)s."
+"It generates a map and summary of a Stardew Valley farm, with your player "
+"avatar and portrait of your family. It's an alternative to screenshot tools "
+"like %(gedosato)s."
 msgstr ""
-"Se genera un mapa y resumen de una granja Stardew Valley, con su avatar y"
-" retrato de su familia. Es una alternativa a herramientas para la captura"
-" de pantalla como %(gedosato)s."
+"Se genera un mapa y resumen de una granja Stardew Valley, con su avatar y "
+"retrato de su familia. Es una alternativa a herramientas para la captura de "
+"pantalla como %(gedosato)s."
 
 #: templates/faq.html:14
 msgid "Where do I find the savegame?"
 msgstr "¿Dónde se encuentra la partida guardada?"
 
-#: templates/faq.html:15
+#: templates/faq.html:20
 #, python-format
 msgid ""
-"Savegames are in %(appdata)s. This can be pasted into the file upload box"
-" to find the correct folder. Within this are subfolders for individual "
-"savegames. The file you should upload is named after your player (i.e. "
-"not named SaveGameInfo)."
+"Savegames are in %(appdata)s. This can be pasted into the file upload box to "
+"find the correct folder. Within this are subfolders for individual savegames. "
+"The file you should upload is named after your player (i.e. not named "
+"SaveGameInfo)."
 msgstr ""
-"Las partidas guardadas están en %(appdata)s. Esto se puede copiar a la "
-"caja de carga de archivos para encontrar la carpeta correcta. Dentro de "
-"la cual están las subcarpetas de partidas guardadas individuales. El "
-"archivo que hay que cargar lleva el nombre de tu personaje (es decir, que"
-" no se llame SaveGameInfo)."
+"Las partidas guardadas están en %(appdata)s. Esto se puede copiar a la caja de "
+"carga de archivos para encontrar la carpeta correcta. Dentro de la cual están "
+"las subcarpetas de partidas guardadas individuales. El archivo que hay que "
+"cargar lleva el nombre de tu personaje (es decir, que no se llame SaveGameInfo)."
 
-#: templates/faq.html:17
+#: templates/faq.html:22
 msgid "Why register for an upload.farm account?"
 msgstr "¿Por qué registrar una cuenta upload.farm?"
 
-#: templates/faq.html:18
+#: templates/faq.html:23
 msgid ""
-"To add <a href='#whysignin'>certain features such as savegame sharing</a>"
-" to the site it became necessary to introduce user accounts, so that page"
-" ownership could be established. The up-side of this is that we are able "
-"to add other features to the site very easily, such as quick upload-to-"
-"imgur, and the ability to link up series of farms."
+"To add <a href='#whysignin'>certain features such as savegame sharing</a> to "
+"the site it became necessary to introduce user accounts, so that page ownership "
+"could be established. The up-side of this is that we are able to add other "
+"features to the site very easily, such as quick upload-to-imgur, and the "
+"ability to link up series of farms."
 msgstr ""
-"Para añadir <a href='#whysignin'>ciertas características tales como "
-"compartir partidas guardadas</a> en la página, fué necesario introducir "
-"cuentas de usuario para establecer la propiedad de la página. Lo bueno de"
-" esto es que nos permite añadir otras características a la página con "
-"mucha facilidad, por ejemplo compartir con imgur y vincular series de "
-"granjas."
+"Para añadir <a href='#whysignin'>ciertas características tales como compartir "
+"partidas guardadas</a> en la página, fué necesario introducir cuentas de "
+"usuario para establecer la propiedad de la página. Lo bueno de esto es que nos "
+"permite añadir otras características a la página con mucha facilidad, por "
+"ejemplo compartir con imgur y vincular series de granjas."
 
-#: templates/faq.html:20
+#: templates/faq.html:25
 msgid "Can I upload multiple farms from the same playthrough?"
 msgstr "¿Puedo subir varias granjas de la misma partida?"
 
-#: templates/faq.html:21
+#: templates/faq.html:26
 #, python-format
 msgid ""
-"Yes. If you are %(signed_up)s and %(logged_in)s, your uploads's series is"
-" automatically linked to below the farm name. You can also move between "
-"these farms using left and right keyboard keys. If you are not "
-"registered, farms are not automatically linked, but if you later choose "
-"to register, they can be claimed."
+"Yes. If you are %(signed_up)s and %(logged_in)s, your uploads's series is "
+"automatically linked to below the farm name. You can also move between these "
+"farms using left and right keyboard keys. If you are not registered, farms are "
+"not automatically linked, but if you later choose to register, they can be "
+"claimed."
 msgstr ""
-"Sí. Si estás %(signed_up)s y estás %(logged_in)s, tus series cargadas "
-"están vinculadas automáticamente bajo el nombre de la granja. Puedes "
-"desplazarte entre granjas usando las teclas de posición del teclado. Si "
-"no estás registrado, las granjas no se vinculan automáticamente, pero si "
-"te registras más adelante, puedes reclamarlas."
+"Sí. Si estás %(signed_up)s y estás %(logged_in)s, tus series cargadas están "
+"vinculadas automáticamente bajo el nombre de la granja. Puedes desplazarte "
+"entre granjas usando las teclas de posición del teclado. Si no estás "
+"registrado, las granjas no se vinculan automáticamente, pero si te registras "
+"más adelante, puedes reclamarlas."
 
-#: templates/faq.html:21 templates/faq.html:27
+#: templates/faq.html:26 templates/faq.html:32
 msgid "signed up"
 msgstr "registrado"
 
-#: templates/faq.html:21 templates/faq.html:42
+#: templates/faq.html:26 templates/faq.html:52
 msgid "logged in"
 msgstr "sesión iniciada"
 
-#: templates/faq.html:23
+#: templates/faq.html:28
 msgid "I can't find my farm!"
 msgstr "¡No puedo encontrar mi granja!"
 
-#: templates/faq.html:24
+#: templates/faq.html:29
 #, python-format
 msgid ""
-"If you are registered, check your %(account)s page. If you are not and "
-"have your original savegame, re-upload your farm and the site will "
-"redirect you to the existing data, and re-set your ownership."
+"If you are registered, check your %(account)s page. If you are not and have "
+"your original savegame, re-upload your farm and the site will redirect you to "
+"the existing data, and re-set your ownership."
 msgstr ""
-"Si estás registrado, revisa tu página %(account)s. Si no estás registrado"
-" y tienes tu savegame original, vuelve a cargar tu granja y el sitio te "
-"redirigirá a los datos existentes y restablecerá la propiedad."
+"Si estás registrado, revisa tu página %(account)s. Si no estás registrado y "
+"tienes tu savegame original, vuelve a cargar tu granja y el sitio te redirigirá "
+"a los datos existentes y restablecerá la propiedad."
 
-#: templates/faq.html:24
+#: templates/faq.html:29
 msgid "account"
 msgstr "cuenta"
 
-#: templates/faq.html:26
+#: templates/faq.html:31
 msgid "How do I enable savegame sharing?"
 msgstr "¿Cómo puedo compartir la partida guardada?"
 
-#: templates/faq.html:27
+#: templates/faq.html:32
 #, python-format
 msgid ""
-"If you are %(signed_up)s and own the page, beneath the minimap is a "
-"button to enable savegame sharing. This enables them for <em>all</em> "
-"users of the site, and may be enabled or disabled as you like."
+"If you are %(signed_up)s and own the page, beneath the minimap is a button to "
+"enable savegame sharing. This enables them for <em>all</em> users of the site, "
+"and may be enabled or disabled as you like."
 msgstr ""
-"Si estás %(signed_up)s y eres dueño de la página, bajo el minimapa "
-"encontrarás un botón para habilitar el poder compartir tu juego. Esto "
-"permite a <em>todos</em> los usuarios ver tu página. Es opcional y puedes"
-" cambiar la opción las veces que quieras."
+"Si estás %(signed_up)s y eres dueño de la página, bajo el minimapa encontrarás "
+"un botón para habilitar el poder compartir tu juego. Esto permite a <em>todos</"
+"em> los usuarios ver tu página. Es opcional y puedes cambiar la opción las "
+"veces que quieras."
 
-#: templates/faq.html:29
+#: templates/faq.html:34
 msgid "Why do I have to sign up to enable savegame sharing?"
 msgstr "¿Por qué tengo que estar registrado para compartir la partida guardada?"
 
-#: templates/faq.html:30
+#: templates/faq.html:35
 msgid ""
-"If other people could download your savegame without you having claimed "
-"the page, they could upload it, <a href='#cantfind'>take control</a> of "
-"it, and then delete it or claim it themselves. So, for the extra "
-"functionality, you have to register."
+"If other people could download your savegame without you having claimed the "
+"page, they could upload it, <a href='#cantfind'>take control</a> of it, and "
+"then delete it or claim it themselves. So, for the extra functionality, you "
+"have to register."
 msgstr ""
-"El registro impide que otras personas se puedan descargar tus partidas no"
-" reclamadas y subirlas como suyas, <a href='#cantfind'>tomar el "
-"control</a> de la misma y luego borrarla. Por ello, para intentar evitar "
-"conflictos, es necesario registrarse."
+"El registro impide que otras personas se puedan descargar tus partidas no "
+"reclamadas y subirlas como suyas, <a href='#cantfind'>tomar el control</a> de "
+"la misma y luego borrarla. Por ello, para intentar evitar conflictos, es "
+"necesario registrarse."
 
-#: templates/faq.html:32
+#: templates/faq.html:37
 msgid "Can I make uploads private, so only I can see them?"
 msgstr ""
-"¿Puedo subir partidas de forma privada, para que solamente pueda verlas "
-"yo?"
+"¿Puedo subir partidas de forma privada, para que solamente pueda verlas yo?"
 
-#: templates/faq.html:33
+#: templates/faq.html:38
 msgid ""
-"You can unlist farms if you are registered and logged in. You can also "
-"set your account to automatically make uploads unlisted on your account "
-"page."
+"You can unlist farms if you are registered and logged in. You can also set your "
+"account to automatically make uploads unlisted on your account page."
 msgstr ""
-"Puedes ocultar las granjas si estás registrado y has iniciado sesión. "
-"También puedes configurar tu cuenta para que las subidas desde tu cuenta "
-"se hagan de manera oculta automáticamente."
+"Puedes ocultar las granjas si estás registrado y has iniciado sesión. También "
+"puedes configurar tu cuenta para que las subidas desde tu cuenta se hagan de "
+"manera oculta automáticamente."
 
-#: templates/faq.html:35
+#: templates/faq.html:40
 msgid "What is the stardew.info planner?"
 msgstr "¿Qué es el planificador de stardew.info?"
 
-#: templates/faq.html:36
+#: templates/faq.html:41
 msgid ""
-"The <a href='https://stardew.info/planner/'' target='_blank'>Stardew "
-"planner</a> by <a href='https://github.com/hpeinar/stardewplanner' "
-"target='_blank'>Henrik Peinar</a> is a tool that allows you to plan your "
-"farm. We have integrated support for the planner to the site for uploads "
-"you own. To use this feature, click the blueprint icon in the control "
-"panel on your farm's profile page to load it into the planner. In "
-"addition, we have worked with Henrik to allow rendering of farms from the"
-" planner. These are separate to normal savegame uploads, and are accessed"
-" from the planner itself."
+"The <a href='https://stardew.info/planner/'' target='_blank'>Stardew planner</"
+"a> by <a href='https://github.com/hpeinar/stardewplanner' "
+"target='_blank'>Henrik Peinar</a> is a tool that allows you to plan your farm. "
+"We have integrated support for the planner to the site for uploads you own. To "
+"use this feature, click the blueprint icon in the control panel on your farm's "
+"profile page to load it into the planner. In addition, we have worked with "
+"Henrik to allow rendering of farms from the planner. These are separate to "
+"normal savegame uploads, and are accessed from the planner itself."
 msgstr ""
-"El <a href='https://stardew.info/planner/' target='_blank'>planificador "
-"de Stardew.info</a> por <a "
-"href='https://github.com/hpeinar/stardewplanner' target = "
-"\"_blank\">Henrik Peinar</a> es una herramienta que te permite diseñar tu"
-" granja. Hemos integrado el soporte para el diseñador a la página, para "
-"ser usado con granjas de tu propiedad. Para utilizar esta función, haz "
-"clic en el icono de plano en el panel de control en la página de perfil "
-"de tu granja, esto lo cargár al diseñador. Además, se ha trabajado con "
-"Henrik para permitir la carga de granjas del diseñadorr. Estos archivos "
-"son independientes a las cargas normales de partidas guardadas, y se "
-"puede acceder directamente desde el diseñador."
+"El <a href='https://stardew.info/planner/' target='_blank'>planificador de "
+"Stardew.info</a> por <a href='https://github.com/hpeinar/stardewplanner' target "
+"= \"_blank\">Henrik Peinar</a> es una herramienta que te permite diseñar tu "
+"granja. Hemos integrado el soporte para el diseñador a la página, para ser "
+"usado con granjas de tu propiedad. Para utilizar esta función, haz clic en el "
+"icono de plano en el panel de control en la página de perfil de tu granja, esto "
+"lo cargár al diseñador. Además, se ha trabajado con Henrik para permitir la "
+"carga de granjas del diseñadorr. Estos archivos son independientes a las cargas "
+"normales de partidas guardadas, y se puede acceder directamente desde el "
+"diseñador."
 
-#: templates/faq.html:38
+#: templates/faq.html:43
 msgid "How do I use downloaded savegames?"
 msgstr "¿Cómo puedo usar las partidas guardadas que he descargado?"
 
-#: templates/faq.html:39
+#: templates/faq.html:49
 #, python-format
 msgid ""
-"Saves go in %(appdata)s where you can place the extracted folder and "
-"contents. This is normally %(windir)s."
+"Saves go in %(appdata)s where you can place the extracted folder and contents. "
+"On Windows this is normally %(windir)s."
 msgstr ""
-"Las partidas guardadas están en %(appdata)s, dónde puedes guardar la "
-"carpeta extraída y sus contenidos. Esto es normalmente %(windir)s."
+"Las partidas guardadas están en %(appdata)s, dónde puedes guardar la carpeta "
+"extraída y sus contenidos. En Windows esto es normalmente %(windir)s."
 
-#: templates/faq.html:41
+#: templates/faq.html:51
 msgid "How can I delete my upload(s)?"
 msgstr "¿Cómo puedo borrar mis archivo(s)?"
 
-#: templates/faq.html:42
+#: templates/faq.html:52
 #, python-format
 msgid ""
-"When you upload a savegame a cookie is set to indicate ownership. Below "
-"the farm name should be a 'delete this page' button. If you are "
-"%(logged_in)s and have uploaded multiple farms from the same playthrough "
-"you will also have an option to delete 'all for this farm'. Both ask for "
-"confirmation before deleting."
+"When you upload a savegame a cookie is set to indicate ownership. Below the "
+"farm name should be a 'delete this page' button. If you are %(logged_in)s and "
+"have uploaded multiple farms from the same playthrough you will also have an "
+"option to delete 'all for this farm'. Both ask for confirmation before deleting."
 msgstr ""
-"Al cargar una partida guardada, se genera una cookie de propiedad. Bajo "
-"el nombre de la granja, encontrarás un botón que te permite borrar la "
-"página. Si has iniciado sesión %(logged_in)s y has subido varias granjas "
-"de la misma partida, también tienes la opción de borrar 'todas las "
-"partidas de esta granja'. Ambas opciones pedirán confirmación antes de "
-"borrar un archivo."
+"Al cargar una partida guardada, se genera una cookie de propiedad. Bajo el "
+"nombre de la granja, encontrarás un botón que te permite borrar la página. Si "
+"has iniciado sesión %(logged_in)s y has subido varias granjas de la misma "
+"partida, también tienes la opción de borrar 'todas las partidas de esta "
+"granja'. Ambas opciones pedirán confirmación antes de borrar un archivo."
 
-#: templates/faq.html:44
+#: templates/faq.html:54
 msgid "Do you support [modname]?"
 msgstr "¿Es compatible con [nombre del mod]?"
 
-#: templates/faq.html:45
+#: templates/faq.html:55
 msgid ""
-"At present we don't explicitly support any mods, but mods that don't add "
-"new assets or structurally change your savegame too much will probably "
-"work. Once we've got the core site functionality sorted we'll look at mod"
-" support!"
+"At present we don't explicitly support any mods, but mods that don't add new "
+"assets or structurally change your savegame too much will probably work. Once "
+"we've got the core site functionality sorted we'll look at mod support!"
 msgstr ""
-"De momento, no ofrecemos compatibilidad para ningún \"mod\" en concreto, "
-"pero aquellos \"mods\" que no añadan nuevos archivos activos o cambien la"
-" estructura de tu partida guardada probablemente funcionen con esta "
-"página. Nos quedan algunas mejoras por hacer a la página, cuando esten "
-"listas seguramente trabajaremos con la compatibilidad de los mods!"
+"De momento, no ofrecemos compatibilidad para ningún \"mod\" en concreto, pero "
+"aquellos \"mods\" que no añadan nuevos archivos activos o cambien la estructura "
+"de tu partida guardada probablemente funcionen con esta página. Nos quedan "
+"algunas mejoras por hacer a la página, cuando esten listas seguramente "
+"trabajaremos con la compatibilidad de los mods!"
 
 #: templates/index.html:40
 msgid "Upload your farm"
@@ -945,25 +799,25 @@ msgstr "Cargar tu granja"
 msgid "Upload!"
 msgstr "Cargar!"
 
-#: templates/index.html:47
+#: templates/index.html:52
 #, python-format
 msgid ""
-"%(stardew_valley)s save files can be found under %(appdata)s and are "
-"named after your character, plus an ID number"
+"%(stardew_valley)s save files can be found under %(appdata)s and are named "
+"after your character, plus an ID number"
 msgstr ""
 " Los archivos de partida guardada de %(stardew_valley)s se encuentran en "
-"%(appdata)s y se nombran usando el nombre del personaje, además de un "
-"número de identidad"
+"%(appdata)s y se nombran usando el nombre del personaje, además de un número de "
+"identidad"
 
-#: templates/index.html:64
+#: templates/index.html:69
 msgid "Recently uploaded farms"
 msgstr "Granjas subidas recientemente"
 
-#: templates/index.html:65
+#: templates/index.html:70
 msgid "Recent uploads"
 msgstr "Recién subidas"
 
-#: templates/index.html:68
+#: templates/index.html:73
 msgid "more"
 msgstr "más"
 
@@ -1065,8 +919,7 @@ msgstr ""
 #, python-format
 msgid "Go forward to %(next)s (right arrow on keyboard also works)"
 msgstr ""
-"Sigue a %(next)s (la tecla de dirección drcha. del teclado también "
-"funciona)"
+"Sigue a %(next)s (la tecla de dirección drcha. del teclado también funciona)"
 
 #: templates/profile.html:182
 msgid "Warning:"
@@ -1074,13 +927,13 @@ msgstr "Advertencia:"
 
 #: templates/profile.html:182
 msgid ""
-"This farm failed image processing, which means the savegame had "
-"unexpected contents. It might be modded, or malicious. Be aware if "
-"downloading the savegame."
+"This farm failed image processing, which means the savegame had unexpected "
+"contents. It might be modded, or malicious. Be aware if downloading the "
+"savegame."
 msgstr ""
-"No pudimos procesar imágenes de este granja, significa que la partida "
-"guardada contiene archivos inesperados. Podría tener \"mods\" o ser un "
-"archivo dañino. Ten cuidado si descargas la partida guardada."
+"No pudimos procesar imágenes de este granja, significa que la partida guardada "
+"contiene archivos inesperados. Podría tener \"mods\" o ser un archivo dañino. "
+"Ten cuidado si descargas la partida guardada."
 
 #: templates/profile.html:218
 msgid "Stats"
@@ -1781,11 +1634,11 @@ msgstr " todas las subidas de esta serie"
 
 #: templates/profile.html:498
 msgid ""
-"This will remove this farm and all associated farms, be sure you mean to "
-"do this!"
+"This will remove this farm and all associated farms, be sure you mean to do "
+"this!"
 msgstr ""
-"Esta acción borrará esta granja y todas las de la serie, ¡Asegurate que "
-"quieres hacer esto!"
+"Esta acción borrará esta granja y todas las de la serie, ¡Asegurate que quieres "
+"hacer esto!"
 
 #: templates/profile.html:498
 msgid "Delete&nbsp;entire&nbsp;series!"
@@ -2091,12 +1944,11 @@ msgstr "Este granja tiene disponible una partida guardada descargable"
 
 #: templates/recents.html:20
 msgid ""
-"This farm is unlisted and will not show up in searches nor on the front "
-"page except to you. It can still be viewed by people with a direct link."
+"This farm is unlisted and will not show up in searches nor on the front page "
+"except to you. It can still be viewed by people with a direct link."
 msgstr ""
-"Este granja está oculta y no aparece ni en las búsquedas y ni en la "
-"página principal. Las personas con un enlace directo todavía pueden "
-"verla."
+"Este granja está oculta y no aparece ni en las búsquedas y ni en la página "
+"principal. Las personas con un enlace directo todavía pueden verla."
 
 #: templates/reset.html:8 templates/reset.html:47
 msgid "Reset password"
@@ -2110,8 +1962,7 @@ msgstr "Nueva contraseña"
 #, python-format
 msgid "Passcode must be at least %(password_min_length)s characters long!"
 msgstr ""
-"Contraseña debe tener al menos %(password_min_length)s caracteres de "
-"longitud!"
+"Contraseña debe tener al menos %(password_min_length)s caracteres de longitud!"
 
 #: templates/reset.html:36
 msgid "Set new password"
@@ -2131,11 +1982,11 @@ msgstr "Regístrate"
 
 #: templates/signup.html:11
 msgid ""
-"Registration allows enabling of savegame sharing, quick imgur upload, and"
-" creation and curation of farm series."
+"Registration allows enabling of savegame sharing, quick imgur upload, and "
+"creation and curation of farm series."
 msgstr ""
-"Al registrate puedes compartir tus partidas, subirlas a imgur de forma "
-"rápida y sencilla, crear granjas y gestionar tus granjas en serie."
+"Al registrate puedes compartir tus partidas, subirlas a imgur de forma rápida y "
+"sencilla, crear granjas y gestionar tus granjas en serie."
 
 #: templates/signup.html:12
 msgid "Already got an account? Sign in!"
@@ -2168,3 +2019,105 @@ msgstr "Salir"
 #~ msgid "Todos activos de Stardew Valley copyright de"
 #~ msgstr "más antiguo"
 
+#~ msgid "1st"
+#~ msgstr "1º"
+
+#~ msgid "2nd"
+#~ msgstr "2º"
+
+#~ msgid "3rd"
+#~ msgstr "3º"
+
+#~ msgid "4th"
+#~ msgstr "4º"
+
+#~ msgid "5th"
+#~ msgstr "5º"
+
+#~ msgid "6th"
+#~ msgstr "6º"
+
+#~ msgid "7th"
+#~ msgstr "7º"
+
+#~ msgid "8th"
+#~ msgstr "8º"
+
+#~ msgid "9th"
+#~ msgstr "9º"
+
+#~ msgid "10th"
+#~ msgstr "10º"
+
+#~ msgid "11th"
+#~ msgstr "11º"
+
+#~ msgid "12th"
+#~ msgstr "12º"
+
+#~ msgid "13th"
+#~ msgstr "13º"
+
+#~ msgid "14th"
+#~ msgstr "14º"
+
+#~ msgid "15th"
+#~ msgstr "15º"
+
+#~ msgid "16th"
+#~ msgstr "16"
+
+#~ msgid "17th"
+#~ msgstr "17º"
+
+#~ msgid "18th"
+#~ msgstr "18º"
+
+#~ msgid "19th"
+#~ msgstr "19º"
+
+#~ msgid "20th"
+#~ msgstr "20º"
+
+#~ msgid "21st"
+#~ msgstr "21º"
+
+#~ msgid "22nd"
+#~ msgstr "22º"
+
+#~ msgid "23rd"
+#~ msgstr "23º"
+
+#~ msgid "24th"
+#~ msgstr "24º"
+
+#~ msgid "25th"
+#~ msgstr "25º"
+
+#~ msgid "26th"
+#~ msgstr "26º"
+
+#~ msgid "27th"
+#~ msgstr "27º"
+
+#~ msgid "28th"
+#~ msgstr "28º"
+
+#~ msgid "Spring"
+#~ msgstr "primavera"
+
+#~ msgid "Summer"
+#~ msgstr "verano"
+
+#~ msgid "Autumn"
+#~ msgstr "otoño"
+
+#~ msgid "Winter"
+#~ msgstr "invierno"
+
+#~ msgid ""
+#~ "Saves go in %(appdata)s where you can place the extracted folder and "
+#~ "contents. This is normally %(windir)s."
+#~ msgstr ""
+#~ "Las partidas guardadas están en %(appdata)s, dónde puedes guardar la carpeta "
+#~ "extraída y sus contenidos. Esto es normalmente %(windir)s."
