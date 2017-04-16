@@ -29,6 +29,7 @@
 		<meta property="og:site_name" content="upload.farm" />
 <script src="{{ url_for('static', filename='js/jquery.detect_swipe.js') }}"></script>
 <script src="{{url_for('static',filename='js/flashedmessages.js')}}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/insights.js') }}"></script>
 <script>
 $(function () {
 	$('[data-toggle="popover"]').popover();
@@ -211,6 +212,13 @@ $(document).ready(function() {
 					{% endfor %}
 				{% endif %}
 			{% endwith %}
+			<div class="row center-block" style="display:none;" id="insight">
+				<div class="col-md-12 col-sm-12 panel">
+					<div class="interiorpanel">
+						{% include "achievements.html" %}
+					</div>
+				</div>
+			</div>
 			<div class="row center-block">				
 				<div class="col-md-8 col-sm-12 panel text-center">
 					<div class="interiorpanel tabbable">
@@ -405,7 +413,7 @@ $(document).ready(function() {
 								<div class="row center-block">
 									<div class="col-md-12">
 										{% if claimable or deletable %}
-											<button type="button" class="btn-link cpanel-object" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='{% include "achievements.html" %}'><img title="{{_('Achievement checker')}}" src="{{url_for('static',filename='css/cpanel/achievements.png')}}"></button>
+											<button type="button" id="insight-button" class="btn-link cpanel-object" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='{{_("Show your farm insights? (may be considered spoilers)")}}<br><span class="clickable" id="insight-show" style="display:none;">{{_("Show me!")}}</span><span class="clickable" id="insight-hide" style="display:none;">{{_("Hide it!")}}</span>'><img title="{{_('Farm insight')}}" src="{{url_for('static',filename='css/cpanel/achievements.png')}}"></button>
 										{% endif %}
 										{% if claimable %}
 											<button type="button" class="btn-link cpanel-object" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='{{_("This will claim")}} <b>{{_("only this")}}</b> {{_("upload")}}.<br><form action="{{data.url}}/claim" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">{{ _("Claim&nbsp;it!") }}</button></form>'><img title="{{_('Claim this farm (link it to your account)')}}" src="{{url_for('static',filename='css/cpanel/clm32.png')}}"></button>
