@@ -212,6 +212,7 @@ $(document).ready(function() {
 					{% endfor %}
 				{% endif %}
 			{% endwith %}
+			{% if missed_achievements != None %}
 			<div class="row center-block" style="display:none;" id="insight">
 				<div class="col-md-12 col-sm-12 panel">
 					<div class="interiorpanel">
@@ -219,6 +220,7 @@ $(document).ready(function() {
 					</div>
 				</div>
 			</div>
+			{% endif %}
 			<div class="row center-block">				
 				<div class="col-md-8 col-sm-12 panel text-center">
 					<div class="interiorpanel tabbable">
@@ -412,7 +414,7 @@ $(document).ready(function() {
 							<div class="bulletinpanel">
 								<div class="row center-block">
 									<div class="col-md-12">
-										{% if claimable or deletable %}
+										{% if missed_achievements != None %}
 											<button type="button" id="insight-button" class="btn-link cpanel-object" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='{{_("Show your farm insights? (may be considered spoilers)")}}<br><span class="clickable" id="insight-show" style="display:none;">{{_("Show me!")}}</span><span class="clickable" id="insight-hide" style="display:none;">{{_("Hide it!")}}</span>'><img title="{{_('Farm insight')}}" src="{{url_for('static',filename='css/cpanel/achievements.png')}}"></button>
 										{% endif %}
 										{% if claimable %}
