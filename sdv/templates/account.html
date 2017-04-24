@@ -20,6 +20,7 @@ $(function () {
 				<div class="col-md-12" style="padding-left:2%;padding-right:2%;">
 					<h3>{{_("Account info")}}</h3>
 					<p>{{_("Email: %(email)s", email=acc_info.email)}}</p>
+					<p><a href="{{url_for('reset_password')}}">Change password</a></p>
 					<p>{{_("Imgur: ")}}{%if acc_info.imgur %}
 					{% autoescape false %} {{
 					_("Logged in as %(username)s",username="<a href='http://{}.imgur.com'>{}</a>".format(acc_info.imgur.account_username,acc_info.imgur.account_username))

@@ -258,6 +258,7 @@ def reset_password():
             if len(result) == 0:
                 g.error = _('Username not found!')
             elif result[0][1] != True:
+                g.show_verify_button = True
                 g.error = _('Email address not verified; please verify your account using the verification email sent when you registered before attempting to reset password!')
             else:
                 cur.execute('SELECT users.id FROM users WHERE email='+app.sqlesc+' AND NOT EXISTS (SELECT todo.id FROM todo WHERE todo.playerid=CAST(users.id AS text))',(request.form['email'],))
@@ -293,6 +294,18 @@ def reset_password():
             return render_template('error.html',**page_args())
         elif 'password' in request.form and len(request.form['password'])< app.config['PASSWORD_MIN_LENGTH']:
             g.error = _('Password insufficiently long, please try again')
+        elif 'resend' in request.form:
+            db = get_db()
+            cur = db.cursor()
+            cur.execute('SELECT id, email_confirmed FROM users WHERE email='+app.sqlesc,(request.form['resend'],))
+            result = cur.fetchall()
+            if len(result) == 0:
+                g.error = _('Username not found!')
+            elif result[0][1] != True:
+                user_id = result[0][0]
+                add_task(user_id,'old_email_confirmation')
+                emailDrone.process_email()
+                flash({'message':'<p>'+_('A new verification email has been sent to you')+'</p>'})
         else:
             g.error = _('Please enter the email address you used to register')
     if 'i' in request.args and 't' in request.args:
@@ -311,7 +324,16 @@ def reset_password():
                 return render_template("reset.html",details=t[0],**page_args())
         g.error = _('Malformed verification string!')
         return render_template('error.html',**page_args())
-    return render_template("reset.html",**page_args())
+    elif logged_in():
+        db = get_db()
+        cur = db.cursor()
+        cur.execute('SELECT email FROM users WHERE id='+app.sqlesc,(get_logged_in_user(),))
+        result = cur.fetchall()
+        if len(result) > 0:
+            g.logged_in_address = result[0][0]
+    show_verify_button = getattr(g, 'show_verify_button', None)
+    logged_in_address = getattr(g, 'logged_in_address', None)
+    return render_template("reset.html",logged_in_address=logged_in_address,show_verify_button=show_verify_button,**page_args())
 
 
 @app.route('/su',methods=['GET','POST'])
