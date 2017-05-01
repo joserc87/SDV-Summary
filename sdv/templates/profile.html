@@ -135,6 +135,188 @@ $(document).ready(function() {
 </script>
 {% endblock %}
 
+{% set translated_animals = {
+'Brown Chicken':_('Brown Chicken'),
+'Brown Chickens':_('Brown Chickens'),
+'White Chicken':_('White Chicken'),
+'White Chickens':_('White Chickens'),
+'Blue Chicken':_('Blue Chicken'),
+'Blue Chickens':_('Blue Chickens'),
+'Void Chicken':_('Void Chicken'),
+'Void Chickens':_('Void Chickens'),
+'White Cow':_('White Cow'),
+'White Cows':_('White Cows'),
+'Brown Cow':_('Brown Cow'),
+'Brown Cows':_('Brown Cows'),
+'Duck':_('Duck'),
+'Ducks':_('Ducks'),
+'Rabbit':_('Rabbit'),
+'Rabbits':_('Rabbits'),
+'Dinosaur':_('Dinosaur'),
+'Dinosaurs':_('Dinosaurs'),
+'Goat':_('Goat'),
+'Goats':_('Goats'),
+'Sheep':_('Sheep'),
+'Sheeps':_('Sheeps'),
+'Pig':_('Pig'),
+'Pigs':_('Pigs')
+}
+%}
+
+{% set professions = [data.professions0,data.professions1,data.professions2,data.professions3,data.professions4,data.professions5,data.professions6,data.professions7,data.professions8,data.professions9] %}
+
+{% set profindex = {
+'Farming':{4:('Rancher','Tiller'),9:('Coopmaster','Shepherd','Artisan','Agriculturist')},
+'Mining':{4:('Miner','Geologist'),9:('Blacksmith','Prospector','Excavator','Gemologist')},
+'Foraging':{4:('Forester','Gatherer'),9:('Lumberjack','Tapper','Botanist','Tracker')},
+'Fishing':{4:('Fisher','Trapper'),9:('Angler','Pirate','Mariner','Luremaster')},
+'Combat':{4:('Fighter','Scout'),9:('Brute','Defender','Acrobat','Desperado')}}
+%}
+
+{% set blurbs = {
+'Rancher':_('Animal Products worth 10%% more.'),
+'Tiller':_('Crops worth 10%% more.'),
+'Coopmaster':_('Befriend Coop animals quicker.')+'<br>'+_('Incubation time cut in half.'),
+'Shepherd':_('Befriend barn animals quicker.')+'<br>'+_('Sheep produce wool faster.'),
+'Artisan':_('Artisan Goods (wine, cheese, oil, etc.) worth 50%% more.'),
+'Agriculturist':_('All crops grow 10%% faster.'),
+'Miner':_('+1 ore per vein.'),
+'Geologist':_('Chance for Gems to appear in pairs.'),
+'Blacksmith':_('Metal bars worth 25%% more.'),
+'Excavator':_('Geode find doubled.'),
+'Prospector':_('Coal find doubled.'),
+'Gemologist':_('Gems worth 30%% more.'),
+'Forester':_('Wood worth 50%% more.'),
+'Gatherer':_('Chance for double harvest of foraged items.'),
+'Lumberjack':_('Normal trees occasionally drop hardwood.'),
+'Botanist':_('Foraged items are always gold quality.'),
+'Tapper':_('Syrup is worth 25%% more.'),
+'Tracker':_('Locations of foragable items are revealed.'),
+'Fisher':_('Fish worth 25%% more.'),
+'Trapper':_('Resources required to craft crab pots reduced.'),
+'Angler':_('Fish worth 50%% more.'),
+'Pirate':_('Chance to find treasure doubled.'),
+'Mariner':_('Crab pots never catch trash.'),
+'Luremaster':_('Crab pots no longer need to be baited.'),
+'Fighter':_('All attacks deal 10%% more damage.')+'<br>'+_('+15 HP.'),
+'Scout':_('Critical strike chance increased by 50%%.'),
+'Brute':_('Damage is increased by 15%%.'),
+'Defender':_('HP is increased by 25.'),
+'Acrobat':_('Cooldown on special moves is cut in half.'),
+'Desperado':_('Critical hits are deadly.')
+}
+%}
+
+{% set translated_titles = {
+'Rancher':_('Rancher'),
+'Tiller':_('Tiller'),
+'Coopmaster':_('Coopmaster'),
+'Shepherd':_('Shepherd'),
+'Artisan':_('Artisan'),
+'Agriculturist':_('Agriculturist'),
+'Miner':_('Miner'),
+'Geologist':_('Geologist'),
+'Blacksmith':_('Blacksmith'),
+'Excavator':_('Excavator'),
+'Prospector':_('Prospector'),
+'Gemologist':_('Gemologist'),
+'Forester':_('Forester'),
+'Gatherer':_('Gatherer'),
+'Lumberjack':_('Lumberjack'),
+'Botanist':_('Botanist'),
+'Tapper':_('Tapper'),
+'Tracker':_('Tracker'),
+'Fisher':_('Fisher'),
+'Trapper':_('Trapper'),
+'Angler':_('Angler'),
+'Pirate':_('Pirate'),
+'Mariner':_('Mariner'),
+'Luremaster':_('Luremaster'),
+'Fighter':_('Fighter'),
+'Scout':_('Scout'),
+'Brute':_('Brute'),
+'Defender':_('Defender'),
+'Acrobat':_('Acrobat'),
+'Desperado':_('Desperado')} %}
+{% set translated_skills = {
+'Farming':_('Farming'),
+'Mining':_('Mining'),
+'Foraging':_('Foraging'),
+'Fishing':_('Fishing'),
+'Combat':_('Combat')
+}
+%}
+
+{% set translated_friends = {
+'Willy':_('Willy'),
+'Clint':_('Clint'),
+'Jodi':_('Jodi'),
+'Harvey':_('Harvey'),
+'Leah':_('Leah'),
+'Wizard':_('Wizard'),
+'Jas':_('Jas'),
+'Abigail':_('Abigail'),
+'Maru':_('Maru'),
+'Elliott':_('Elliott'),
+'Caroline':_('Caroline'),
+'Pam':_('Pam'),
+'Dwarf':_('Dwarf'),
+'Shane':_('Shane'),
+'Demetrius':_('Demetrius'),
+'Alex':_('Alex'),
+'Gus':_('Gus'),
+'Vincent':_('Vincent'),
+'Sebastian':_('Sebastian'),
+'Robin':_('Robin'),
+'Sam':_('Sam'),
+'Lewis':_('Lewis'),
+'Marnie':_('Marnie'),
+'Penny':_('Penny'),
+'Haley':_('Haley'),
+'Pierre':_('Pierre'),
+'Evelyn':_('Evelyn'),
+'Linus':_('Linus'),
+'George':_('George'),
+'Emily':_('Emily'),
+'Kent':_('Kent'),
+'Krobus':_('Krobus'),
+'Sandy':_('Sandy'),
+'Henchman':_('Henchman')
+}
+%}
+
+{% set monster_dict = {
+'Armored Bug':[_('Armored Bug'),'armored_bug.png'],
+'Bat':[_('Bat'),'bat.png'],
+'Big Slime':[_('Big Slime'),'big_slime.png'],
+'Bug':[_('Bug'),'bug.png'],
+'Duggy':[_('Duggy'),'duggy.png'],
+'Dust Spirit':[_('Dust Sprite'),'dust_spirit.png'],
+'Fly':[_('Fly'),'fly.png'],
+'Frost Bat':[_('Frost Bat'),'frost_bat.png'],
+'Frost Jelly':[_('Frost Jelly'),'frost_jelly.png'],
+'Ghost':[_('Ghost'),'ghost.png'],
+'Green Slime':[_('Green Slime'),'green_slime.png'],
+'Grub':[_('Grub'),'grub.png'],
+'Lava Bat':[_('Lava Bat'),'lava_bat.png'],
+'Lava Crab':[_('Lava Crab'),'lava_crab.png'],
+'Metal Head':[_('Metal Head'),'metal_head.png'],
+'Mummy':[_('Mummy'),'mummy.png'],
+'Purple Slime':[_('Purple Slime'),'purple_slime.png'],
+'Red Slime':[_('Sludge'),'red_slime.png'],
+'Rock Crab':[_('Rock Crab'),'rock_crab.png'],
+'Serpent':[_('Serpent'),'serpent.png'],
+'Shadow Brute':[_('Shadow Brute'),'shadow_brute.png'],
+'Skeleton':[_('Skeleton'),'skeleton.png'],
+'Squid Kid':[_('Squid Kid'),'squid_kid.png'],
+'Stone Golem':[_('Stone Golem'),'stone_golem.png'],
+'Transparent Slime':[_('Transparent Slime'),'transparent_slime.png'],
+'Shadow Shaman':[_('Void Spirit'),'void_spirit.png'],
+'Sludge':[_('Yellow Slime'),'yellow_slime.png']
+}
+%}
+
+
 {% block title %}{{ _("%(farmname)s Farm",farmname = data.farmName)}} - {{super()}}{% endblock %}
 {% block bodycontent %}
 			<div class="row center-block">
@@ -239,9 +421,9 @@ $(document).ready(function() {
 										<dt>{{ _('Steps Taken') }}</dt><dd>{{ data.statsStepsTaken }}</dd>
 										{% if data.deepestMineLevel > 120 %}
 											<dt>{{ _('Mines Depth') }}</dt><dd>{{_('level')}} 120</dd>
-											<dt>{{ _('Cavern Depth') }}</dt><dd>{{_('level')}} {{ data.deepestMineLevel - 120}}</dd>
+											<dt>{{ _('Cavern Depth') }}</dt><dd>{{ _('%(word_level)s %(number)s',word_level=_('level'), number=data.deepestMineLevel-120) }}</dd>
 										{% else %}
-											<dt>{{ _('Mine Depth') }}</dt><dd>{{_('level')}} {{ data.deepestMineLevel }}</dd>
+											<dt>{{ _('Mine Depth') }}</dt><dd>{{ _('%(word_level)s %(number)s',word_level=_('level'), number=data.deepestMineLevel) }}</dd>
 										{% endif %}
 		 								<dt>{{ _('Time Played') }}</dt><dd>{{ data.millisecondsPlayed }} {{_('hours')}}</dd>
 		 							</dl>
@@ -257,7 +439,7 @@ $(document).ready(function() {
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
 									<p>
 									{% if data.portrait_info['partner'] != None %}
-										<b>{{data.name}}</b> {{_('is married to')}} <b>{{ data.portrait_info['partner'] }}</b>{%if data.petName!=None%}, {%else%}{{ _('and') }}{%endif%}
+										<b>{{data.name}}</b> {{_('is married to')}} <b>{{ translated_friends.get(data.portrait_info['partner'],None) }}</b>{%if data.petName!=None%}, {%else%}{{ _('and') }}{%endif%}
 									{% else %}
 										<b>{{data.name}}</b> {{_('is unmarried')}}{%if data.petName!=None%},{%else%} {{ _('and') }}{%endif%}
 									{%endif%}
@@ -278,32 +460,7 @@ $(document).ready(function() {
 									</p>
 								</div>
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
-									{% set translated_animals = {
-										'Brown Chicken':_('Brown Chicken'),
-										'Brown Chickens':_('Brown Chickens'),
-										'White Chicken':_('White Chicken'),
-										'White Chickens':_('White Chickens'),
-										'Blue Chicken':_('Blue Chicken'),
-										'Blue Chickens':_('Blue Chickens'),
-										'Void Chicken':_('Void Chicken'),
-										'Void Chickens':_('Void Chickens'),
-										'White Cow':_('White Cow'),
-										'White Cows':_('White Cows'),
-										'Brown Cow':_('Brown Cow'),
-										'Brown Cows':_('Brown Cows'),
-										'Duck':_('Duck'),
-										'Ducks':_('Ducks'),
-										'Rabbit':_('Rabbit'),
-										'Rabbits':_('Rabbits'),
-										'Dinosaur':_('Dinosaur'),
-										'Dinosaurs':_('Dinosaurs'),
-										'Goat':_('Goat'),
-										'Goats':_('Goats'),
-										'Sheep':_('Sheep'),
-										'Sheeps':_('Sheeps'),
-										'Pig':_('Pig'),
-										'Pigs':_('Pigs')
-									} %}
+
 									{% if data.animals %}
 										<!--<h3>Farm Animals</h3>-->
 										<br>
@@ -312,7 +469,8 @@ $(document).ready(function() {
 										{%endif%}
 										{% for key in data.animals.keys() %}
 											{%if key != 'horse' %}
-												<p>{{data.animals[key]|length}} {% if data.animals[key]|length>1%}{{translated_animals[key+'s']}}{% else %}{{translated_animals[key]}}{% endif %}:
+												{% if data.animals[key]|length>1%}{% set animal_name = translated_animals[key+'s'] %}{% else %}{% set animal_name = translated_animals[key] %}{% endif %}
+												<p>{{ _('%(number)s %(animal)s',number=data.animals[key]|length, animal=animal_name) }}:
 													{% for row in data.animals[key] %}
 														<span class="clickable" data-toggle="tooltip" title="{{ _('%(n)s days old',n=row[1]) }}">{{row[0]}}</span>{%if not loop.last%},{%endif%}
 													{% endfor %}
@@ -332,84 +490,7 @@ $(document).ready(function() {
 							</div>
 							<div id="skills" class="tab-pane">
 								<dl class="dl-horizontal">
-									{% set professions = [data.professions0,data.professions1,data.professions2,data.professions3,data.professions4,data.professions5,data.professions6,data.professions7,data.professions8,data.professions9] %}
-									<!-- start -->
-									{% set profindex = {
-									'Farming':{4:('Rancher','Tiller'),9:('Coopmaster','Shepherd','Artisan','Agriculturist')},
-									'Mining':{4:('Miner','Geologist'),9:('Blacksmith','Prospector','Excavator','Gemologist')},
-									'Foraging':{4:('Forester','Gatherer'),9:('Lumberjack','Tapper','Botanist','Tracker')},
-									'Fishing':{4:('Fisher','Trapper'),9:('Angler','Pirate','Mariner','Luremaster')},
-									'Combat':{4:('Fighter','Scout'),9:('Brute','Defender','Acrobat','Desperado')}}
-									%}
-									{% set blurbs = {
-									'Rancher':_('Animal Products worth 10%% more.'),
-									'Tiller':_('Crops worth 10%% more.'),
-									'Coopmaster':_('Befriend Coop animals quicker.')+'<br>'+_('Incubation time cut in half.'),
-									'Shepherd':_('Befriend barn animals quicker.')+'<br>'+_('Sheep produce wool faster.'),
-									'Artisan':_('Artisan Goods (wine, cheese, oil, etc.) worth 50%% more.'),
-									'Agriculturist':_('All crops grow 10%% faster.'),
-									'Miner':_('+1 ore per vein.'),
-									'Geologist':_('Chance for Gems to appear in pairs.'),
-									'Blacksmith':_('Metal bars worth 25%% more.'),
-									'Excavator':_('Geode find doubled.'),
-									'Prospector':_('Coal find doubled.'),
-									'Gemologist':_('Gems worth 30%% more.'),
-									'Forester':_('Wood worth 50%% more.'),
-									'Gatherer':_('Chance for double harvest of foraged items.'),
-									'Lumberjack':_('Normal trees occasionally drop hardwood.'),
-									'Botanist':_('Foraged items are always gold quality.'),
-									'Tapper':_('Syrup is worth 25%% more.'),
-									'Tracker':_('Locations of foragable items are revealed.'),
-									'Fisher':_('Fish worth 25%% more.'),
-									'Trapper':_('Resources required to craft crab pots reduced.'),
-									'Angler':_('Fish worth 50%% more.'),
-									'Pirate':_('Chance to find treasure doubled.'),
-									'Mariner':_('Crab pots never catch trash.'),
-									'Luremaster':_('Crab pots no longer need to be baited.'),
-									'Fighter':_('All attacks deal 10%% more damage.')+'<br>'+_('+15 HP.'),
-									'Scout':_('Critical strike chance increased by 50%%.'),
-									'Brute':_('Damage is increased by 15%%.'),
-									'Defender':_('HP is increased by 25.'),
-									'Acrobat':_('Cooldown on special moves is cut in half.'),
-									'Desperado':_('Critical hits are deadly.')} %}
-									{% set translated_titles = {
-									'Rancher':_('Rancher'),
-									'Tiller':_('Tiller'),
-									'Coopmaster':_('Coopmaster'),
-									'Shepherd':_('Shepherd'),
-									'Artisan':_('Artisan'),
-									'Agriculturist':_('Agriculturist'),
-									'Miner':_('Miner'),
-									'Geologist':_('Geologist'),
-									'Blacksmith':_('Blacksmith'),
-									'Excavator':_('Excavator'),
-									'Prospector':_('Prospector'),
-									'Gemologist':_('Gemologist'),
-									'Forester':_('Forester'),
-									'Gatherer':_('Gatherer'),
-									'Lumberjack':_('Lumberjack'),
-									'Botanist':_('Botanist'),
-									'Tapper':_('Tapper'),
-									'Tracker':_('Tracker'),
-									'Fisher':_('Fisher'),
-									'Trapper':_('Trapper'),
-									'Angler':_('Angler'),
-									'Pirate':_('Pirate'),
-									'Mariner':_('Mariner'),
-									'Luremaster':_('Luremaster'),
-									'Fighter':_('Fighter'),
-									'Scout':_('Scout'),
-									'Brute':_('Brute'),
-									'Defender':_('Defender'),
-									'Acrobat':_('Acrobat'),
-									'Desperado':_('Desperado')} %}
-									{% set translated_skills = {
-									'Farming':_('Farming'),
-									'Mining':_('Mining'),
-									'Foraging':_('Foraging'),
-									'Fishing':_('Fishing'),
-									'Combat':_('Combat')}
-									%}
+
 									{% for skill in [('Farming',data.farmingLevel),('Mining',data.miningLevel),('Foraging',data.foragingLevel),('Fishing',data.fishingLevel),('Combat',data.combatLevel)] %}
 										<dt>{{translated_skills[skill[0]]}}</dt>
 										<dd>
@@ -520,42 +601,6 @@ $(document).ready(function() {
 						<div class="col-md-12 text-center">
 							<h3>{{_("Friendships")}}</h3>
 						</div>
-						{% set translated_friends = {
-									'Willy':_('Willy'),
-									'Clint':_('Clint'),
-									'Jodi':_('Jodi'),
-									'Harvey':_('Harvey'),
-									'Leah':_('Leah'),
-									'Wizard':_('Wizard'),
-									'Jas':_('Jas'),
-									'Abigail':_('Abigail'),
-									'Maru':_('Maru'),
-									'Elliott':_('Elliott'),
-									'Caroline':_('Caroline'),
-									'Pam':_('Pam'),
-									'Dwarf':_('Dwarf'),
-									'Shane':_('Shane'),
-									'Demetrius':_('Demetrius'),
-									'Alex':_('Alex'),
-									'Gus':_('Gus'),
-									'Vincent':_('Vincent'),
-									'Sebastian':_('Sebastian'),
-									'Robin':_('Robin'),
-									'Sam':_('Sam'),
-									'Lewis':_('Lewis'),
-									'Marnie':_('Marnie'),
-									'Penny':_('Penny'),
-									'Haley':_('Haley'),
-									'Pierre':_('Pierre'),
-									'Evelyn':_('Evelyn'),
-									'Linus':_('Linus'),
-									'George':_('George'),
-									'Emily':_('Emily'),
-									'Kent':_('Kent'),
-									'Krobus':_('Krobus'),
-									'Sandy':_('Sandy'),
-									'Henchman':_('Henchman')}
-									%}
 						{% for i in friendships %}
 							<div class="npc-container text-center">
 								<button type="button" class="btn-link npc-button" data-animation="false" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title='<img src="{{url_for('static',filename='assets/npcs/'+i.0+'.png')}}"><br>{{translated_friends[i.0]}}: {{ i.1 // 250 }}/10'>
@@ -567,33 +612,8 @@ $(document).ready(function() {
 						{% endfor %}
 					</div>
 				</div>
-				{% set monster_dict = {'Armored Bug':[_('Armored Bug'),'armored_bug.png'],
-										'Bat':[_('Bat'),'bat.png'],
-										'Big Slime':[_('Big Slime'),'big_slime.png'],
-										'Bug':[_('Bug'),'bug.png'],
-										'Duggy':[_('Duggy'),'duggy.png'],
-										'Dust Spirit':[_('Dust Sprite'),'dust_spirit.png'],
-										'Fly':[_('Fly'),'fly.png'],
-										'Frost Bat':[_('Frost Bat'),'frost_bat.png'],
-										'Frost Jelly':[_('Frost Jelly'),'frost_jelly.png'],
-										'Ghost':[_('Ghost'),'ghost.png'],
-										'Green Slime':[_('Green Slime'),'green_slime.png'],
-										'Grub':[_('Grub'),'grub.png'],
-										'Lava Bat':[_('Lava Bat'),'lava_bat.png'],
-										'Lava Crab':[_('Lava Crab'),'lava_crab.png'],
-										'Metal Head':[_('Metal Head'),'metal_head.png'],
-										'Mummy':[_('Mummy'),'mummy.png'],
-										'Purple Slime':[_('Purple Slime'),'purple_slime.png'],
-										'Red Slime':[_('Sludge'),'red_slime.png'],
-										'Rock Crab':[_('Rock Crab'),'rock_crab.png'],
-										'Serpent':[_('Serpent'),'serpent.png'],
-										'Shadow Brute':[_('Shadow Brute'),'shadow_brute.png'],
-										'Skeleton':[_('Skeleton'),'skeleton.png'],
-										'Squid Kid':[_('Squid Kid'),'squid_kid.png'],
-										'Stone Golem':[_('Stone Golem'),'stone_golem.png'],
-										'Transparent Slime':[_('Transparent Slime'),'transparent_slime.png'],
-										'Shadow Shaman':[_('Void Spirit'),'void_spirit.png'],
-										'Sludge':[_('Yellow Slime'),'yellow_slime.png']} %}
+
+
 
 				<div class="col-md-5 panel">
 					<div class="interiorpanel text-center" style="padding-left:8px;padding-right:8px;">

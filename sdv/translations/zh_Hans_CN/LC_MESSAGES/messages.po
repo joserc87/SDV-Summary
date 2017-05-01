@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-15 16:38+0100\n"
-"PO-Revision-Date: 2017-04-15 17:02+0100\n"
+"POT-Creation-Date: 2017-05-01 23:22+0100\n"
+"PO-Revision-Date: 2017-05-01 23:25+0100\n"
 "Language: zh\n"
 "Language-Team: zh_Hans_CN <LL@li.org>\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -19,1873 +19,1959 @@ msgstr ""
 "Last-Translator: \n"
 "X-Generator: Poedit 2.0\n"
 
-#: __init__.py:192 __init__.py:259
+#: ../sdv/__init__.py:192 ../sdv/__init__.py:259
 msgid "Username not found!"
 msgstr "不存在此用户名！"
 
-#: __init__.py:204
+#: ../sdv/__init__.py:204
 msgid "Unable to interpret stored password hash!"
 msgstr "无法解析密码哈希值！"
 
-#: __init__.py:215
+#: ../sdv/__init__.py:215
 msgid "Incorrect password!"
 msgstr "密码错误！"
 
-#: __init__.py:238
+#: ../sdv/__init__.py:238
 msgid "Missing email or password for login!"
 msgstr "缺少邮箱地址或密码！"
 
-#: __init__.py:244
+#: ../sdv/__init__.py:244
 msgid "Logged in successfully!"
 msgstr "成功登录！"
 
-#: __init__.py:261
-msgid ""
-"Email address not verified; please verify your account using the verification email sent when you registered "
-"before attempting to reset password!"
+#: ../sdv/__init__.py:261
+msgid "Email address not verified; please verify your account using the verification email sent when you registered before attempting to reset password!"
 msgstr "邮箱地址尚未验证，重设密码之前请先利用注册确认邮件中的链接确认账户！"
 
-#: __init__.py:270
+#: ../sdv/__init__.py:270
 msgid "Password reset email sent!"
 msgstr "密码重设邮件已发送！"
 
-#: __init__.py:272
+#: ../sdv/__init__.py:272
 msgid "Previous password reset email still waiting to be sent... (sorry)"
 msgstr "之前那封重设邮件还没发出去...（抱歉~）"
 
-#: __init__.py:280 __init__.py:304
+#: ../sdv/__init__.py:280 ../sdv/__init__.py:304
 msgid "Cannot reset password: account does not exist"
 msgstr "无法重设密码：账户不存在"
 
-#: __init__.py:283
+#: ../sdv/__init__.py:283
 msgid "This reset link has already been used!</p>"
 msgstr "这个重设链接已过期！"
 
-#: __init__.py:290
+#: ../sdv/__init__.py:290
 msgid "Password reset, please log in!"
 msgstr "密码重设成功，请登录！"
 
-#: __init__.py:292 __init__.py:312 __init__.py:1626
+#: ../sdv/__init__.py:292 ../sdv/__init__.py:312 ../sdv/__init__.py:1626
 msgid "Malformed verification string!"
 msgstr "不完整的验证密钥！"
 
-#: __init__.py:295
+#: ../sdv/__init__.py:295
 msgid "Password insufficiently long, please try again"
 msgstr "密码长度不足，请重试"
 
-#: __init__.py:297
+#: ../sdv/__init__.py:297
 msgid "Please enter the email address you used to register"
 msgstr "请输入注册时使用的邮箱地址"
 
-#: __init__.py:307
+#: ../sdv/__init__.py:307
 msgid "This reset link has already been used!"
 msgstr "这个重设链接已经被使用过！"
 
-#: __init__.py:321
+#: ../sdv/__init__.py:321
 msgid "You are already logged in!"
 msgstr "您已登录！"
 
-#: __init__.py:324
+#: ../sdv/__init__.py:324
 msgid "Missing email or password!"
 msgstr "缺少邮箱地址或密码！"
 
-#: __init__.py:326
+#: ../sdv/__init__.py:326
 msgid "Password too short!"
 msgstr "密码长度不足！"
 
-#: __init__.py:341
+#: ../sdv/__init__.py:341
 msgid "You have successfully registered. A verification email has been sent to you. Now, please sign in!"
 msgstr "您已成功注册，确认邮件已发送至您的邮箱，现在请登录！"
 
-#: __init__.py:344
+#: ../sdv/__init__.py:344
 msgid "Invalid email address!"
 msgstr "邮箱地址无效！"
 
-#: __init__.py:346
+#: ../sdv/__init__.py:346
 msgid "This email address has already registered"
 msgstr "这个邮箱地址已经被使用过"
 
-#: __init__.py:348
+#: ../sdv/__init__.py:348
 msgid "Captcha failed! If you are human, please try again!"
 msgstr "验证码错误！如果您是人类，请重试一次！"
 
-#: __init__.py:356
+#: ../sdv/__init__.py:356
 msgid "You must be signed in to view your profile!"
 msgstr "登录之后才能查看您的资料！"
 
-#: __init__.py:457
+#: ../sdv/__init__.py:457
 msgid "I don't think that's very funny"
 msgstr "这一点都不好笑"
 
-#: __init__.py:460
+#: ../sdv/__init__.py:460
 msgid "Savegame failed sanity check (if you think this is in error please let us know)"
 msgstr "存档文件初步校验失败（如果您觉得这不应发生，请与我们联系）"
 
-#: __init__.py:467
+#: ../sdv/__init__.py:467
 msgid "Not valid save file - did you select file 'SaveGameInfo' instead of 'playername_number'?"
 msgstr "存档文件无效，您是不是选择了'SaveGameInfo'文件而不是'玩家名称_id编号'文件？"
 
-#: __init__.py:471
+#: ../sdv/__init__.py:471
 msgid "Not well-formed xml"
 msgstr "xml编码错误"
 
-#: __init__.py:474
+#: ../sdv/__init__.py:474
 msgid "Savegame failed an internal check (often caused by mods) sorry :("
 msgstr "存档文件读取失败（可能是因为使用了mod），抱歉:("
 
-#: __init__.py:498
+#: ../sdv/__init__.py:498
 msgid "Error occurred inserting information into the database!"
 msgstr "写入数据库时发生错误！"
 
-#: __init__.py:910
+#: ../sdv/__init__.py:910
 msgid "Save file incompatible with current database: error is "
 msgstr "存档文件与数据库不兼容，错误"
 
-#: __init__.py:922 __init__.py:976
+#: ../sdv/__init__.py:922 ../sdv/__init__.py:976
 msgid "There is nothing here... is this URL correct?"
 msgstr "这儿啥也没有...没有把地址搞错吗？"
 
-#: __init__.py:964
-msgid ""
-"It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a "
-"href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to "
-"imgur!"
-msgstr ""
-"您似乎在没有登录的情况下上传了多个文件，如果您<a href='{}'>注册</a>或<a href='{}'>登录</a>的话可以将这些文件编为一"
-"个系列，共享您的存档，并且可以讲农场的图片一键上传至imgur！"
+#: ../sdv/__init__.py:964
+msgid "It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!"
+msgstr "您似乎在没有登录的情况下上传了多个文件，如果您<a href='{}'>注册</a>或<a href='{}'>登录</a>的话可以将这些文件编为一个系列，共享您的存档，并且可以讲农场的图片一键上传至imgur！"
 
-#: __init__.py:996
-msgid ""
-"This plan failed to render, probably because of a bug. It's logged and we'll look into it as soon as possible! "
-"Sorry!"
+#: ../sdv/__init__.py:996
+msgid "This plan failed to render, probably because of a bug. It's logged and we'll look into it as soon as possible! Sorry!"
 msgstr "这个规划无法正常渲染，这应该是个bug，我们已经将其记录在案并会尽快修正，抱歉！"
 
-#: __init__.py:1082
+#: ../sdv/__init__.py:1082
 msgid "Unknown or insufficient credentials"
 msgstr "未知或不充分的身份验证"
 
-#: __init__.py:1113
+#: ../sdv/__init__.py:1113
 msgid "You do not own this farm"
 msgstr "您并不拥有这个农场"
 
-#: __init__.py:1124
+#: ../sdv/__init__.py:1124
 msgid "You do not own at least one of the farms"
 msgstr "您并不拥有其中一个或多个农场"
 
-#: __init__.py:1145
+#: ../sdv/__init__.py:1145
 msgid "You do not have sufficient credentials to claim this page"
 msgstr "您缺乏认领这个农场需要的身份验证"
 
-#: __init__.py:1155
+#: ../sdv/__init__.py:1155
 msgid "You do not have sufficient credentials to claim one of these pages"
 msgstr "您缺乏认领其中至少一个农场需要的身份验证"
 
-#: __init__.py:1170
+#: ../sdv/__init__.py:1170
 msgid "You do not have sufficient credentials to perform this action"
 msgstr "您缺乏这个操作需要的身份验证"
 
-#: __init__.py:1185
+#: ../sdv/__init__.py:1185
 msgid "You have uploaded this page to imgur in the last 2 hours: please wait to upload again"
 msgstr "2小时之前您已经将这个页面上传至imgur，再次上传需要等待一段时间"
 
-#: __init__.py:1187
+#: ../sdv/__init__.py:1187
 msgid "There was an issue with uploading the file to imgur. Please try again later!"
 msgstr "上传至imgur的过程中出现错误，请稍候再试！"
 
-#: __init__.py:1194
+#: ../sdv/__init__.py:1194
 msgid "Either you or upload.farm are out of imgur credits for the day! Sorry :( Try again tomorrow"
 msgstr "您或者我们的imgur账户已经用完今天的上传限额，请明天再试"
 
-#: __init__.py:1197
+#: ../sdv/__init__.py:1197
 msgid "You must be logged in to post your farm to imgur!"
 msgstr "您需要登录才能将农场上传至imgur！"
 
-#: __init__.py:1205
+#: ../sdv/__init__.py:1205
 msgid "Sorry, the stardew.info planner API is over its rate limit: please try again in a few minutes!"
 msgstr "stardew.info农场规划器API超出流量限额，请等几分钟再试！"
 
-#: __init__.py:1209
+#: ../sdv/__init__.py:1209
 msgid "There was a problem accessing the planner. Error was: {}"
 msgstr "访问农场规划器失败，错误为{}"
 
-#: __init__.py:1238
+#: ../sdv/__init__.py:1238
 msgid "You do not have the correct session information to perform this action!"
 msgstr "您没有执行这个操作所需的正确的会话信息！"
 
-#: __init__.py:1276
+#: ../sdv/__init__.py:1276
 msgid "Problem authenticating!"
 msgstr "身份验证错误！"
 
-#: __init__.py:1278
+#: ../sdv/__init__.py:1278
 msgid "You are not logged in!"
 msgstr "您尚未登录！"
 
-#: __init__.py:1417
+#: ../sdv/__init__.py:1417
 msgid "No browse with that ID!"
 msgstr "不存在与ID对应的农场浏览页！"
 
-#: __init__.py:1436
+#: ../sdv/__init__.py:1436
 msgid "Malformed request for entries!"
 msgstr "不完整的条目请求！"
 
-#: __init__.py:1548 __init__.py:1550
+#: ../sdv/__init__.py:1548 ../sdv/__init__.py:1550
 msgid "No blog with that ID!"
 msgstr "不存在与ID对应的博客文章！"
 
-#: __init__.py:1576
+#: ../sdv/__init__.py:1576
 msgid "URL does not exist"
 msgstr "地址不存在"
 
-#: __init__.py:1578
+#: ../sdv/__init__.py:1578
 msgid "You are unable to download this farm data at this time."
 msgstr "您现在无法下载这个农场的数据。"
 
-#: __init__.py:1599
+#: ../sdv/__init__.py:1599
 msgid "Problem authenticating at imgur!"
 msgstr "imgur身份验证错误！"
 
-#: __init__.py:1602
+#: ../sdv/__init__.py:1602
 msgid "Cannot connect to imgur if not logged in!"
 msgstr "未登录时无法连接至imgur！"
 
-#: __init__.py:1615
+#: ../sdv/__init__.py:1615
 msgid "Account does not exist!"
 msgstr "账户不存在！"
 
-#: __init__.py:1618
+#: ../sdv/__init__.py:1618
 msgid "Already confirmed email address!"
 msgstr "此邮箱地址已经确认！"
 
-#: __init__.py:1624
+#: ../sdv/__init__.py:1624
 msgid "Account email address confirmed!"
 msgstr "邮箱地址确认！"
 
-#: __init__.py:1637
+#: ../sdv/__init__.py:1637
 msgid "not logged in"
 msgstr "未登录"
 
-#: getDate.py:41
-msgid " of "
+#: ../sdv/getDate.py:4
+msgid "1st"
+msgstr "1号"
+
+#: ../sdv/getDate.py:5
+msgid "2nd"
+msgstr "2号"
+
+#: ../sdv/getDate.py:6
+msgid "3rd"
+msgstr "3号"
+
+#: ../sdv/getDate.py:7
+msgid "4th"
+msgstr "4号"
+
+#: ../sdv/getDate.py:8
+msgid "5th"
+msgstr "5号"
+
+#: ../sdv/getDate.py:9
+msgid "6th"
+msgstr "6号"
+
+#: ../sdv/getDate.py:10
+msgid "7th"
+msgstr "7号"
+
+#: ../sdv/getDate.py:11
+msgid "8th"
+msgstr "8号"
+
+#: ../sdv/getDate.py:12
+msgid "9th"
+msgstr "9号"
+
+#: ../sdv/getDate.py:13
+msgid "10th"
+msgstr "10号"
+
+#: ../sdv/getDate.py:14
+msgid "11th"
+msgstr "11号"
+
+#: ../sdv/getDate.py:15
+msgid "12th"
+msgstr "12号"
+
+#: ../sdv/getDate.py:16
+msgid "13th"
+msgstr "13号"
+
+#: ../sdv/getDate.py:17
+msgid "14th"
+msgstr "14号"
+
+#: ../sdv/getDate.py:18
+msgid "15th"
+msgstr "15号"
+
+#: ../sdv/getDate.py:19
+msgid "16th"
+msgstr "16号"
+
+#: ../sdv/getDate.py:20
+msgid "17th"
+msgstr "17号"
+
+#: ../sdv/getDate.py:21
+msgid "18th"
+msgstr "18号"
+
+#: ../sdv/getDate.py:22
+msgid "19th"
+msgstr "19号"
+
+#: ../sdv/getDate.py:23
+msgid "20th"
+msgstr "20号"
+
+#: ../sdv/getDate.py:24
+msgid "21st"
+msgstr "21号"
+
+#: ../sdv/getDate.py:25
+msgid "22nd"
+msgstr "22号"
+
+#: ../sdv/getDate.py:26
+msgid "23rd"
+msgstr "23号"
+
+#: ../sdv/getDate.py:27
+msgid "24th"
+msgstr "24号"
+
+#: ../sdv/getDate.py:28
+msgid "25th"
+msgstr "25号"
+
+#: ../sdv/getDate.py:29
+msgid "26th"
+msgstr "26号"
+
+#: ../sdv/getDate.py:30
+msgid "27th"
+msgstr "27号"
+
+#: ../sdv/getDate.py:31
+msgid "28th"
+msgstr "28号"
+
+#: ../sdv/getDate.py:33
+msgid "Spring"
+msgstr "春季"
+
+#: ../sdv/getDate.py:34
+msgid "Summer"
+msgstr "夏季"
+
+#: ../sdv/getDate.py:35
+msgid "Autumn"
+msgstr "秋季"
+
+#: ../sdv/getDate.py:36
+msgid "Winter"
+msgstr "冬季"
+
+#: ../sdv/getDate.py:42
+#, python-format
+msgid "%(day)s of %(season)s, Year %(year)s"
 msgstr ""
 
-#: getDate.py:41
-msgid ", Year "
-msgstr ""
-
-#: templates/account.html:13 templates/titlebar.html:24
+#: ../sdv/templates/account.html:13 ../sdv/templates/titlebar.html:24
 msgid "Account"
 msgstr "账户"
 
-#: templates/account.html:21
+#: ../sdv/templates/account.html:21
 msgid "Account info"
 msgstr "账户信息"
 
-#: templates/account.html:22
+#: ../sdv/templates/account.html:22
 #, python-format
 msgid "Email: %(email)s"
 msgstr "邮箱:%(email)s"
 
-#: templates/account.html:23
+#: ../sdv/templates/account.html:23
 msgid "Imgur: "
 msgstr "Imgur账户："
 
-#: templates/account.html:25
+#: ../sdv/templates/account.html:25
 #, python-format
 msgid "Logged in as %(username)s"
 msgstr "以%(username)s名义登录"
 
-#: templates/account.html:26
+#: ../sdv/templates/account.html:26
 msgid "connect to imgur"
 msgstr "连接至imgur"
 
-#: templates/account.html:28
+#: ../sdv/templates/account.html:28
 msgid "Browse my liked farms"
 msgstr "浏览我喜欢过的农场"
 
-#: templates/account.html:33
+#: ../sdv/templates/account.html:33
 msgid "Preferences"
 msgstr "偏好设置"
 
-#: templates/account.html:34
+#: ../sdv/templates/account.html:34
 msgid "Upload default: "
 msgstr "上传默认："
 
-#: templates/account.html:34
+#: ../sdv/templates/account.html:34
 msgid "Change to listed?"
 msgstr "更改至公开展示？"
 
-#: templates/account.html:34
+#: ../sdv/templates/account.html:34
 msgid "This will allow new uploads it to appear in searches on the site by default"
 msgstr "这会默认允许新的上传出现在网站的搜索中"
 
-#: templates/account.html:34
+#: ../sdv/templates/account.html:34
 msgid "Change&nbsp;to&nbsp;listed!"
 msgstr "更改至公开展示！"
 
-#: templates/account.html:34
+#: ../sdv/templates/account.html:34
 msgid "New uploads will not appear on the site by default"
 msgstr "新的上传文件将不会默认出现在网站中"
 
-#: templates/account.html:34
+#: ../sdv/templates/account.html:34
 msgid "Change to unlisted?"
 msgstr "更改至不公开展示？"
 
-#: templates/account.html:34
+#: ../sdv/templates/account.html:34
 msgid "This will prevent new uploads appearing to others on the site by default"
-msgstr "这会默认使您新上传的文件对他人不可见"
+msgstr "这会使您新上传的文件默认对他人不可见"
 
-#: templates/account.html:34
+#: ../sdv/templates/account.html:34
 msgid "Change&nbsp;to&nbsp;unlisted!"
 msgstr "更改至不公开展示！"
 
-#: templates/account.html:34
+#: ../sdv/templates/account.html:34
 msgid "New uploads will appear listed on the site by default"
 msgstr "新的上传文件将会默认出现在网站中"
 
-#: templates/account.html:40 templates/account.html:85 templates/all.html:93 templates/error.html:9
-#: templates/index.html:60 templates/login.html:55 templates/profile.html:179 templates/signup.html:39
+#: ../sdv/templates/account.html:40 ../sdv/templates/account.html:85
+#: ../sdv/templates/all.html:93 ../sdv/templates/error.html:9
+#: ../sdv/templates/index.html:60 ../sdv/templates/login.html:55
+#: ../sdv/templates/profile.html:361 ../sdv/templates/signup.html:39
 msgid "Error:"
 msgstr "错误："
 
-#: templates/account.html:51
+#: ../sdv/templates/account.html:51
 msgid "Claimable farms"
 msgstr "可认领的农场"
 
-#: templates/account.html:52
+#: ../sdv/templates/account.html:52
 msgid "The following farms are not associated with your user account, but were uploaded from your computer:"
 msgstr "这些农场与您的账户无关，但却是从您的电脑上传的："
 
-#: templates/account.html:60
+#: ../sdv/templates/account.html:60
 msgid "Or, claim all"
 msgstr "干脆认领全部"
 
-#: templates/account.html:63
+#: ../sdv/templates/account.html:63
 msgid "Your farm series"
 msgstr "您的农场系列"
 
-#: templates/account.html:64
+#: ../sdv/templates/account.html:64
 msgid "Linked series of farms you have uploaded:"
-msgstr "将您上传的一个系列的农场排列出来"
+msgstr "已将您上传的一系列农场排列出来："
 
-#: templates/account.html:68 templates/recents.html:11
+#: ../sdv/templates/account.html:68 ../sdv/templates/recents.html:11
 #, python-format
 msgid "%(name)s, %(farmname)s Farm"
 msgstr "%(name)s的%(farmname)s农场"
 
-#: templates/account.html:72
+#: ../sdv/templates/account.html:72
 msgid "imgur"
 msgstr "imgur"
 
-#: templates/all.html:15 templates/titlebar.html:21
+#: ../sdv/templates/all.html:15 ../sdv/templates/titlebar.html:21
 msgid "Browse"
 msgstr "浏览"
 
-#: templates/all.html:19
+#: ../sdv/templates/all.html:19
 msgid "Search"
 msgstr "搜索"
 
-#: templates/all.html:27
+#: ../sdv/templates/all.html:27
 msgid "Search for farms by user or farm name, or change sort type"
 msgstr "搜索用户名或农场名，或者改变筛选条件"
 
-#: templates/all.html:31
+#: ../sdv/templates/all.html:31
 #, python-format
 msgid "Sorting %(number)s results by "
-msgstr "有%(number)s农场是"
+msgstr "有%(number)s个农场是"
 
-#: templates/all.html:32
+#: ../sdv/templates/all.html:32
 msgid "top rated"
 msgstr "最受好评"
 
-#: templates/all.html:32
+#: ../sdv/templates/all.html:32
 msgid "most views"
 msgstr "最多查看"
 
-#: templates/all.html:32 templates/all.html:34
+#: ../sdv/templates/all.html:32 ../sdv/templates/all.html:34
 msgid "most recent"
 msgstr "最新上传"
 
-#: templates/all.html:45
+#: ../sdv/templates/all.html:45
 msgid "showing"
 msgstr "显示"
 
-#: templates/all.html:46
+#: ../sdv/templates/all.html:46
 msgid "only downloadable"
 msgstr "可下载的"
 
-#: templates/all.html:48 templates/all.html:52
+#: ../sdv/templates/all.html:48 ../sdv/templates/all.html:52
 msgid "all farms"
 msgstr "所有农场"
 
-#: templates/all.html:57
+#: ../sdv/templates/all.html:57
 msgid "with"
 msgstr "以及"
 
-#: templates/all.html:58
+#: ../sdv/templates/all.html:58
 msgid "full"
 msgstr "全景图"
 
-#: templates/all.html:60 templates/all.html:64
+#: ../sdv/templates/all.html:60 ../sdv/templates/all.html:64
 msgid "minimap"
 msgstr "小地图"
 
-#: templates/all.html:69
+#: ../sdv/templates/all.html:69
 msgid "thumbnail"
 msgstr "的缩略图"
 
-#: templates/all.html:71
+#: ../sdv/templates/all.html:71
 msgid "limiting results to"
 msgstr "限制结果为"
 
-#: templates/all.html:75
+#: ../sdv/templates/all.html:75
 msgid "farms in same series as"
 msgstr "在一个系列中的农场"
 
-#: templates/all.html:75 templates/all.html:83
+#: ../sdv/templates/all.html:75 ../sdv/templates/all.html:83
 msgid "remove limit"
 msgstr "去除限制"
 
-#: templates/all.html:83
+#: ../sdv/templates/all.html:83
 msgid "farms I upvoted"
 msgstr "我喜欢的农场"
 
-#: templates/all.html:104 templates/all.html:106 templates/blog.html:13 templates/blog.html:15
+#: ../sdv/templates/all.html:104 ../sdv/templates/all.html:106
+#: ../sdv/templates/blog.html:13 ../sdv/templates/blog.html:15
 msgid "newest"
 msgstr "最新的"
 
-#: templates/all.html:110 templates/all.html:112 templates/blog.html:18 templates/blog.html:20
+#: ../sdv/templates/all.html:110 ../sdv/templates/all.html:112
+#: ../sdv/templates/blog.html:18 ../sdv/templates/blog.html:20
 msgid "previous"
 msgstr "前一页"
 
-#: templates/all.html:125 templates/all.html:127 templates/blog.html:28 templates/blog.html:30
+#: ../sdv/templates/all.html:125 ../sdv/templates/all.html:127
+#: ../sdv/templates/blog.html:28 ../sdv/templates/blog.html:30
 msgid "next"
 msgstr "下一页"
 
-#: templates/all.html:131 templates/all.html:133 templates/blog.html:33 templates/blog.html:35
+#: ../sdv/templates/all.html:131 ../sdv/templates/all.html:133
+#: ../sdv/templates/blog.html:33 ../sdv/templates/blog.html:35
 msgid "oldest"
 msgstr "最老的"
 
-#: templates/base.html:4
+#: ../sdv/templates/base.html:4
 msgid "upload.farm Stardew Valley Summary Generator"
 msgstr "upload.farm 星露谷物语摘要生成器"
 
-#: templates/base.html:41
+#: ../sdv/templates/base.html:41
 msgid "This website uses cookies when you upload a savegame to determine ownership"
 msgstr "这个网站使用cookie来确认游戏存档的拥有者"
 
-#: templates/base.html:41
+#: ../sdv/templates/base.html:41
 msgid "Okay!"
 msgstr "好的！"
 
-#: templates/base.html:41
+#: ../sdv/templates/base.html:41
 msgid "More info"
 msgstr "更多信息"
 
-#: templates/base.html:57
+#: ../sdv/templates/base.html:57
 #, python-format
 msgid "Took %(processtime)s seconds to process request"
 msgstr "处理用时%(processtime)s秒"
 
-#: templates/base.html:57
+#: ../sdv/templates/base.html:57
 #, python-format
 msgid "source at %(github)s"
 msgstr "源代码：%(github)s"
 
-#: templates/base.html:57
+#: ../sdv/templates/base.html:57
 #, python-format
 msgid "All Stardew Valley assets copyright %(concerned_ape)s"
 msgstr "所有星露谷物语的资源为%(concerned_ape)s所有"
 
-#: templates/blog.html:7 templates/index.html:82
+#: ../sdv/templates/blog.html:7 ../sdv/templates/index.html:82
 msgid "Development blog"
 msgstr "开发博客"
 
-#: templates/blogcontent.html:7
+#: ../sdv/templates/blogcontent.html:7
 #, python-format
 msgid "by %(name)s at %(time)s"
 msgstr "作者%(name)s，时间%(time)s"
 
-#: templates/error.html:7
+#: ../sdv/templates/error.html:7
 msgid "Error!"
 msgstr "错误！"
 
-#: templates/faq.html:7
+#: ../sdv/templates/faq.html:7
 msgid "Frequently Asked Questions"
 msgstr "常见问题集"
 
-#: templates/faq.html:8 templates/titlebar.html:23
+#: ../sdv/templates/faq.html:8 ../sdv/templates/titlebar.html:23
 msgid "FAQ"
 msgstr "FAQ"
 
-#: templates/faq.html:11
+#: ../sdv/templates/faq.html:11
 msgid "What does this site do?"
 msgstr "这网站是干啥的？"
 
-#: templates/faq.html:12
+#: ../sdv/templates/faq.html:12
 #, python-format
-msgid ""
-"It generates a map and summary of a Stardew Valley farm, with your player avatar and portrait of your family. "
-"It's an alternative to screenshot tools like %(gedosato)s."
+msgid "It generates a map and summary of a Stardew Valley farm, with your player avatar and portrait of your family. It's an alternative to screenshot tools like %(gedosato)s."
 msgstr "这个网站自动产生一份星露谷中农场的地图和摘要，及玩家形象和家庭的头像图。是%(gedosato)s及类似工具的替代品。"
 
-#: templates/faq.html:14
+#: ../sdv/templates/faq.html:14
 msgid "Where do I find the savegame?"
 msgstr "我在哪里可以找到游戏存档？"
 
-#: templates/faq.html:20
+#: ../sdv/templates/faq.html:20
 #, python-format
-msgid ""
-"Savegames are in %(appdata)s. This can be pasted into the file upload box to find the correct folder. Within this "
-"are subfolders for individual savegames. The file you should upload is named after your player (i.e. not named "
-"SaveGameInfo)."
-msgstr ""
-"游戏存档在%(appdata)s目录下，把这个地址粘贴在上传框中并按回车就可以找到，文件夹中的目录为游戏存档。存档文件夹以玩"
-"家名称命名，应上传的是文件夹中玩家名称_随机ID的文件，并非SaveGameInfo文件。"
+msgid "Savegames are in %(appdata)s. This can be pasted into the file upload box to find the correct folder. Within this are subfolders for individual savegames. The file you should upload is named after your player (i.e. not named SaveGameInfo)."
+msgstr "游戏存档在%(appdata)s目录下，把这个地址粘贴在上传框中并按回车就可以找到，文件夹中的目录为游戏存档。存档文件夹以玩家名称命名，应上传的是文件夹中玩家名称_随机ID的文件，并非SaveGameInfo文件。"
 
-#: templates/faq.html:22
+#: ../sdv/templates/faq.html:22
 msgid "Why register for an upload.farm account?"
 msgstr "为什么要注册一个upload.farm账户？"
 
-#: templates/faq.html:23
-msgid ""
-"To add <a href='#whysignin'>certain features such as savegame sharing</a> to the site it became necessary to "
-"introduce user accounts, so that page ownership could be established. The up-side of this is that we are able to "
-"add other features to the site very easily, such as quick upload-to-imgur, and the ability to link up series of "
-"farms."
-msgstr ""
-"账户是诸多有趣功能的基础，它可以确认您的拥有者身份，这样您就可以使用共享存档等功能。我们也很容易在以账户系统为基础"
-"的网站中加入新功能，例如上传农场至imgur，和将农场系列化等。"
+#: ../sdv/templates/faq.html:23
+msgid "To add <a href='#whysignin'>certain features such as savegame sharing</a> to the site it became necessary to introduce user accounts, so that page ownership could be established. The up-side of this is that we are able to add other features to the site very easily, such as quick upload-to-imgur, and the ability to link up series of farms."
+msgstr "账户是诸多有趣功能的基础，它可以确认您的拥有者身份，这样您就可以使用共享存档等功能。我们也很容易在以账户系统为基础的网站中加入新功能，例如上传农场至imgur，和将农场系列化等。"
 
-#: templates/faq.html:25
+#: ../sdv/templates/faq.html:25
 msgid "Can I upload multiple farms from the same playthrough?"
 msgstr "我可以上传同一次游戏中的多个农场吗？"
 
-#: templates/faq.html:26
+#: ../sdv/templates/faq.html:26
 #, python-format
-msgid ""
-"Yes. If you are %(signed_up)s and %(logged_in)s, your uploads's series is automatically linked to below the farm "
-"name. You can also move between these farms using left and right keyboard keys. If you are not registered, farms "
-"are not automatically linked, but if you later choose to register, they can be claimed."
-msgstr ""
-"当然可以。只要您已经%(signed_up)s并%(logged_in)s，您上传的这些农场就会被自动归类为一个系列，您可以使用键盘的左右键"
-"快速切换。若是没有登录，这些农场就不会被自动归类，您可以登录并认领它们。"
+msgid "Yes. If you are %(signed_up)s and %(logged_in)s, your uploads's series is automatically linked to below the farm name. You can also move between these farms using left and right keyboard keys. If you are not registered, farms are not automatically linked, but if you later choose to register, they can be claimed."
+msgstr "当然可以。只要您已经%(signed_up)s并%(logged_in)s，您上传的这些农场就会被自动归类为一个系列，您可以使用键盘的左右键快速切换。若是没有登录，这些农场就不会被自动归类，您可以登录并认领它们。"
 
-#: templates/faq.html:26 templates/faq.html:32
+#: ../sdv/templates/faq.html:26 ../sdv/templates/faq.html:32
 msgid "signed up"
 msgstr "注册"
 
-#: templates/faq.html:26 templates/faq.html:52
+#: ../sdv/templates/faq.html:26 ../sdv/templates/faq.html:52
 msgid "logged in"
 msgstr "登录"
 
-#: templates/faq.html:28
+#: ../sdv/templates/faq.html:28
 msgid "I can't find my farm!"
 msgstr "我找不到我的农场了！"
 
-#: templates/faq.html:29
+#: ../sdv/templates/faq.html:29
 #, python-format
-msgid ""
-"If you are registered, check your %(account)s page. If you are not and have your original savegame, re-upload "
-"your farm and the site will redirect you to the existing data, and re-set your ownership."
-msgstr ""
-"如果您已经注册，检查一下%(account)s页面。如果您没注册，只需要重新上传您的农场，您将会被引导至先前上传的农场，这样"
-"就可以重设拥有权。"
+msgid "If you are registered, check your %(account)s page. If you are not and have your original savegame, re-upload your farm and the site will redirect you to the existing data, and re-set your ownership."
+msgstr "如果您已经注册，检查一下%(account)s页面。如果您没注册，只需要重新上传您的农场，您将会被引导至先前上传的农场，这样就可以重设拥有权。"
 
-#: templates/faq.html:29
+#: ../sdv/templates/faq.html:29
 msgid "account"
 msgstr "账户"
 
-#: templates/faq.html:31
+#: ../sdv/templates/faq.html:31
 msgid "How do I enable savegame sharing?"
 msgstr "我怎么开启存档共享功能？"
 
-#: templates/faq.html:32
+#: ../sdv/templates/faq.html:32
 #, python-format
-msgid ""
-"If you are %(signed_up)s and own the page, beneath the minimap is a button to enable savegame sharing. This "
-"enables them for <em>all</em> users of the site, and may be enabled or disabled as you like."
-msgstr ""
-"如果您已经%(signed_up)s并拥有这个农场，网页右侧小地图上方有一个软盘图标状按键。您可以用这个按键选择是否与<em>全体"
-"</em>网站用户共享，此功能可随时关闭。"
+msgid "If you are %(signed_up)s and own the page, beneath the minimap is a button to enable savegame sharing. This enables them for <em>all</em> users of the site, and may be enabled or disabled as you like."
+msgstr "如果您已经%(signed_up)s并拥有这个农场，网页右侧小地图上方有一个软盘图标状按键。您可以用这个按键选择是否与<em>全体</em>网站用户共享，此功能可随时关闭。"
 
-#: templates/faq.html:34
+#: ../sdv/templates/faq.html:34
 msgid "Why do I have to sign up to enable savegame sharing?"
 msgstr "为什么我必须注册才能共享存档？"
 
-#: templates/faq.html:35
-msgid ""
-"If other people could download your savegame without you having claimed the page, they could upload it, <a "
-"href='#cantfind'>take control</a> of it, and then delete it or claim it themselves. So, for the extra "
-"functionality, you have to register."
-msgstr ""
-"如果其他用户下载了您尚未认领的农场的存档，他们就可以重新上传这个存档并<a href='#cantfind'>控制</a>这个农场。为了保"
-"障您成果的安全，注册一个账户是必需的。"
+#: ../sdv/templates/faq.html:35
+msgid "If other people could download your savegame without you having claimed the page, they could upload it, <a href='#cantfind'>take control</a> of it, and then delete it or claim it themselves. So, for the extra functionality, you have to register."
+msgstr "如果其他用户下载了您尚未认领的农场的存档，他们就可以重新上传这个存档并<a href='#cantfind'>控制</a>这个农场。为了保障您成果的安全，注册一个账户是必需的。"
 
-#: templates/faq.html:37
+#: ../sdv/templates/faq.html:37
 msgid "Can I make uploads private, so only I can see them?"
 msgstr "我可以把我上传的农场私有化/改为不公开展示吗？"
 
-#: templates/faq.html:38
-msgid ""
-"You can unlist farms if you are registered and logged in. You can also set your account to automatically make "
-"uploads unlisted on your account page."
-msgstr ""
-"如果您已经注册并登录，在账户页面可以选择不公开展示农场。您也可以在账户页里更改设置，使您的农场默认不公开展示。"
+#: ../sdv/templates/faq.html:38
+msgid "You can unlist farms if you are registered and logged in. You can also set your account to automatically make uploads unlisted on your account page."
+msgstr "如果您已经注册并登录，在账户页面可以选择不公开展示农场。您也可以在账户页里更改设置，使您的农场默认不公开展示。"
 
-#: templates/faq.html:40
+#: ../sdv/templates/faq.html:40
 msgid "What is the stardew.info planner?"
 msgstr "stardew.info规划器是什么？"
 
-#: templates/faq.html:41
-msgid ""
-"The <a href='https://stardew.info/planner/'' target='_blank'>Stardew planner</a> by <a href='https://github.com/"
-"hpeinar/stardewplanner' target='_blank'>Henrik Peinar</a> is a tool that allows you to plan your farm. We have "
-"integrated support for the planner to the site for uploads you own. To use this feature, click the blueprint icon "
-"in the control panel on your farm's profile page to load it into the planner. In addition, we have worked with "
-"Henrik to allow rendering of farms from the planner. These are separate to normal savegame uploads, and are "
-"accessed from the planner itself."
-msgstr ""
-"<a href='https://stardew.info/planner/'' target='_blank'>星露谷物语规划器</a>是由<a href='https://github.com/"
-"hpeinar/stardewplanner'target='_blank'>Henrik Peinar</a>编写的程序，您可以使用它规划您的农场，我们已经集成对规划器"
-"的支持。如果您想规划您的农场，点击网页右侧小地图上方的蓝图图标即可。另外，我们也可以将规划器的成果渲染成农场的图"
-"片，这与上传存档的系统是分开的，可以在规划器中使用这项功能。"
+#: ../sdv/templates/faq.html:41
+msgid "The <a href='https://stardew.info/planner/'' target='_blank'>Stardew planner</a> by <a href='https://github.com/hpeinar/stardewplanner' target='_blank'>Henrik Peinar</a> is a tool that allows you to plan your farm. We have integrated support for the planner to the site for uploads you own. To use this feature, click the blueprint icon in the control panel on your farm's profile page to load it into the planner. In addition, we have worked with Henrik to allow rendering of farms from the planner. These are separate to normal savegame uploads, and are accessed from the planner itself."
+msgstr "<a href='https://stardew.info/planner/'' target='_blank'>星露谷物语规划器</a>是由<a href='https://github.com/hpeinar/stardewplanner'target='_blank'>Henrik Peinar</a>编写的程序，您可以使用它规划您的农场，我们已经集成对规划器的支持。如果您想规划您的农场，点击网页右侧小地图上方的蓝图图标即可。另外，我们也可以将规划器的成果渲染成农场的图片，这与上传存档的系统是分开的，可以在规划器中使用这项功能。"
 
-#: templates/faq.html:43
+#: ../sdv/templates/faq.html:43
 msgid "How do I use downloaded savegames?"
 msgstr "我怎么使用下载来的存档？"
 
-#: templates/faq.html:49
+#: ../sdv/templates/faq.html:49
 #, python-format
-msgid ""
-"Saves go in %(appdata)s where you can place the extracted folder and contents. On Windows this is normally "
-"%(windir)s."
-msgstr "下载的存档是zip格式，应解压至%(appdata)s文件夹下。一般路径为%(windir)s。"
+msgid "Saves go in %(appdata)s where you can place the extracted folder and contents. On Windows this is normally %(windir)s."
+msgstr ""
 
-#: templates/faq.html:51
+#: ../sdv/templates/faq.html:51
 msgid "How can I delete my upload(s)?"
 msgstr "我怎么能删除我上传的农场？"
 
-#: templates/faq.html:52
+#: ../sdv/templates/faq.html:52
 #, python-format
-msgid ""
-"When you upload a savegame a cookie is set to indicate ownership. Below the farm name should be a 'delete this "
-"page' button. If you are %(logged_in)s and have uploaded multiple farms from the same playthrough you will also "
-"have an option to delete 'all for this farm'. Both ask for confirmation before deleting."
-msgstr ""
-"在您%(logged_in)s之后，您拥有的农场页面右侧小地图上方有两个垃圾桶图标状按键，灰色为删除此农场，红色为删除整个系"
-"列。删除前需要确认。"
+msgid "When you upload a savegame a cookie is set to indicate ownership. Below the farm name should be a 'delete this page' button. If you are %(logged_in)s and have uploaded multiple farms from the same playthrough you will also have an option to delete 'all for this farm'. Both ask for confirmation before deleting."
+msgstr "在您%(logged_in)s之后，您拥有的农场页面右侧小地图上方有两个垃圾桶图标状按键，灰色为删除此农场，红色为删除整个系列。删除前需要确认。"
 
-#: templates/faq.html:54
+#: ../sdv/templates/faq.html:54
 msgid "Do you support [modname]?"
-msgstr "您们支持[插入mod名]吗？"
+msgstr "网站支持[插入mod名]吗？"
 
-#: templates/faq.html:55
-msgid ""
-"At present we don't explicitly support any mods, but mods that don't add new assets or structurally change your "
-"savegame too much will probably work. Once we've got the core site functionality sorted we'll look at mod support!"
-msgstr ""
-"目前我们并不会特别支持任何mod，并未向游戏加入新资源或改变存档文件结构的mod应该都是支持的。我们在网站本身开发完成之"
-"后会研究mod支持功能。"
+#: ../sdv/templates/faq.html:55
+msgid "At present we don't explicitly support any mods, but mods that don't add new assets or structurally change your savegame too much will probably work. Once we've got the core site functionality sorted we'll look at mod support!"
+msgstr "目前我们并不会特别支持任何mod，并未向游戏加入新资源或改变存档文件结构的mod应该都是支持的。我们在网站本身开发完成之后会研究mod支持功能。"
 
-#: templates/index.html:40
+#: ../sdv/templates/index.html:40
 msgid "Upload your farm"
 msgstr "上传您的农场"
 
-#: templates/index.html:44
+#: ../sdv/templates/index.html:44
 msgid "Upload!"
 msgstr "上传！"
 
-#: templates/index.html:52
+#: ../sdv/templates/index.html:52
 #, python-format
-msgid ""
-"%(stardew_valley)s save files can be found under %(appdata)s and are named after your character, plus an ID number"
-msgstr "%(stardew_valley)s的存档文件在%(appdata)s目录中，为您的角色名_ID号的文件"
+msgid "%(stardew_valley)s save files can be found under %(appdata)s and are named after your character, plus an ID number"
+msgstr "%(stardew_valley)s的存档文件在%(appdata)s目录中，文件名为：您的角色名_ID号，将目录粘贴到资源管理器中就能看到"
 
-#: templates/index.html:69
+#: ../sdv/templates/index.html:69
 msgid "Recently uploaded farms"
 msgstr "最近上传的农场"
 
-#: templates/index.html:70
+#: ../sdv/templates/index.html:70
 msgid "Recent uploads"
 msgstr "最新上传"
 
-#: templates/index.html:73
+#: ../sdv/templates/index.html:73
 msgid "more"
 msgstr "更多农场"
 
-#: templates/login.html:2
+#: ../sdv/templates/login.html:2
 msgid "Login"
 msgstr "登录"
 
-#: templates/login.html:32 templates/titlebar.html:26
+#: ../sdv/templates/login.html:32 ../sdv/templates/titlebar.html:26
 msgid "Sign in"
 msgstr "登录"
 
-#: templates/login.html:37
+#: ../sdv/templates/login.html:37
 msgid "Log in to a user account on upload.farm"
 msgstr "登录upload.farm账户"
 
-#: templates/login.html:40 templates/reset.html:27 templates/reset.html:43 templates/signup.html:20
+#: ../sdv/templates/login.html:40 ../sdv/templates/reset.html:27
+#: ../sdv/templates/reset.html:43 ../sdv/templates/signup.html:20
 msgid "Email address"
 msgstr "邮箱地址"
 
-#: templates/login.html:41 templates/reset.html:44 templates/signup.html:21
+#: ../sdv/templates/login.html:41 ../sdv/templates/reset.html:44
+#: ../sdv/templates/signup.html:21
 msgid "email"
 msgstr "电子邮箱"
 
-#: templates/login.html:45 templates/signup.html:25
+#: ../sdv/templates/login.html:45 ../sdv/templates/signup.html:25
 msgid "Password"
 msgstr "密码"
 
-#: templates/login.html:46 templates/reset.html:33 templates/signup.html:26
+#: ../sdv/templates/login.html:46 ../sdv/templates/reset.html:33
+#: ../sdv/templates/signup.html:26
 msgid "password"
 msgstr "密码"
 
-#: templates/login.html:49
+#: ../sdv/templates/login.html:49
 msgid "Sign in!"
 msgstr "登录！"
 
-#: templates/login.html:57
+#: ../sdv/templates/login.html:57
 msgid "Need to register?"
 msgstr "需要注册吗？"
 
-#: templates/login.html:57 templates/signup.html:33
+#: ../sdv/templates/login.html:57 ../sdv/templates/signup.html:33
 msgid "Sign up!"
 msgstr "注册！"
 
-#: templates/login.html:57
+#: ../sdv/templates/login.html:57
 msgid "Forgot password?"
 msgstr "忘记密码了？"
 
-#: templates/login.html:57
+#: ../sdv/templates/login.html:57
 msgid "Reset it!"
 msgstr "重设密码！"
 
-#: templates/plan.html:5 templates/plan.html:9 templates/plan.html:16 templates/plan.html:26
+#: ../sdv/templates/plan.html:5 ../sdv/templates/plan.html:9
+#: ../sdv/templates/plan.html:16 ../sdv/templates/plan.html:26
 msgid "Render of stardew.info farm plan (Stardew Valley)"
 msgstr "stardew.info农场规划渲染图（星露谷物语）"
 
-#: templates/plan.html:8 templates/plan.html:15 templates/plan.html:22
+#: ../sdv/templates/plan.html:8 ../sdv/templates/plan.html:15
+#: ../sdv/templates/plan.html:22
 msgid "Farm plan render - upload.farm"
 msgstr "农场规划渲染-upload.farm"
 
-#: templates/plan.html:79
+#: ../sdv/templates/plan.html:79
 #, python-format
 msgid "Farm plan in %(season)s"
 msgstr "%(season)s的农场规划"
 
-#: templates/plan.html:87
+#: ../sdv/templates/plan.html:87
 msgid "view plan"
 msgstr "查看规划"
 
-#: templates/plan.html:93
+#: ../sdv/templates/plan.html:93
 msgid "Plan re-rendering, will automatically load when complete"
 msgstr "规划重新渲染中，完成后会自动加载"
 
-#: templates/profile.html:5 templates/profile.html:9 templates/profile.html:16 templates/profile.html:28
+#: ../sdv/templates/profile.html:5 ../sdv/templates/profile.html:9
+#: ../sdv/templates/profile.html:16 ../sdv/templates/profile.html:28
 #, python-format
 msgid "Summary of %(farmname)s Farm by %(name)s (Stardew Valley)"
 msgstr "%(name)s的%(farmname)s农场的摘要（星露谷物语）"
 
-#: templates/profile.html:8 templates/profile.html:15 templates/profile.html:22
+#: ../sdv/templates/profile.html:8 ../sdv/templates/profile.html:15
+#: ../sdv/templates/profile.html:22
 #, python-format
 msgid "%(farmname)s Farm Summary - upload.farm"
 msgstr "%(farmname)s农场摘要-upload.farm"
 
-#: templates/profile.html:138 templates/profile.html:159
-#, python-format
-msgid "%(farmname)s Farm"
-msgstr "%(farmname)s的农场"
-
-#: templates/profile.html:168
-#, python-format
-msgid "Go back to %(previous)s (left arrow on keyboard also works)"
-msgstr "后退至%(previous)s（也可以使用键盘左键）"
-
-#: templates/profile.html:170
-#, python-format
-msgid "Go forward to %(next)s (right arrow on keyboard also works)"
-msgstr "前进至%(next)s（也可以使用键盘右键）"
-
-#: templates/profile.html:182
-msgid "Warning:"
-msgstr "警告："
-
-#: templates/profile.html:182
-msgid ""
-"This farm failed image processing, which means the savegame had unexpected contents. It might be modded, or "
-"malicious. Be aware if downloading the savegame."
-msgstr "这个农场无法生成图片，这说明存档内有非正常内容。可能是因为mod，也可能因为是恶意的存档，下载此存档时要小心。"
-
-#: templates/profile.html:218
-msgid "Stats"
-msgstr "状态"
-
-#: templates/profile.html:219
-msgid "Summary"
-msgstr "摘要"
-
-#: templates/profile.html:220
-msgid "Skills"
-msgstr "技能"
-
-#: templates/profile.html:231
-msgid "Name"
-msgstr ""
-
-#: templates/profile.html:232
-msgid "Current Funds"
-msgstr "现有资金"
-
-#: templates/profile.html:233
-msgid "Total Earnings"
-msgstr "总计收入"
-
-#: templates/profile.html:234
-msgid "Gender"
-msgstr "性别"
-
-#: templates/profile.html:234
-msgid "Male"
-msgstr "男性"
-
-#: templates/profile.html:234
-msgid "Female"
-msgstr "女性"
-
-#: templates/profile.html:236
-msgid "Favorite Thing"
-msgstr "最喜欢的东西"
-
-#: templates/profile.html:237
-msgid "Health"
-msgstr "健康"
-
-#: templates/profile.html:238
-msgid "Stamina"
-msgstr "耐久"
-
-#: templates/profile.html:239
-msgid "Steps Taken"
-msgstr "步数"
-
-#: templates/profile.html:241
-msgid "Mines Depth"
-msgstr "矿洞层数"
-
-#: templates/profile.html:241 templates/profile.html:242 templates/profile.html:244
-msgid "level"
-msgstr " "
-
-#: templates/profile.html:242
-msgid "Cavern Depth"
-msgstr "骷髅洞窟层数"
-
-#: templates/profile.html:244
-msgid "Mine Depth"
-msgstr "矿洞层数"
-
-#: templates/profile.html:246
-msgid "Time Played"
-msgstr "游戏时间"
-
-#: templates/profile.html:246
-msgid "hours"
-msgstr "小时"
-
-#: templates/profile.html:260
-msgid "is married to"
-msgstr "的伴侣是"
-
-#: templates/profile.html:260 templates/profile.html:262 templates/profile.html:266
-msgid "and"
-msgstr "和"
-
-#: templates/profile.html:262
-msgid "is unmarried"
-msgstr "暂时未婚"
-
-#: templates/profile.html:266
-msgid "has"
-msgstr "有"
-
-#: templates/profile.html:267
-#, python-format
-msgid "a %(n)s day old"
-msgstr "一个%(n)s天大的"
-
-#: templates/profile.html:268
-msgid "son"
-msgstr "儿子"
-
-#: templates/profile.html:268
-msgid "daughter"
-msgstr "女儿"
-
-#: templates/profile.html:269 templates/profile.html:276
-msgid "named"
-msgstr "叫做"
-
-#: templates/profile.html:273
-msgid "has no children"
-msgstr "暂时没有孩子"
-
-#: templates/profile.html:276
-msgid "and has a pet"
-msgstr "有一个宠物"
-
-#: templates/profile.html:276
-msgid "cat"
-msgstr "猫"
-
-#: templates/profile.html:276
-msgid "dog"
-msgstr "狗"
-
-#: templates/profile.html:282
+#: ../sdv/templates/profile.html:139
 msgid "Brown Chicken"
-msgstr ""
+msgstr "棕色鸡"
 
-#: templates/profile.html:283
+#: ../sdv/templates/profile.html:140
 msgid "Brown Chickens"
-msgstr ""
+msgstr "棕色鸡"
 
-#: templates/profile.html:284
+#: ../sdv/templates/profile.html:141
 msgid "White Chicken"
-msgstr ""
+msgstr "白色鸡"
 
-#: templates/profile.html:285
+#: ../sdv/templates/profile.html:142
 msgid "White Chickens"
-msgstr ""
+msgstr "白色鸡"
 
-#: templates/profile.html:286
+#: ../sdv/templates/profile.html:143
 msgid "Blue Chicken"
-msgstr ""
+msgstr "蓝色鸡"
 
-#: templates/profile.html:287
+#: ../sdv/templates/profile.html:144
 msgid "Blue Chickens"
-msgstr ""
+msgstr "蓝色鸡"
 
-#: templates/profile.html:288
+#: ../sdv/templates/profile.html:145
 msgid "Void Chicken"
-msgstr ""
+msgstr "虚空鸡"
 
-#: templates/profile.html:289
+#: ../sdv/templates/profile.html:146
 msgid "Void Chickens"
-msgstr ""
+msgstr "虚空鸡"
 
-#: templates/profile.html:290
+#: ../sdv/templates/profile.html:147
 msgid "White Cow"
-msgstr ""
+msgstr "白色奶牛"
 
-#: templates/profile.html:291
+#: ../sdv/templates/profile.html:148
 msgid "White Cows"
-msgstr ""
+msgstr "白色奶牛"
 
-#: templates/profile.html:292
+#: ../sdv/templates/profile.html:149
 msgid "Brown Cow"
-msgstr ""
+msgstr "棕色奶牛"
 
-#: templates/profile.html:293
+#: ../sdv/templates/profile.html:150
 msgid "Brown Cows"
-msgstr ""
+msgstr "棕色奶牛"
 
-#: templates/profile.html:294
+#: ../sdv/templates/profile.html:151
 msgid "Duck"
-msgstr ""
+msgstr "鸭子"
 
-#: templates/profile.html:295
+#: ../sdv/templates/profile.html:152
 msgid "Ducks"
-msgstr ""
+msgstr "鸭子"
 
-#: templates/profile.html:296
+#: ../sdv/templates/profile.html:153
 msgid "Rabbit"
-msgstr ""
+msgstr "兔子"
 
-#: templates/profile.html:297
+#: ../sdv/templates/profile.html:154
 msgid "Rabbits"
-msgstr ""
+msgstr "兔子"
 
-#: templates/profile.html:298
+#: ../sdv/templates/profile.html:155
 msgid "Dinosaur"
-msgstr ""
+msgstr "恐龙"
 
-#: templates/profile.html:299
+#: ../sdv/templates/profile.html:156
 msgid "Dinosaurs"
-msgstr ""
+msgstr "恐龙"
 
-#: templates/profile.html:300
+#: ../sdv/templates/profile.html:157
 msgid "Goat"
-msgstr ""
+msgstr "山羊"
 
-#: templates/profile.html:301
+#: ../sdv/templates/profile.html:158
 msgid "Goats"
-msgstr ""
+msgstr "山羊"
 
-#: templates/profile.html:302
+#: ../sdv/templates/profile.html:159
 msgid "Sheep"
-msgstr ""
+msgstr "绵羊"
 
-#: templates/profile.html:303
+#: ../sdv/templates/profile.html:160
 msgid "Sheeps"
-msgstr ""
+msgstr "绵羊"
 
-#: templates/profile.html:304
+#: ../sdv/templates/profile.html:161
 msgid "Pig"
-msgstr ""
+msgstr "猪"
 
-#: templates/profile.html:305
+#: ../sdv/templates/profile.html:162
 msgid "Pigs"
-msgstr ""
+msgstr "猪"
 
-#: templates/profile.html:311
-msgid "Farm horse:"
-msgstr "农场的马"
-
-#: templates/profile.html:317
-#, python-format
-msgid "%(n)s days old"
-msgstr "%(n)s天大"
-
-#: templates/profile.html:345
+#: ../sdv/templates/profile.html:177
 #, python-format
 msgid "Animal Products worth 10%% more."
 msgstr "动物产物价格增加10%%。"
 
-#: templates/profile.html:346
+#: ../sdv/templates/profile.html:178
 #, python-format
 msgid "Crops worth 10%% more."
 msgstr "庄稼价格增加10%%。"
 
-#: templates/profile.html:347
+#: ../sdv/templates/profile.html:179
 msgid "Befriend Coop animals quicker."
 msgstr "更容易受鸡舍中动物的喜欢。"
 
-#: templates/profile.html:347
+#: ../sdv/templates/profile.html:179
 msgid "Incubation time cut in half."
 msgstr "蛋孵化时间减半。"
 
-#: templates/profile.html:348
+#: ../sdv/templates/profile.html:180
 msgid "Befriend barn animals quicker."
 msgstr "更容易受畜棚中动物的喜欢。"
 
-#: templates/profile.html:348
+#: ../sdv/templates/profile.html:180
 msgid "Sheep produce wool faster."
 msgstr "绵羊产生羊毛的速度更快。"
 
-#: templates/profile.html:349
+#: ../sdv/templates/profile.html:181
 #, python-format
 msgid "Artisan Goods (wine, cheese, oil, etc.) worth 50%% more."
 msgstr "加工产品（酒，奶酪，油等）价格增加50%%。"
 
-#: templates/profile.html:350
+#: ../sdv/templates/profile.html:182
 #, python-format
 msgid "All crops grow 10%% faster."
 msgstr "所有庄稼生长速度增加10%%。"
 
-#: templates/profile.html:351
+#: ../sdv/templates/profile.html:183
 msgid "+1 ore per vein."
 msgstr "矿脉多出一个矿石。"
 
-#: templates/profile.html:352
+#: ../sdv/templates/profile.html:184
 msgid "Chance for Gems to appear in pairs."
 msgstr "宝石可能会成对出现。"
 
-#: templates/profile.html:353
+#: ../sdv/templates/profile.html:185
 #, python-format
 msgid "Metal bars worth 25%% more."
 msgstr "金属条价格增加25%%。"
 
-#: templates/profile.html:354
+#: ../sdv/templates/profile.html:186
 msgid "Geode find doubled."
 msgstr "晶洞掉落加倍。"
 
-#: templates/profile.html:355
+#: ../sdv/templates/profile.html:187
 msgid "Coal find doubled."
 msgstr "煤炭掉落加倍。"
 
-#: templates/profile.html:356
+#: ../sdv/templates/profile.html:188
 #, python-format
 msgid "Gems worth 30%% more."
 msgstr "宝石价格增加30%%。"
 
-#: templates/profile.html:357
+#: ../sdv/templates/profile.html:189
 #, python-format
 msgid "Wood worth 50%% more."
 msgstr "木材价格增加50%%。"
 
-#: templates/profile.html:358
+#: ../sdv/templates/profile.html:190
 msgid "Chance for double harvest of foraged items."
 msgstr "可采集的物品可能成对出现。"
 
-#: templates/profile.html:359
+#: ../sdv/templates/profile.html:191
 msgid "Normal trees occasionally drop hardwood."
 msgstr "一般的树偶尔掉落硬木。"
 
-#: templates/profile.html:360
+#: ../sdv/templates/profile.html:192
 msgid "Foraged items are always gold quality."
 msgstr "可采集的物品总是最高质量。"
 
-#: templates/profile.html:361
+#: ../sdv/templates/profile.html:193
 #, python-format
 msgid "Syrup is worth 25%% more."
 msgstr "糖浆价格增加25%%。"
 
-#: templates/profile.html:362
+#: ../sdv/templates/profile.html:194
 msgid "Locations of foragable items are revealed."
 msgstr "显示可采集物品的地点。"
 
-#: templates/profile.html:363
+#: ../sdv/templates/profile.html:195
 #, python-format
 msgid "Fish worth 25%% more."
 msgstr "鱼类价格增加25%%。"
 
-#: templates/profile.html:364
+#: ../sdv/templates/profile.html:196
 msgid "Resources required to craft crab pots reduced."
 msgstr "制造捕蟹笼需要的材料减少。"
 
-#: templates/profile.html:365
+#: ../sdv/templates/profile.html:197
 #, python-format
 msgid "Fish worth 50%% more."
 msgstr "鱼类价格增加50%%。"
 
-#: templates/profile.html:366
+#: ../sdv/templates/profile.html:198
 msgid "Chance to find treasure doubled."
 msgstr "钓到宝藏的概率加倍。"
 
-#: templates/profile.html:367
+#: ../sdv/templates/profile.html:199
 msgid "Crab pots never catch trash."
 msgstr "捕蟹笼中不出现垃圾。"
 
-#: templates/profile.html:368
+#: ../sdv/templates/profile.html:200
 msgid "Crab pots no longer need to be baited."
 msgstr "捕蟹笼不再需要诱饵。"
 
-#: templates/profile.html:369
+#: ../sdv/templates/profile.html:201
 #, python-format
 msgid "All attacks deal 10%% more damage."
 msgstr "所有攻击增加10%%伤害。"
 
-#: templates/profile.html:369
+#: ../sdv/templates/profile.html:201
 msgid "+15 HP."
 msgstr "增加15点健康值。"
 
-#: templates/profile.html:370
+#: ../sdv/templates/profile.html:202
 #, python-format
 msgid "Critical strike chance increased by 50%%."
 msgstr "会心一击的概率增加50%%。"
 
-#: templates/profile.html:371
+#: ../sdv/templates/profile.html:203
 #, python-format
 msgid "Damage is increased by 15%%."
 msgstr "攻击伤害增加15%%。"
 
-#: templates/profile.html:372
+#: ../sdv/templates/profile.html:204
 msgid "HP is increased by 25."
 msgstr "增加25点健康值。"
 
-#: templates/profile.html:373
+#: ../sdv/templates/profile.html:205
 msgid "Cooldown on special moves is cut in half."
 msgstr "特殊招式的冷却时间减半。"
 
-#: templates/profile.html:374
+#: ../sdv/templates/profile.html:206
 msgid "Critical hits are deadly."
 msgstr "会心一击伤害大大增加。"
 
-#: templates/profile.html:376
+#: ../sdv/templates/profile.html:211
 msgid "Rancher"
-msgstr ""
+msgstr "牧场主"
 
-#: templates/profile.html:377
+#: ../sdv/templates/profile.html:212
 msgid "Tiller"
-msgstr ""
+msgstr "农场主"
 
-#: templates/profile.html:378
+#: ../sdv/templates/profile.html:213
 msgid "Coopmaster"
-msgstr ""
+msgstr "鸡舍大师"
 
-#: templates/profile.html:379
+#: ../sdv/templates/profile.html:214
 msgid "Shepherd"
-msgstr ""
+msgstr "牧羊人"
 
-#: templates/profile.html:380
+#: ../sdv/templates/profile.html:215
 msgid "Artisan"
-msgstr ""
+msgstr "特产工匠"
 
-#: templates/profile.html:381
+#: ../sdv/templates/profile.html:216
 msgid "Agriculturist"
-msgstr ""
+msgstr "农业学家"
 
-#: templates/profile.html:382
+#: ../sdv/templates/profile.html:217
 msgid "Miner"
-msgstr ""
+msgstr "采工"
 
-#: templates/profile.html:383
+#: ../sdv/templates/profile.html:218
 msgid "Geologist"
-msgstr ""
+msgstr "地质学家"
 
-#: templates/profile.html:384
+#: ../sdv/templates/profile.html:219
 msgid "Blacksmith"
-msgstr ""
+msgstr "熟练铁匠"
 
-#: templates/profile.html:385
+#: ../sdv/templates/profile.html:220
 msgid "Excavator"
-msgstr ""
+msgstr "开凿者"
 
-#: templates/profile.html:386
+#: ../sdv/templates/profile.html:221
 msgid "Prospector"
-msgstr ""
+msgstr "勘探者"
 
-#: templates/profile.html:387
+#: ../sdv/templates/profile.html:222
 msgid "Gemologist"
-msgstr ""
+msgstr "宝石学家"
 
-#: templates/profile.html:388
+#: ../sdv/templates/profile.html:223
 msgid "Forester"
-msgstr ""
+msgstr "林务员"
 
-#: templates/profile.html:389
+#: ../sdv/templates/profile.html:224
 msgid "Gatherer"
-msgstr ""
+msgstr "采集家"
 
-#: templates/profile.html:390
+#: ../sdv/templates/profile.html:225
 msgid "Lumberjack"
-msgstr ""
+msgstr "伐木工"
 
-#: templates/profile.html:391
+#: ../sdv/templates/profile.html:226
 msgid "Botanist"
-msgstr ""
+msgstr "植物专家"
 
-#: templates/profile.html:392
+#: ../sdv/templates/profile.html:227
 msgid "Tapper"
-msgstr ""
+msgstr "树脂专家"
 
-#: templates/profile.html:393
+#: ../sdv/templates/profile.html:228
 msgid "Tracker"
-msgstr ""
+msgstr "追踪专家"
 
-#: templates/profile.html:394
+#: ../sdv/templates/profile.html:229
 msgid "Fisher"
-msgstr ""
+msgstr "渔夫"
 
-#: templates/profile.html:395
+#: ../sdv/templates/profile.html:230
 msgid "Trapper"
-msgstr ""
+msgstr "捕鱼者"
 
-#: templates/profile.html:396
+#: ../sdv/templates/profile.html:231
 msgid "Angler"
-msgstr ""
+msgstr "钓鱼老手"
 
-#: templates/profile.html:397
+#: ../sdv/templates/profile.html:232
 msgid "Pirate"
-msgstr ""
+msgstr "财宝海盗"
 
-#: templates/profile.html:398
+#: ../sdv/templates/profile.html:233
 msgid "Mariner"
-msgstr ""
+msgstr "老海员"
 
-#: templates/profile.html:399
+#: ../sdv/templates/profile.html:234
 msgid "Luremaster"
-msgstr ""
+msgstr "诱饵大师"
 
-#: templates/profile.html:400
+#: ../sdv/templates/profile.html:235
 msgid "Fighter"
-msgstr ""
+msgstr "斗士"
 
-#: templates/profile.html:401
+#: ../sdv/templates/profile.html:236
 msgid "Scout"
-msgstr ""
+msgstr "侦察兵"
 
-#: templates/profile.html:402
+#: ../sdv/templates/profile.html:237
 msgid "Brute"
-msgstr ""
+msgstr "暴徒"
 
-#: templates/profile.html:403
+#: ../sdv/templates/profile.html:238
 msgid "Defender"
-msgstr ""
+msgstr "防御专家"
 
-#: templates/profile.html:404
+#: ../sdv/templates/profile.html:239
 msgid "Acrobat"
-msgstr ""
+msgstr "杂技家"
 
-#: templates/profile.html:405
+#: ../sdv/templates/profile.html:240
 msgid "Desperado"
-msgstr ""
+msgstr "亡命之徒"
 
-#: templates/profile.html:407
+#: ../sdv/templates/profile.html:242
 msgid "Farming"
-msgstr ""
+msgstr "耕种"
 
-#: templates/profile.html:408
+#: ../sdv/templates/profile.html:243
 msgid "Mining"
-msgstr ""
+msgstr "挖矿"
 
-#: templates/profile.html:409
+#: ../sdv/templates/profile.html:244
 msgid "Foraging"
-msgstr ""
+msgstr "采集"
 
-#: templates/profile.html:410
+#: ../sdv/templates/profile.html:245
 msgid "Fishing"
-msgstr ""
+msgstr "钓鱼"
 
-#: templates/profile.html:411
+#: ../sdv/templates/profile.html:246
 msgid "Combat"
-msgstr ""
+msgstr "战斗"
 
-#: templates/profile.html:454
-msgid "(Hover for professions)"
-msgstr "滑动可见技术名称"
-
-#: templates/profile.html:472 templates/profile.html:474
-msgid "This will claim"
-msgstr "仅认领"
-
-#: templates/profile.html:472 templates/profile.html:496
-msgid "only this"
-msgstr "仅这个"
-
-#: templates/profile.html:472
-msgid "upload"
-msgstr "上传"
-
-#: templates/profile.html:472
-msgid "Claim&nbsp;it!"
-msgstr "认领了！"
-
-#: templates/profile.html:472
-msgid "Claim this farm (link it to your account)"
-msgstr "认领这个农场"
-
-#: templates/profile.html:474
-msgid "all unclaimed uploads"
-msgstr "所有未认领的上传"
-
-#: templates/profile.html:474
-msgid "made from this browser."
-msgstr "使用此浏览器上传的"
-
-#: templates/profile.html:474
-msgid "Claim&nbsp;all!"
-msgstr "认领全部！"
-
-#: templates/profile.html:474
-msgid "Claim all unclaimed farms (link them to your account)"
-msgstr "认领全部农场"
-
-#: templates/profile.html:478
-msgid "Send to"
-msgstr "发送至"
-
-#: templates/profile.html:478
-msgid "stardew.info planner"
-msgstr "stardew.info规划器"
-
-#: templates/profile.html:478
-msgid "?"
-msgstr "？"
-
-#: templates/profile.html:478
-msgid "(this is a separate site not part of upload.farm)"
-msgstr "（这工具不是upload.farm的一部分）"
-
-#: templates/profile.html:478
-msgid "Plan&nbsp;my&nbsp;farm!"
-msgstr "规划我的农场！"
-
-#: templates/profile.html:478
-msgid "Plan my farm (send to stardew.info planner)"
-msgstr "规划我的农场（发送至stardew.info规划器）"
-
-#: templates/profile.html:481
-msgid "Disable downloads?"
-msgstr "禁止存档下载？"
-
-#: templates/profile.html:481
-msgid "Disables sharing of the savegame you uploaded"
-msgstr "禁止分享您上传的游戏存档"
-
-#: templates/profile.html:481
-msgid "Disable!"
-msgstr "禁止！"
-
-#: templates/profile.html:481
-msgid "Downloads currently enabled"
-msgstr "现在可以下载存档"
-
-#: templates/profile.html:484
-msgid "Enable downloads?"
-msgstr "允许下载？"
-
-#: templates/profile.html:484
-msgid "Enables download of the savegame you uploaded by yourself and others"
-msgstr "允许您和他人下载您上传的存档"
-
-#: templates/profile.html:484
-msgid "Enable!"
-msgstr "允许！"
-
-#: templates/profile.html:484
-msgid "Downloads currently disabled"
-msgstr "现在不能下载存档。"
-
-#: templates/profile.html:486
-msgid "To enable savegame download please first"
-msgstr "要开启存档分享功能，先"
-
-#: templates/profile.html:486
-msgid "sign up"
-msgstr "注册"
-
-#: templates/profile.html:486
-msgid "sign in"
-msgstr "登录"
-
-#: templates/profile.html:486
-msgid ", then"
-msgstr "，然后"
-
-#: templates/profile.html:486
-msgid "claim this page."
-msgstr "认领这个农场"
-
-#: templates/profile.html:486
-msgid "Sign up or sign in to enable downloads!"
-msgstr "注册或登录以允许下载！"
-
-#: templates/profile.html:490
-msgid "List your farm?"
-msgstr "公开展示您的农场？"
-
-#: templates/profile.html:490
-msgid "Allows it to appear in searches on the site"
-msgstr "允许您的农场出现在站点搜索结果中"
-
-#: templates/profile.html:490
-msgid "List!"
-msgstr "公开展示！"
-
-#: templates/profile.html:490
-msgid "Farm currently unlisted"
-msgstr "农场并未公开展示"
-
-#: templates/profile.html:492
-msgid "Unlist your farm?"
-msgstr "不公开展示您的农场？"
-
-#: templates/profile.html:492
-msgid "Prevents it appearing on the site except to you and people with the URL"
-msgstr "除了您自己和知道地址的人之外无法访问"
-
-#: templates/profile.html:492
-msgid "Unlist!"
-msgstr "不公开展示！"
-
-#: templates/profile.html:492
-msgid "Farm currently listed"
-msgstr "农场在公开展示中"
-
-#: templates/profile.html:496
-msgid "Delete this farm?"
-msgstr "删除这个农场？"
-
-#: templates/profile.html:496 templates/profile.html:498
-msgid "This will delete "
-msgstr "这会删除"
-
-#: templates/profile.html:496
-msgid " upload"
-msgstr "上传的农场"
-
-#: templates/profile.html:496
-msgid "Delete&nbsp;it!"
-msgstr "删除！"
-
-#: templates/profile.html:496
-msgid "Delete farm"
-msgstr "删除农场"
-
-#: templates/profile.html:498
-msgid "Delete all for this farm?"
-msgstr "删除这个农场所有信息？"
-
-#: templates/profile.html:498
-msgid "all uploads in this series."
-msgstr "这个系列中所有的农场"
-
-#: templates/profile.html:498
-msgid "This will remove this farm and all associated farms, be sure you mean to do this!"
-msgstr "这会移除这个及所有相关的农场，请三思！"
-
-#: templates/profile.html:498
-msgid "Delete&nbsp;entire&nbsp;series!"
-msgstr "删除整个系列！"
-
-#: templates/profile.html:498
-msgid "Delete entire farm series"
-msgstr "删除整个农场系列"
-
-#: templates/profile.html:511
-msgid "You use the contents of this zip at your own risk!"
-msgstr "使用此存档zip引发的问题责任自负！"
-
-#: templates/profile.html:511
-msgid "I understand, download!"
-msgstr "我理解，下载！"
-
-#: templates/profile.html:511
-msgid "download savegame"
-msgstr "下载存档"
-
-#: templates/profile.html:521
-msgid "Friendships"
-msgstr "友情关系"
-
-#: templates/profile.html:524
+#: ../sdv/templates/profile.html:251
 msgid "Willy"
-msgstr ""
+msgstr "威利"
 
-#: templates/profile.html:525
+#: ../sdv/templates/profile.html:252
 msgid "Clint"
-msgstr ""
+msgstr "克林特"
 
-#: templates/profile.html:526
+#: ../sdv/templates/profile.html:253
 msgid "Jodi"
-msgstr ""
+msgstr "朱蒂"
 
-#: templates/profile.html:527
+#: ../sdv/templates/profile.html:254
 msgid "Harvey"
-msgstr ""
+msgstr "哈维"
 
-#: templates/profile.html:528
+#: ../sdv/templates/profile.html:255
 msgid "Leah"
-msgstr ""
+msgstr "莉亚"
 
-#: templates/profile.html:529
+#: ../sdv/templates/profile.html:256
 msgid "Wizard"
-msgstr ""
+msgstr "巫师"
 
-#: templates/profile.html:530
+#: ../sdv/templates/profile.html:257
 msgid "Jas"
-msgstr ""
+msgstr "嘉丝"
 
-#: templates/profile.html:531
+#: ../sdv/templates/profile.html:258
 msgid "Abigail"
-msgstr ""
+msgstr "阿比盖尔"
 
-#: templates/profile.html:532
+#: ../sdv/templates/profile.html:259
 msgid "Maru"
-msgstr ""
+msgstr "玛露"
 
-#: templates/profile.html:533
+#: ../sdv/templates/profile.html:260
 msgid "Elliott"
-msgstr ""
+msgstr "艾略特"
 
-#: templates/profile.html:534
+#: ../sdv/templates/profile.html:261
 msgid "Caroline"
-msgstr ""
+msgstr "卡洛琳"
 
-#: templates/profile.html:535
+#: ../sdv/templates/profile.html:262
 msgid "Pam"
-msgstr ""
+msgstr "潘姆"
 
-#: templates/profile.html:536
+#: ../sdv/templates/profile.html:263
 msgid "Dwarf"
-msgstr ""
+msgstr "矮人"
 
-#: templates/profile.html:537
+#: ../sdv/templates/profile.html:264
 msgid "Shane"
-msgstr ""
+msgstr "谢恩"
 
-#: templates/profile.html:538
+#: ../sdv/templates/profile.html:265
 msgid "Demetrius"
-msgstr ""
+msgstr "迪米特里厄斯"
 
-#: templates/profile.html:539
+#: ../sdv/templates/profile.html:266
 msgid "Alex"
-msgstr ""
+msgstr "艾利克斯"
 
-#: templates/profile.html:540
+#: ../sdv/templates/profile.html:267
 msgid "Gus"
-msgstr ""
+msgstr "戈斯"
 
-#: templates/profile.html:541
+#: ../sdv/templates/profile.html:268
 msgid "Vincent"
-msgstr ""
+msgstr "文森特"
 
-#: templates/profile.html:542
+#: ../sdv/templates/profile.html:269
 msgid "Sebastian"
-msgstr ""
+msgstr "塞巴斯提安"
 
-#: templates/profile.html:543
+#: ../sdv/templates/profile.html:270
 msgid "Robin"
-msgstr ""
+msgstr "罗宾"
 
-#: templates/profile.html:544
+#: ../sdv/templates/profile.html:271
 msgid "Sam"
-msgstr ""
+msgstr "山姆"
 
-#: templates/profile.html:545
+#: ../sdv/templates/profile.html:272
 msgid "Lewis"
-msgstr ""
+msgstr "路易斯"
 
-#: templates/profile.html:546
+#: ../sdv/templates/profile.html:273
 msgid "Marnie"
-msgstr ""
+msgstr "玛妮"
 
-#: templates/profile.html:547
+#: ../sdv/templates/profile.html:274
 msgid "Penny"
-msgstr ""
+msgstr "潘妮"
 
-#: templates/profile.html:548
+#: ../sdv/templates/profile.html:275
 msgid "Haley"
-msgstr ""
+msgstr "海莉"
 
-#: templates/profile.html:549
+#: ../sdv/templates/profile.html:276
 msgid "Pierre"
-msgstr ""
+msgstr "皮埃尔"
 
-#: templates/profile.html:550
+#: ../sdv/templates/profile.html:277
 msgid "Evelyn"
-msgstr ""
+msgstr "艾芙琳"
 
-#: templates/profile.html:551
+#: ../sdv/templates/profile.html:278
 msgid "Linus"
-msgstr ""
+msgstr "莱纳斯"
 
-#: templates/profile.html:552
+#: ../sdv/templates/profile.html:279
 msgid "George"
-msgstr ""
+msgstr "乔治"
 
-#: templates/profile.html:553
+#: ../sdv/templates/profile.html:280
 msgid "Emily"
-msgstr ""
+msgstr "艾米丽"
 
-#: templates/profile.html:554
+#: ../sdv/templates/profile.html:281
 msgid "Kent"
-msgstr ""
+msgstr "肯特"
 
-#: templates/profile.html:555
+#: ../sdv/templates/profile.html:282
 msgid "Krobus"
-msgstr ""
+msgstr "科罗布斯"
 
-#: templates/profile.html:556
+#: ../sdv/templates/profile.html:283
 msgid "Sandy"
-msgstr ""
+msgstr "桑迪"
 
-#: templates/profile.html:557
+#: ../sdv/templates/profile.html:284
 msgid "Henchman"
-msgstr ""
+msgstr "仆从"
 
-#: templates/profile.html:570
+#: ../sdv/templates/profile.html:289
 msgid "Armored Bug"
 msgstr "装甲飞虫"
 
-#: templates/profile.html:571
+#: ../sdv/templates/profile.html:290
 msgid "Bat"
 msgstr "蝙蝠"
 
-#: templates/profile.html:572
+#: ../sdv/templates/profile.html:291
 msgid "Big Slime"
 msgstr "大号史莱姆"
 
-#: templates/profile.html:573
+#: ../sdv/templates/profile.html:292
 msgid "Bug"
 msgstr "小虫"
 
-#: templates/profile.html:574
+#: ../sdv/templates/profile.html:293
 msgid "Duggy"
 msgstr "地鼠"
 
-#: templates/profile.html:575
+#: ../sdv/templates/profile.html:294
 msgid "Dust Sprite"
 msgstr "尘埃灵"
 
-#: templates/profile.html:576
+#: ../sdv/templates/profile.html:295
 msgid "Fly"
 msgstr "飞虫"
 
-#: templates/profile.html:577
+#: ../sdv/templates/profile.html:296
 msgid "Frost Bat"
 msgstr "寒冰蝙蝠"
 
-#: templates/profile.html:578
+#: ../sdv/templates/profile.html:297
 msgid "Frost Jelly"
 msgstr "寒霜史莱姆"
 
-#: templates/profile.html:579
+#: ../sdv/templates/profile.html:298
 msgid "Ghost"
 msgstr "死灵"
 
-#: templates/profile.html:580
+#: ../sdv/templates/profile.html:299
 msgid "Green Slime"
 msgstr "绿色史莱姆"
 
-#: templates/profile.html:581
+#: ../sdv/templates/profile.html:300
 msgid "Grub"
 msgstr "爬虫"
 
-#: templates/profile.html:582
+#: ../sdv/templates/profile.html:301
 msgid "Lava Bat"
 msgstr "熔岩蝙蝠"
 
-#: templates/profile.html:583
+#: ../sdv/templates/profile.html:302
 msgid "Lava Crab"
 msgstr "熔岩寄居蟹"
 
-#: templates/profile.html:584
+#: ../sdv/templates/profile.html:303
 msgid "Metal Head"
 msgstr "硬脑壳"
 
-#: templates/profile.html:585
+#: ../sdv/templates/profile.html:304
 msgid "Mummy"
 msgstr "木乃伊"
 
-#: templates/profile.html:586
+#: ../sdv/templates/profile.html:305
 msgid "Purple Slime"
 msgstr "紫色史莱姆"
 
-#: templates/profile.html:587
+#: ../sdv/templates/profile.html:306
 msgid "Sludge"
 msgstr "史莱姆"
 
-#: templates/profile.html:588
+#: ../sdv/templates/profile.html:307
 msgid "Rock Crab"
 msgstr "寄居蟹"
 
-#: templates/profile.html:589
+#: ../sdv/templates/profile.html:308
 msgid "Serpent"
 msgstr "飞蛇"
 
-#: templates/profile.html:590
+#: ../sdv/templates/profile.html:309
 msgid "Shadow Brute"
 msgstr "暗影猎人"
 
-#: templates/profile.html:591
+#: ../sdv/templates/profile.html:310
 msgid "Skeleton"
 msgstr "骷髅"
 
-#: templates/profile.html:592
+#: ../sdv/templates/profile.html:311
 msgid "Squid Kid"
 msgstr "鱿鱼小子"
 
-#: templates/profile.html:593
+#: ../sdv/templates/profile.html:312
 msgid "Stone Golem"
 msgstr "石制魔像"
 
-#: templates/profile.html:594
+#: ../sdv/templates/profile.html:313
 msgid "Transparent Slime"
 msgstr "透明史莱姆"
 
-#: templates/profile.html:595
+#: ../sdv/templates/profile.html:314
 msgid "Void Spirit"
 msgstr "虚空灵魂"
 
-#: templates/profile.html:596
+#: ../sdv/templates/profile.html:315
 msgid "Yellow Slime"
 msgstr "黄色史莱姆"
 
-#: templates/profile.html:600
+#: ../sdv/templates/profile.html:320 ../sdv/templates/profile.html:341
+#, python-format
+msgid "%(farmname)s Farm"
+msgstr "%(farmname)s的农场"
+
+#: ../sdv/templates/profile.html:350
+#, python-format
+msgid "Go back to %(previous)s (left arrow on keyboard also works)"
+msgstr "后退至%(previous)s（也可以使用键盘左键）"
+
+#: ../sdv/templates/profile.html:352
+#, python-format
+msgid "Go forward to %(next)s (right arrow on keyboard also works)"
+msgstr "前进至%(next)s（也可以使用键盘右键）"
+
+#: ../sdv/templates/profile.html:364
+msgid "Warning:"
+msgstr "警告："
+
+#: ../sdv/templates/profile.html:364
+msgid "This farm failed image processing, which means the savegame had unexpected contents. It might be modded, or malicious. Be aware if downloading the savegame."
+msgstr "这个农场无法生成图片，这说明存档内有非正常内容。可能是因为mod，也可能因为是恶意的存档，下载此存档时要小心。"
+
+#: ../sdv/templates/profile.html:400
+msgid "Stats"
+msgstr "状态"
+
+#: ../sdv/templates/profile.html:401
+msgid "Summary"
+msgstr "摘要"
+
+#: ../sdv/templates/profile.html:402
+msgid "Skills"
+msgstr "技能"
+
+#: ../sdv/templates/profile.html:413
+msgid "Name"
+msgstr "名字"
+
+#: ../sdv/templates/profile.html:414
+msgid "Current Funds"
+msgstr "现有资金"
+
+#: ../sdv/templates/profile.html:415
+msgid "Total Earnings"
+msgstr "总计收入"
+
+#: ../sdv/templates/profile.html:416
+msgid "Gender"
+msgstr "性别"
+
+#: ../sdv/templates/profile.html:416
+msgid "Male"
+msgstr "男性"
+
+#: ../sdv/templates/profile.html:416
+msgid "Female"
+msgstr "女性"
+
+#: ../sdv/templates/profile.html:418
+msgid "Favorite Thing"
+msgstr "最喜欢的东西"
+
+#: ../sdv/templates/profile.html:419
+msgid "Health"
+msgstr "健康"
+
+#: ../sdv/templates/profile.html:420
+msgid "Stamina"
+msgstr "耐久"
+
+#: ../sdv/templates/profile.html:421
+msgid "Steps Taken"
+msgstr "步数"
+
+#: ../sdv/templates/profile.html:423
+msgid "Mines Depth"
+msgstr "矿洞层数"
+
+#: ../sdv/templates/profile.html:423 ../sdv/templates/profile.html:424
+#: ../sdv/templates/profile.html:426
+msgid "level"
+msgstr "层"
+
+#: ../sdv/templates/profile.html:424
+msgid "Cavern Depth"
+msgstr "骷髅洞窟层数"
+
+#: ../sdv/templates/profile.html:424 ../sdv/templates/profile.html:426
+#, python-format
+msgid "%(word_level)s %(number)s"
+msgstr "%(number)s%(word_level)s"
+
+#: ../sdv/templates/profile.html:426
+msgid "Mine Depth"
+msgstr "矿洞层数"
+
+#: ../sdv/templates/profile.html:428
+msgid "Time Played"
+msgstr "游戏时间"
+
+#: ../sdv/templates/profile.html:428
+msgid "hours"
+msgstr "小时"
+
+#: ../sdv/templates/profile.html:442
+msgid "is married to"
+msgstr "的伴侣是"
+
+#: ../sdv/templates/profile.html:442 ../sdv/templates/profile.html:444
+#: ../sdv/templates/profile.html:448
+msgid "and"
+msgstr "和"
+
+#: ../sdv/templates/profile.html:444
+msgid "is unmarried"
+msgstr "暂时未婚"
+
+#: ../sdv/templates/profile.html:448
+msgid "has"
+msgstr "有"
+
+#: ../sdv/templates/profile.html:449
+#, python-format
+msgid "a %(n)s day old"
+msgstr "一个%(n)s天大的"
+
+#: ../sdv/templates/profile.html:450
+msgid "son"
+msgstr "儿子"
+
+#: ../sdv/templates/profile.html:450
+msgid "daughter"
+msgstr "女儿"
+
+#: ../sdv/templates/profile.html:451 ../sdv/templates/profile.html:458
+msgid "named"
+msgstr "叫做"
+
+#: ../sdv/templates/profile.html:455
+msgid "has no children"
+msgstr "暂时没有孩子"
+
+#: ../sdv/templates/profile.html:458
+msgid "and has a pet"
+msgstr "有一个宠物"
+
+#: ../sdv/templates/profile.html:458
+msgid "cat"
+msgstr "猫"
+
+#: ../sdv/templates/profile.html:458
+msgid "dog"
+msgstr "狗"
+
+#: ../sdv/templates/profile.html:468
+msgid "Farm horse:"
+msgstr "农场的马"
+
+#: ../sdv/templates/profile.html:473
+#, python-format
+msgid "%(number)s %(animal)s"
+msgstr "%(number)s只%(animal)s"
+
+#: ../sdv/templates/profile.html:475
+#, python-format
+msgid "%(n)s days old"
+msgstr "%(n)s天大"
+
+#: ../sdv/templates/profile.html:535
+msgid "(Hover for professions)"
+msgstr "滑动可见技术名称"
+
+#: ../sdv/templates/profile.html:553 ../sdv/templates/profile.html:555
+msgid "This will claim"
+msgstr "仅认领"
+
+#: ../sdv/templates/profile.html:553 ../sdv/templates/profile.html:577
+msgid "only this"
+msgstr "仅这个"
+
+#: ../sdv/templates/profile.html:553
+msgid "upload"
+msgstr "上传"
+
+#: ../sdv/templates/profile.html:553
+msgid "Claim&nbsp;it!"
+msgstr "认领了！"
+
+#: ../sdv/templates/profile.html:553
+msgid "Claim this farm (link it to your account)"
+msgstr "认领这个农场"
+
+#: ../sdv/templates/profile.html:555
+msgid "all unclaimed uploads"
+msgstr "所有未认领的上传"
+
+#: ../sdv/templates/profile.html:555
+msgid "made from this browser."
+msgstr "使用此浏览器上传的"
+
+#: ../sdv/templates/profile.html:555
+msgid "Claim&nbsp;all!"
+msgstr "认领全部！"
+
+#: ../sdv/templates/profile.html:555
+msgid "Claim all unclaimed farms (link them to your account)"
+msgstr "认领全部农场"
+
+#: ../sdv/templates/profile.html:559
+msgid "Send to"
+msgstr "发送至"
+
+#: ../sdv/templates/profile.html:559
+msgid "stardew.info planner"
+msgstr "stardew.info规划器"
+
+#: ../sdv/templates/profile.html:559
+msgid "?"
+msgstr "？"
+
+#: ../sdv/templates/profile.html:559
+msgid "(this is a separate site not part of upload.farm)"
+msgstr "（这工具不是upload.farm的一部分）"
+
+#: ../sdv/templates/profile.html:559
+msgid "Plan&nbsp;my&nbsp;farm!"
+msgstr "规划我的农场！"
+
+#: ../sdv/templates/profile.html:559
+msgid "Plan my farm (send to stardew.info planner)"
+msgstr "规划我的农场（发送至stardew.info规划器）"
+
+#: ../sdv/templates/profile.html:562
+msgid "Disable downloads?"
+msgstr "禁止存档下载？"
+
+#: ../sdv/templates/profile.html:562
+msgid "Disables sharing of the savegame you uploaded"
+msgstr "禁止分享您上传的游戏存档"
+
+#: ../sdv/templates/profile.html:562
+msgid "Disable!"
+msgstr "禁止！"
+
+#: ../sdv/templates/profile.html:562
+msgid "Downloads currently enabled"
+msgstr "现在可以下载存档"
+
+#: ../sdv/templates/profile.html:565
+msgid "Enable downloads?"
+msgstr "允许下载？"
+
+#: ../sdv/templates/profile.html:565
+msgid "Enables download of the savegame you uploaded by yourself and others"
+msgstr "允许您和他人下载您上传的存档"
+
+#: ../sdv/templates/profile.html:565
+msgid "Enable!"
+msgstr "允许！"
+
+#: ../sdv/templates/profile.html:565
+msgid "Downloads currently disabled"
+msgstr "现在不能下载存档。"
+
+#: ../sdv/templates/profile.html:567
+msgid "To enable savegame download please first"
+msgstr "要开启存档分享功能，先"
+
+#: ../sdv/templates/profile.html:567
+msgid "sign up"
+msgstr "注册"
+
+#: ../sdv/templates/profile.html:567
+msgid "sign in"
+msgstr "登录"
+
+#: ../sdv/templates/profile.html:567
+msgid ", then"
+msgstr "，然后"
+
+#: ../sdv/templates/profile.html:567
+msgid "claim this page."
+msgstr "认领这个农场"
+
+#: ../sdv/templates/profile.html:567
+msgid "Sign up or sign in to enable downloads!"
+msgstr "注册或登录以允许下载！"
+
+#: ../sdv/templates/profile.html:571
+msgid "List your farm?"
+msgstr "公开展示您的农场？"
+
+#: ../sdv/templates/profile.html:571
+msgid "Allows it to appear in searches on the site"
+msgstr "允许您的农场出现在站点搜索结果中"
+
+#: ../sdv/templates/profile.html:571
+msgid "List!"
+msgstr "公开展示！"
+
+#: ../sdv/templates/profile.html:571
+msgid "Farm currently unlisted"
+msgstr "农场并未公开展示"
+
+#: ../sdv/templates/profile.html:573
+msgid "Unlist your farm?"
+msgstr "不公开展示您的农场？"
+
+#: ../sdv/templates/profile.html:573
+msgid "Prevents it appearing on the site except to you and people with the URL"
+msgstr "除了您自己和知道地址的人，其他人无法访问"
+
+#: ../sdv/templates/profile.html:573
+msgid "Unlist!"
+msgstr "不公开展示！"
+
+#: ../sdv/templates/profile.html:573
+msgid "Farm currently listed"
+msgstr "农场在公开展示中"
+
+#: ../sdv/templates/profile.html:577
+msgid "Delete this farm?"
+msgstr "删除这个农场？"
+
+#: ../sdv/templates/profile.html:577 ../sdv/templates/profile.html:579
+msgid "This will delete "
+msgstr "仅会删除"
+
+#: ../sdv/templates/profile.html:577
+msgid " upload"
+msgstr "这个农场"
+
+#: ../sdv/templates/profile.html:577
+msgid "Delete&nbsp;it!"
+msgstr "删除！"
+
+#: ../sdv/templates/profile.html:577
+msgid "Delete farm"
+msgstr "删除农场"
+
+#: ../sdv/templates/profile.html:579
+msgid "Delete all for this farm?"
+msgstr "删除这个农场系列的所有信息？"
+
+#: ../sdv/templates/profile.html:579
+msgid "all uploads in this series."
+msgstr "这个系列中所有的农场"
+
+#: ../sdv/templates/profile.html:579
+msgid "This will remove this farm and all associated farms, be sure you mean to do this!"
+msgstr "这会移除这个及所有相关的农场，请三思！"
+
+#: ../sdv/templates/profile.html:579
+msgid "Delete&nbsp;entire&nbsp;series!"
+msgstr "删除整个系列！"
+
+#: ../sdv/templates/profile.html:579
+msgid "Delete entire farm series"
+msgstr "删除整个农场系列"
+
+#: ../sdv/templates/profile.html:592
+msgid "You use the contents of this zip at your own risk!"
+msgstr "使用此存档zip引发的问题责任自负！"
+
+#: ../sdv/templates/profile.html:592
+msgid "I understand, download!"
+msgstr "我理解，下载！"
+
+#: ../sdv/templates/profile.html:592
+msgid "download savegame"
+msgstr "下载存档"
+
+#: ../sdv/templates/profile.html:602
+msgid "Friendships"
+msgstr "友情关系"
+
+#: ../sdv/templates/profile.html:620
 msgid "Monster Kills"
 msgstr "怪物狩猎记录"
 
-#: templates/profile.html:613
+#: ../sdv/templates/profile.html:633
 #, python-format
 msgid "%(name)s has not killed any monsters yet."
 msgstr "%(name)s还没杀过一只怪物。"
 
-#: templates/profile.html:623
+#: ../sdv/templates/profile.html:643
 #, python-format
 msgid "Map of %(farmname)s Farm"
 msgstr "%(farmname)s农场的地图"
 
-#: templates/profile.html:628
+#: ../sdv/templates/profile.html:648
 msgid "Click to open farm gallery"
 msgstr "点击打开农场相册"
 
-#: templates/profile.html:637
+#: ../sdv/templates/profile.html:657
 msgid "view on imgur"
 msgstr "在imgur上查看"
 
-#: templates/profile.html:644
+#: ../sdv/templates/profile.html:664
 msgid "reupload to imgur"
 msgstr "重新上传至imgur"
 
-#: templates/profile.html:644
+#: ../sdv/templates/profile.html:664
 msgid "upload to imgur"
 msgstr "上传至imgur"
 
-#: templates/recents.html:15
+#: ../sdv/templates/recents.html:15
 msgid "This farm has a downloadable savegame available"
 msgstr "这个农场对应的存档可以下载"
 
-#: templates/recents.html:20
-msgid ""
-"This farm is unlisted and will not show up in searches nor on the front page except to you. It can still be "
-"viewed by people with a direct link."
+#: ../sdv/templates/recents.html:20
+msgid "This farm is unlisted and will not show up in searches nor on the front page except to you. It can still be viewed by people with a direct link."
 msgstr "这个农场未公开展示，只有您及有地址的人可以查看。"
 
-#: templates/reset.html:8 templates/reset.html:47
+#: ../sdv/templates/reset.html:8 ../sdv/templates/reset.html:47
 msgid "Reset password"
 msgstr "重设密码"
 
-#: templates/reset.html:32
+#: ../sdv/templates/reset.html:32
 msgid "New password"
 msgstr "新密码"
 
-#: templates/reset.html:33 templates/signup.html:26
+#: ../sdv/templates/reset.html:33 ../sdv/templates/signup.html:26
 #, python-format
 msgid "Passcode must be at least %(password_min_length)s characters long!"
 msgstr "密码应至少有%(password_min_length)s个字符长！"
 
-#: templates/reset.html:36
+#: ../sdv/templates/reset.html:36
 msgid "Set new password"
 msgstr "设置新密码"
 
-#: templates/reset.html:40
+#: ../sdv/templates/reset.html:40
 msgid "Reset password for user account on upload.farm"
 msgstr "重设upload.farm账户的密码"
 
-#: templates/reset.html:54
+#: ../sdv/templates/reset.html:54
 msgid "Error"
 msgstr "错误"
 
-#: templates/signup.html:2 templates/signup.html:8 templates/titlebar.html:27
+#: ../sdv/templates/signup.html:2 ../sdv/templates/signup.html:8
+#: ../sdv/templates/titlebar.html:27
 msgid "Sign up"
 msgstr "注册"
 
-#: templates/signup.html:11
-msgid ""
-"Registration allows enabling of savegame sharing, quick imgur upload, and creation and curation of farm series."
+#: ../sdv/templates/signup.html:11
+msgid "Registration allows enabling of savegame sharing, quick imgur upload, and creation and curation of farm series."
 msgstr "注册即可启用分享存档，快速上传农场图片至imgur，创造及维护农场系列等功能。"
 
-#: templates/signup.html:12
+#: ../sdv/templates/signup.html:12
 msgid "Already got an account? Sign in!"
 msgstr "已经有账户了？登录！"
 
-#: templates/signup.html:17
+#: ../sdv/templates/signup.html:17
 msgid "Register a user account on upload.farm"
 msgstr "注册upload.farm账户"
 
-#: templates/titlebar.html:11
+#: ../sdv/templates/titlebar.html:11
 msgid "upload.farm"
 msgstr "upload.farm"
 
-#: templates/titlebar.html:16
+#: ../sdv/templates/titlebar.html:16
 msgid "Stardew Valley Summary Generator"
 msgstr "星露谷物语摘要生成器"
 
-#: templates/titlebar.html:20
+#: ../sdv/templates/titlebar.html:20
 msgid "Upload"
 msgstr "上传"
 
-#: templates/titlebar.html:22
+#: ../sdv/templates/titlebar.html:22
 msgid "Blog"
 msgstr "博客"
 
-#: templates/titlebar.html:25
+#: ../sdv/templates/titlebar.html:25
 msgid "Logout"
 msgstr "注销"
 
+#~ msgid " of "
+#~ msgstr "，"
+
+#~ msgid ", Year "
+#~ msgstr "，年"
+
 #~ msgid ""
-#~ "Saves go in %(appdata)s where you can place the extracted folder and contents. This is normally %(windir)s."
 #~ msgstr "下载的存档是zip格式，应解压至%(appdata)s文件夹下。一般路径为%(windir)s。"

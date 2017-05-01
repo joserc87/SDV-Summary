@@ -38,7 +38,8 @@ season_list = {'0':lazy_gettext('Spring'),
 def get_date_string(dayOfMonthForSaveGame,seasonForSaveGame,yearForSaveGame):
     daystring = day_list.get(str(dayOfMonthForSaveGame),str(dayOfMonthForSaveGame))
     seastring = season_list.get(str(seasonForSaveGame),str(seasonForSaveGame))
-    formatted_string = daystring + _(' of ') + seastring + _(', Year ') + str(yearForSaveGame)
+    # formatted_string = daystring + _(' of ') + seastring + _(', Year ') + str(yearForSaveGame)
+    formatted_string = _('%(day)s of %(season)s, Year %(year)s',day=daystring,season=seastring,year=yearForSaveGame)
     return formatted_string
 
 def get_date_data(statsDaysPlayed):
