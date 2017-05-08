@@ -324,6 +324,15 @@ def generate_plans():
 	connection.close()
 	print('done')
 
+def generate_ad_log():
+	connection=connect_db()
+	c = connection.cursor()
+	statement = 'CREATE TABLE ad_log(id '+idcode+', time BIGINT, ip_address TEXT, ad_id TEXT, ad_place TEXT, ad_file TEXT, ad_url TEXT);'
+	c.execute(statement)
+	connection.commit()
+	connection.close()
+	print('done')
+
 def set_indexes():
 	connection=connect_db()
 	c = connection.cursor()
@@ -478,6 +487,9 @@ def init_db(drop_all=False):
 	if drop_all:
 		delete_db()
 	print('---------')
+	a = raw_input('Generate advertising log database? (y/n): ')
+	if a == 'y':
+		generate_ad_log()
 	a = raw_input('Generate playerinfo database? (y/n): ')
 	if a == 'y':
 		generate_db()

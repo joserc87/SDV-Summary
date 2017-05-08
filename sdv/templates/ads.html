@@ -1,0 +1,9 @@
+{% if advert %}
+<div class="row center-block">
+	<div class="col-md-12 col-sm-12">
+		<div class="">
+			<a href="{{url_for('route_out', url=advert.3|quote_plus, id=advert.0, place=advert.1) }}"><img class="img-responsive center-block" src="{{advert.2}}"></a>
+		</div>
+	</div>
+</div>
+{% endif %}

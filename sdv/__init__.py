@@ -41,9 +41,11 @@ import sdv.validate
 
 if sys.version_info >= (3, 0):
     unicode = str
+    from urlparse import quote_plus, unquote_plus
     from urllib.parse import urlparse
 else:
     str = unicode
+    from urllib import quote_plus, unquote_plus
     from urlparse import urlparse
 
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
@@ -122,6 +124,7 @@ def legacy_location(location):
 
 app.jinja_env.globals.update(legacy_location=legacy_location)
 app.jinja_env.globals.update(get_locale=get_locale)
+app.jinja_env.filters['quote_plus'] = lambda u: quote_plus(u)
 
 import sdv.imageDrone  # noqa
 import sdv.emailDrone  # noqa
@@ -150,7 +153,35 @@ def page_init():
 
 
 def page_args():
-    return {'processtime':round(time.time()-g.start_time,5),'error':g.error}
+    advert = get_advert()
+    return {'processtime':round(time.time()-g.start_time,5),'error':g.error,'advert':advert}
+
+
+def get_advert():
+    try:
+        ads = app.config['ADVERTS']
+        result = None if ads == None else random.choice(ads)
+    except KeyError:
+        result = None
+    return result
+
+
+@app.route('/out/<url>')
+def route_out(url):
+    url = unquote_plus(url)
+    log_ad_click(url,request.args.get('id'),request.args.get('place'))
+    return redirect(url)
+
+
+def log_ad_click(ad_url,ad_id,ad_place):
+    db = get_db()
+    cur = db.cursor()
+    ip = request.environ['REMOTE_ADDR']
+    referral_time = time.time()
+    ad_file = None
+    cur.execute('INSERT INTO ad_log (time, ip_address, ad_id, ad_place, ad_file, ad_url) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(referral_time,ip,ad_id,ad_place,ad_file,ad_url))
+    db.commit()
+    return
 
 
 def md5(md5file):
