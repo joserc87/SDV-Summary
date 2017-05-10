@@ -1606,6 +1606,15 @@ def faq():
     page_init()
     return render_template('faq.html',**page_args())
 
+@app.route('/about')
+def about():
+    page_init()
+    return render_template('about.html',**page_args())
+
+@app.route('/pp')
+def privacy():
+    page_init()
+    return render_template('privacy.html',**page_args())
 
 @app.route('/imgur')
 def get_imgur_auth_code():
