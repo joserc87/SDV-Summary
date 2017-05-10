@@ -41,8 +41,8 @@ import sdv.validate
 
 if sys.version_info >= (3, 0):
     unicode = str
-    from urlparse import quote_plus, unquote_plus
     from urllib.parse import urlparse
+    from urllib.parse import quote_plus, unquote_plus
 else:
     str = unicode
     from urllib import quote_plus, unquote_plus
