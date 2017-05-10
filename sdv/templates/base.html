@@ -54,7 +54,7 @@
 			<div class="row panel center-block text-center">
 				<div class="interiorpanel">
 					{% autoescape false %}
-						<p class="text-muted">{{_("Took %(processtime)s seconds to process request",processtime=processtime)}} | {{_("source at %(github)s",github='<a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a>')}}<br>{{_("All Stardew Valley assets copyright %(concerned_ape)s",concerned_ape='<a href="http://twitter.com/concernedape">Concerned Ape</a>')}}</p>
+						<p class="text-muted">{{_("Took %(processtime)s&thinsp;s",processtime=processtime)}} | <a href='{{url_for("privacy")}}'>{{_("privacy policy")}}</a> | {{_("source at %(github)s",github='<a href="https://github.com/Sketchy502/SDV-Summary">GitHub</a>')}}<br>{{_("All Stardew Valley assets copyright %(concerned_ape)s",concerned_ape='<a href="http://twitter.com/concernedape">Concerned Ape</a>')}}</p>
 					{% endautoescape %}
 				</div>
 			</div>
