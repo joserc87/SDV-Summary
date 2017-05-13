@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-05-01 23:22+0100\n"
-"PO-Revision-Date: 2017-05-01 23:23+0100\n"
+"POT-Creation-Date: 2017-05-13 18:04+0100\n"
+"PO-Revision-Date: 2017-05-13 18:09+0100\n"
 "Last-Translator: \n"
 "Language: es\n"
 "Language-Team: es <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
-"X-Generator: Poedit 2.0\n"
+"X-Generator: Poedit 2.0.2\n"
 
 #: ../sdv/__init__.py:192 ../sdv/__init__.py:259
 msgid "Username not found!"
@@ -531,6 +531,10 @@ msgid ""
 msgstr ""
 "Las siguientes granjas no están asociadas con tu cuenta de usuario, pero han "
 "sido cargadas desde este ordenador:"
+
+#: ../sdv/templates/account.html:56
+msgid "Claim"
+msgstr "Reclama"
 
 #: ../sdv/templates/account.html:60
 msgid "Or, claim all"
@@ -1416,139 +1420,139 @@ msgstr "Combate"
 
 #: ../sdv/templates/profile.html:251
 msgid "Willy"
-msgstr ""
+msgstr "Willy"
 
 #: ../sdv/templates/profile.html:252
 msgid "Clint"
-msgstr ""
+msgstr "Clint"
 
 #: ../sdv/templates/profile.html:253
 msgid "Jodi"
-msgstr ""
+msgstr "Jodi"
 
 #: ../sdv/templates/profile.html:254
 msgid "Harvey"
-msgstr ""
+msgstr "Harvey"
 
 #: ../sdv/templates/profile.html:255
 msgid "Leah"
-msgstr ""
+msgstr "Leah"
 
 #: ../sdv/templates/profile.html:256
 msgid "Wizard"
-msgstr ""
+msgstr "Rasmodius"
 
 #: ../sdv/templates/profile.html:257
 msgid "Jas"
-msgstr ""
+msgstr "Jas"
 
 #: ../sdv/templates/profile.html:258
 msgid "Abigail"
-msgstr ""
+msgstr "Abigail"
 
 #: ../sdv/templates/profile.html:259
 msgid "Maru"
-msgstr ""
+msgstr "Maru"
 
 #: ../sdv/templates/profile.html:260
 msgid "Elliott"
-msgstr ""
+msgstr "Elliott"
 
 #: ../sdv/templates/profile.html:261
 msgid "Caroline"
-msgstr ""
+msgstr "Caroline"
 
 #: ../sdv/templates/profile.html:262
 msgid "Pam"
-msgstr ""
+msgstr "Pam"
 
 #: ../sdv/templates/profile.html:263
 msgid "Dwarf"
-msgstr ""
+msgstr "Enano"
 
 #: ../sdv/templates/profile.html:264
 msgid "Shane"
-msgstr ""
+msgstr "Shane"
 
 #: ../sdv/templates/profile.html:265
 msgid "Demetrius"
-msgstr ""
+msgstr "Demetrius"
 
 #: ../sdv/templates/profile.html:266
 msgid "Alex"
-msgstr ""
+msgstr "Alex"
 
 #: ../sdv/templates/profile.html:267
 msgid "Gus"
-msgstr ""
+msgstr "Gus"
 
 #: ../sdv/templates/profile.html:268
 msgid "Vincent"
-msgstr ""
+msgstr "Vincent"
 
 #: ../sdv/templates/profile.html:269
 msgid "Sebastian"
-msgstr ""
+msgstr "Sebastian"
 
 #: ../sdv/templates/profile.html:270
 msgid "Robin"
-msgstr ""
+msgstr "Robin"
 
 #: ../sdv/templates/profile.html:271
 msgid "Sam"
-msgstr ""
+msgstr "Sam"
 
 #: ../sdv/templates/profile.html:272
 msgid "Lewis"
-msgstr ""
+msgstr "Lewis"
 
 #: ../sdv/templates/profile.html:273
 msgid "Marnie"
-msgstr ""
+msgstr "Marnie"
 
 #: ../sdv/templates/profile.html:274
 msgid "Penny"
-msgstr ""
+msgstr "Penny"
 
 #: ../sdv/templates/profile.html:275
 msgid "Haley"
-msgstr ""
+msgstr "Haley"
 
 #: ../sdv/templates/profile.html:276
 msgid "Pierre"
-msgstr ""
+msgstr "Pierre"
 
 #: ../sdv/templates/profile.html:277
 msgid "Evelyn"
-msgstr ""
+msgstr "Evelyn"
 
 #: ../sdv/templates/profile.html:278
 msgid "Linus"
-msgstr ""
+msgstr "Linus"
 
 #: ../sdv/templates/profile.html:279
 msgid "George"
-msgstr ""
+msgstr "George"
 
 #: ../sdv/templates/profile.html:280
 msgid "Emily"
-msgstr ""
+msgstr "Emily"
 
 #: ../sdv/templates/profile.html:281
 msgid "Kent"
-msgstr ""
+msgstr "Kent"
 
 #: ../sdv/templates/profile.html:282
 msgid "Krobus"
-msgstr ""
+msgstr "Krobus"
 
 #: ../sdv/templates/profile.html:283
 msgid "Sandy"
-msgstr ""
+msgstr "Sandy"
 
 #: ../sdv/templates/profile.html:284
 msgid "Henchman"
-msgstr ""
+msgstr "Esbirro"
 
 #: ../sdv/templates/profile.html:289
 msgid "Armored Bug"
