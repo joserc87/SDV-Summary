@@ -165,7 +165,7 @@ def md5(md5file):
 
 @app.route('/_mini_recents')
 def jsonifyRecents():
-    mini_recents = [str(post[0])+str(post[6])+str(post[8])+str(get_votes(post[0])) for post in get_recents()['posts']]
+    mini_recents = [str(post[0])+str(post[5])+str(post[6])+str(post[8])+str(get_votes(post[0])) for post in get_recents()['posts']]
     return jsonify(mini_recents)
 
 @app.route('/_full_recents')

@@ -18,29 +18,29 @@
 				</div>
 				<div class="row hidden-xs">
 					<ul class="list-inline text-center" style="margin-bottom:0px;">
-						<li><a href="/">{{_("Upload")}}</a></li>
-						<li><a href="/all">{{_("Browse")}}</a></li>
-						<li><a href="/blog">{{_("Blog")}}</a></li>
-						<li><a href="/faq">{{_("FAQ")}}</a></li>
-						<li><a href="/about">{{_("About")}}</a></li>
-						{% if logged_in() %}<li><a href="/acc">{{_("Account")}}</a></li>
-						<li><a href="/lo">{{_("Logout")}}</a></li>{% else %}
-						<li><a href="/login">{{_("Sign in")}}</a></li>
-						<li><a href="/{{url_for('signup')}}">{{_("Sign up")}}</a></li>{%endif%}
+						<li><a href="{{url_for('home')}}">{{_("Upload")}}</a></li>
+						<li><a href="{{url_for('allmain')}}">{{_("Browse")}}</a></li>
+						<li><a href="{{url_for('blogmain')}}">{{_("Blog")}}</a></li>
+						<li><a href="{{url_for('faq')}}">{{_("FAQ")}}</a></li>
+						<li><a href="{{url_for('about')}}">{{_("About")}}</a></li>
+						{% if logged_in() %}<li><a href="{{url_for('account_page')}}">{{_("Account")}}</a></li>
+						<li><a href="{{url_for('logout')}}">{{_("Logout")}}</a></li>{% else %}
+						<li><a href="{{url_for('login')}}">{{_("Sign in")}}</a></li>
+						<li><a href="{{url_for('signup')}}">{{_("Sign up")}}</a></li>{%endif%}
 					</ul>
 				</div>
 				<div class="row visible-xs-inline">
 					<ul class="list-inline text-center" style="margin-bottom:0px;">
-						<li><a href="/"><img src="{{url_for('static',filename='css/titlebar/upload.png')}}" title='{{_("Upload")}}'></a></li>
-						<li><a href="/all"><img src="{{url_for('static',filename='css/titlebar/browse.png')}}" title='{{_("Browse")}}'></a></li>
-						<li><a href="/blog"><img src="{{url_for('static',filename='css/titlebar/blog.png')}}" title='{{_("Blog")}}'></a></li>
-						<li><a href="/faq"><img src="{{url_for('static',filename='css/titlebar/faq.png')}}" title='{{_("FAQ")}}'></a></li>
-						<li><a href="/about"><img src="{{url_for('static',filename='css/titlebar/about.png')}}" title='{{_("About")}}'></a></li>
+						<li><a href="{{url_for('home')}}"><img src="{{url_for('static',filename='css/titlebar/upload.png')}}" title='{{_("Upload")}}'></a></li>
+						<li><a href="{{url_for('allmain')}}"><img src="{{url_for('static',filename='css/titlebar/browse.png')}}" title='{{_("Browse")}}'></a></li>
+						<li><a href="{{url_for('blogmain')}}"><img src="{{url_for('static',filename='css/titlebar/blog.png')}}" title='{{_("Blog")}}'></a></li>
+						<li><a href="{{url_for('faq')}}"><img src="{{url_for('static',filename='css/titlebar/faq.png')}}" title='{{_("FAQ")}}'></a></li>
+						<li><a href="{{url_for('about')}}"><img src="{{url_for('static',filename='css/titlebar/about.png')}}" title='{{_("About")}}'></a></li>
 						{% if logged_in() %}
-						<li><a href="/acc"><img src="{{url_for('static',filename='css/titlebar/account.png')}}" title='{{_("Account")}}'></a></li>
-						<li><a href="/lo"><img src="{{url_for('static',filename='css/titlebar/logout.png')}}" title='{{_("Logout")}}'></a></li>{% else %}
-						<li><a href="/login"><img src="{{url_for('static',filename='css/titlebar/login.png')}}" title='{{_("Sign in")}}'></a></li>
-						<li><a href="/{{url_for('signup')}}"><img src="{{url_for('static',filename='css/titlebar/signup.png')}}" title='{{_("Sign up")}}'></a></li>{%endif%}
+						<li><a href="{{url_for('account_page')}}"><img src="{{url_for('static',filename='css/titlebar/account.png')}}" title='{{_("Account")}}'></a></li>
+						<li><a href="{{url_for('logout')}}"><img src="{{url_for('static',filename='css/titlebar/logout.png')}}" title='{{_("Logout")}}'></a></li>{% else %}
+						<li><a href="{{url_for('login')}}"><img src="{{url_for('static',filename='css/titlebar/login.png')}}" title='{{_("Sign in")}}'></a></li>
+						<li><a href="{{url_for('signup')}}"><img src="{{url_for('static',filename='css/titlebar/signup.png')}}" title='{{_("Sign up")}}'></a></li>{%endif%}
 					</ul>
 				</div>
 			</div>
