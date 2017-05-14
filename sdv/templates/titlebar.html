@@ -8,7 +8,7 @@
 			<div class="col-sm-10 col-xs-12">
 				<div class="row">
 					<div class="col-md-12">
-						<h1 class="text-center" style="margin-bottom:0px;">{{_("upload.farm")}}</h1>
+						<h1 class="text-center uploadfarmtitle" style="margin-bottom:0px;">{{_("upload.farm")}}</h1>
 					</div>
 				</div>
 				<div class="row hidden-xs">
@@ -31,16 +31,16 @@
 				</div>
 				<div class="row visible-xs-inline">
 					<ul class="list-inline text-center" style="margin-bottom:0px;">
-						<li><a href="{{url_for('home')}}"><img src="{{url_for('static',filename='css/titlebar/upload.png')}}" title='{{_("Upload")}}'></a></li>
-						<li><a href="{{url_for('allmain')}}"><img src="{{url_for('static',filename='css/titlebar/browse.png')}}" title='{{_("Browse")}}'></a></li>
-						<li><a href="{{url_for('blogmain')}}"><img src="{{url_for('static',filename='css/titlebar/blog.png')}}" title='{{_("Blog")}}'></a></li>
-						<li><a href="{{url_for('faq')}}"><img src="{{url_for('static',filename='css/titlebar/faq.png')}}" title='{{_("FAQ")}}'></a></li>
-						<li><a href="{{url_for('about')}}"><img src="{{url_for('static',filename='css/titlebar/about.png')}}" title='{{_("About")}}'></a></li>
+						<li><a class="menu-button-12px" href="{{url_for('home')}}"><img src="{{url_for('static',filename='css/titlebar/upload.png')}}" title='{{_("Upload")}}'></a></li>
+						<li><a class="menu-button-12px" href="{{url_for('allmain')}}"><img src="{{url_for('static',filename='css/titlebar/browse.png')}}" title='{{_("Browse")}}'></a></li>
+						<li><a class="menu-button-12px" href="{{url_for('blogmain')}}"><img src="{{url_for('static',filename='css/titlebar/blog.png')}}" title='{{_("Blog")}}'></a></li>
+						<li><a class="menu-button-12px" href="{{url_for('faq')}}"><img src="{{url_for('static',filename='css/titlebar/faq.png')}}" title='{{_("FAQ")}}'></a></li>
+						<li><a class="menu-button-12px" href="{{url_for('about')}}"><img src="{{url_for('static',filename='css/titlebar/about.png')}}" title='{{_("About")}}'></a></li>
 						{% if logged_in() %}
-						<li><a href="{{url_for('account_page')}}"><img src="{{url_for('static',filename='css/titlebar/account.png')}}" title='{{_("Account")}}'></a></li>
-						<li><a href="{{url_for('logout')}}"><img src="{{url_for('static',filename='css/titlebar/logout.png')}}" title='{{_("Logout")}}'></a></li>{% else %}
-						<li><a href="{{url_for('login')}}"><img src="{{url_for('static',filename='css/titlebar/login.png')}}" title='{{_("Sign in")}}'></a></li>
-						<li><a href="{{url_for('signup')}}"><img src="{{url_for('static',filename='css/titlebar/signup.png')}}" title='{{_("Sign up")}}'></a></li>{%endif%}
+						<li><a class="menu-button-12px" href="{{url_for('account_page')}}"><img src="{{url_for('static',filename='css/titlebar/account.png')}}" title='{{_("Account")}}'></a></li>
+						<li><a class="menu-button-12px" href="{{url_for('logout')}}"><img src="{{url_for('static',filename='css/titlebar/logout.png')}}" title='{{_("Logout")}}'></a></li>{% else %}
+						<li><a class="menu-button-12px" href="{{url_for('login')}}"><img src="{{url_for('static',filename='css/titlebar/login.png')}}" title='{{_("Sign in")}}'></a></li>
+						<li><a class="menu-button-12px" href="{{url_for('signup')}}"><img src="{{url_for('static',filename='css/titlebar/signup.png')}}" title='{{_("Sign up")}}'></a></li>{%endif%}
 					</ul>
 				</div>
 			</div>

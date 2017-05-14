@@ -697,4 +697,19 @@ p .cc_message {
 	position:absolute;
 	right:15px;
 	top: 15px;
+	z-index: 1000;
+}
+
+@media (max-width: 420px) {
+	.uploadfarmtitle {
+		font-size:40px;
+	}
+}
+
+.menu-button-12px:hover {
+	opacity: 1;
+}
+
+.menu-button-12px {
+	opacity: 0.65;
 }
