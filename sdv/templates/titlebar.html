@@ -26,7 +26,7 @@
 						{% if logged_in() %}<li><a href="/acc">{{_("Account")}}</a></li>
 						<li><a href="/lo">{{_("Logout")}}</a></li>{% else %}
 						<li><a href="/login">{{_("Sign in")}}</a></li>
-						<li><a href="{{url_for('signup')}}">{{_("Sign up")}}</a></li>{%endif%}
+						<li><a href="/{{url_for('signup')}}">{{_("Sign up")}}</a></li>{%endif%}
 					</ul>
 				</div>
 				<div class="row visible-xs-inline">
