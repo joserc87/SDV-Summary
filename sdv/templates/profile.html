@@ -317,7 +317,7 @@ $(document).ready(function() {
 %}
 
 
-{% block title %}{{ _("%(farmname)s Farm",farmname = data.farmName)}} - {{super()}}{% endblock %}
+{% block title %}{{ _("%(farmname)s Farm",farmname = data.farmName|censor)}} - {{super()}}{% endblock %}
 {% block bodycontent %}
 			<div class="row center-block">
 				<div class="col-md-12 col-sm-12 panel">
@@ -338,7 +338,7 @@ $(document).ready(function() {
 											</div>
 										{% endif %}
 										<div class="title-title">
-											<h1 class="text-center" style="margin-bottom:0px;">{{ _("%(farmname)s Farm",farmname = data.farmName)}}</h1>
+											<h1 class="text-center" style="margin-bottom:0px;">{{ _("%(farmname)s Farm",farmname = data.farmName|censor)}}</h1>
 										</div>
 									</div>
 								</div>
@@ -410,12 +410,12 @@ $(document).ready(function() {
 								</div>
 								<div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
 									<dl class="dl-horizontal">
-										<dt><b>{{ _('Name') }}</b></dt><dd><b>{{ data.name }}</b></dd>
+										<dt><b>{{ _('Name') }}</b></dt><dd><b>{{ data.name|censor }}</b></dd>
 										<dt>{{ _('Current Funds') }}</dt><dd>{{ data.money }}g</dd>
 										<dt>{{ _('Total Earnings') }}</dt><dd>{{ data.totalMoneyEarned }}g</dd>
 										<dt>{{ _('Gender') }}</dt><dd>{% if data.isMale == 'true' %} {{_('Male')}} {% else %} {{_('Female')}} {% endif %}</dd>
 										</dd>
-										<dt>{{ _('Favorite Thing') }}</dt><dd>{{ data.favoriteThing }}</dd>
+										<dt>{{ _('Favorite Thing') }}</dt><dd>{{ data.favoriteThing|censor }}</dd>
 										<dt>{{ _('Health') }}</dt><dd>{{ data.maxHealth }}</dd>
 										<dt>{{ _('Stamina') }}</dt><dd>{{ data.maxStamina }}</dd>
 										<dt>{{ _('Steps Taken') }}</dt><dd>{{ data.statsStepsTaken }}</dd>
@@ -441,21 +441,21 @@ $(document).ready(function() {
 									{% if data.portrait_info['partner'] != None %}
 										<b>{{data.name}}</b> {{_('is married to')}} <b>{{ translated_friends.get(data.portrait_info['partner'],None) }}</b>{%if data.petName!=None%}, {%else%}{{ _('and') }}{%endif%}
 									{% else %}
-										<b>{{data.name}}</b> {{_('is unmarried')}}{%if data.petName!=None%},{%else%} {{ _('and') }}{%endif%}
+										<b>{{data.name|censor}}</b> {{_('is unmarried')}}{%if data.petName!=None%},{%else%} {{ _('and') }}{%endif%}
 									{%endif%}
 									{% if data.portrait_info['children']|length > 0 %}
 										{% for child in data.portrait_info['children'] %}
 											{%if loop.index0 == 0 %}{{ _('has') }}{%else%}{{ _('and') }}{%endif%} 
 											{{ _('a %(n)s day old',n=child[2])}}
 											{% if child[0] == 0 %}{{ _('son') }}{%else%}{{ _('daughter') }}{%endif%} 
-											{{ _('named') }} <b>{{ child[3] }}</b>{%if not loop.last %} {%endif%}
+											{{ _('named') }} <b>{{ child[3]|censor }}</b>{%if not loop.last %} {%endif%}
 											{%if loop.last and data.petName!=None%},{%endif%} 
 										{% endfor %}
 									{% else %}
 										{{ _('has no children') }}{%if data.petName!=None%},{%else%}.{%endif%} 
 									{%endif%}
 									{%if data.petName != None %}
-									{{ _('and has a pet') }} {% if data.catPerson == 'true' %} {{ _('cat') }} {% else %} {{ _('dog') }} {% endif %} {{ _('named') }} <b>{{ data.petName }}</b>.
+									{{ _('and has a pet') }} {% if data.catPerson == 'true' %} {{ _('cat') }} {% else %} {{ _('dog') }} {% endif %} {{ _('named') }} <b>{{ data.petName|censor }}</b>.
 									{%endif%}
 									</p>
 								</div>
@@ -465,14 +465,14 @@ $(document).ready(function() {
 										<!--<h3>Farm Animals</h3>-->
 										<br>
 										{% if data.animals['horse'] %}
-											<p>{{ _('Farm horse:') }} {{data.animals['horse']}}</p>
+											<p>{{ _('Farm horse:') }} {{data.animals['horse']|censor}}</p>
 										{%endif%}
 										{% for key in data.animals.keys() %}
 											{%if key != 'horse' %}
 												{% if data.animals[key]|length>1%}{% set animal_name = translated_animals[key+'s'] %}{% else %}{% set animal_name = translated_animals[key] %}{% endif %}
 												<p>{{ _('%(number)s %(animal)s',number=data.animals[key]|length, animal=animal_name) }}:
 													{% for row in data.animals[key] %}
-														<span class="clickable" data-toggle="tooltip" title="{{ _('%(n)s days old',n=row[1]) }}">{{row[0]}}</span>{%if not loop.last%},{%endif%}
+														<span class="clickable" data-toggle="tooltip" title="{{ _('%(n)s days old',n=row[1]) }}">{{row[0]|censor}}</span>{%if not loop.last%},{%endif%}
 													{% endfor %}
 												</p>
 											{%endif%}
