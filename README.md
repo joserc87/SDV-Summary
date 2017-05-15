@@ -64,4 +64,4 @@ Assets for image generation go in `sdv\assets\[subfolder]`. Assets used as-is go
 
 ## Acknowledgements
 
-Thanks to Leonardo Francisco (icantbewrong@outlook.com) for contributing the Brazilian Portuguese translation.
+Thanks to Leonardo Francisco (icantbewrong@outlook.com) for contributing the Brazilian Portuguese translation, and thanks to Yiming Wang (yimingw@umich.edu) for contributing the Chinese translation.
