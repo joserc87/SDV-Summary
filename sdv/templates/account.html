@@ -54,7 +54,7 @@ $(function () {
 						<ul>
 						{% for key in claimable.keys() %}
 							<li>
-								<form action="/{{claimable[key]['data'][0]}}/claim" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">Claim</button>| <a href="/{{claimable[key]['data'][0]}}">{{claimable[key]['auto_key_json'][1]}}, {{claimable[key]['auto_key_json'][2]}} Farm, {{claimable[key]['data'][1]}}</a></form>
+								<form action="/{{claimable[key]['data'][0]}}/claim" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">{{_("Claim")}}</button>| <a href="/{{claimable[key]['data'][0]}}">{{claimable[key]['auto_key_json'][1]}}, {{claimable[key]['auto_key_json'][2]}} Farm, {{claimable[key]['data'][1]}}</a></form>
 							</li>
 						{% endfor %}
 						</ul>

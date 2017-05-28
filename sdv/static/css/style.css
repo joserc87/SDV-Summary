@@ -143,14 +143,14 @@ h1 {
 
 p, li, dl, .pixeltext, .tooltip-inner, .popover-content, .popover-title {
 	line-height: 1;
-	font-family: 'VT323';
+	font-family: 'VT323','FZXS15';
 	font-size: 20pt;
 	margin: 0;
 	color: #333;
 }
 
 .help-block, .smallpixeltext {
-	font-family: 'VT323';
+	font-family: 'VT323','FZXS15';
 	font-size: 16pt;
 }
 
@@ -261,7 +261,7 @@ dt, dd {
 
 .previewtext {
 	position:absolute;
-	font-family: 'VT323';
+	font-family: 'VT323','FZXS15';
 	font-size: 16pt;
 	bottom:21px;
 	left: 35px;
@@ -287,7 +287,7 @@ dt, dd {
 
 .maptextbase {
 	position:absolute;
-	font-family: 'VT323';
+	font-family: 'VT323','FZXS15';
 	font-size: 16pt;
 	top: 46px;
 	height:auto;
@@ -302,7 +302,7 @@ dt, dd {
 .maptextinsert {
 	float:left;
 	display:inline;
-	font-family: 'VT323';
+	font-family: 'VT323','FZXS15';
 	font-size: 16pt;
 	background-color: rgba(0,0,0,0.75);
 	padding: 0px;
@@ -329,7 +329,7 @@ dt, dd {
 
 .npc-relationship {
 	position:absolute;
-	font-family: 'VT323';
+	font-family: 'VT323','FZXS15';
 	font-size: 64px;
 	top: 0px;
 	height:100%;
@@ -428,7 +428,7 @@ dt, dd {
 
 .monster-text {
 	position:absolute;
-	font-family: 'VT323';
+	font-family: 'VT323','FZXS15';
 	font-size: 64px;
 	top: 0px;
 	height:100%;
@@ -580,7 +580,7 @@ p .cc_message {
 .browsebutton {
 	padding: 2px 12px;
 	line-height: 1;
-	font-family: 'VT323';
+	font-family: 'VT323','FZXS15';
 	font-size: 20pt;
 	margin: 0;
 }
@@ -623,7 +623,7 @@ p .cc_message {
 @media all {
 	#featherlight-box-caption {
 		position:absolute;
-		font-family: 'VT323';
+		font-family: 'VT323','FZXS15';
 		font-size: 16pt;
 		top:25px;
 		left: 50%;
@@ -697,4 +697,19 @@ p .cc_message {
 	position:absolute;
 	right:15px;
 	top: 15px;
+	z-index: 1000;
+}
+
+@media (max-width: 420px) {
+	.uploadfarmtitle {
+		font-size:40px;
+	}
+}
+
+.menu-button-12px:hover {
+	opacity: 1;
+}
+
+.menu-button-12px {
+	opacity: 0.65;
 }
