@@ -12,6 +12,11 @@ overlay_layers = {
 }
 
 
+def open_nicely(filename):
+    im = Image.open(filename)
+    im.load()
+    return im
+
 def load_overlays(season, base):
     overlays = dict()
 
@@ -19,7 +24,7 @@ def load_overlays(season, base):
         overlays[layer] = list()
         overlay_path = os.path.join(asset_dir, 'base', base, season, layer)
         for i in range(65):
-            overlays[layer].append(Image.open(os.path.join(overlay_path, '{}-{}.png'.format(layer, i))))
+            overlays[layer].append(open_nicely(os.path.join(overlay_path, '{}-{}.png'.format(layer, i))))
     return overlays
 
 
