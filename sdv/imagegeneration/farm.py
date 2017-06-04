@@ -52,7 +52,7 @@ def generateFarm(season, data, assets=None):
 
     if assets is None:
         print('\tLoading Assets...')
-        assets = loadFarmAssets()
+        assets = loadFarmAssets(season, type)
 
     farm_base = Image.new('RGBA', (1280, 1040))
     farm_base.paste(assets['base'][type][season], (0, 0))
