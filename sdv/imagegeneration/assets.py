@@ -28,46 +28,13 @@ def load_overlays(season, base):
     return overlays
 
 
-def loadFarmAssets():
+def loadFarmAssets(season='spring', base='Default'):
     assets = {
         'base'      : {
-            'Default' : {
-                'spring': Image.open(os.path.join(asset_dir, 'base', 'Default', 'spring', 'Back.png')),
-                'summer': Image.open(os.path.join(asset_dir, 'base', 'Default', 'summer', 'Back.png')),
-                'fall'  : Image.open(os.path.join(asset_dir, 'base', 'Default', 'fall', 'Back.png')),
-                'winter': Image.open(os.path.join(asset_dir, 'base', 'Default', 'winter', 'Back.png'))
-            },
-            'Combat'  : {
-                'spring': Image.open(os.path.join(asset_dir, 'base', 'Combat', 'spring', 'Back.png')),
-                'summer': Image.open(os.path.join(asset_dir, 'base', 'Combat', 'summer', 'Back.png')),
-                'fall'  : Image.open(os.path.join(asset_dir, 'base', 'Combat', 'fall', 'Back.png')),
-                'winter': Image.open(os.path.join(asset_dir, 'base', 'Combat', 'winter', 'Back.png'))
-            },
-            'Fishing' : {
-                'spring': Image.open(os.path.join(asset_dir, 'base', 'Fishing', 'spring', 'Back.png')),
-                'summer': Image.open(os.path.join(asset_dir, 'base', 'Fishing', 'summer', 'Back.png')),
-                'fall'  : Image.open(os.path.join(asset_dir, 'base', 'Fishing', 'fall', 'Back.png')),
-                'winter': Image.open(os.path.join(asset_dir, 'base', 'Fishing', 'winter', 'Back.png'))
-            },
-            'Mining'  : {
-                'spring': Image.open(os.path.join(asset_dir, 'base', 'Mining', 'spring', 'Back.png')),
-                'summer': Image.open(os.path.join(asset_dir, 'base', 'Mining', 'summer', 'Back.png')),
-                'fall'  : Image.open(os.path.join(asset_dir, 'base', 'Mining', 'fall', 'Back.png')),
-                'winter': Image.open(os.path.join(asset_dir, 'base', 'Mining', 'winter', 'Back.png'))
-            },
-            'Foraging': {
-                'spring': Image.open(os.path.join(asset_dir, 'base', 'Foraging', 'spring', 'Back.png')),
-                'summer': Image.open(os.path.join(asset_dir, 'base', 'Foraging', 'summer', 'Back.png')),
-                'fall'  : Image.open(os.path.join(asset_dir, 'base', 'Foraging', 'fall', 'Back.png')),
-                'winter': Image.open(os.path.join(asset_dir, 'base', 'Foraging', 'winter', 'Back.png'))
-            }
+            base: {season: Image.open(os.path.join(asset_dir, 'base', base, season, 'Back.png'))}
         },
         'overlays'  : {
-            'Default' : {season: load_overlays(season, 'Default') for season in {'spring', 'summer', 'fall', 'winter'}},
-            'Combat'  : {season: load_overlays(season, 'Combat') for season in {'spring', 'summer', 'fall', 'winter'}},
-            'Fishing' : {season: load_overlays(season, 'Fishing') for season in {'spring', 'summer', 'fall', 'winter'}},
-            'Mining'  : {season: load_overlays(season, 'Mining') for season in {'spring', 'summer', 'fall', 'winter'}},
-            'Foraging': {season: load_overlays(season, 'Foraging') for season in {'spring', 'summer', 'fall', 'winter'}}
+            base : {season: load_overlays(season, base)}
         },
         'objects'   : Image.open(os.path.join(asset_dir, 'farm', 'tileSheets', 'springobjects.png')),
         'craftables': Image.open(os.path.join(asset_dir, 'farm', 'tileSheets', 'Craftables.png')),
