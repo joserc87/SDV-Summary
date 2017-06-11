@@ -1,0 +1,7 @@
+{% if config['INFOLINKS_ID'] %}
+<script type="text/javascript">
+var infolinks_pid = {{config['INFOLINKS_PID']}};
+var infolinks_wsid = {{config['INFOLINKS_WSID']}};
+</script>
+<script type="text/javascript" src="//resources.infolinks.com/js/infolinks_main.js"></script>
+{% endif %}
