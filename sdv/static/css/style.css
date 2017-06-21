@@ -554,7 +554,7 @@ code {
 	word-break: normal;
 	word-wrap: normal;
 }
-p .cc_message {
+p.cc_message {
 	color: #ffffff !important;
 	font-family: sans-serif;
 }
@@ -713,3 +713,5 @@ p .cc_message {
 .menu-button-12px {
 	opacity: 0.65;
 }
+
+.cc_
