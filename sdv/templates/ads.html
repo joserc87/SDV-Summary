@@ -2,7 +2,10 @@
 <div class="row center-block">
 	<div class="col-md-12 col-sm-12">
 		<div class="">
-			<a href="{{url_for('route_out', url=advert.3|quote_plus, id=advert.0, place=advert.1) }}"><img class="img-responsive center-block" src="{{advert.2}}"></a>
+			<a href="{{url_for('route_out', url=advert.3|quote_plus, id=advert.0, place=advert.1) }}" target="_blank">
+			{% if advert.4 == 'banner' %}<img class="img-responsive center-block" src="{{advert.2}}">{%endif%}
+			{% if advert.4 == 'text' %}<p class="text-center">{{advert.2}}</p>{% endif %}
+			</a>
 		</div>
 	</div>
 </div>

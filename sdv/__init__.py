@@ -158,11 +158,18 @@ def page_args():
 
 
 def get_advert():
-    try:
-        ads = app.config['ADVERTS']
-        result = None if ads == None else random.choice(ads)
-    except KeyError:
-        result = None
+    if request.path == '/':
+        try:
+            fpads = app.config['FRONT_PAGE_ADVERTS']
+            result = None if fpads == None else random.choice(fpads)
+        except KeyError:
+            result = None
+    else:
+        try:
+            ads = app.config['ADVERTS']
+            result = None if ads == None else random.choice(ads)
+        except KeyError:
+            result = None
     return result
 
 
