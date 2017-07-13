@@ -554,7 +554,7 @@ code {
 	word-break: normal;
 	word-wrap: normal;
 }
-p .cc_message {
+p.cc_message {
 	color: #ffffff !important;
 	font-family: sans-serif;
 }

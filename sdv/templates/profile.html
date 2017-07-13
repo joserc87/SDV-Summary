@@ -373,6 +373,7 @@ $(document).ready(function() {
 					</div>
 				</div>
 			</div>
+			{% include "ads.html" %}
 			{% with messages = get_flashed_messages() %}
 				{% if messages %}
 					{% for message in messages %}
