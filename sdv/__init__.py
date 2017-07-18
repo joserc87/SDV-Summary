@@ -30,6 +30,7 @@ from sdv.playerInfo import playerInfo
 from sdv.farmInfo import getFarmInfo
 from sdv.bigbase import dec2big
 from sdv.parsers.json import parse_json, json_layout_map
+from sdv.parsers.wordfilter import Censor
 
 from config import config
 
@@ -54,6 +55,7 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
 recaptcha = ReCaptcha()
 bcrypt = Bcrypt()
 mail = Mail()
+censor = Censor()
 
 
 def create_app(config_name=None):
@@ -66,6 +68,7 @@ def create_app(config_name=None):
     recaptcha.init_app(app=app)
     bcrypt.init_app(app)
     mail.init_app(app)
+    censor.init_app(app=app)
 
     app.secret_key = app.config['SECRET_KEY']
     app.jinja_env.trim_blocks = True

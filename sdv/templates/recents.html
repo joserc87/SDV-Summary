@@ -8,7 +8,7 @@
 				<img src="{{ recent[4] }}" class="headimg" >
 			</div>
 			<div class="previewtext">
-				{{ _("%(name)s, %(farmname)s Farm",name=recent[1],farmname=recent[2]) }} <br/> {{ recent[3] }}
+				{{ _("%(name)s, %(farmname)s Farm",name=recent[1]|censor,farmname=recent[2]|censor) }} <br/> {{ recent[3] }}
 			</div>
 			{% if recent[6] %}
 				<div class="previewdl">

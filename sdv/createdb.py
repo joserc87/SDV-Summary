@@ -336,9 +336,21 @@ def generate_ad_log():
 def set_indexes():
 	connection=connect_db()
 	c = connection.cursor()
-	c.execute('CREATE INDEX series_id_index ON playerinfo (series_id)')
-	c.execute('CREATE INDEX url_index ON playerinfo (url)')
-	connection.commit()
+	indexes = ['CREATE INDEX series_id_index ON playerinfo (series_id)',
+				'CREATE INDEX url_index ON playerinfo (url)',
+				'CREATE INDEX views_index ON playerinfo (views)',
+				'CREATE INDEX positive_votes_index ON playerinfo (positive_votes)',
+				'CREATE INDEX negative_votes_index ON playerinfo (negative_votes)',
+				'CREATE INDEX millisecondsPlayed ON playerinfo (millisecondsPlayed)']
+	for index in indexes:
+		try:
+			c.execute(index)
+			connection.commit()
+			print('{} successful'.format(index))
+		except:
+			connection.rollback()
+			print('{} failed (may already exist)'.format(index))
+
 	connection.close()
 	print('done')
 
