@@ -200,6 +200,9 @@ def md5(md5file):
             h.update(chunk)
     return h.hexdigest()
 
+@app.route('/_ver')
+def theversion():
+    return sys.version
 
 @app.route('/_mini_recents')
 def jsonifyRecents():
@@ -220,6 +223,21 @@ def get_formatted_recents():
     return jsonify(text=text,votes=votes)
 
 
+def generate_bcrypt_password_hash(word):
+    word = bcrypt.generate_password_hash(word)
+    try:
+        word = word.decode('utf-8')
+    except:
+        pass
+    return word
+
+def check_bcrypt_password_hash(passwordhash,attempt):
+    try:
+        result = bcrypt.check_password_hash(passwordhash,attempt)
+    except AssertionError:
+        return None
+    return result
+
 def check_user_pw(email,password_attempt):
     db = get_db()
     cur = db.cursor()
@@ -233,13 +251,13 @@ def check_user_pw(email,password_attempt):
         if hash_type == 'sha1':
             password_valid = check_password_hash(result[0][1],password_attempt)
             if password_valid:
-                new_hash = bcrypt.generate_password_hash(password_attempt)
+                new_hash = generate_bcrypt_password_hash(password_attempt)
                 cur.execute('UPDATE users SET password='+app.sqlesc+' WHERE email='+app.sqlesc,(new_hash,email))
                 db.commit()
         elif hash_type == 'bcrypt':
-            password_valid = bcrypt.check_password_hash(result[0][1],password_attempt)
+            password_valid = check_bcrypt_password_hash(result[0][1],password_attempt)
         else:
-            return {'result':False,'error':_('Unable to interpret stored password hash!')}
+            return {'result':None}
         if password_valid == True:
             if result[0][2] == None:
                 auth_key = dec2big(random.randint(0,(2**128)))
@@ -249,6 +267,8 @@ def check_user_pw(email,password_attempt):
                 auth_key = result[0][2]
             session['logged_in_user']=(result[0][0],auth_key)
             return {'result':True}
+        elif password_valid == None:
+            return {'result':None}
         else:
             return {'result':False,'error':_('Incorrect password!')}
 
@@ -257,12 +277,15 @@ def _get_hash_type(hashed_pw):
     # print(hashed_pw)
     split_hash = hashed_pw.split('$')
     # print(split_hash)
-    if split_hash[0] == 'pbkdf2:sha1:1000':
-        return 'sha1'
-    elif split_hash[1] == '2b' and split_hash[0] == '':
-        return 'bcrypt'
-    else:
-        raise TypeError
+    try:
+        if split_hash[0] == 'pbkdf2:sha1:1000':
+            return 'sha1'
+        elif split_hash[1] == '2b' and split_hash[0] == '':
+            return 'bcrypt'
+        else:
+            raise TypeError
+    except IndexError:
+        return None
 
 
 @app.route('/login', methods=['GET','POST'])
@@ -276,8 +299,11 @@ def login():
             g.error = _('Missing email or password for login!')
         else:
             pw = check_user_pw(request.form['email'],request.form['password'])
-            if pw['result'] != True:
+            if pw['result'] == False:
                 g.error = pw['error']
+            elif pw['result'] == None:
+                flash({'message':'<p>'+_('Please reset your password to log in!')+'</p>'})
+                return redirect(url_for('reset_password'))
             else:
                 flash({'message':'<p>'+_('Logged in successfully!')+'</p>'})
                 return redirect(url_for('home'))
@@ -323,7 +349,7 @@ def reset_password():
                 return redirect(url_for('home'))
             else:
                 if t[0][0] == request.args.get('t'):
-                    new_hash = bcrypt.generate_password_hash(request.form['password'])
+                    new_hash = generate_bcrypt_password_hash(request.form['password'])
                     cur.execute('UPDATE users SET password='+app.sqlesc+', pw_reset_token=NULL WHERE id='+app.sqlesc,(new_hash,request.form['id']))
                     db.commit()
                     flash({'message':'<p>'+_('Password reset, please log in!')+'</p>'})
@@ -392,7 +418,7 @@ def signup():
                 result = cur.fetchall()
                 if len(result) == 0:
                     if len(request.form['email'].split('@')) == 2 and len(request.form['email'].split('@')[1].split('.'))>= 2:
-                        cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+') RETURNING id',(request.form['email'],bcrypt.generate_password_hash(request.form['password'])))
+                        cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+') RETURNING id',(request.form['email'],generate_bcrypt_password_hash(request.form['password'])))
                         user_id = cur.fetchall()[0][0]
                         # cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('email_confirmation',user_id))
                         # db.commit()
