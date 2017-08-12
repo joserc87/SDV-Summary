@@ -13,7 +13,10 @@ map_types = [
 def checkSurrounding(tiles):
     floor_map = [[None for a in range(80)] for b in range(65)]
     for tile in tiles:
-        floor_map[tile.y][tile.x] = tile
+        try:
+            floor_map[tile.y][tile.x] = tile
+        except IndexError:
+            pass
 
     temp = []
     m = []
@@ -31,6 +34,10 @@ def checkSurrounding(tiles):
             a = 0
             if tile is not None:
                 for dx, dy, b in [(0, -1, 1), (1, 0, 2), (0, 1, 4), (-1, 0, 8)]:
+                    try:
+                        current_tile = floor_map[y + dy][x + dx]
+                    except IndexError:
+                        current_tile = None
                     try:
                         if floor_map[y + dy][x + dx] is not None:
                             if tile.name == 'Flooring' or (tile.name == 'Fence' and not tile.growth):
