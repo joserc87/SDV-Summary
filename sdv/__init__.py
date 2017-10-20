@@ -36,17 +36,17 @@ from config import config
 
 from sdv.createdb import database_structure_dict, database_fields
 from sdv.savefile import savefile
-from sdv.zipuploads import zopen, zwrite
+from sdv.zipuploads import zopen, zwrite, unzip_request_file
 from sdv.getDate import get_date
 import sdv.validate
 
 if sys.version_info >= (3, 0):
     unicode = str
-    from urllib.parse import urlparse
+    from urllib.parse import urlparse, urlencode
     from urllib.parse import quote_plus, unquote_plus
 else:
     str = unicode
-    from urllib import quote_plus, unquote_plus
+    from urllib import quote_plus, unquote_plus, urlencode
     from urlparse import urlparse
 
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
@@ -309,7 +309,12 @@ def login():
                 return redirect(url_for('reset_password'))
             else:
                 flash({'message':'<p>'+_('Logged in successfully!')+'</p>'})
-                return redirect(url_for('home'))
+                redirect_url = session.get('login_redir')
+                if redirect_url:
+                    session.pop('login_redir')
+                    return redirect(redirect_url)
+                else:
+                    return redirect(url_for('home'))
     return render_template("login.html",**page_args())
 
 
@@ -613,9 +618,211 @@ def home():
     vote = json.dumps({entry[0]:get_votes(entry[0]) for entry in recents['posts']})
     return render_template("index.html", recents=recents, vote=vote, blogposts=get_blogposts(5), **page_args())
 
-@app.route('/test')
-def test_thing():
-    return make_response(url_for('display_plan',url='12345',_external=True))
+
+@app.route('/auth',methods=['POST','GET'])
+def api_auth():
+    page_init()
+    if request.args.get('client_id'):
+        if logged_in():
+            db = get_db()
+            cur = db.cursor() 
+            if request.method == 'POST':
+                # should probably have some kind of csrf protection! perhaps hidden form field in GET request which is POSTed back? [answer: yes]
+                cur.execute('DELETE FROM api_users WHERE userid = '+app.sqlesc+' AND clientid = (SELECT id FROM api_clients WHERE key = '+app.sqlesc+')',(get_logged_in_user(),request.args.get('client_id')))
+                db.commit()
+                for i in range(100):
+                    # try 100 times to insert new uuids; if fails 100 times, something is seriously wrong!
+                    try:
+                        token = str(uuid.uuid4())
+                        refresh_token = str(uuid.uuid4())
+                        expires_in = 3600
+                        expiry = int(time.time())+expires_in
+                        cur.execute('INSERT INTO api_users(clientid,userid,token,refresh_token,expiry) VALUES ((SELECT id FROM api_clients WHERE key = '+app.sqlesc+'),'+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.args.get('client_id'),get_logged_in_user(),token,refresh_token,expiry))
+                        db.commit()
+                        cur.execute('SELECT redirect, name FROM api_clients WHERE key = '+app.sqlesc,(request.args.get('client_id'),))
+                        results = cur.fetchall()
+                        try:
+                            assert len(results)<2
+                        except AssertionError:
+                            g.error = "Multiple entries for this client_id! Please contact the site administrator!"
+                            return render_template("error.html", **page_args())
+                        # try:
+                        flash({'message':'<p>'+_('You have granted access to %(client)s, you may now close this tab',client=results[0][1])+'</p>'})
+                        return redirect(results[0][0] +'?'+ urlencode({'token':token,'refresh_token':refresh_token,'expiry':expires_in}))
+                        # except:
+                        #     g.error = "An unexpected error occurred returning the token to {}! Please try again later.".format(results[0][1])
+                        #     return render_template("error.html", **page_args())
+                    except psycopg2.IntegrityError:
+                        db.rollback()
+                g.error = "Unable to generate unique key! Something bad has happened, report to site administrator!"
+                return render_template("error.html", **page_args())
+            else:
+                cur.execute('SELECT name, id FROM api_clients WHERE key = '+app.sqlesc,(request.args.get('client_id'),))
+                results = cur.fetchall()
+                try:
+                    assert len(results)<2
+                except AssertionError:
+                    g.error = "Multiple entries for this client_id! Please contact the site administrator!"
+                    return render_template("error.html", **page_args())
+                if len(results) == 0:
+                    g.error = "Referrer client_id is invalid!"
+                    return render_template("error.html", **page_args())
+                else:
+                    cur.execute('SELECT COUNT(*) FROM api_users WHERE userid = '+app.sqlesc+' AND clientid = (SELECT id FROM api_clients WHERE key = '+app.sqlesc+')',(get_logged_in_user(),request.args.get('client_id')))
+                    entries = cur.fetchone()
+                    print(entries)
+                    api_client_name = results[0][0]
+                    if entries[0] != 0:
+                        flash({'message':'<p>'+_('You have previously approved %(client)s to access your account - reauthorising will generate a new API key',client=api_client_name)+'</p>'})
+                    return render_template("api_auth.html", api_client_name=api_client_name, **page_args())
+        else:
+            flash({'message':'<p>'+_('Please log in first')+'</p>'})
+            session['login_redir'] = url_for('api_auth',client_id=request.args.get('client_id'))
+            return redirect(url_for('login'))
+    else:
+        g.error = "Referrer didn't include client_id in request! Please contact whoever linked you here."
+        return render_template("error.html", **page_args())
+
+@app.route('/api/v1/get_user_info',methods=['POST'])
+def api_v1_get_user_info():
+    if request.method == 'POST':
+        credential_check = check_api_credentials(request.form)
+        if 'user' in credential_check:
+            db = get_db()
+            cur = db.cursor()
+            cur.execute('SELECT email FROM users WHERE id = '+app.sqlesc,(credential_check.get('user'),))
+            result = cur.fetchone()
+            return make_response(jsonify({'email':result[0]}))
+        else:
+            return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}))
+
+
+@app.route('/api/v1/upload_zipped',methods=['POST'])
+def api_v1_upload_zipped():
+    if request.method == 'POST':
+        if 'zip' in request.files:
+            credential_check = check_api_credentials(request.form)
+            if 'user' in credential_check:
+                try:
+                    set_privacy_for_api(credential_check['user'])
+                    inputfile = unzip_request_file(request.files['zip'])
+                except zipfile.BadZipfile:
+                    return make_response(jsonify({"error": "bad_zip_error"}))
+                return make_response(jsonify(_api_zip_uploaded(inputfile,credential_check['user'])))
+            else:
+                return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}))
+        else:
+            return make_response(jsonify({"error": "no_file_error"}))
+
+
+def set_privacy_for_api(userid):
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('SELECT privacy_default FROM users WHERE id='+app.sqlesc,(userid,))
+    g.logged_in_privacy_default = cur.fetchone()[0]
+
+
+def _api_zip_uploaded(inputfile,owner_id):
+    # # need to deal with zipped nature first!
+    memfile = inputfile.read()
+    # inputfile.save(memfile)
+    md5_info = md5(io.BytesIO(memfile))
+    error = None
+    try:
+        save = savefile(memfile, True)
+        player_info = playerInfo(save)
+    except (defusedxml.common.EntitiesForbidden,IOError,AttributeError,ParseError,AssertionError):
+        return {"error":"invalid_file_error"}
+    dupe = is_duplicate(md5_info,player_info)
+    if dupe != False:
+        return {"url":dupe[0]}
+    else:
+        farm_info = getFarmInfo(save)
+        outcome, del_token, rowid, error = insert_info(player_info,farm_info,md5_info)
+        if outcome != False:
+            filename = os.path.join(app.config['UPLOAD_FOLDER'], outcome)
+            # with open(filename,'wb') as f:
+            #   f.write(memfile.getvalue())
+            # REPLACED WITH ZIPUPLOADS
+            zwrite(memfile,legacy_location(filename))
+            series_id = add_to_series(rowid,player_info['uniqueIDForThisGame'],player_info['name'],player_info['farmName'])
+            db = get_db()
+            cur = db.cursor()
+            cur.execute('UPDATE playerinfo SET savefileLocation='+app.sqlesc+', series_id='+app.sqlesc+', owner_id='+app.sqlesc+' WHERE url='+app.sqlesc+';',(filename,series_id,owner_id,outcome))
+            db.commit()
+        else:
+            return {"error": "internal_server_error"}
+        imageDrone.process_queue()
+    if outcome != False:
+        return {"url":outcome}
+
+
+@app.route('/api/v1/refresh_token',methods=['POST'])
+def api_v1_refresh_token():
+    if request.method == 'POST':
+        credential_check = refresh_api_credentials(request.form)
+        if 'token' in credential_check:
+            return make_response(jsonify(credential_check))
+        else:
+            return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}))
+        
+
+def refresh_api_credentials(formdata):
+    """returns new expiry if refresh_token/client_id/client_secret correct and valid"""
+    client_id = formdata.get('client_id')
+    client_secret = formdata.get('client_secret')
+    refresh_token = formdata.get('refresh_token')
+    if None in [client_id, client_secret, refresh_token]:
+        return {'error':'invalid_token'}
+    else:
+        db = get_db()
+        cur = db.cursor()
+        cur.execute('SELECT id from api_users WHERE refresh_token = '+app.sqlesc+' AND clientid = (SELECT id FROM api_clients WHERE key = '+app.sqlesc+' AND secret = '+app.sqlesc+')',(refresh_token,client_id,client_secret))
+        result = cur.fetchall()
+        if len(result) == 0:
+            return {'internal_error':'invalid_token'}
+        elif len(result) != 1:
+            return {'internal_error':'multiple_users_returned'}
+        else:
+            for i in range(100):
+                # try 100 times to insert new uuids; if fails 100 times, something is seriously wrong!
+                try:
+                    token = str(uuid.uuid4())
+                    expires_in = 3600
+                    expiry = int(time.time())+expires_in
+                    cur.execute('UPDATE api_users SET token = '+app.sqlesc+', expiry = '+app.sqlesc+' WHERE id = '+app.sqlesc,(token,expiry,result[0][0]))
+                    db.commit()
+                    return {'token':token,'expires_in':expires_in}
+                except psycopg2.IntegrityError:
+                    db.rollback()
+            return {'internal_error':'unable_to_generate_new_unique_keys'}
+
+
+def check_api_credentials(formdata):
+    """returns users id in {user:id} if token/client_id/client_secret/expiry correct and valid,
+    else returns {error}"""
+    client_id = formdata.get('client_id')
+    client_secret = formdata.get('client_secret')
+    token = formdata.get('token')
+    if None in [client_id, client_secret, token]:
+        return {'error':'invalid_token'}
+    else:
+        db = get_db()
+        cur = db.cursor()
+        cur.execute('SELECT userid from api_users WHERE token = '+app.sqlesc+' AND expiry > '+app.sqlesc+' AND clientid = (SELECT id FROM api_clients WHERE key = '+app.sqlesc+' AND secret = '+app.sqlesc+')',(token,time.time(),client_id,client_secret))
+        result = cur.fetchall()
+        if len(result) == 0:
+            cur.execute('SELECT userid from api_users WHERE token = '+app.sqlesc+' AND expiry <= '+app.sqlesc+' AND clientid = (SELECT id FROM api_clients WHERE key = '+app.sqlesc+' AND secret = '+app.sqlesc+')',(token,time.time(),client_id,client_secret))
+            result = cur.fetchall()
+            if len(result) == 1:
+                return {'error':'invalid_token','error_description':'token_expired'}
+        try:
+            assert len(result) == 1
+        except AssertionError:
+            return {'internal_error':'multiple_users_returned'}
+        return {'user':result[0][0]}
+
+
 
 @app.route('/api/v1/plan',methods=['POST'])
 def api_v1_plan():

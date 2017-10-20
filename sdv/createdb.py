@@ -333,6 +333,24 @@ def generate_ad_log():
 	connection.close()
 	print('done')
 
+def generate_api_clients():
+	connection=connect_db()
+	c = connection.cursor()
+	statement = 'CREATE TABLE api_clients(id '+idcode+', name TEXT, key TEXT, secret TEXT, redirect TEXT, info TEXT);'
+	c.execute(statement)
+	connection.commit()
+	connection.close()
+	print('done')
+
+def generate_api_users():
+	connection=connect_db()
+	c = connection.cursor()
+	statement = 'CREATE TABLE api_users(id '+idcode+', clientid INT, userid INT, token TEXT UNIQUE, refresh_token TEXT UNIQUE, expiry INT, scope TEXT);'
+	c.execute(statement)
+	connection.commit()
+	connection.close()
+	print('done')
+
 def set_indexes():
 	connection=connect_db()
 	c = connection.cursor()
@@ -520,6 +538,12 @@ def init_db(drop_all=False):
 	a = raw_input('Generate serial database? (y/n): ')
 	if a == 'y':
 		generate_serial()
+	a = raw_input('Generate api_clients database? (y/n): ')
+	if a == 'y':
+		generate_api_clients()
+	a = raw_input('Generate api_users database? (y/n): ')
+	if a == 'y':
+		generate_api_users()
 	a = raw_input('Generate plans database? (y/n): ')
 	if a == 'y':
 		generate_plans()
