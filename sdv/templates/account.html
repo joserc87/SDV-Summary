@@ -9,10 +9,31 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 </script>
+<script src="{{url_for('static',filename='js/flashedmessages.js')}}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}
 {% block title %}{{_("Account")}} - {{super()}}{% endblock %}
 {%block bodycontent %}
 {% include "titlebar.html" %}
+{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		{% for message in messages %}
+			<div class="row center-block" id="{{loop.index0}}-container">
+				<div class="col-md-12 panel text-center">
+					<div class="bulletinpanel">
+						<div class="bulletinclose">
+							<span id="{{loop.index0}}-{%if 'cookie_controlled' in message.keys()%}scafc-{{message.cookie_controlled}}{%else%}fc{%endif%}" class="clickable"><img class="img-responsive" src="{{url_for('static',filename='css/bulletin/cross.png')}}"></span>
+						</div>
+						<div class="row center-block">
+							<div class="col-md-12">
+								{{message.message|safe}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endwith %}
 <div class="row center-block panel">
 	<div class="col-md-4 col-sm-12 panel">
 		<div class="interiorpanel">
@@ -25,6 +46,22 @@ $(function () {
 					{% autoescape false %} {{
 					_("Logged in as %(username)s",username="<a href='http://{}.imgur.com'>{}</a>".format(acc_info.imgur.account_username,acc_info.imgur.account_username))
 					}}{% endautoescape %}{%else%}<a href="{{url_for('get_imgur_auth_code')}}">{{_("connect to imgur")}}</a>{%endif%}</p>
+					<p>{{_("Patreon: ")}}
+						{%if acc_info.patreon and not acc_info.patreon.csrf %}
+							{% autoescape false %}
+								{%if acc_info.patreon.name %}
+									{{
+									_("Logged in as %(username)s",username="<a href='http://patreon.com/uploadfarm'>{}</a>".format(acc_info.patreon.name))
+									}}
+								{% elif acc_info.patreon.error %}
+									Error! <a href="{{url_for('get_patreon_auth_code')}}">{{_("Reconnect patreon?")}}</a>
+								{%endif%}
+							{% endautoescape %}
+						{%else%}
+						<a href="{{url_for('get_patreon_auth_code')}}">{{_("connect patreon")}}</a>
+						{%endif%}
+					</p>
+
 					{% if has_liked %}
 						<p><a href="{{url_for('allmain',liked=True)}}">{{_("Browse my liked farms")}}</a></p>
 					{% endif %}

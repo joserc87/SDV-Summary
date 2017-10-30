@@ -222,12 +222,25 @@ users_structure_dict = {'id':idcode,
 'email':'TEXT',
 'email_confirmed':'BOOLEAN',
 'email_conf_token':'TEXT',
+
 'pw_reset_token':'TEXT',
 'password':'TEXT',
+
 'imgur_json':'TEXT',
 'imgur_id':'TEXT',
+
+'patreon_info':'TEXT',
+'patreon_token':'TEXT',
+'patreon_refresh_token':'TEXT',
+'patreon_expiry':'BIGINT',
+
+'unconditional_api_access':'BOOLEAN', # designed to allow discretionary
+# awarding of API usage; should not be used when API access is required:
+# update check_api_availability() instead!
+
 'auth_key':'TEXT',
 'login_time':'BIGINT',
+
 'api_key':'TEXT',
 'api_secret':'TEXT',
 'votes':'TEXT',
