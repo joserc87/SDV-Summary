@@ -19,7 +19,10 @@ def setup_logger():
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.DEBUG)
 
-    log_file = 'sdv.log'
+    if not os.path.isdir('logs'):
+        os.mkdir('logs')
+
+    log_file = 'logs/sdv.log'
     file_handler = TimedRotatingFileHandler(log_file, when='midnight', interval=1)
     file_handler.setLevel(log_level)
 
