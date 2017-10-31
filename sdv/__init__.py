@@ -27,6 +27,9 @@ import patreon
 import defusedxml
 import psycopg2
 import requests
+
+from sdv.utils.log import app_logger
+
 from sdv.playerInfo import playerInfo
 from sdv.farmInfo import getFarmInfo
 from sdv.bigbase import dec2big
@@ -40,6 +43,8 @@ from sdv.savefile import savefile
 from sdv.zipuploads import zopen, zwrite, unzip_request_file
 from sdv.getDate import get_date
 import sdv.validate
+
+logger = app_logger.getChild('init')
 
 if sys.version_info >= (3, 0):
     unicode = str
@@ -60,11 +65,15 @@ censor = Censor()
 
 
 def create_app(config_name=None):
+    logger.info('Creating flask app...')
     app = Flask(__name__)
 
     if config_name is None:
+        logger.info('Config name not supplied, searching environment')
         config_name = os.environ.get('SDV_APP_SETTINGS', 'development')
+        logger.info(f'Config name set to: {config_name}')
 
+    logger.info('Initialising extensions')
     app.config.from_object(config[config_name])
     recaptcha.init_app(app=app)
     bcrypt.init_app(app)
@@ -75,16 +84,22 @@ def create_app(config_name=None):
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
     app.wsgi_app = ProxyFix(app.wsgi_app)
-    if app.config['USE_SQLITE'] == True:
+
+    if app.config['USE_SQLITE']:
+        logger.info('Application set to use SQLite')
         app.database = app.config['DB_SQLITE']
         app.sqlesc = '?'
+
         def connect_db():
             return sqlite3.connect(app.database)
     else:
-        app.database = 'dbname='+app.config['DB_NAME']+' user='+app.config['DB_USER']+' password='+app.config['DB_PASSWORD']
+        logger.info('Application set to use Postgres')
+        app.database = 'dbname=' + app.config['DB_NAME'] + ' user=' + app.config[
+            'DB_USER'] + ' password=' + app.config['DB_PASSWORD']
         app.sqlesc = '%s'
 
     return app
+
 
 app = create_app()
 babel = Babel(app)
@@ -639,7 +654,7 @@ def api_auth():
     if request.args.get('client_id'):
         if logged_in():
             db = get_db()
-            cur = db.cursor() 
+            cur = db.cursor()
             if request.method == 'POST':
                 # should probably have some kind of csrf protection! perhaps hidden form field in GET request which is POSTed back? [answer: yes]
                 cur.execute('DELETE FROM api_users WHERE userid = '+app.sqlesc+' AND clientid = (SELECT id FROM api_clients WHERE key = '+app.sqlesc+')',(get_logged_in_user(),request.args.get('client_id')))
@@ -801,7 +816,7 @@ def api_v1_refresh_token():
             return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}),400)
         else:
             return make_response(jsonify({'error':'internal_server_error'}),500)
-        
+
 
 def refresh_api_credentials(formdata):
     """returns new expiry if refresh_token/client_id/client_secret correct and valid"""
