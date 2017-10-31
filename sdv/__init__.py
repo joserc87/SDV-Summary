@@ -737,6 +737,10 @@ def api_v1_upload_zipped():
             return make_response(jsonify({"error": "no_file_error"}),400)
 
 
+@app.route('/api/v1/uploader_version',methods=['GET'])
+def api_v1_uploader_version():
+    return make_response(jsonify({"version":"1.0"}))
+
 def set_privacy_for_api(userid):
     db = get_db()
     cur = db.cursor()
