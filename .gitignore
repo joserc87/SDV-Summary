@@ -84,3 +84,6 @@ logfile
 assets/
 render_test.py
 test
+
+logs/
+*.log*
