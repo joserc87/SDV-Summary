@@ -55,7 +55,9 @@ class WaitingWindow(QtGui.QMainWindow):
 		self.timer.start(1000)
 		self.fully_kill = True
 
+
 	aboutToQuit = QtCore.Signal()
+
 
 	def set_bg_image(self):
 		self.bgimage = QtGui.QPixmap("images/bg.png").scaled(self.size(), transformMode=QtCore.Qt.SmoothTransformation)
@@ -63,9 +65,11 @@ class WaitingWindow(QtGui.QMainWindow):
 		palette.setBrush(QtGui.QPalette.Window,self.bgimage)
 		self.setPalette(palette)
 
+
 	def resizeEvent(self,event):
 		self.set_bg_image()
 		event.accept()
+
 
 	def init_ui(self):
 		self.name_of_application = "upload.farm uploader v{}".format(__version__)
@@ -73,6 +77,7 @@ class WaitingWindow(QtGui.QMainWindow):
 		self.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
 		self._create_layouts_and_widgets()
 		self.show()
+
 
 	def _create_layouts_and_widgets(self):
 		self._logo = QtGui.QLabel()
@@ -117,13 +122,16 @@ class WaitingWindow(QtGui.QMainWindow):
 		self._main_widget.setMinimumHeight(400)
 		self.setCentralWidget(self._main_widget)
 
+
 	def open_api_auth(self):
 		QtGui.QDesktopServices.openUrl(AUTHENTICATION_URL)
+
 
 	def check_db(self):
 		if check_settings() == True and is_user_info_invalid() == False:
 			time.sleep(0.2)
 			self.caught_credentials()
+
 
 	def caught_credentials(self):
 		# print('killing webserver')
@@ -142,11 +150,13 @@ class WaitingWindow(QtGui.QMainWindow):
 		self.fully_kill = False
 		self.close()
 		
+
 	def open_help(self):
 		self.help_window = WebWindow("help/help.html")
 		self.help_window.hide()
 		self.aboutToQuit.connect(self.help_window.close)
 		self.help_window.show()
+
 
 	def closeEvent(self,event):
 		self.webserver.terminate()
@@ -157,6 +167,7 @@ class WaitingWindow(QtGui.QMainWindow):
 		if self.fully_kill:
 			QtCore.QCoreApplication.instance().quit()
 		event.accept()
+
 
 class MainWindow(QtGui.QMainWindow):
 	def __init__(self):
@@ -226,6 +237,7 @@ class MainWindow(QtGui.QMainWindow):
 		except:
 			pass
 
+
 	def init_tray(self):
 		self._popup_shown = False
 		self.trayIcon = QtGui.QSystemTrayIcon(QtGui.QIcon("icons/windows_icon.ico"),self)
@@ -246,7 +258,14 @@ class MainWindow(QtGui.QMainWindow):
 
 		self.trayIcon.setContextMenu(self.trayIconMenu)
 		self.trayIcon.activated.connect(self._icon_activated)
-		self.trayIcon.show()
+		self._show_when_systray_available()
+
+
+	def _show_when_systray_available(self):
+		if self.trayIcon.isSystemTrayAvailable():
+			self.trayIcon.show()
+		else:
+			QtCore.QTimer.singleShot(1000,self._show_when_systray_available)
 
 
 	def _create_layouts_and_widgets(self):

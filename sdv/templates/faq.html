@@ -53,6 +53,9 @@
 
 		<dt>{{_("Do you support [modname]?")}}</dt>
 		<dd>{{_("At present we don't explicitly support any mods, but mods that don't add new assets or structurally change your savegame too much will probably work. Once we've got the core site functionality sorted we'll look at mod support!")}}</dd>
+
+		<dt>{{_("What is the upload.farm uploader?")}}</dt>
+		<dd>{{_("The uploader is a thank-you to upload.farm users who support the site through our %(patreon)s. It runs on Windows, and automatically backs up and optionally uploads savegames from Stardew Valley.",patreon='<a href="http://patreon.com/uploadfarm">Patreon</a>')}}<br><br><div class="img-responsive text-center"><a href="http://patreon.com/uploadfarm"><img src="{{url_for('static',filename='uploader/uploader.png')}}"></a></div></dd>
 		</dl>
 		{% endautoescape %}
 	</div>

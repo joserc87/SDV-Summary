@@ -71,7 +71,7 @@ def create_app(config_name=None):
     if config_name is None:
         logger.info('Config name not supplied, searching environment')
         config_name = os.environ.get('SDV_APP_SETTINGS', 'development')
-        logger.info(f'Config name set to: {config_name}')
+        logger.info('Config name set to: {}'.format(config_name))
 
     logger.info('Initialising extensions')
     app.config.from_object(config[config_name])
@@ -184,10 +184,13 @@ def get_advert():
         except KeyError:
             result = None
     else:
-        try:
-            ads = app.config['ADVERTS']
-            result = None if ads == None else random.choice(ads)
-        except KeyError:
+        if not logged_in() or check_api_eligibility() != True:
+            try:
+                ads = app.config['ADVERTS']
+                result = None if ads == None else random.choice(ads)
+            except KeyError:
+                result = None
+        else:
             result = None
     return result
 
@@ -906,6 +909,7 @@ def check_api_credentials(formdata):
         except AssertionError:
             return {'internal_error':'multiple_users_returned'}
         return {'user':result[0][0]}
+
 
 
 @app.route('/api/v1/plan',methods=['POST'])
