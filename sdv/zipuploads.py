@@ -32,6 +32,16 @@ def zwrite(data, filename):
     zf.close()
     return
 
+def unzip_request_file(file):
+    # perform sanity checking, then unzip
+    zf = zipfile.ZipFile(file,'r')
+    if len(zf.infolist()) == 1:
+        if zf.infolist()[0].file_size < 16000000: 
+            uzfile = zf.open(zf.infolist()[0].filename)
+            zf.close()
+            return uzfile
+    raise zipfile.BadZipfile
+
 
 def main():
     import app

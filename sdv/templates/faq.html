@@ -12,7 +12,12 @@
 		<dd>{{_("It generates a map and summary of a Stardew Valley farm, with your player avatar and portrait of your family. It's an alternative to screenshot tools like %(gedosato)s.",gedosato='<a href="http://blog.metaclassofnil.com/?page_id=582">GeDoSaTo</a>')}}</dd>
 
 		<dt>{{_("Where do I find the savegame?")}}</dt>
-		<dd>{{_("Savegames are in %(appdata)s. This can be pasted into the file upload box to find the correct folder. Within this are subfolders for individual savegames. The file you should upload is named after your player (i.e. not named SaveGameInfo).",appdata='<code>%APPDATA%\StardewValley\Saves</code>')}}</dd>
+		{% set appdata_contents = {
+		'windows': '<code>%APPDATA%\StardewValley\Saves</code>',
+		'linux': '<code>~/.config/StardewValley/Saves</code>',
+		'macos': '<code>~/.config/StardewValley/Saves</code>',
+		} %}
+		<dd>{{_("Savegames are in %(appdata)s. This can be pasted into the file upload box to find the correct folder. Within this are subfolders for individual savegames. The file you should upload is named after your player (i.e. not named SaveGameInfo).",appdata=appdata_contents.get(request.user_agent.platform,appdata_contents.get('windows')))}}</dd>
 
 		<dt>{{_("Why register for an upload.farm account?")}}</dt>
 		<dd>{{_("To add <a href='#whysignin'>certain features such as savegame sharing</a> to the site it became necessary to introduce user accounts, so that page ownership could be established. The up-side of this is that we are able to add other features to the site very easily, such as quick upload-to-imgur, and the ability to link up series of farms.")}}</dd>
@@ -36,13 +41,21 @@
 		<dd>{{_("The <a href='https://stardew.info/planner/'' target='_blank'>Stardew planner</a> by <a href='https://github.com/hpeinar/stardewplanner' target='_blank'>Henrik Peinar</a> is a tool that allows you to plan your farm. We have integrated support for the planner to the site for uploads you own. To use this feature, click the blueprint icon in the control panel on your farm's profile page to load it into the planner. In addition, we have worked with Henrik to allow rendering of farms from the planner. These are separate to normal savegame uploads, and are accessed from the planner itself.")}}</dd>
 
 		<dt>{{_("How do I use downloaded savegames?")}}</dt>
-		<dd>{{_("Saves go in %(appdata)s where you can place the extracted folder and contents. This is normally %(windir)s.",appdata='<code>%APPDATA%\StardewValley\Saves</code>',windir='<br>C:\\Users\\[Windows&nbsp;login]\\AppData\\Roaming\\StardewValley\\Saves')}}</dd>
+		{% set windir_contents = {
+		'default':'<br>C:\\Users\\[Windows&nbsp;login]\\AppData\\Roaming\\StardewValley\\Saves',
+		'zh_Hans_CN':'<br>C:\\用户\\[系统用户名]\\AppData\\Roaming\\StardewValley\\Saves'
+		}
+		%}
+		<dd>{{_("Saves go in %(appdata)s where you can place the extracted folder and contents. On Windows this is normally %(windir)s.",appdata=appdata_contents.get(request.user_agent.platform,appdata_contents.get('windows')),windir=windir_contents.get(get_locale(),windir_contents.get('default')))}}</dd>
 
 		<dt>{{_("How can I delete my upload(s)?")}}</dt>
 		<dd>{{_("When you upload a savegame a cookie is set to indicate ownership. Below the farm name should be a 'delete this page' button. If you are %(logged_in)s and have uploaded multiple farms from the same playthrough you will also have an option to delete 'all for this farm'. Both ask for confirmation before deleting.",logged_in='<a href="'+url_for('login')+'">'+_('logged in')+'</a>')}}</dd>
 
 		<dt>{{_("Do you support [modname]?")}}</dt>
 		<dd>{{_("At present we don't explicitly support any mods, but mods that don't add new assets or structurally change your savegame too much will probably work. Once we've got the core site functionality sorted we'll look at mod support!")}}</dd>
+
+		<dt>{{_("What is the upload.farm uploader?")}}</dt>
+		<dd>{{_("The uploader is a thank-you to upload.farm users who support the site through our %(patreon)s. It runs on Windows, and automatically backs up and optionally uploads savegames from Stardew Valley.",patreon='<a href="http://patreon.com/uploadfarm">Patreon</a>')}}<br><br><div class="img-responsive text-center"><a href="http://patreon.com/uploadfarm"><img src="{{url_for('static',filename='uploader/uploader.png')}}"></a></div></dd>
 		</dl>
 		{% endautoescape %}
 	</div>

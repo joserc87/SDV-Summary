@@ -1,10 +1,31 @@
-from distutils.core import setup
-import py2exe, sys, os
+import os
+import sys
 
-sys.argv.append('py2exe')
+from cx_Freeze import setup, Executable
+# Dependencies are automatically detected, but it might need
+# fine tuning.
+include_files = ['images',
+				 'help',
+				 'icons']
+exclude_modules = ['tcl',
+				   'tk',
+				   'tkinter']
+buildOptions = dict(packages = [],excludes = exclude_modules,include_files=include_files, optimize=2)
+otheroptions = dict(icon="icons/windows_icon.ico")
 
-setup(
-    options = {'py2exe': {'bundle_files': 1, 'compressed': True}},
-    console = [{'script': "uploader.py"}],
-    zipfile = None,
-)
+version = '1.0'
+
+base = 'Win32GUI' if sys.platform=='win32' else None
+
+if __name__ == "__main__":
+    os.environ['TCL_LIBRARY'] = r'C:\Python35\tcl\tcl8.6'
+    os.environ['TK_LIBRARY'] = r'C:\Python35\tcl\tk8.6'
+
+    executables = [
+        Executable('__init__.py', base=base, targetName = 'uploader.exe',**otheroptions)
+    ]
+    setup(name='upload.farm uploader',
+          version = version,
+          description = 'upload.farm uploader',
+          options = dict(build_exe = buildOptions),
+          executables = executables)

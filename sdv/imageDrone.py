@@ -65,6 +65,7 @@ def process_queue():
                 farm = generateFarm(data['currentSeason'], farm_data)
                 th = farm.resize((int(farm.width/4), int(farm.height/4)), Image.ANTIALIAS)
                 th.save(legacy_location(thumb_path))
+                farm = watermark(farm,filename='u.f.png')
                 farm.save(legacy_location(map_path), compress_level=9)
 
                 cur.execute('UPDATE playerinfo SET farm_url='+sqlesc+', avatar_url='+sqlesc+', portrait_url='+sqlesc+', map_url='+sqlesc+', thumb_url='+sqlesc+', base_path='+sqlesc+' WHERE id='+sqlesc+'',(farm_path,avatar_path,portrait_path,map_path,thumb_path,base_path,data['id']))

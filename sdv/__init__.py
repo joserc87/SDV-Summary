@@ -23,28 +23,37 @@ import datetime
 import uuid
 import io
 import sdv.imgur
+import patreon
 import defusedxml
 import psycopg2
 import requests
+
+from sdv.utils.log import app_logger
+
 from sdv.playerInfo import playerInfo
 from sdv.farmInfo import getFarmInfo
 from sdv.bigbase import dec2big
 from sdv.parsers.json import parse_json, json_layout_map
+from sdv.parsers.wordfilter import Censor
 
 from config import config
 
 from sdv.createdb import database_structure_dict, database_fields
 from sdv.savefile import savefile
-from sdv.zipuploads import zopen, zwrite
+from sdv.zipuploads import zopen, zwrite, unzip_request_file
 from sdv.getDate import get_date
 import sdv.validate
 import sdv.achievements.checker
 
+logger = app_logger.getChild('init')
+
 if sys.version_info >= (3, 0):
     unicode = str
-    from urllib.parse import urlparse
+    from urllib.parse import urlparse, urlencode
+    from urllib.parse import quote_plus, unquote_plus
 else:
     str = unicode
+    from urllib import quote_plus, unquote_plus, urlencode
     from urlparse import urlparse
 
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
@@ -53,33 +62,45 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
 recaptcha = ReCaptcha()
 bcrypt = Bcrypt()
 mail = Mail()
+censor = Censor()
 
 
 def create_app(config_name=None):
+    logger.info('Creating flask app...')
     app = Flask(__name__)
 
     if config_name is None:
+        logger.info('Config name not supplied, searching environment')
         config_name = os.environ.get('SDV_APP_SETTINGS', 'development')
+        logger.info('Config name set to: {}'.format(config_name))
 
+    logger.info('Initialising extensions')
     app.config.from_object(config[config_name])
     recaptcha.init_app(app=app)
     bcrypt.init_app(app)
     mail.init_app(app)
+    censor.init_app(app=app)
 
     app.secret_key = app.config['SECRET_KEY']
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
     app.wsgi_app = ProxyFix(app.wsgi_app)
-    if app.config['USE_SQLITE'] == True:
+
+    if app.config['USE_SQLITE']:
+        logger.info('Application set to use SQLite')
         app.database = app.config['DB_SQLITE']
         app.sqlesc = '?'
+
         def connect_db():
             return sqlite3.connect(app.database)
     else:
-        app.database = 'dbname='+app.config['DB_NAME']+' user='+app.config['DB_USER']+' password='+app.config['DB_PASSWORD']
+        logger.info('Application set to use Postgres')
+        app.database = 'dbname=' + app.config['DB_NAME'] + ' user=' + app.config[
+            'DB_USER'] + ' password=' + app.config['DB_PASSWORD']
         app.sqlesc = '%s'
 
     return app
+
 
 app = create_app()
 babel = Babel(app)
@@ -123,6 +144,7 @@ def legacy_location(location):
 
 app.jinja_env.globals.update(legacy_location=legacy_location)
 app.jinja_env.globals.update(get_locale=get_locale)
+app.jinja_env.filters['quote_plus'] = lambda u: quote_plus(u)
 
 import sdv.imageDrone  # noqa
 import sdv.emailDrone  # noqa
@@ -151,7 +173,45 @@ def page_init():
 
 
 def page_args():
-    return {'processtime':round(time.time()-g.start_time,5),'error':g.error}
+    advert = get_advert()
+    return {'processtime':round(time.time()-g.start_time,5),'error':g.error,'advert':advert}
+
+
+def get_advert():
+    if request.path == '/':
+        try:
+            fpads = app.config['FRONT_PAGE_ADVERTS']
+            result = None if fpads == None else random.choice(fpads)
+        except KeyError:
+            result = None
+    else:
+        if not logged_in() or check_api_eligibility() != True:
+            try:
+                ads = app.config['ADVERTS']
+                result = None if ads == None else random.choice(ads)
+            except KeyError:
+                result = None
+        else:
+            result = None
+    return result
+
+
+@app.route('/out/<url>')
+def route_out(url):
+    url = unquote_plus(url)
+    log_ad_click(url,request.args.get('id'),request.args.get('place'))
+    return redirect(url)
+
+
+def log_ad_click(ad_url,ad_id,ad_place):
+    db = get_db()
+    cur = db.cursor()
+    ip = request.environ['REMOTE_ADDR']
+    referral_time = time.time()
+    ad_file = None
+    cur.execute('INSERT INTO ad_log (time, ip_address, ad_id, ad_place, ad_file, ad_url) VALUES ('+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(referral_time,ip,ad_id,ad_place,ad_file,ad_url))
+    db.commit()
+    return
 
 
 def md5(md5file):
@@ -163,10 +223,13 @@ def md5(md5file):
             h.update(chunk)
     return h.hexdigest()
 
+@app.route('/_ver')
+def theversion():
+    return sys.version
 
 @app.route('/_mini_recents')
 def jsonifyRecents():
-    mini_recents = [str(post[0])+str(post[6])+str(post[8])+str(get_votes(post[0])) for post in get_recents()['posts']]
+    mini_recents = [str(post[0])+str(post[5])+str(post[6])+str(post[8])+str(get_votes(post[0])) for post in get_recents()['posts']]
     return jsonify(mini_recents)
 
 @app.route('/_full_recents')
@@ -183,6 +246,21 @@ def get_formatted_recents():
     return jsonify(text=text,votes=votes)
 
 
+def generate_bcrypt_password_hash(word):
+    word = bcrypt.generate_password_hash(word)
+    try:
+        word = word.decode('utf-8')
+    except:
+        pass
+    return word
+
+def check_bcrypt_password_hash(passwordhash,attempt):
+    try:
+        result = bcrypt.check_password_hash(passwordhash,attempt)
+    except AssertionError:
+        return None
+    return result
+
 def check_user_pw(email,password_attempt):
     db = get_db()
     cur = db.cursor()
@@ -196,13 +274,13 @@ def check_user_pw(email,password_attempt):
         if hash_type == 'sha1':
             password_valid = check_password_hash(result[0][1],password_attempt)
             if password_valid:
-                new_hash = bcrypt.generate_password_hash(password_attempt)
+                new_hash = generate_bcrypt_password_hash(password_attempt)
                 cur.execute('UPDATE users SET password='+app.sqlesc+' WHERE email='+app.sqlesc,(new_hash,email))
                 db.commit()
         elif hash_type == 'bcrypt':
-            password_valid = bcrypt.check_password_hash(result[0][1],password_attempt)
+            password_valid = check_bcrypt_password_hash(result[0][1],password_attempt)
         else:
-            return {'result':False,'error':_('Unable to interpret stored password hash!')}
+            return {'result':None}
         if password_valid == True:
             if result[0][2] == None:
                 auth_key = dec2big(random.randint(0,(2**128)))
@@ -212,6 +290,8 @@ def check_user_pw(email,password_attempt):
                 auth_key = result[0][2]
             session['logged_in_user']=(result[0][0],auth_key)
             return {'result':True}
+        elif password_valid == None:
+            return {'result':None}
         else:
             return {'result':False,'error':_('Incorrect password!')}
 
@@ -220,12 +300,15 @@ def _get_hash_type(hashed_pw):
     # print(hashed_pw)
     split_hash = hashed_pw.split('$')
     # print(split_hash)
-    if split_hash[0] == 'pbkdf2:sha1:1000':
-        return 'sha1'
-    elif split_hash[1] == '2b' and split_hash[0] == '':
-        return 'bcrypt'
-    else:
-        raise TypeError
+    try:
+        if split_hash[0] == 'pbkdf2:sha1:1000':
+            return 'sha1'
+        elif split_hash[1] == '2b' and split_hash[0] == '':
+            return 'bcrypt'
+        else:
+            raise TypeError
+    except IndexError:
+        return None
 
 
 @app.route('/login', methods=['GET','POST'])
@@ -239,11 +322,19 @@ def login():
             g.error = _('Missing email or password for login!')
         else:
             pw = check_user_pw(request.form['email'],request.form['password'])
-            if pw['result'] != True:
+            if pw['result'] == False:
                 g.error = pw['error']
+            elif pw['result'] == None:
+                flash({'message':'<p>'+_('Please reset your password to log in!')+'</p>'})
+                return redirect(url_for('reset_password'))
             else:
                 flash({'message':'<p>'+_('Logged in successfully!')+'</p>'})
-                return redirect(url_for('home'))
+                redirect_url = session.get('login_redir')
+                if redirect_url:
+                    session.pop('login_redir')
+                    return redirect(redirect_url)
+                else:
+                    return redirect(url_for('home'))
     return render_template("login.html",**page_args())
 
 
@@ -259,6 +350,7 @@ def reset_password():
             if len(result) == 0:
                 g.error = _('Username not found!')
             elif result[0][1] != True:
+                g.show_verify_button = True
                 g.error = _('Email address not verified; please verify your account using the verification email sent when you registered before attempting to reset password!')
             else:
                 cur.execute('SELECT users.id FROM users WHERE email='+app.sqlesc+' AND NOT EXISTS (SELECT todo.id FROM todo WHERE todo.playerid=CAST(users.id AS text))',(request.form['email'],))
@@ -285,7 +377,7 @@ def reset_password():
                 return redirect(url_for('home'))
             else:
                 if t[0][0] == request.args.get('t'):
-                    new_hash = bcrypt.generate_password_hash(request.form['password'])
+                    new_hash = generate_bcrypt_password_hash(request.form['password'])
                     cur.execute('UPDATE users SET password='+app.sqlesc+', pw_reset_token=NULL WHERE id='+app.sqlesc,(new_hash,request.form['id']))
                     db.commit()
                     flash({'message':'<p>'+_('Password reset, please log in!')+'</p>'})
@@ -294,6 +386,18 @@ def reset_password():
             return render_template('error.html',**page_args())
         elif 'password' in request.form and len(request.form['password'])< app.config['PASSWORD_MIN_LENGTH']:
             g.error = _('Password insufficiently long, please try again')
+        elif 'resend' in request.form:
+            db = get_db()
+            cur = db.cursor()
+            cur.execute('SELECT id, email_confirmed FROM users WHERE email='+app.sqlesc,(request.form['resend'],))
+            result = cur.fetchall()
+            if len(result) == 0:
+                g.error = _('Username not found!')
+            elif result[0][1] != True:
+                user_id = result[0][0]
+                add_task(user_id,'old_email_confirmation')
+                emailDrone.process_email()
+                flash({'message':'<p>'+_('A new verification email has been sent to you')+'</p>'})
         else:
             g.error = _('Please enter the email address you used to register')
     if 'i' in request.args and 't' in request.args:
@@ -312,7 +416,16 @@ def reset_password():
                 return render_template("reset.html",details=t[0],**page_args())
         g.error = _('Malformed verification string!')
         return render_template('error.html',**page_args())
-    return render_template("reset.html",**page_args())
+    elif logged_in():
+        db = get_db()
+        cur = db.cursor()
+        cur.execute('SELECT email FROM users WHERE id='+app.sqlesc,(get_logged_in_user(),))
+        result = cur.fetchall()
+        if len(result) > 0:
+            g.logged_in_address = result[0][0]
+    show_verify_button = getattr(g, 'show_verify_button', None)
+    logged_in_address = getattr(g, 'logged_in_address', None)
+    return render_template("reset.html",logged_in_address=logged_in_address,show_verify_button=show_verify_button,**page_args())
 
 
 @app.route('/su',methods=['GET','POST'])
@@ -333,7 +446,7 @@ def signup():
                 result = cur.fetchall()
                 if len(result) == 0:
                     if len(request.form['email'].split('@')) == 2 and len(request.form['email'].split('@')[1].split('.'))>= 2:
-                        cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+') RETURNING id',(request.form['email'],bcrypt.generate_password_hash(request.form['password'])))
+                        cur.execute('INSERT INTO users (email,password) VALUES ('+app.sqlesc+','+app.sqlesc+') RETURNING id',(request.form['email'],generate_bcrypt_password_hash(request.form['password'])))
                         user_id = cur.fetchall()[0][0]
                         # cur.execute('INSERT INTO todo (task, playerid) VALUES ('+app.sqlesc+','+app.sqlesc+')',('email_confirmation',user_id))
                         # db.commit()
@@ -384,9 +497,9 @@ def account_page():
             c.execute('SELECT auto_key_json FROM series WHERE id=(SELECT series_id FROM playerinfo WHERE id='+app.sqlesc+')',(row[0],))
             a = json.loads(c.fetchone()[0])
             claimable_ids[row[0]] = {'auto_key_json':a,'data':(row[1],d)}
-        c.execute('SELECT email,imgur_json,privacy_default FROM users WHERE id='+app.sqlesc,(user,))
+        c.execute('SELECT email,imgur_json,privacy_default,patreon_info FROM users WHERE id='+app.sqlesc,(user,))
         e = c.fetchone()
-        acc_info = {'email':e[0],'imgur':json.loads(e[1]) if e[1] != None else None, 'privacy_default':e[2]}
+        acc_info = {'email':e[0],'imgur':json.loads(e[1]) if e[1] != None else None, 'privacy_default':e[2],'patreon':json.loads(e[3]) if e[3] != None else None}
         has_liked = True if True in has_votes(user).values() else False
         return render_template('account.html',claimed=claimed_ids,claimable=claimable_ids, has_liked=has_liked, acc_info=acc_info,**page_args())
 
@@ -411,6 +524,17 @@ def logged_in():
             g.logged_in_user = False
     return g.logged_in_user
 
+def set_api_user(api_user_id):
+    g.api_user_id = api_user_id
+    set_privacy_for_api(api_user_id)
+
+def api_user():
+    if hasattr(g,'api_user_id'):
+        return True
+    else:
+        return False
+
+
 app.jinja_env.globals.update(logged_in=logged_in)
 app.jinja_env.globals.update(list=list)
 app.jinja_env.add_extension('jinja2.ext.do')
@@ -420,8 +544,8 @@ def add_to_series(rowid,uniqueIDForThisGame,name,farmName):
     current_auto_key = json.dumps([uniqueIDForThisGame,name,farmName])
     db = get_db()
     cur = db.cursor()
-    if logged_in():
-        logged_in_userid = session['logged_in_user'][0]
+    if logged_in() or api_user():
+        logged_in_userid = get_logged_in_user()
         cur.execute('SELECT id, owner, members_json FROM series WHERE auto_key_json='+app.sqlesc+' AND owner='+app.sqlesc,(current_auto_key,logged_in_userid))
         result = cur.fetchall()
         db.commit()
@@ -443,6 +567,8 @@ def add_to_series(rowid,uniqueIDForThisGame,name,farmName):
 def get_logged_in_user():
     if logged_in():
         return session['logged_in_user'][0]
+    elif api_user():
+        return g.api_user_id
     else:
         return None
 
@@ -525,9 +651,267 @@ def home():
     vote = json.dumps({entry[0]:get_votes(entry[0]) for entry in recents['posts']})
     return render_template("index.html", recents=recents, vote=vote, blogposts=get_blogposts(5), **page_args())
 
-@app.route('/test')
-def test_thing():
-    return make_response(url_for('display_plan',url='12345',_external=True))
+
+@app.route('/auth',methods=['POST','GET'])
+def api_auth():
+    page_init()
+    if request.args.get('client_id'):
+        if logged_in():
+            db = get_db()
+            cur = db.cursor()
+            if request.method == 'POST':
+                # should probably have some kind of csrf protection! perhaps hidden form field in GET request which is POSTed back? [answer: yes]
+                cur.execute('DELETE FROM api_users WHERE userid = '+app.sqlesc+' AND clientid = (SELECT id FROM api_clients WHERE key = '+app.sqlesc+')',(get_logged_in_user(),request.args.get('client_id')))
+                db.commit()
+                for i in range(100):
+                    # try 100 times to insert new uuids; if fails 100 times, something is seriously wrong!
+                    try:
+                        token = str(uuid.uuid4())
+                        refresh_token = str(uuid.uuid4())
+                        expires_in = 3600
+                        expiry = int(time.time())+expires_in
+                        cur.execute('INSERT INTO api_users(clientid,userid,token,refresh_token,expiry) VALUES ((SELECT id FROM api_clients WHERE key = '+app.sqlesc+'),'+app.sqlesc+','+app.sqlesc+','+app.sqlesc+','+app.sqlesc+')',(request.args.get('client_id'),get_logged_in_user(),token,refresh_token,expiry))
+                        db.commit()
+                        cur.execute('SELECT redirect, name FROM api_clients WHERE key = '+app.sqlesc,(request.args.get('client_id'),))
+                        results = cur.fetchall()
+                        try:
+                            assert len(results)<2
+                        except AssertionError:
+                            g.error = "Multiple entries for this client_id! Please contact the site administrator!"
+                            return render_template("error.html", **page_args())
+                        # try:
+                        flash({'message':'<p>'+_('You have granted access to %(client)s, you may now close this tab',client=results[0][1])+'</p>'})
+                        return redirect(results[0][0] +'?'+ urlencode({'token':token,'refresh_token':refresh_token,'expiry':expires_in}))
+                        # except:
+                        #     g.error = "An unexpected error occurred returning the token to {}! Please try again later.".format(results[0][1])
+                        #     return render_template("error.html", **page_args())
+                    except psycopg2.IntegrityError:
+                        db.rollback()
+                g.error = "Unable to generate unique key! Something bad has happened, report to site administrator!"
+                return render_template("error.html", **page_args())
+            else:
+                eligible = check_api_eligibility()
+                if eligible:
+                    cur.execute('SELECT name, id FROM api_clients WHERE key = '+app.sqlesc,(request.args.get('client_id'),))
+                    results = cur.fetchall()
+                    try:
+                        assert len(results)<2
+                    except AssertionError:
+                        g.error = "Multiple entries for this client_id! Please contact the site administrator!"
+                        return render_template("error.html", **page_args())
+                    if len(results) == 0:
+                        g.error = "Referrer client_id is invalid!"
+                        return render_template("error.html", **page_args())
+                    else:
+                        cur.execute('SELECT COUNT(*) FROM api_users WHERE userid = '+app.sqlesc+' AND clientid = (SELECT id FROM api_clients WHERE key = '+app.sqlesc+')',(get_logged_in_user(),request.args.get('client_id')))
+                        entries = cur.fetchone()
+                        # print(entries)
+                        api_client_name = results[0][0]
+                        if entries[0] != 0:
+                            flash({'message':'<p>'+_('You have previously approved %(client)s to access your account - reauthorising will generate a new API key',client=api_client_name)+'</p>'})
+                        return render_template("api_auth.html", api_client_name=api_client_name, **page_args())
+                else:
+                    g.error = "At this time, the upload.farm API and uploader are for upload.farm supporters only. If you are already a supporter, please connect your Patreon account on your account panel. If your Patreon account is already linked, please check you have active pledges. If you think this is in error, please contact us via the About page!"
+                    return render_template('error.html', **page_args())
+        else:
+            flash({'message':'<p>'+_('Please log in first')+'</p>'})
+            session['login_redir'] = url_for('api_auth',client_id=request.args.get('client_id'))
+            return redirect(url_for('login'))
+    else:
+        g.error = "Referrer didn't include client_id in request! Please contact whoever linked you here."
+        return render_template("error.html", **page_args())
+
+@app.route('/api/v1/get_user_info',methods=['POST'])
+def api_v1_get_user_info():
+    if request.method == 'POST':
+        credential_check = check_api_credentials(request.form)
+        if 'user' in credential_check:
+            db = get_db()
+            cur = db.cursor()
+            cur.execute('SELECT email FROM users WHERE id = '+app.sqlesc,(credential_check.get('user'),))
+            result = cur.fetchone()
+            return make_response(jsonify({'email':result[0]}))
+        else:
+            return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}),400)
+
+
+@app.route('/api/v1/upload_zipped',methods=['POST'])
+def api_v1_upload_zipped():
+    if request.method == 'POST':
+        if 'zip' in request.files:
+            credential_check = check_api_credentials(request.form)
+            if 'user' in credential_check:
+                rate_limited = check_upload_zip_rate_limiter(credential_check['user'])
+                if rate_limited != None:
+                    return make_response(jsonify({"error": "over_rate_limit","retry-next": rate_limited}),429)
+                set_api_user(credential_check['user'])
+                try:
+                    inputfile = unzip_request_file(request.files['zip'])
+                except zipfile.BadZipfile:
+                    return make_response(jsonify({"error": "bad_zip_error"}),400)
+                return make_response(jsonify(_api_zip_uploaded(inputfile)))
+            else:
+                return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}),400)
+        else:
+            return make_response(jsonify({"error": "no_file_error"}),400)
+
+
+@app.route('/api/v1/uploader_version',methods=['GET'])
+def api_v1_uploader_version():
+    return make_response(jsonify({"version":"1.0"}))
+
+def set_privacy_for_api(userid):
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('SELECT privacy_default FROM users WHERE id='+app.sqlesc,(userid,))
+    g.logged_in_privacy_default = cur.fetchone()[0]
+
+
+def _api_zip_uploaded(inputfile):
+    memfile = inputfile.read()
+    md5_info = md5(io.BytesIO(memfile))
+    error = None
+    try:
+        save = savefile(memfile, True)
+        player_info = playerInfo(save)
+    except (defusedxml.common.EntitiesForbidden,IOError,AttributeError,ParseError,AssertionError):
+        return {"error":"invalid_file_error"}
+    dupe = is_duplicate(md5_info,player_info)
+    if dupe != False:
+        return {"url":dupe[0]}
+    else:
+        farm_info = getFarmInfo(save)
+        outcome, del_token, rowid, error = insert_info(player_info,farm_info,md5_info)
+        if outcome != False:
+            filename = os.path.join(app.config['UPLOAD_FOLDER'], outcome)
+            zwrite(memfile,legacy_location(filename))
+            owner_id = get_logged_in_user()
+            series_id = add_to_series(rowid,player_info['uniqueIDForThisGame'],player_info['name'],player_info['farmName'])
+            db = get_db()
+            cur = db.cursor()
+            cur.execute('UPDATE playerinfo SET savefileLocation='+app.sqlesc+', series_id='+app.sqlesc+', owner_id='+app.sqlesc+' WHERE url='+app.sqlesc+';',(filename,series_id,owner_id,outcome))
+            db.commit()
+        else:
+            return {"error": "internal_server_error"}
+        imageDrone.process_queue()
+    if outcome != False:
+        return {"url":outcome}
+
+
+def check_upload_zip_rate_limiter(owner_id):
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('SELECT added_time FROM playerinfo WHERE owner_id='+app.sqlesc+' AND added_time>'+app.sqlesc+' ORDER BY added_time ASC',(owner_id,time.time()-app.config['API_V1_UPLOAD_ZIP_TIME_PER_USER']))
+    results = cur.fetchall()
+    if len(results) <= app.config['API_V1_UPLOAD_ZIP_LIMIT_PER_USER']:
+        return None
+    else:
+        return int(app.config['API_V1_UPLOAD_ZIP_TIME_PER_USER'] - (time.time() - results[0][0]))
+
+
+@app.route('/api/v1/refresh_token',methods=['POST'])
+def api_v1_refresh_token():
+    if request.method == 'POST':
+        credential_check = refresh_api_credentials(request.form)
+        # print(credential_check)
+        if 'token' in credential_check:
+            return make_response(jsonify(credential_check))
+        elif 'error' in credential_check:
+            return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}),400)
+        else:
+            return make_response(jsonify({'error':'internal_server_error'}),500)
+
+
+def refresh_api_credentials(formdata):
+    """returns new expiry if refresh_token/client_id/client_secret correct and valid"""
+    client_id = formdata.get('client_id')
+    client_secret = formdata.get('client_secret')
+    refresh_token = formdata.get('refresh_token')
+    if None in [client_id, client_secret, refresh_token]:
+        return {'error':'invalid_token'}
+    else:
+        db = get_db()
+        cur = db.cursor()
+        cur.execute('SELECT id,userid from api_users WHERE refresh_token = '+app.sqlesc+' AND clientid = (SELECT id FROM api_clients WHERE key = '+app.sqlesc+' AND secret = '+app.sqlesc+')',(refresh_token,client_id,client_secret))
+        result = cur.fetchall()
+        if len(result) == 0:
+            return {'error':'bad_refresh_token'}
+        elif len(result) != 1:
+            return {'internal_error':'multiple_users_returned'}
+        else:
+            # perform the checking for API key eligibility...
+            set_api_user(result[0][1])
+            eligible = check_api_eligibility()
+            if eligible:
+                for i in range(100):
+                    # try 100 times to insert new uuids; if fails 100 times, something is seriously wrong!
+                    try:
+                        token = str(uuid.uuid4())
+                        refresh_token = str(uuid.uuid4())
+                        expires_in = 3600
+                        expiry = int(time.time())+expires_in
+                        cur.execute('UPDATE api_users SET token = '+app.sqlesc+', refresh_token = '+app.sqlesc+', expiry = '+app.sqlesc+' WHERE id = '+app.sqlesc,(token,refresh_token,expiry,result[0][0]))
+                        db.commit()
+                        return {'token':token,'refresh_token':refresh_token,'expires_in':expires_in}
+                    except psycopg2.IntegrityError:
+                        db.rollback()
+            else:
+                return {'error':'no_api_access'}
+            return {'internal_error':'unable_to_generate_new_unique_keys'}
+
+
+def check_api_eligibility():
+    '''checks whether a user can use the upload.farm API; returns True if can, False if not'''
+    # first check db field for unconditional API access
+    if _user_has_unconditional_api_access() == True:
+        return True
+    # then check Patreon
+    try:
+        patreon_info = update_patreon_info_for_current_user()
+        if patreon_info['num_pledges'] > 0:
+            return True
+    except:
+        pass
+    return False
+
+def _user_has_unconditional_api_access():
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('SELECT unconditional_api_access FROM users WHERE id ='+app.sqlesc,(get_logged_in_user(),))
+    result = cur.fetchone()
+    if result[0] == True:
+        return True
+    else:
+        return False
+
+
+def check_api_credentials(formdata):
+    """returns users id in {user:id} if token/client_id/client_secret/expiry correct and valid,
+    else returns {error:type}"""
+    client_id = formdata.get('client_id')
+    client_secret = formdata.get('client_secret')
+    token = formdata.get('token')
+    if None in [client_id, client_secret, token]:
+        return {'error':'invalid_request'}
+    else:
+        db = get_db()
+        cur = db.cursor()
+        cur.execute('SELECT userid from api_users WHERE token = '+app.sqlesc+' AND expiry > '+app.sqlesc+' AND clientid = (SELECT id FROM api_clients WHERE key = '+app.sqlesc+' AND secret = '+app.sqlesc+')',(token,time.time(),client_id,client_secret))
+        result = cur.fetchall()
+        if len(result) == 0:
+            cur.execute('SELECT userid from api_users WHERE token = '+app.sqlesc+' AND expiry <= '+app.sqlesc+' AND clientid = (SELECT id FROM api_clients WHERE key = '+app.sqlesc+' AND secret = '+app.sqlesc+')',(token,time.time(),client_id,client_secret))
+            result2 = cur.fetchall()
+            if len(result2) == 1:
+                return {'error':'invalid_token','error_description':'token_expired'}
+            else:
+                return {'error':'bad_token'}
+        try:
+            assert len(result) == 1
+        except AssertionError:
+            return {'internal_error':'multiple_users_returned'}
+        return {'user':result[0][0]}
+
+
 
 @app.route('/api/v1/plan',methods=['POST'])
 def api_v1_plan():
@@ -1590,6 +1974,15 @@ def faq():
     page_init()
     return render_template('faq.html',**page_args())
 
+@app.route('/about')
+def about():
+    page_init()
+    return render_template('about.html',**page_args())
+
+@app.route('/pp')
+def privacy():
+    page_init()
+    return render_template('privacy.html',**page_args())
 
 @app.route('/imgur')
 def get_imgur_auth_code():
@@ -1607,6 +2000,157 @@ def get_imgur_auth_code():
     else:
         g.error = _("Cannot connect to imgur if not logged in!")
         return render_template('error.html',**page_args())
+
+
+@app.route('/_patreon')
+def get_patreon_auth_code():
+    page_init()
+    if logged_in():
+        if len(request.args)==0:
+            db = get_db()
+            cur= db.cursor()
+            csrf = str(uuid.uuid4())
+            cur.execute('UPDATE users SET patreon_info='+app.sqlesc+' WHERE id='+app.sqlesc,
+                (json.dumps({'csrf':csrf}),get_logged_in_user()))
+            db.commit()
+            return redirect('http://www.patreon.com/oauth2/authorize?'+urlencode({
+                'response_type':'code',
+                'client_id':app.config['PATREON_CLIENT_ID'],
+                'redirect_uri':app.config['PATREON_REDIRECT_URI'],
+                'state':csrf}))
+        else:
+            db = get_db()
+            cur= db.cursor()
+            cur.execute('SELECT patreon_info FROM users WHERE id='+app.sqlesc,(get_logged_in_user(),))
+            result = cur.fetchall()
+            if len(result) == 1 and request.args.get('state') == json.loads(result[0][0])['csrf']:
+                # CSRF passed [thumbs up emoji]
+                oauth_client = patreon.OAuth(app.config['PATREON_CLIENT_ID'],app.config['PATREON_CLIENT_SECRET'])
+                tokens = oauth_client.get_tokens(request.args.get('code'),app.config['PATREON_REDIRECT_URI'])
+                if 'errors' in tokens or 'error' in tokens or 'token_type' not in tokens:
+                    g.error = _("Error authorising with Patreon. Please try again later!")
+                    return render_template('error.html',**page_args())
+                else:
+                    # put tokens in db
+                    at = tokens['access_token']
+                    rt = tokens['refresh_token']
+                    expiry = tokens['expires_in']+time.time()
+                    cur.execute('UPDATE users SET patreon_token='+app.sqlesc+', patreon_refresh_token='+app.sqlesc+
+                        ', patreon_expiry='+app.sqlesc+' WHERE id='+app.sqlesc,(at,rt,expiry,get_logged_in_user()))
+                    db.commit()
+                    patreon_info = update_patreon_info(at,rt,expiry)
+                    if patreon_info.get('num_pledges') != None and patreon_info['num_pledges']>0:
+                        flash({'message':'<p>'+_('Connected to Patreon. Thank you for your support!')+'</p>'})
+                    else:
+                        flash({'message':'<p>'+_('Connected to Patreon!')+'</p>'})
+                    return redirect(url_for('account_page'))
+            else:
+                g.error = _("Cross-site request forgery check failed!")
+                return render_template('error.html',**page_args())
+    else:
+        g.error = _("Cannot connect to Patreon if not logged in!")
+        return render_template('error.html',**page_args())
+
+
+def update_patreon_info_for_current_user():
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('SELECT patreon_token,patreon_refresh_token,patreon_expiry FROM users WHERE id='+app.sqlesc,
+        (get_logged_in_user(),))
+    result = cur.fetchone()
+    return update_patreon_info(result[0],result[1],result[2])
+
+
+def update_patreon_info(access_token,refresh_token,expiry):
+    # if expired, refresh
+    if time.time() >= expiry:
+        result = refresh_patreon_token(refresh_token,expiry)
+        access_token = result.get('new_access_token')
+        print(result)
+        if access_token == None:
+            return {'error':result}
+    # get info
+    try:
+        # try to get new info
+        api_client = patreon.API(access_token)
+        user = api_client.fetch_user()
+        try:
+            if 'errors' in user:
+                # if not authorised, try a last-ditch attempt at refreshing token
+                if user['errors'][0]['status'] == '401':
+                    result = refresh_patreon_token(refresh_token,expiry)
+                    access_token = result.get('new_access_token')
+                    if access_token == None:
+                        return {'error':result}
+                    else:
+                        # if it worked, try getting new user info
+                        api_client = patreon.API(access_token)
+                        user = api_client.fetch_user()
+                        if 'errors' in user:
+                           # but if this failed, handle errors & return
+                            return {'error':user}
+        except TypeError:
+            pass
+        # otherwise continue
+        patreon_info = {'json_data':user.json_data,
+            'name':user.data().attributes()['full_name'],
+            'num_pledges':len(user.data().relationships()['pledges']['data'])}
+        db = get_db()
+        cur = db.cursor()
+        cur.execute('UPDATE users SET patreon_info='+app.sqlesc+' WHERE id='+app.sqlesc,
+                        (json.dumps(patreon_info),get_logged_in_user()))
+        db.commit()
+        return patreon_info
+    except:
+        # except if you can't for some reason (server issue?), fall back on existing db info...
+        db = get_db()
+        cur = db.cursor()
+        cur.execute('SELECT patreon_info FROM users WHERE id='+app.sqlesc,(get_logged_in_user(),))
+        result = cur.fetchone()
+        try:
+            patreon_info = json.loads(result[0])
+        except json.JSONDecodeError:
+            patreon_info = {}
+        return patreon_info
+
+
+def handle_patreon_error(response):
+    try:
+        if response.get('errors'):
+            if response['errors'][0]['status'] == '401':
+                db = get_db()
+                cur = db.cursor()
+                cur.execute('UPDATE users SET patreon_info='+app.sqlesc+', patreon_token='+app.sqlesc+
+                    ', patreon_refresh_token='+app.sqlesc+', patreon_expiry='+app.sqlesc+' patreon WHERE id='+app.sqlesc,
+                                (json.dumps({'error':'unauthorized'}),None,None,None,get_logged_in_user()))
+                db.commit()
+        if response.get('error') and response['error'] == 'invalid_grant':
+            db = get_db()
+            cur = db.cursor()
+            cur.execute('UPDATE users SET patreon_info='+app.sqlesc+', patreon_token='+app.sqlesc+
+                ', patreon_refresh_token='+app.sqlesc+', patreon_expiry='+app.sqlesc+' WHERE id='+app.sqlesc,
+                            (json.dumps({'error':'unauthorized'}),None,None,None,get_logged_in_user()))
+            db.commit()
+    except:
+        pass
+
+
+def refresh_patreon_token(refresh_token,expiry):
+    oauth_client = patreon.OAuth(app.config['PATREON_CLIENT_ID'],app.config['PATREON_CLIENT_SECRET'])
+    tokens = oauth_client.refresh_token(refresh_token,app.config['PATREON_REDIRECT_URI'])
+    if 'token_type' not in tokens:
+        handle_patreon_error(tokens)
+        return tokens
+    else:
+        db = get_db()
+        cur = db.cursor()
+        access_token = tokens['access_token']
+        refresh_token = tokens['refresh_token']
+        expiry = tokens['expires_in']+time.time()
+        cur.execute('UPDATE users SET patreon_token='+app.sqlesc+', patreon_refresh_token='+app.sqlesc+
+            ', patreon_expiry='+app.sqlesc+' WHERE id='+app.sqlesc,(access_token,refresh_token,expiry,get_logged_in_user()))
+        db.commit()
+        return {'new_access_token':access_token}
 
 
 @app.route('/verify_email')

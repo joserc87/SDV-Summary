@@ -29,7 +29,6 @@
 {% endwith %}
 <div class="row center-block panel">
 	<div class="interiorpanel">
-		
 	<!--<div class="row">
 		<p style="width: 80%; margin: 0 auto;">This site generates a profile page from your Stardew Valley savegame. It automatically links uploads from different stages.</p>
 	</div>-->
@@ -44,7 +43,12 @@
 								<button class="btn btn-primary btn-lg" type="submit" describedby="helpBlock" onclick="ga('send', 'event', 'saveFile', 'upload');">{{_("Upload!")}}</button>
 							</span>
 						</div>{% autoescape false %}
-						<span id="helpBlock" class="help-block text-center">{{_("%(stardew_valley)s save files can be found under %(appdata)s and are named after your character, plus an ID number",stardew_valley='<a href="http://stardewvalley.net">Stardew Valley</a>',appdata='<code>%APPDATA%\StardewValley\Saves</code>')}}</span>{% endautoescape %}
+						{% set appdata_contents = {
+						'windows': '<code>%APPDATA%\StardewValley\Saves</code>',
+						'linux': '<code>~/.config/StardewValley/Saves</code>',
+						'macos': '<code>~/.config/StardewValley/Saves</code>',
+						} %}
+						<span id="helpBlock" class="help-block text-center">{{_("%(stardew_valley)s save files can be found under %(appdata)s and are named after your character, plus an ID number",stardew_valley='<a href="http://stardewvalley.net">Stardew Valley</a>',appdata=appdata_contents.get(request.user_agent.platform,appdata_contents.get('windows')))}}</span>{% endautoescape %}
 					</form>
 				</div>
 			</div>
@@ -58,6 +62,7 @@
 		{% endif %}
 	</div>
 </div>
+{% include "ads.html" %}
 <div class="row center-block panel lead">	
 	<div class="interiorpanel">
 		<div class="col-md-12">
