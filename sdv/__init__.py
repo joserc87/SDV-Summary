@@ -63,6 +63,7 @@ bcrypt = Bcrypt()
 mail = Mail()
 censor = Censor()
 
+random.seed()
 
 def create_app(config_name=None):
     logger.info('Creating flask app...')
@@ -177,6 +178,7 @@ def page_args():
 
 
 def get_advert():
+    random.seed()
     if request.path == '/':
         try:
             fpads = app.config['FRONT_PAGE_ADVERTS']
