@@ -3,7 +3,7 @@
         <div class="col-md-12 col-sm-12">
             <div class="">
                 <a href="{{ url_for('route_out', url=advert['url']|quote_plus, id=advert['id'], place=advert['place']) }}"
-                   target="_blank">
+                   target="_blank" onclick="ga('send', 'event', 'out_route', {{ advert['reference'] }});">
                     {% if advert['type'] == 'banner' %}
                         <img class="img-responsive center-block"
                              src="{{ advert['src'] }}" alt="{{ advert['text'] }}">
