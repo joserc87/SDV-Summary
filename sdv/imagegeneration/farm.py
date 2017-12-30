@@ -46,7 +46,8 @@ def getPlant(img, growth, colour, days, T, defaultSize=(16, 16), objectSize=(16,
 def generateFarm(season, data, assets=None):
     type = data['type']
     farm = data['data']
-    sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
+    sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped',
+                                   'orientation'])
     craftable_blacklist = ['Twig', 'Stone', 'Weeds', 'Torch', 'Sprinkler',
                            'Quality Sprinkler', 'Iridium Sprinkler', 'Note Block', 'Jack-O-Lantern']
 
@@ -97,16 +98,20 @@ def generateFarm(season, data, assets=None):
                         crop_img = cropImg(crop_sprites, item.growth,
                                            (16, 32), (16, 32))
                     else:
-                        crop_img = getPlant(crop_sprites, item.growth, item.orientation[0], item.orientation[1],
+                        crop_img = getPlant(crop_sprites, item.growth, item.orientation[0],
+                                            item.orientation[1],
                                             item.type,
                                             (16, 32), (16, 32))
                 else:
                     if item.type == 190:
-                        crop_img = cropImg(assets['crops'], 263, objectSize=(48, 64), defaultSize=(16, 32))
+                        crop_img = cropImg(assets['crops'], 263, objectSize=(48, 64),
+                                           defaultSize=(16, 32))
                     if item.type == 254:
-                        crop_img = cropImg(assets['crops'], 266, objectSize=(48, 64), defaultSize=(16, 32))
+                        crop_img = cropImg(assets['crops'], 266, objectSize=(48, 64),
+                                           defaultSize=(16, 32))
                     if item.type == 276:
-                        crop_img = cropImg(assets['crops'], 269, objectSize=(48, 64), defaultSize=(16, 32))
+                        crop_img = cropImg(assets['crops'], 269, objectSize=(48, 64),
+                                           defaultSize=(16, 32))
                 if item.flipped:
                     crop_img = crop_img.transpose(Image.FLIP_LEFT_RIGHT)
                 farm_base.paste(crop_img, (item.x * 16, item.y * 16 - 16), crop_img)
@@ -123,7 +128,13 @@ def generateFarm(season, data, assets=None):
                     # Seriously need to get reworking how images are rendered
                     obj_img = cropImg(assets['craftables'], 168,
                                       (16, 32), (16, 32))
-                    obj_img = tintImage(obj_img, item.orientation[1])
+
+                    is_chest = item.orientation[0] == 'Chest'
+                    tint = item.orientation[1]
+                    if is_chest and tint == [0, 0, 0]:
+                        tint = [211, 139, 71]
+
+                    obj_img = tintImage(obj_img, tint)
                     overlay = cropImg(assets['craftables'], 176,
                                       (16, 32), (16, 32))
                     obj_img.paste(overlay, box=(0, 0), mask=overlay)
@@ -154,7 +165,8 @@ def generateFarm(season, data, assets=None):
                         fence_img = cropImg(assets['fences'][material], item.orientation,
                                             defaultSize=(16, 32), objectSize=(16, 32))
                     offsety = 16
-                    farm_base.paste(fence_img, (item.x * 16 + offsetx, item.y * 16 - offsety), fence_img)
+                    farm_base.paste(fence_img, (item.x * 16 + offsetx, item.y * 16 - offsety),
+                                    fence_img)
                 except Exception as e:
                     print(e)
 
@@ -195,7 +207,8 @@ def generateFarm(season, data, assets=None):
                         offsetx = 1 * 16
                     if item.flipped:
                         tree_crop = tree_crop.transpose(Image.FLIP_LEFT_RIGHT)
-                    farm_base.paste(tree_crop, (item.x * 16 - offsetx, item.y * 16 - offsety), tree_crop)
+                    farm_base.paste(tree_crop, (item.x * 16 - offsetx, item.y * 16 - offsety),
+                                    tree_crop)
                 except Exception as e:
                     print(e)
 
@@ -203,29 +216,34 @@ def generateFarm(season, data, assets=None):
                 seasons = {'spring': 0, 'summer': 1, 'fall': 2, 'winter': 3}
                 try:
                     if item.growth <= 3:
-                        tree_crop = cropImg(assets['trees']['fruit'], item.growth + 1 + 9 * item.type,
+                        tree_crop = cropImg(assets['trees']['fruit'],
+                                            item.growth + 1 + 9 * item.type,
                                             defaultSize=(48, 80), objectSize=(48, 80))
                     else:
-                        tree_crop = cropImg(assets['trees']['fruit'], 4 + seasons[season] + 9 * item.type,
+                        tree_crop = cropImg(assets['trees']['fruit'],
+                                            4 + seasons[season] + 9 * item.type,
                                             defaultSize=(48, 80), objectSize=(48, 80))
                     offsety = 4 * 16
                     offsetx = 1 * 16
                     if item.flipped:
                         tree_crop = tree_crop.transpose(Image.FLIP_LEFT_RIGHT)
-                    farm_base.paste(tree_crop, (item.x * 16 - offsetx, item.y * 16 - offsety), tree_crop)
+                    farm_base.paste(tree_crop, (item.x * 16 - offsetx, item.y * 16 - offsety),
+                                    tree_crop)
                 except Exception as e:
                     print(e)
 
             if item.name == "Building":
                 try:
                     if item.type.lower() == "junimo hut":
-                        offsety = assets['buildings'][item.type.lower()][season].height - (item.h) * 16
+                        offsety = assets['buildings'][item.type.lower()][season].height - (
+                        item.h) * 16
                         farm_base.paste(assets['buildings'][item.type.lower()][season],
                                         (item.x * 16, item.y * 16 - offsety),
                                         assets['buildings'][item.type.lower()][season])
                     else:
                         offsety = assets['buildings'][item.type.lower()].height - (item.h) * 16
-                        farm_base.paste(assets['buildings'][item.type.lower()], (item.x * 16, item.y * 16 - offsety),
+                        farm_base.paste(assets['buildings'][item.type.lower()],
+                                        (item.x * 16, item.y * 16 - offsety),
                                         assets['buildings'][item.type.lower()])
                 except Exception as e:
                     print(e)
@@ -240,7 +258,8 @@ def generateFarm(season, data, assets=None):
                                             (16, 20), (16, 20))
                         offsety = 8 + (ymask & i) * 4 - 16 + random.randint(-2, 2)
                         offsetx = 12 + (xmask & i) * 8 - 16 + random.randint(-2, 2)
-                        farm_base.paste(grass_img, (item.x * 16 + offsetx, item.y * 16 + offsety), grass_img)
+                        farm_base.paste(grass_img, (item.x * 16 + offsetx, item.y * 16 + offsety),
+                                        grass_img)
                 except Exception as e:
                     print(e)
 
@@ -256,7 +275,8 @@ def generateFarm(season, data, assets=None):
                 try:
                     greenhouse_img = cropImg(assets['buildings']['greenhouse'], item.index,
                                              defaultSize=(112, 160), objectSize=(112, 160))
-                    farm_base.paste(greenhouse_img, (item.x * 16, item.y * 16 - 16 * item.h), greenhouse_img)
+                    farm_base.paste(greenhouse_img, (item.x * 16, item.y * 16 - 16 * item.h),
+                                    greenhouse_img)
                 except Exception as e:
                     print(e)
 
