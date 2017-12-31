@@ -180,10 +180,13 @@ def page_args():
 def get_advert():
     random.seed()
     if request.path == '/':
-        try:
-            fpads = app.config['FRONT_PAGE_ADVERTS']
-            result = None if fpads == None else random.choice(fpads)
-        except KeyError:
+        if not logged_in() or check_api_eligibility() != True:
+            try:
+                fpads = app.config['FRONT_PAGE_ADVERTS']
+                result = None if fpads == None else random.choice(fpads)
+            except KeyError:
+                result = None
+        else:
             result = None
     else:
         if not logged_in() or check_api_eligibility() != True:
