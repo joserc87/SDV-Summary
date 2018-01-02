@@ -3,8 +3,15 @@ import time
 import json
 import os
 import ctypes
+import sys
 
-from PySide import QtGui, QtCore, QtWebKit
+if sys.platform == 'win32':
+	from PySide import QtGui, QtCore, QtWebKit
+elif sys.platform == 'darwin':
+	from PyQt5 import QtGui, QtCore, QtWebEngineWidgets, QtWidgets
+else:
+	raise ImportError
+
 from tendo import singleton
 
 from webserver import launch_webserver_as_process
@@ -18,7 +25,7 @@ from config import server_location, client_id, backup_directory
 from ufapi import get_user_email
 from uploadmonitor import launch_uploadmonitor_as_thread
 from multiprocessing import freeze_support
-from addtoregistry import add_to_startup, remove_from_startup, check_startup
+from addtostartup import add_to_startup, remove_from_startup, check_startup
 from setup import version
 from versioninfo import version_is_current
 
@@ -28,13 +35,57 @@ BACKUP_DIRECTORY = backup_directory
 RUN_STARDEW_VALLEY_STEAM = 'steam://rungameid/413150'
 __version__ = version
 
-class WebWindow(QtGui.QWidget):
+if sys.platform == 'win32':
+	WebView = QtWebKit.QWebView
+	QWidget = QtGui.QWidget
+	QMainWindow = QtGui.QMainWindow
+	QApplication = QtGui.QApplication
+	Signal = QtCore.Signal
+	QLabel = QtGui.QLabel
+	QHBoxLayout = QtGui.QHBoxLayout
+	QVBoxLayout = QtGui.QVBoxLayout
+	QTextEdit = QtGui.QTextEdit
+	QPushButton = QtGui.QPushButton
+	QGridLayout = QtGui.QGridLayout
+	QHeaderView = QtGui.QHeaderView
+	QSystemTrayIcon = QtGui.QSystemTrayIcon
+	QMenu = QtGui.QMenu
+	QAction = QtGui.QAction
+	QTableWidget = QtGui.QTableWidget
+	QMessageBox = QtGui.QMessageBox
+	QTableWidgetItem = QtGui.QTableWidgetItem
+	qApp = QtGui.qApp
+	QUrl = str
+
+elif sys.platform == 'darwin':
+	WebView = QtWebEngineWidgets.QWebEngineView
+	QWidget = QtWidgets.QWidget
+	QMainWindow = QtWidgets.QMainWindow
+	Signal = QtCore.pyqtSignal
+	QApplication = QtWidgets.QApplication
+	QLabel = QtWidgets.QLabel
+	QHBoxLayout = QtWidgets.QHBoxLayout
+	QVBoxLayout = QtWidgets.QVBoxLayout
+	QTextEdit = QtWidgets.QTextEdit
+	QPushButton = QtWidgets.QPushButton
+	QGridLayout = QtWidgets.QGridLayout
+	QHeaderView = QtWidgets.QHeaderView
+	QSystemTrayIcon = QtWidgets.QSystemTrayIcon
+	QMenu = QtWidgets.QMenu
+	QAction = QtWidgets.QMenu
+	QTableWidget = QtWidgets.QTableWidget
+	QMessageBox = QtWidgets.QMessageBox
+	QTableWidgetItem = QtWidgets.QTableWidgetItem
+	qApp = QtWidgets.qApp
+	QUrl = QtCore.QUrl
+
+class WebWindow(QWidget):
 	def __init__(self,url,title='Help'):
 		super().__init__()
-		self.view = QtWebKit.QWebView(self)
+		self.view = WebView(self)
 		self.view.load(url)
 
-		self.layout = QtGui.QHBoxLayout()
+		self.layout = QHBoxLayout()
 		self.layout.addWidget(self.view)
 		self.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
 
@@ -43,7 +94,7 @@ class WebWindow(QtGui.QWidget):
 		self.setWindowTitle(title)
 		self.show()
 
-class WaitingWindow(QtGui.QMainWindow):
+class WaitingWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
 		remove_from_startup()
@@ -56,13 +107,16 @@ class WaitingWindow(QtGui.QMainWindow):
 		self.fully_kill = True
 
 
-	aboutToQuit = QtCore.Signal()
+	aboutToQuit = Signal()
 
 
 	def set_bg_image(self):
 		self.bgimage = QtGui.QPixmap("images/bg.png").scaled(self.size(), transformMode=QtCore.Qt.SmoothTransformation)
 		palette = QtGui.QPalette()
-		palette.setBrush(QtGui.QPalette.Window,self.bgimage)
+		if sys.version == 'win32':
+			palette.setBrush(QtGui.QPalette.Window,self.bgimage)
+		elif sys.version == 'darwin':
+			pass
 		self.setPalette(palette)
 
 
@@ -80,35 +134,35 @@ class WaitingWindow(QtGui.QMainWindow):
 
 
 	def _create_layouts_and_widgets(self):
-		self._logo = QtGui.QLabel()
+		self._logo = QLabel()
 		self._logo.setPixmap(QtGui.QPixmap("images/logo.png"))
 
-		self._explanation = QtGui.QTextEdit("This tool is a thank-you to supporters of "
+		self._explanation = QTextEdit("This tool is a thank-you to supporters of "
 			"upload.farm.<br><br>It allows you to automatically backup your Stardew Valley "
 			"savegames and upload them to upload.farm for safekeeping.<br><br>To begin using "
 			"the uploader, please authenticate with your upload.farm account by pressing "
 			"the button below, or by navigating to:<br><br>{}".format(AUTHENTICATION_URL))
 		self._explanation.setReadOnly(True)
-		self._profile_button = QtGui.QPushButton("&Authenticate")
+		self._profile_button = QPushButton("&Authenticate")
 		self._profile_button.clicked.connect(self.open_api_auth)
-		self._help_button = QtGui.QPushButton("&Help!")
+		self._help_button = QPushButton("&Help!")
 		self._help_button.clicked.connect(self.open_help)
 
-		self._vbox = QtGui.QVBoxLayout()
+		self._vbox = QVBoxLayout()
 		self._vbox.addStretch(1)
-		logobox = QtGui.QHBoxLayout()
+		logobox = QHBoxLayout()
 		logobox.addStretch(1)
 		logobox.addWidget(self._logo)
 		logobox.addStretch(1)
 		self._vbox.addLayout(logobox)
 		self._vbox.addStretch(1)
-		logobox = QtGui.QHBoxLayout()
+		logobox = QHBoxLayout()
 		logobox.addStretch(1)
 		logobox.addWidget(self._explanation)
 		logobox.addStretch(1)
 		self._vbox.addLayout(logobox)
 		self._vbox.addStretch(1)
-		logobox = QtGui.QHBoxLayout()
+		logobox = QHBoxLayout()
 		logobox.addStretch(1)
 		logobox.addWidget(self._profile_button)
 		logobox.addWidget(self._help_button)
@@ -116,7 +170,7 @@ class WaitingWindow(QtGui.QMainWindow):
 		self._vbox.addLayout(logobox)
 		self._vbox.addStretch(1)
 
-		self._main_widget = QtGui.QWidget()
+		self._main_widget = QWidget()
 		self._main_widget.setLayout(self._vbox)
 		self._main_widget.setMinimumWidth(500)
 		self._main_widget.setMinimumHeight(400)
@@ -124,7 +178,7 @@ class WaitingWindow(QtGui.QMainWindow):
 
 
 	def open_api_auth(self):
-		QtGui.QDesktopServices.openUrl(AUTHENTICATION_URL)
+		QtGui.QDesktopServices.openUrl(QUrl(AUTHENTICATION_URL))
 
 
 	def check_db(self):
@@ -169,7 +223,7 @@ class WaitingWindow(QtGui.QMainWindow):
 		event.accept()
 
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
 		self.init_ui()
@@ -189,10 +243,10 @@ class MainWindow(QtGui.QMainWindow):
 		elif not(len(sys.argv)>1 and sys.argv[1] == '--silent'):
 			self.show()
 
-	updateGui = QtCore.Signal()
-	aboutToQuit = QtCore.Signal()
-	authError = QtCore.Signal()
-	maximizeWindow = QtCore.Signal()
+	updateGui = Signal()
+	aboutToQuit = Signal()
+	authError = Signal()
+	maximizeWindow = Signal()
 
 
 	def run_loopback(self):
@@ -240,12 +294,12 @@ class MainWindow(QtGui.QMainWindow):
 
 	def init_tray(self):
 		self._popup_shown = False
-		self.trayIcon = QtGui.QSystemTrayIcon(QtGui.QIcon("icons/windows_icon.ico"),self)
-		self.trayIconMenu = QtGui.QMenu()
+		self.trayIcon = QSystemTrayIcon(QtGui.QIcon("icons/windows_icon.ico"),self)
+		self.trayIconMenu = QMenu()
 
-		self.openAction = QtGui.QAction("&Show/Hide", self, triggered=self._showhide)
-		self.startupAction = QtGui.QAction("Start &Automatically", self, triggered=self.toggle_startup)
-		self.exitAction = QtGui.QAction("&Exit", self, triggered=self._icon_exit)
+		self.openAction = QAction("&Show/Hide", self, triggered=self._showhide)
+		self.startupAction = QAction("Start &Automatically", self, triggered=self.toggle_startup)
+		self.exitAction = QAction("&Exit", self, triggered=self._icon_exit)
 
 		self.startupAction.setCheckable(True)
 		self.startupAction.setChecked(check_startup())
@@ -269,38 +323,38 @@ class MainWindow(QtGui.QMainWindow):
 
 
 	def _create_layouts_and_widgets(self):
-		self._table_layout = QtGui.QGridLayout()
-		self._table = QtGui.QTableWidget(0,6,self)
-		self._table_header = QtGui.QHeaderView(QtCore.Qt.Orientation.Horizontal)
-		self._table_header.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+		self._table_layout = QGridLayout()
+		self._table = QTableWidget(0,6,self)
+		self._table_header = QHeaderView(QtCore.Qt.Orientation.Horizontal)
+		self._table_header.setResizeMode(QHeaderView.ResizeToContents)
 		# self._table_header.stretchLastSection()
 		self._table.setHorizontalHeader(self._table_header)
 		self._table.setHorizontalHeaderLabels(['Savegame','Last backed up','Auto\nbackup','Upload\nbackups','Manual\nbackup','Latest URL'])
 		self._table.itemClicked.connect(self.item_clicked_handler)
 
-		self._logo = QtGui.QLabel()
+		self._logo = QLabel()
 		self._logo.setPixmap(QtGui.QPixmap("images/logo.png"))
-		self._profile_button = QtGui.QPushButton("&My Account")
+		self._profile_button = QPushButton("&My Account")
 		self._profile_button.clicked.connect(self.open_acc_page)
-		self._run_sdv_button = QtGui.QPushButton("Launch &Game!")
+		self._run_sdv_button = QPushButton("Launch &Game!")
 		self._run_sdv_button.clicked.connect(self.run_stardew_valley)
-		self._browse_button = QtGui.QPushButton("&Backups")
+		self._browse_button = QPushButton("&Backups")
 		self._browse_button.clicked.connect(self.open_browse_backups)
-		self._logout_button = QtGui.QPushButton("&Logout")
+		self._logout_button = QPushButton("&Logout")
 		self._logout_button.clicked.connect(self._logout)
-		self._exit_button = QtGui.QPushButton("E&xit")
+		self._exit_button = QPushButton("E&xit")
 		self._exit_button.clicked.connect(self._icon_exit)
-		self._help_button = QtGui.QPushButton("&Help")
+		self._help_button = QPushButton("&Help")
 		self._help_button.clicked.connect(self.open_help)
-		self._update_button = QtGui.QPushButton("&Updates")
+		self._update_button = QPushButton("&Updates")
 		self._update_button.clicked.connect(self.check_for_update)
 
 		self._table_layout.addWidget(self._table)
 
-		self._vbox = QtGui.QVBoxLayout()
-		self._hbox_title = QtGui.QHBoxLayout()
-		self._vbox_title = QtGui.QVBoxLayout()
-		self._menubar = QtGui.QHBoxLayout()
+		self._vbox = QVBoxLayout()
+		self._hbox_title = QHBoxLayout()
+		self._vbox_title = QVBoxLayout()
+		self._menubar = QHBoxLayout()
 
 		self._hbox_title.addWidget(self._logo)
 		self._hbox_title.addStretch(1)
@@ -317,7 +371,7 @@ class MainWindow(QtGui.QMainWindow):
 		self._vbox.addLayout(self._hbox_title)
 		self._vbox.addLayout(self._table_layout)
 
-		self._main_widget = QtGui.QWidget()
+		self._main_widget = QWidget()
 		self._main_widget.setLayout(self._vbox)
 		self._main_widget.setMinimumWidth(700)
 		self._main_widget.setMinimumHeight(500)
@@ -326,9 +380,9 @@ class MainWindow(QtGui.QMainWindow):
 
 	def check_for_update(self):
 		if not version_is_current():
-			QtGui.QMessageBox.information(self,"upload.farm uploader","There is a new version of this tool! Please visit <a href='{}'>upload.farm</a> to download!".format(server_location))
+			QMessageBox.information(self,"upload.farm uploader","There is a new version of this tool! Please visit <a href='{}'>upload.farm</a> to download!".format(server_location))
 		else:
-			QtGui.QMessageBox.information(self,"upload.farm uploader","Your uploader version appears up-to-date!")			
+			QMessageBox.information(self,"upload.farm uploader","Your uploader version appears up-to-date!")			
 
 	def update_gui(self):
 		"""activates on Signal, updates GUI table from db"""
@@ -380,29 +434,29 @@ class MainWindow(QtGui.QMainWindow):
 		for i, item in enumerate(items):
 			if type(item) != bool:
 				if i == 4:
-					self.new_item = QtGui.QPushButton('Backup!')
+					self.new_item = QPushButton('Backup!')
 					self.new_item.clicked.connect(self.handle_manual_backup)
 					self._table.setCellWidget(new_row-1,i,self.new_item)
 					continue
 				elif i == 5 and item != None:
 					if item != '...':
-						new_item = QtGui.QTableWidgetItem('{}'.format(item))
+						new_item = QTableWidgetItem('{}'.format(item))
 						link_font = QtGui.QFont(new_item.font())
 						link_font.setUnderline(True)
 						new_item.setFont(link_font)
 						new_item.setTextAlignment(QtCore.Qt.AlignCenter)
 						new_item.setForeground(QtGui.QBrush(QtGui.QColor("teal")))
 					else:
-						new_item = QtGui.QTableWidgetItem('{}'.format(item))
+						new_item = QTableWidgetItem('{}'.format(item))
 						new_item.setTextAlignment(QtCore.Qt.AlignCenter)
 				elif i == 1 and item == None:
-					new_item = QtGui.QTableWidgetItem('no backups')
+					new_item = QTableWidgetItem('no backups')
 					new_item.setForeground(QtGui.QBrush(QtGui.QColor("grey")))
 				else:
-					new_item = QtGui.QTableWidgetItem(item)
+					new_item = QTableWidgetItem(item)
 				new_item.setFlags(QtCore.Qt.ItemIsEnabled)
 			elif type(item) == bool:
-				new_item = QtGui.QTableWidgetItem()
+				new_item = QTableWidgetItem()
 				if i == 3 and items[2] == False:
 					new_item.setFlags(QtCore.Qt.ItemFlags() != QtCore.Qt.ItemIsEnabled)
 					new_item.setCheckState(QtCore.Qt.Unchecked)
@@ -432,11 +486,11 @@ class MainWindow(QtGui.QMainWindow):
 				self._table_state[item.row()][item.column()] = checkstate
 		if item.column() == 5:
 			if self._table_state[item.row()][item.column()] != None:
-				QtGui.QDesktopServices.openUrl(server_location+'/'+self._table_state[item.row()][item.column()])
+				QtGui.QDesktopServices.openUrl(QUrl(server_location+'/'+self._table_state[item.row()][item.column()]))
 
 
 	def handle_manual_backup(self):
-		button = QtGui.qApp.focusWidget()
+		button = qApp.focusWidget()
 		index = self._table.indexAt(button.pos())
 		if index.isValid():
 			manual_process(self._table_state[index.row()][0],BACKUP_DIRECTORY)
@@ -472,17 +526,17 @@ class MainWindow(QtGui.QMainWindow):
 			self.hide()
 			if self.trayIcon.isVisible() and self._popup_shown != True:
 				self._popup_shown = True
-				# QtGui.QMessageBox.information(self,"upload.farm uploader","The uploader will keep running in the system tray. To fully terminate the program, right-click the icon in the system tray and choose <b>Exit</b>.")
-				reply = QtGui.QMessageBox.question(self,'upload.farm uploader','Do you want the uploader to keep running in the system tray?'
-					' This is a good option if you want to keep it monitoring your Stardew Valley savegames!', QtGui.QMessageBox.Yes|QtGui.QMessageBox.No, QtGui.QMessageBox.Yes)
-				if reply == QtGui.QMessageBox.No:
+				# QMessageBox.information(self,"upload.farm uploader","The uploader will keep running in the system tray. To fully terminate the program, right-click the icon in the system tray and choose <b>Exit</b>.")
+				reply = QMessageBox.question(self,'upload.farm uploader','Do you want the uploader to keep running in the system tray?'
+					' This is a good option if you want to keep it monitoring your Stardew Valley savegames!', QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
+				if reply == QMessageBox.No:
 					QtCore.QCoreApplication.instance().quit()
 					event.accept()
 			event.ignore()
 
 
 	def open_acc_page(self):
-		QtGui.QDesktopServices.openUrl(ACCOUNT_URL)
+		QtGui.QDesktopServices.openUrl(QUrl(ACCOUNT_URL))
 
 
 	def open_browse_backups(self):
@@ -497,7 +551,7 @@ class MainWindow(QtGui.QMainWindow):
 
 
 	def _icon_activated(self,reason):
-		if reason == QtGui.QSystemTrayIcon.DoubleClick:
+		if reason == QSystemTrayIcon.DoubleClick:
 			self.activate_main_window()
 
 
@@ -514,10 +568,10 @@ class MainWindow(QtGui.QMainWindow):
 
 
 	def _logout(self):
-		reply = QtGui.QMessageBox.question(self,'Really logout?','Are you sure you want to log out? Your API credentials will be deleted'
-			' and you will have to re-authorise with upload.farm to continue using the uploader!', QtGui.QMessageBox.Yes | 
-            QtGui.QMessageBox.No, QtGui.QMessageBox.No)
-		if reply == QtGui.QMessageBox.Yes:
+		reply = QMessageBox.question(self,'Really logout?','Are you sure you want to log out? Your API credentials will be deleted'
+			' and you will have to re-authorise with upload.farm to continue using the uploader!', QMessageBox.Yes | 
+            QMessageBox.No, QMessageBox.No)
+		if reply == QMessageBox.Yes:
 			clear_user_info()
 			self.handle_auth_error()
 
@@ -527,7 +581,7 @@ class MainWindow(QtGui.QMainWindow):
 
 
 	def reauthorise(self):
-		QtGui.QMessageBox.information(self, "Re-authorisation needed!",
+		QMessageBox.information(self, "Re-authorisation needed!",
 				"You must re-authorise the uploader to continue using this application.")
 		self.hide()
 		self.auth_window = WaitingWindow()
@@ -547,9 +601,10 @@ def launch():
 	freeze_support()
 	check_app_running()
 	me = singleton.SingleInstance()
-	windows_appusermodelid()
-	app = QtGui.QApplication(sys.argv)
-	QtGui.QApplication.setQuitOnLastWindowClosed(False)
+	if sys.platform == 'win32':
+		windows_appusermodelid()
+	app = QApplication(sys.argv)
+	QApplication.setQuitOnLastWindowClosed(False)
 	if check_settings() == False or is_user_info_invalid() == True:
 		waiting = WaitingWindow()
 	else:

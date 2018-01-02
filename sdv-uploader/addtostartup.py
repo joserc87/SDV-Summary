@@ -1,5 +1,12 @@
 import sys
-import winreg
+
+if sys.platform == 'win32':
+	import winreg
+elif sys.platform == 'darwin':
+	pass
+else:
+	raise ImportError
+
 
 REGISTRY_NAME = 'uploadfarm'
 

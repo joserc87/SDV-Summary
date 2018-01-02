@@ -1,8 +1,14 @@
 import os
 import json
+import sys
 
-import win32file
-import win32con
+if sys.platform == 'win32':
+	import win32file
+	import win32con
+elif sys.platform == 'darwin':
+	pass
+else:
+	raise ImportError
 
 from database import md5, check_monitor, update_monitor, add_log_entry, get_monitor_data_by_name
 from handler import archive
