@@ -13,7 +13,7 @@ exclude_modules = ['tcl',
 buildOptions = dict(packages = [],excludes = exclude_modules,include_files=include_files, optimize=2)
 otheroptions = dict(icon="icons/windows_icon.ico")
 
-version = '1.0'
+version = '2.0'
 
 base = 'Win32GUI' if sys.platform=='win32' else None
 

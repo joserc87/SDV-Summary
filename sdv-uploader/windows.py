@@ -5,13 +5,7 @@ import os
 import ctypes
 import sys
 
-if sys.platform == 'win32':
-	from PySide import QtGui, QtCore, QtWebKit
-elif sys.platform == 'darwin':
-	from PyQt5 import QtGui, QtCore, QtWebEngineWidgets, QtWidgets
-else:
-	raise ImportError
-
+from PyQt5 import QtGui, QtCore, QtWebEngineWidgets, QtWidgets
 from tendo import singleton
 
 from webserver import launch_webserver_as_process
@@ -35,55 +29,33 @@ BACKUP_DIRECTORY = backup_directory
 RUN_STARDEW_VALLEY_STEAM = 'steam://rungameid/413150'
 __version__ = version
 
-if sys.platform == 'win32':
-	WebView = QtWebKit.QWebView
-	QWidget = QtGui.QWidget
-	QMainWindow = QtGui.QMainWindow
-	QApplication = QtGui.QApplication
-	Signal = QtCore.Signal
-	QLabel = QtGui.QLabel
-	QHBoxLayout = QtGui.QHBoxLayout
-	QVBoxLayout = QtGui.QVBoxLayout
-	QTextEdit = QtGui.QTextEdit
-	QPushButton = QtGui.QPushButton
-	QGridLayout = QtGui.QGridLayout
-	QHeaderView = QtGui.QHeaderView
-	QSystemTrayIcon = QtGui.QSystemTrayIcon
-	QMenu = QtGui.QMenu
-	QAction = QtGui.QAction
-	QTableWidget = QtGui.QTableWidget
-	QMessageBox = QtGui.QMessageBox
-	QTableWidgetItem = QtGui.QTableWidgetItem
-	qApp = QtGui.qApp
-	QUrl = str
 
-elif sys.platform == 'darwin':
-	WebView = QtWebEngineWidgets.QWebEngineView
-	QWidget = QtWidgets.QWidget
-	QMainWindow = QtWidgets.QMainWindow
-	Signal = QtCore.pyqtSignal
-	QApplication = QtWidgets.QApplication
-	QLabel = QtWidgets.QLabel
-	QHBoxLayout = QtWidgets.QHBoxLayout
-	QVBoxLayout = QtWidgets.QVBoxLayout
-	QTextEdit = QtWidgets.QTextEdit
-	QPushButton = QtWidgets.QPushButton
-	QGridLayout = QtWidgets.QGridLayout
-	QHeaderView = QtWidgets.QHeaderView
-	QSystemTrayIcon = QtWidgets.QSystemTrayIcon
-	QMenu = QtWidgets.QMenu
-	QAction = QtWidgets.QMenu
-	QTableWidget = QtWidgets.QTableWidget
-	QMessageBox = QtWidgets.QMessageBox
-	QTableWidgetItem = QtWidgets.QTableWidgetItem
-	qApp = QtWidgets.qApp
-	QUrl = QtCore.QUrl
+WebView = QtWebEngineWidgets.QWebEngineView
+QWidget = QtWidgets.QWidget
+QMainWindow = QtWidgets.QMainWindow
+Signal = QtCore.pyqtSignal
+QApplication = QtWidgets.QApplication
+QLabel = QtWidgets.QLabel
+QHBoxLayout = QtWidgets.QHBoxLayout
+QVBoxLayout = QtWidgets.QVBoxLayout
+QTextEdit = QtWidgets.QTextEdit
+QPushButton = QtWidgets.QPushButton
+QGridLayout = QtWidgets.QGridLayout
+QHeaderView = QtWidgets.QHeaderView
+QSystemTrayIcon = QtWidgets.QSystemTrayIcon
+QMenu = QtWidgets.QMenu
+QAction = QtWidgets.QAction
+QTableWidget = QtWidgets.QTableWidget
+QMessageBox = QtWidgets.QMessageBox
+QTableWidgetItem = QtWidgets.QTableWidgetItem
+qApp = QtWidgets.qApp
+QUrl = QtCore.QUrl
 
 class WebWindow(QWidget):
 	def __init__(self,url,title='Help'):
 		super().__init__()
 		self.view = WebView(self)
-		self.view.load(url)
+		self.view.load(QUrl(url))
 
 		self.layout = QHBoxLayout()
 		self.layout.addWidget(self.view)
@@ -111,12 +83,9 @@ class WaitingWindow(QMainWindow):
 
 
 	def set_bg_image(self):
-		self.bgimage = QtGui.QPixmap("images/bg.png").scaled(self.size(), transformMode=QtCore.Qt.SmoothTransformation)
+		self.bgimage = QtGui.QImage("images/bg.png").scaled(self.size(), transformMode=QtCore.Qt.SmoothTransformation)
 		palette = QtGui.QPalette()
-		if sys.version == 'win32':
-			palette.setBrush(QtGui.QPalette.Window,self.bgimage)
-		elif sys.version == 'darwin':
-			pass
+		palette.setBrush(QtGui.QPalette.Window,QtGui.QBrush(self.bgimage))
 		self.setPalette(palette)
 
 
@@ -262,9 +231,9 @@ class MainWindow(QMainWindow):
 
 
 	def set_bg_image(self):
-		self.bgimage = QtGui.QPixmap("images/bg.png").scaled(self.size(), transformMode=QtCore.Qt.SmoothTransformation)
+		self.bgimage = QtGui.QImage("images/bg.png").scaled(self.size(), transformMode=QtCore.Qt.SmoothTransformation)
 		palette = QtGui.QPalette()
-		palette.setBrush(QtGui.QPalette.Window,self.bgimage)
+		palette.setBrush(QtGui.QPalette.Window,QtGui.QBrush(self.bgimage))
 		self.setPalette(palette)
 
 
@@ -325,8 +294,8 @@ class MainWindow(QMainWindow):
 	def _create_layouts_and_widgets(self):
 		self._table_layout = QGridLayout()
 		self._table = QTableWidget(0,6,self)
-		self._table_header = QHeaderView(QtCore.Qt.Orientation.Horizontal)
-		self._table_header.setResizeMode(QHeaderView.ResizeToContents)
+		self._table_header = QHeaderView(QtCore.Qt.Orientation(0))
+		self._table_header.setSectionResizeMode(QHeaderView.ResizeToContents)
 		# self._table_header.stretchLastSection()
 		self._table.setHorizontalHeader(self._table_header)
 		self._table.setHorizontalHeaderLabels(['Savegame','Last backed up','Auto\nbackup','Upload\nbackups','Manual\nbackup','Latest URL'])
@@ -458,7 +427,7 @@ class MainWindow(QMainWindow):
 			elif type(item) == bool:
 				new_item = QTableWidgetItem()
 				if i == 3 and items[2] == False:
-					new_item.setFlags(QtCore.Qt.ItemFlags() != QtCore.Qt.ItemIsEnabled)
+					new_item.setFlags(QtCore.Qt.ItemFlags() & ~QtCore.Qt.ItemIsEnabled)
 					new_item.setCheckState(QtCore.Qt.Unchecked)
 				else:
 					new_item.setFlags(QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled)
@@ -479,7 +448,7 @@ class MainWindow(QMainWindow):
 					if checkstate == True:
 						self._table.item(item.row(),3).setFlags(QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled)
 					else:
-						self._table.item(item.row(),3).setFlags(QtCore.Qt.ItemFlags() != QtCore.Qt.ItemIsEnabled)
+						self._table.item(item.row(),3).setFlags(QtCore.Qt.ItemFlags() & ~QtCore.Qt.ItemIsEnabled)
 						self._table.item(item.row(),3).setCheckState(QtCore.Qt.Unchecked)
 				elif item.column() == 3:
 					update_monitor(self._table_state[item.row()][0],uploading=checkstate)
