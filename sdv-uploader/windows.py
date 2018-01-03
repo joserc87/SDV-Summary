@@ -535,7 +535,10 @@ class MainWindow(QMainWindow):
 
 
 	def open_browse_backups(self):
-		os.startfile(BACKUP_DIRECTORY)
+		if sys.platform == 'win32':
+			os.startfile(BACKUP_DIRECTORY)
+		elif sys.platform == 'darwin':
+			subprocess.call(['open',BACKUP_DIRECTORY])
 
 
 	def open_help(self):
