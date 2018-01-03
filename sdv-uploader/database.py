@@ -4,11 +4,18 @@ import hashlib
 import time
 import json
 import sqlite3
+import sys
+
 from config import root_directory
 
 def get_current_savegame_filenames(**kwargs):
 	#look in registry? or just at appdata?
-	savegamedir = os.path.join(os.getenv('APPDATA'),'StardewValley\\Saves')
+	if sys.platform == 'win32':
+		savegamedir = os.path.join(os.getenv('APPDATA'),'StardewValley\\Saves')
+	if sys.platform == 'darwin':
+		savegamedir = os.path.expanduser('~/.config/StardewValley/Saves')
+	else:
+		raise SystemError
 	lookin = os.path.join(savegamedir,'*')
 
 	savegames = {}

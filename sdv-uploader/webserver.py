@@ -22,4 +22,5 @@ def home():
 
 
 if __name__ == "__main__":
-	run_flask()
+	launch_webserver_as_process()
+	# run_flask() # works on mac; maybe process doesnt?
