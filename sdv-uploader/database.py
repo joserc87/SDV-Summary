@@ -12,7 +12,7 @@ def get_current_savegame_filenames(**kwargs):
 	#look in registry? or just at appdata?
 	if sys.platform == 'win32':
 		savegamedir = os.path.join(os.getenv('APPDATA'),'StardewValley\\Saves')
-	if sys.platform == 'darwin':
+	elif sys.platform == 'darwin':
 		savegamedir = os.path.expanduser('~/.config/StardewValley/Saves')
 	else:
 		raise SystemError

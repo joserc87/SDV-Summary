@@ -4,6 +4,7 @@ import json
 import os
 import ctypes
 import sys
+import subprocess
 
 from PyQt5 import QtGui, QtCore, QtWebEngineWidgets, QtWidgets
 from tendo import singleton
@@ -28,6 +29,7 @@ ACCOUNT_URL = server_location+"/acc"
 BACKUP_DIRECTORY = backup_directory
 RUN_STARDEW_VALLEY_STEAM = 'steam://rungameid/413150'
 HELP_FILE_LOCATION = "file:///help/help.html"
+LOGO_ICON = "images/logo.png"
 __version__ = version
 
 
@@ -120,7 +122,7 @@ class WaitingWindow(QMainWindow):
 
 	def _create_layouts_and_widgets(self):
 		self._logo = QLabel()
-		self._logo.setPixmap(QtGui.QPixmap("images/logo.png"))
+		self._logo.setPixmap(QtGui.QPixmap(LOGO_ICON))
 
 		self._explanation = QTextEdit("This tool is a thank-you to supporters of "
 			"upload.farm.<br><br>It allows you to automatically backup your Stardew Valley "
@@ -318,7 +320,7 @@ class MainWindow(QMainWindow):
 		self._table.itemClicked.connect(self.item_clicked_handler)
 
 		self._logo = QLabel()
-		self._logo.setPixmap(QtGui.QPixmap("images/logo.png"))
+		self._logo.setPixmap(QtGui.QPixmap(LOGO_ICON))
 		self._profile_button = QPushButton("&My Account")
 		self._profile_button.clicked.connect(self.open_acc_page)
 		self._run_sdv_button = QPushButton("Launch &Game!")
@@ -512,11 +514,19 @@ class MainWindow(QMainWindow):
 			if self.trayIcon.isVisible() and self._popup_shown != True:
 				self._popup_shown = True
 				# QMessageBox.information(self,"upload.farm uploader","The uploader will keep running in the system tray. To fully terminate the program, right-click the icon in the system tray and choose <b>Exit</b>.")
-				reply = QMessageBox.question(self,'upload.farm uploader','Do you want the uploader to keep running in the system tray?'
-					' This is a good option if you want to keep it monitoring your Stardew Valley savegames!', QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
-				if reply == QMessageBox.No:
-					QtCore.QCoreApplication.instance().quit()
-					event.accept()
+				# reply = QMessageBox.question(self,'upload.farm uploader','Do you want the uploader to keep running in the system tray?'
+				# 	' This is a good option if you want to keep it monitoring your Stardew Valley savegames!', QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
+				# if reply == QMessageBox.No:
+				# 	QtCore.QCoreApplication.instance().quit()
+				# 	event.accept()
+
+				n_title = 'upload.farm uploader'
+				n_message = 'The uploader will keep running in the system tray. To fully terminate the program, right-click the icon in the system tray and choose <b>Exit</b>.'
+				# n_app_name = 'UploadFarm.Uploader.0001'
+				# n_app_icon = LOGO_ICON
+				# notification.notify(title=n_title,message=n_message,app_name=n_app_name)#,app_icon=n_app_icon)
+
+				self.trayIcon.showMessage(n_title,n_message)
 			event.ignore()
 
 
@@ -574,7 +584,14 @@ class MainWindow(QMainWindow):
 
 
 	def run_stardew_valley(self):
-		os.startfile(RUN_STARDEW_VALLEY_STEAM)
+		try:
+			if sys.platform == 'win32':
+				os.startfile(RUN_STARDEW_VALLEY_STEAM)
+			elif sys.platform == 'darwin':
+				subprocess.call(['open',RUN_STARDEW_VALLEY_STEAM])
+		except OSError:
+			QMessageBox.information(self, "Game launch error!",
+				"At present this only works if you have Stardew Valley on Steam. Sorry!")
 
 
 def windows_appusermodelid():
