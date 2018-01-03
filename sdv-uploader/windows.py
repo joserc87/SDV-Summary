@@ -225,15 +225,25 @@ class MainWindow(QMainWindow):
 		self.run_loopback()
 		self._last_updated = 0
 		self.update_gui()
+		self.timer = QtCore.QTimer(self)
+		self.timer.timeout.connect(self.monitor_user_info)
+		self.timer.start(1000)
 		if is_user_info_invalid():
 			self.reauthorise()
 		elif not(len(sys.argv)>1 and sys.argv[1] == '--silent'):
 			self.show()
 
+
 	updateGui = Signal()
 	aboutToQuit = Signal()
 	authError = Signal()
 	maximizeWindow = Signal()
+
+
+	def monitor_user_info(self):
+		self.timer.stop()
+		if is_user_info_invalid():
+			self.reauthorise()
 
 
 	def run_loopback(self):
