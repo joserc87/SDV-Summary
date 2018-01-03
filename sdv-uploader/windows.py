@@ -27,10 +27,11 @@ AUTHENTICATION_URL = server_location+"/auth?client_id="+client_id
 ACCOUNT_URL = server_location+"/acc"
 BACKUP_DIRECTORY = backup_directory
 RUN_STARDEW_VALLEY_STEAM = 'steam://rungameid/413150'
+HELP_FILE_LOCATION = "file:///help/help.html"
 __version__ = version
 
 
-WebView = QtWebEngineWidgets.QWebEngineView
+QWebEngineView = QtWebEngineWidgets.QWebEngineView
 QWidget = QtWidgets.QWidget
 QMainWindow = QtWidgets.QMainWindow
 Signal = QtCore.pyqtSignal
@@ -51,10 +52,25 @@ QTableWidgetItem = QtWidgets.QTableWidgetItem
 qApp = QtWidgets.qApp
 QUrl = QtCore.QUrl
 
+class WebWindow_OLD(QWidget):
+	def __init__(self,url,title='Help'):
+		super().__init__()
+		self.view = QWebEngineView(self)
+		self.view.load(QUrl(url))
+
+		self.layout = QHBoxLayout()
+		self.layout.addWidget(self.view)
+		self.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
+
+		self.setLayout(self.layout)
+		self.resize(800,600)
+		self.setWindowTitle(title)
+		self.show()
+
 class WebWindow(QWidget):
 	def __init__(self,url,title='Help'):
 		super().__init__()
-		self.view = WebView(self)
+		self.view = QWebEngineView(self)
 		self.view.load(QUrl(url))
 
 		self.layout = QHBoxLayout()
@@ -175,7 +191,7 @@ class WaitingWindow(QMainWindow):
 		
 
 	def open_help(self):
-		self.help_window = WebWindow("help/help.html")
+		self.help_window = WebWindow(HELP_FILE_LOCATION)
 		self.help_window.hide()
 		self.aboutToQuit.connect(self.help_window.close)
 		self.help_window.show()
@@ -294,7 +310,7 @@ class MainWindow(QMainWindow):
 	def _create_layouts_and_widgets(self):
 		self._table_layout = QGridLayout()
 		self._table = QTableWidget(0,6,self)
-		self._table_header = QHeaderView(QtCore.Qt.Orientation(0))
+		self._table_header = QHeaderView(QtCore.Qt.Horizontal)
 		self._table_header.setSectionResizeMode(QHeaderView.ResizeToContents)
 		# self._table_header.stretchLastSection()
 		self._table.setHorizontalHeader(self._table_header)
@@ -513,7 +529,7 @@ class MainWindow(QMainWindow):
 
 
 	def open_help(self):
-		self.help_window = WebWindow("help/help.html")
+		self.help_window = WebWindow(HELP_FILE_LOCATION)
 		self.help_window.hide()
 		self.aboutToQuit.connect(self.help_window.close)
 		self.help_window.show()
