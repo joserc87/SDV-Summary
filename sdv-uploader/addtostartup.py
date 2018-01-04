@@ -10,6 +10,7 @@ else:
 
 
 REGISTRY_NAME = 'uploadfarm'
+MAC_APP_LABEL = "org.{}.uploader".format(REGISTRY_NAME)
 
 
 def add_to_startup(filename='"{}" --silent'.format(sys.argv[0])):
@@ -21,9 +22,7 @@ def add_to_startup(filename='"{}" --silent'.format(sys.argv[0])):
 		create_plist_mac(filename)
 
 def create_plist_mac(filename):
-	label = "Label"
-	appid = "org.{}".format(REGISTRY_NAME)
-	location = os.path.expanduser('~/Library/LaunchAgents/{}.plist'.format(appid))
+	location = os.path.expanduser('~/Library/LaunchAgents/{}.plist'.format(MAC_APP_LABEL))
 	args = filename.split(' ')
 
 	program_arguments = ''
@@ -34,9 +33,9 @@ def create_plist_mac(filename):
 		<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 		<plist version="1.0">
 		<dict>
-		    <key>"""+label+"""</key>
+		    <key>Label</key>
 		    <!-- The label should be the same as the filename without the extension -->
-		    <string>"""+appid+"""</string>
+		    <string>"""+MAC_APP_LABEL+"""</string>
 		    <!-- Specify how to run your program here -->
 		    <key>ProgramArguments</key>
 		    <array>
