@@ -13,7 +13,7 @@ REGISTRY_NAME = 'uploadfarm'
 MAC_APP_LABEL = "org.{}.uploader".format(REGISTRY_NAME)
 
 
-def add_to_startup(filename='"{}" --silent'.format(sys.argv[0])):
+def add_to_startup(filename='"{}" --silent'.format(os.path.abspath(sys.argv[0]))):
 	if sys.platform == 'win32':
 		key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r'SOFTWARE\Microsoft\Windows\CurrentVersion\Run', 0, winreg.KEY_SET_VALUE)
 		winreg.SetValueEx(key, REGISTRY_NAME, 0, winreg.REG_SZ, filename)
