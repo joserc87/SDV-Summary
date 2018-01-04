@@ -4,14 +4,15 @@ import os
 if sys.platform == 'win32':
 	import winreg
 elif sys.platform == 'darwin':
-	pass
+	import plistlib
 else:
 	raise ImportError
 
 
 REGISTRY_NAME = 'uploadfarm'
 MAC_APP_LABEL = "org.{}.uploader".format(REGISTRY_NAME)
-
+MAC_PLIST_LOCATION = os.path.expanduser('~/Library/LaunchAgents/{}.plist'.format(MAC_APP_LABEL))
+ 
 
 def add_to_startup(filename='"{}" --silent'.format(os.path.abspath(sys.argv[0]))):
 	if sys.platform == 'win32':
@@ -19,39 +20,28 @@ def add_to_startup(filename='"{}" --silent'.format(os.path.abspath(sys.argv[0]))
 		winreg.SetValueEx(key, REGISTRY_NAME, 0, winreg.REG_SZ, filename)
 		key.Close()
 	elif sys.platform == 'darwin':
-		create_plist_mac(filename)
+		create_plist_mac(filename,True)
 
-def create_plist_mac(filename):
-	location = os.path.expanduser('~/Library/LaunchAgents/{}.plist'.format(MAC_APP_LABEL))
-	args = filename.split(' ')
 
-	program_arguments = ''
-	for arg in args:
-		program_arguments += '<string>{}</string>\n'.format(arg)
+def create_plist_mac(filename,state):
+	plist_info = {'ProgramArguments': filename.split(' '),
+		'ProcessType': 'Interactive', 'Label': MAC_APP_LABEL,
+		'KeepAlive': False, 'RunAtLoad': state}
+	with open(MAC_PLIST_LOCATION,'wb') as f:
+		plistlib.dump(plist_info,f)
 
-	plist = """<?xml version="1.0" encoding="UTF-8"?>
-		<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-		<plist version="1.0">
-		<dict>
-		    <key>Label</key>
-		    <!-- The label should be the same as the filename without the extension -->
-		    <string>"""+MAC_APP_LABEL+"""</string>
-		    <!-- Specify how to run your program here -->
-		    <key>ProgramArguments</key>
-		    <array>
-		        """+program_arguments+"""
-		    </array>
-		    <key>ProcessType</key>
-		    <string>Interactive</string>
-		    <key>RunAtLoad</key>
-		    <true/>
-		    <key>KeepAlive</key>
-		    <false/>
-		</dict>
-			</plist>"""
-	print('writing to: {}'.format(location))
-	print('content: {}'.format(plist))
-	print('((NOT WRITTEN))')
+
+def update_plist_mac(state):
+	if check_startup() != state:
+		try:
+			with open(MAC_PLIST_LOCATION,'rb') as f:
+				plist_info = plistlib.load(f)
+			plist_info['RunAtLoad'] = state
+			with open(MAC_PLIST_LOCATION,'wb') as f:
+				plistlib.dump(plist_info, f)
+		except FileNotFoundError:
+			create_plist_mac(state)
+
 
 def remove_from_startup():
 	if sys.platform == 'win32':
@@ -62,7 +52,8 @@ def remove_from_startup():
 		except:
 			pass
 	elif sys.platform == 'darwin':
-		pass
+		update_plist_mac(False)
+
 
 
 def check_startup():
@@ -80,8 +71,12 @@ def check_startup():
 		key.Close()
 		return False
 	elif sys.platform == 'darwin':
-		return False
-
+		try:
+			with open(MAC_PLIST_LOCATION,'rb') as f:
+				a = plistlib.load(f)
+			return a['RunAtLoad']
+		except FileNotFoundError:
+			return False
 
 def main():
 	print(check_startup())
