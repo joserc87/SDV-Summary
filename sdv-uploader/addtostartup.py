@@ -18,7 +18,7 @@ def add_to_startup(filename='"{}" --silent'.format(sys.argv[0])):
 		winreg.SetValueEx(key, REGISTRY_NAME, 0, winreg.REG_SZ, filename)
 		key.Close()
 	elif sys.platform == 'darwin':
-		create_plist(filename)
+		create_plist_mac(filename)
 
 def create_plist_mac(filename):
 	label = "Label"
