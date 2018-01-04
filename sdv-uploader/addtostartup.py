@@ -1,4 +1,5 @@
 import sys
+import os
 
 if sys.platform == 'win32':
 	import winreg
@@ -17,8 +18,41 @@ def add_to_startup(filename='"{}" --silent'.format(sys.argv[0])):
 		winreg.SetValueEx(key, REGISTRY_NAME, 0, winreg.REG_SZ, filename)
 		key.Close()
 	elif sys.platform == 'darwin':
-		pass
+		create_plist(filename)
 
+def create_plist_mac(filename):
+	label = "Label"
+	appid = "org.{}".format(REGISTRY_NAME)
+	location = os.path.expanduser('~/Library/LaunchAgents/{}.plist'.format(appid))
+	args = filename.split(' ')
+
+	program_arguments = ''
+	for arg in args:
+		program_arguments += '<string>{}</string>\n'.format(arg)
+
+	plist = """<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+		<plist version="1.0">
+		<dict>
+		    <key>"""+label+"""</key>
+		    <!-- The label should be the same as the filename without the extension -->
+		    <string>"""+appid+"""</string>
+		    <!-- Specify how to run your program here -->
+		    <key>ProgramArguments</key>
+		    <array>
+		        """+program_arguments+"""
+		    </array>
+		    <key>ProcessType</key>
+		    <string>Interactive</string>
+		    <key>RunAtLoad</key>
+		    <true/>
+		    <key>KeepAlive</key>
+		    <false/>
+		</dict>
+			</plist>"""
+	print('writing to: {}'.format(location))
+	print('content: {}'.format(plist))
+	print('((NOT WRITTEN))')
 
 def remove_from_startup():
 	if sys.platform == 'win32':
@@ -51,11 +85,11 @@ def check_startup():
 
 
 def main():
-	print(check_registry())
-	add_to_registry()
-	print(check_registry())
-	remove_from_registry()
-	print(check_registry())
+	print(check_startup())
+	add_to_startup()
+	print(check_startup())
+	remove_from_startup()
+	print(check_startup())
 
 
 if __name__ == '__main__':
