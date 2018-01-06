@@ -10,7 +10,7 @@ else:
 
 
 REGISTRY_NAME = 'uploadfarm'
-MAC_APP_LABEL = "org.{}.uploader".format(REGISTRY_NAME)
+MAC_APP_LABEL = "farm.upload.uploader".format(REGISTRY_NAME)
 MAC_PLIST_LOCATION = os.path.expanduser('~/Library/LaunchAgents/{}.plist'.format(MAC_APP_LABEL))
  
 
