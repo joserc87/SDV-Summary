@@ -225,25 +225,15 @@ class MainWindow(QMainWindow):
 		self.run_loopback()
 		self._last_updated = 0
 		self.update_gui()
-		self.timer = QtCore.QTimer(self)
-		self.timer.timeout.connect(self.monitor_user_info)
-		self.timer.start(1000)
 		if is_user_info_invalid():
 			self.reauthorise()
 		elif not(len(sys.argv)>1 and sys.argv[1] == '--silent'):
 			self.show()
 
-
 	updateGui = Signal()
 	aboutToQuit = Signal()
 	authError = Signal()
 	maximizeWindow = Signal()
-
-
-	def monitor_user_info(self):
-		self.timer.stop()
-		if is_user_info_invalid():
-			self.reauthorise()
 
 
 	def run_loopback(self):
@@ -529,13 +519,8 @@ class MainWindow(QMainWindow):
 				# if reply == QMessageBox.No:
 				# 	QtCore.QCoreApplication.instance().quit()
 				# 	event.accept()
-
 				n_title = 'upload.farm uploader'
 				n_message = 'The uploader will keep running in the system tray. To fully terminate the program, right-click the icon in the system tray and choose <b>Exit</b>.'
-				# n_app_name = 'UploadFarm.Uploader.0001'
-				# n_app_icon = LOGO_ICON
-				# notification.notify(title=n_title,message=n_message,app_name=n_app_name)#,app_icon=n_app_icon)
-
 				self.trayIcon.showMessage(n_title,n_message)
 			event.ignore()
 
@@ -545,10 +530,7 @@ class MainWindow(QMainWindow):
 
 
 	def open_browse_backups(self):
-		if sys.platform == 'win32':
-			os.startfile(BACKUP_DIRECTORY)
-		elif sys.platform == 'darwin':
-			subprocess.call(['open',BACKUP_DIRECTORY])
+		os.startfile(BACKUP_DIRECTORY)
 
 
 	def open_help(self):

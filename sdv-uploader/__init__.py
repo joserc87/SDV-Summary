@@ -3,6 +3,7 @@ from setup import version
 import os
 import sys
 
+
 __version__ = version
 
 def main():

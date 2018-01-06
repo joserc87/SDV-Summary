@@ -9,7 +9,8 @@ include_files = ['images',
 				 'icons']
 exclude_modules = ['tcl',
 				   'tk',
-				   'tkinter']
+				   'tkinter',
+           'PySide']
 buildOptions = dict(packages = [],excludes = exclude_modules,include_files=include_files, optimize=2)
 otheroptions = dict(icon="icons/windows_icon.ico")
 
