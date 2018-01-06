@@ -11,19 +11,30 @@ exclude_modules = ['tcl',
 				   'tk',
 				   'tkinter',
            'PySide']
-buildOptions = dict(packages = [],excludes = exclude_modules,include_files=include_files, optimize=2)
+
+packages = []
+if sys.platform == 'darwin':
+    packages.append('asyncio')
+    packages.append('idna')
+    packages.append('_sysconfigdata_m_darwin_darwin')
+
+buildOptions = dict(packages = packages,excludes = exclude_modules,include_files=include_files, optimize=2)
 otheroptions = dict(icon="icons/windows_icon.ico")
 
 version = '2.0'
 
 base = 'Win32GUI' if sys.platform=='win32' else None
 
-if __name__ == "__main__":
+targetName = 'uploader'
+if sys.platform == 'win32':
+    targetName = '{}.exe'.format(targetName)
+
+if __name__ == "__main__":    
     os.environ['TCL_LIBRARY'] = r'C:\Python35\tcl\tcl8.6'
     os.environ['TK_LIBRARY'] = r'C:\Python35\tcl\tk8.6'
 
     executables = [
-        Executable('__init__.py', base=base, targetName = 'uploader.exe',**otheroptions)
+        Executable('__init__.py', base=base, targetName = targetName,**otheroptions)
     ]
     setup(name='upload.farm uploader',
           version = version,

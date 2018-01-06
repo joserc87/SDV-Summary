@@ -54,35 +54,36 @@ QTableWidgetItem = QtWidgets.QTableWidgetItem
 qApp = QtWidgets.qApp
 QUrl = QtCore.QUrl
 
-class WebWindow_OLD(QWidget):
-	def __init__(self,url,title='Help'):
-		super().__init__()
-		self.view = QWebEngineView(self)
-		self.view.load(QUrl(url))
 
-		self.layout = QHBoxLayout()
-		self.layout.addWidget(self.view)
-		self.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
+# class WebWindow_OLD(QWidget):
+# 	def __init__(self,url,title='Help'):
+# 		super().__init__()
+# 		self.view = QWebEngineView(self)
+# 		self.view.load(QUrl(url))
 
-		self.setLayout(self.layout)
-		self.resize(800,600)
-		self.setWindowTitle(title)
-		self.show()
+# 		self.layout = QHBoxLayout()
+# 		self.layout.addWidget(self.view)
+# 		self.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
 
-class WebWindow(QWidget):
-	def __init__(self,url,title='Help'):
-		super().__init__()
-		self.view = QWebEngineView(self)
-		self.view.load(QUrl(url))
+# 		self.setLayout(self.layout)
+# 		self.resize(800,600)
+# 		self.setWindowTitle(title)
+# 		self.show()
 
-		self.layout = QHBoxLayout()
-		self.layout.addWidget(self.view)
-		self.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
+# class WebWindow(QWidget):
+# 	def __init__(self,url,title='Help'):
+# 		super().__init__()
+# 		self.view = QWebEngineView(self)
+# 		self.view.load(QUrl(url))
 
-		self.setLayout(self.layout)
-		self.resize(800,600)
-		self.setWindowTitle(title)
-		self.show()
+# 		self.layout = QHBoxLayout()
+# 		self.layout.addWidget(self.view)
+# 		self.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
+
+# 		self.setLayout(self.layout)
+# 		self.resize(800,600)
+# 		self.setWindowTitle(title)
+# 		self.show()
 
 class WaitingWindow(QMainWindow):
 	def __init__(self):
@@ -193,10 +194,11 @@ class WaitingWindow(QMainWindow):
 		
 
 	def open_help(self):
-		self.help_window = WebWindow(HELP_FILE_LOCATION)
-		self.help_window.hide()
-		self.aboutToQuit.connect(self.help_window.close)
-		self.help_window.show()
+		QtGui.QDesktopServices.openUrl(QUrl(HELP_FILE_LOCATION))
+		# self.help_window = WebWindow(HELP_FILE_LOCATION)
+		# self.help_window.hide()
+		# self.aboutToQuit.connect(self.help_window.close)
+		# self.help_window.show()
 
 
 	def closeEvent(self,event):
@@ -534,10 +536,11 @@ class MainWindow(QMainWindow):
 
 
 	def open_help(self):
-		self.help_window = WebWindow(HELP_FILE_LOCATION)
-		self.help_window.hide()
-		self.aboutToQuit.connect(self.help_window.close)
-		self.help_window.show()
+		QtGui.QDesktopServices.openUrl(QUrl(HELP_FILE_LOCATION))
+		# self.help_window = WebWindow(HELP_FILE_LOCATION)
+		# self.help_window.hide()
+		# self.aboutToQuit.connect(self.help_window.close)
+		# self.help_window.show()
 
 
 	def _icon_activated(self,reason):
