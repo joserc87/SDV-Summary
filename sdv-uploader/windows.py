@@ -6,7 +6,7 @@ import ctypes
 import sys
 import subprocess
 
-from PyQt5 import QtGui, QtCore, QtWebEngineWidgets, QtWidgets
+from PyQt5 import QtGui, QtCore, QtWidgets #QtWebEngineWidgets
 from tendo import singleton
 
 from webserver import launch_webserver_as_process
@@ -28,12 +28,12 @@ AUTHENTICATION_URL = server_location+"/auth?client_id="+client_id
 ACCOUNT_URL = server_location+"/acc"
 BACKUP_DIRECTORY = backup_directory
 RUN_STARDEW_VALLEY_STEAM = 'steam://rungameid/413150'
-HELP_FILE_LOCATION = "file:///help/help.html"
+HELP_FILE_LOCATION = "file:///{}".format(os.path.abspath("help/help.html"))
 LOGO_ICON = "images/logo.png"
 __version__ = version
 
 
-QWebEngineView = QtWebEngineWidgets.QWebEngineView
+# QWebEngineView = QtWebEngineWidgets.QWebEngineView
 QWidget = QtWidgets.QWidget
 QMainWindow = QtWidgets.QMainWindow
 Signal = QtCore.pyqtSignal
@@ -54,21 +54,6 @@ QTableWidgetItem = QtWidgets.QTableWidgetItem
 qApp = QtWidgets.qApp
 QUrl = QtCore.QUrl
 
-
-# class WebWindow_OLD(QWidget):
-# 	def __init__(self,url,title='Help'):
-# 		super().__init__()
-# 		self.view = QWebEngineView(self)
-# 		self.view.load(QUrl(url))
-
-# 		self.layout = QHBoxLayout()
-# 		self.layout.addWidget(self.view)
-# 		self.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
-
-# 		self.setLayout(self.layout)
-# 		self.resize(800,600)
-# 		self.setWindowTitle(title)
-# 		self.show()
 
 # class WebWindow(QWidget):
 # 	def __init__(self,url,title='Help'):
