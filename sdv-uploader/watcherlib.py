@@ -53,7 +53,7 @@ class UploadFarmEventHandler(FileSystemEventHandler):
 		if self.kwargs.get('function'):
 			self.kwargs.get('function')()
 		full_filename = os.path.join(self.path_to_watch,event.src_path)
-		print('changed: {}'.format(full_filename))
+		# print('changed: {}'.format(full_filename))
 		monitor_comparison = check_monitor(full_filename)
 		if len(monitor_comparison) == 1:
 			try:

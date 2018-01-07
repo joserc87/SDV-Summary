@@ -8,6 +8,8 @@ import subprocess
 
 from PyQt5 import QtGui, QtCore, QtWidgets #QtWebEngineWidgets
 from tendo import singleton
+if sys.platform == 'darwin':
+	import AppKit
 
 from webserver import launch_webserver_as_process
 from loopbacklistener import launch_loopback, check_app_running
@@ -54,6 +56,9 @@ QTableWidgetItem = QtWidgets.QTableWidgetItem
 qApp = QtWidgets.qApp
 QUrl = QtCore.QUrl
 
+NSApplicationActivationPolicyRegular = 0
+NSApplicationActivationPolicyAccessory = 1
+NSApplicationActivationPolicyProhibited = 2
 
 # class WebWindow(QWidget):
 # 	def __init__(self,url,title='Help'):
@@ -497,18 +502,13 @@ class MainWindow(QMainWindow):
 			QtCore.QCoreApplication.instance().quit()
 			event.accept()
 		else:
+			if sys.platform == 'darwin':
+				AppKit.NSApp.setActivationPolicy_(NSApplicationActivationPolicyProhibited)
 			self.hide()
 			if self.trayIcon.isVisible() and self._popup_shown != True:
 				self._popup_shown = True
-				# QMessageBox.information(self,"upload.farm uploader","The uploader will keep running in the system tray. To fully terminate the program, right-click the icon in the system tray and choose <b>Exit</b>.")
-				# reply = QMessageBox.question(self,'upload.farm uploader','Do you want the uploader to keep running in the system tray?'
-				# 	' This is a good option if you want to keep it monitoring your Stardew Valley savegames!', QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
-				# if reply == QMessageBox.No:
-				# 	QtCore.QCoreApplication.instance().quit()
-				# 	event.accept()
 				n_title = 'upload.farm uploader'
 				n_message = 'The uploader will keep running in the system tray. To fully terminate the program, right-click the icon in the system tray and choose <b>Exit</b>.'
-				self.trayIcon.showMessage(n_title,n_message)
 			event.ignore()
 
 
@@ -535,8 +535,13 @@ class MainWindow(QMainWindow):
 
 	def _showhide(self):
 		if not self.isVisible():
+			if sys.platform == 'darwin':
+				AppKit.NSApp.setActivationPolicy_(NSApplicationActivationPolicyRegular)
+				qApp.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
 			self.activate_main_window()
 		else:
+			if sys.platform == 'darwin':
+				AppKit.NSApp.setActivationPolicy_(NSApplicationActivationPolicyProhibited)
 			self.hide()
 
 
@@ -589,6 +594,7 @@ def launch():
 	if sys.platform == 'win32':
 		windows_appusermodelid()
 	app = QApplication(sys.argv)
+	app.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
 	QApplication.setQuitOnLastWindowClosed(False)
 	if check_settings() == False or is_user_info_invalid() == True:
 		waiting = WaitingWindow()
