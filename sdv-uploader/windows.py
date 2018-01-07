@@ -75,6 +75,15 @@ NSApplicationActivationPolicyProhibited = 2
 # 		self.setWindowTitle(title)
 # 		self.show()
 
+def remove_mac_dock_icon():
+	if sys.platform == 'darwin':
+		AppKit.NSApp.setActivationPolicy_(NSApplicationActivationPolicyProhibited)
+
+def restore_mac_dock_icon():
+	if sys.platform == 'darwin':
+		AppKit.NSApp.setActivationPolicy_(NSApplicationActivationPolicyRegular)
+
+
 class WaitingWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
@@ -221,6 +230,9 @@ class MainWindow(QMainWindow):
 			self.reauthorise()
 		elif not(len(sys.argv)>1 and sys.argv[1] == '--silent'):
 			self.show()
+		else:
+			remove_mac_dock_icon()
+
 
 	updateGui = Signal()
 	aboutToQuit = Signal()
@@ -502,13 +514,13 @@ class MainWindow(QMainWindow):
 			QtCore.QCoreApplication.instance().quit()
 			event.accept()
 		else:
-			if sys.platform == 'darwin':
-				AppKit.NSApp.setActivationPolicy_(NSApplicationActivationPolicyProhibited)
-			self.hide()
 			if self.trayIcon.isVisible() and self._popup_shown != True:
 				self._popup_shown = True
 				n_title = 'upload.farm uploader'
 				n_message = 'The uploader will keep running in the system tray. To fully terminate the program, right-click the icon in the system tray and choose <b>Exit</b>.'
+				self.trayIcon.showMessage(n_title,n_message)
+			self.hide()
+			remove_mac_dock_icon()
 			event.ignore()
 
 
@@ -535,13 +547,12 @@ class MainWindow(QMainWindow):
 
 	def _showhide(self):
 		if not self.isVisible():
+			restore_mac_dock_icon()
 			if sys.platform == 'darwin':
-				AppKit.NSApp.setActivationPolicy_(NSApplicationActivationPolicyRegular)
 				qApp.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
 			self.activate_main_window()
 		else:
-			if sys.platform == 'darwin':
-				AppKit.NSApp.setActivationPolicy_(NSApplicationActivationPolicyProhibited)
+			remove_mac_dock_icon()
 			self.hide()
 
 
