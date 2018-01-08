@@ -425,9 +425,9 @@ class MainWindow(QMainWindow):
 		for i, item in enumerate(items):
 			if type(item) != bool:
 				if i == 4:
-					self.new_item = QPushButton('Backup!')
-					self.new_item.clicked.connect(self.handle_manual_backup)
-					self._table.setCellWidget(new_row-1,i,self.new_item)
+					new_item = QPushButton('Backup!')
+					new_item.clicked.connect(self.handle_manual_backup)
+					self._table.setCellWidget(new_row-1,i,new_item)
 					continue
 				elif i == 5 and item != None:
 					if item != '...':
@@ -481,10 +481,15 @@ class MainWindow(QMainWindow):
 
 
 	def handle_manual_backup(self):
-		button = qApp.focusWidget()
+		if sys.platform == 'win32':
+			button = qApp.focusWidget()
+		elif sys.platform == 'darwin':
+			abs_position = QtGui.QCursor().pos()
+			button = qApp.widgetAt(abs_position)
 		index = self._table.indexAt(button.pos())
+		row = index.row()
 		if index.isValid():
-			manual_process(self._table_state[index.row()][0],BACKUP_DIRECTORY)
+			manual_process(self._table_state[row][0],BACKUP_DIRECTORY)
 			self.update_gui()
 
 
