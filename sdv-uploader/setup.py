@@ -14,9 +14,11 @@ exclude_modules = ['tcl',
 
 packages = []
 if sys.platform == 'darwin':
-    packages.append('asyncio')
-    packages.append('idna')
-    packages.append('_sysconfigdata_m_darwin_darwin')
+    packages += ['asyncio',
+                 'idna',
+                 '_sysconfigdata_m_darwin_darwin',
+                 'six',
+                 'pkg_resources']
 
 buildOptions = dict(packages = packages,excludes = exclude_modules,include_files=include_files, optimize=2)
 otheroptions = dict(icon="icons/windows_icon.ico")
