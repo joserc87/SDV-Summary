@@ -13,6 +13,7 @@ from handler import archive
 class Watcher:
 	def __init__(self,path_to_watch,backup_dir):
 		self.path_to_watch = path_to_watch
+		os.makedirs(path_to_watch,exist_ok=True)
 		self.backup_dir = backup_dir
 		self.initialize()
 
