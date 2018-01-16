@@ -523,7 +523,7 @@ class MainWindow(QMainWindow):
 			if self.trayIcon.isVisible() and self._popup_shown != True:
 				self._popup_shown = True
 				n_title = 'upload.farm uploader'
-				n_message = 'The uploader will keep running in the system tray. To fully terminate the program, right-click the icon in the system tray and choose <b>Exit</b>.'
+				n_message = 'The uploader will keep running in the system tray. To fully close, right-click the icon and choose Exit.'
 				self.trayIcon.showMessage(n_title,n_message)
 			self.hide()
 			remove_mac_dock_icon()
