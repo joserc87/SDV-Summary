@@ -1,5 +1,6 @@
 from PIL import Image
 from collections import namedtuple
+from sdv.savefile import get_location
 
 map_types = [
     'Default',
@@ -73,9 +74,9 @@ def getFarmInfo(saveFile):
 
     # Farm Objects
 
-    locations = root.find('locations').findall("GameLocation")
     s = []
-    for item in locations[1].find('objects').iter("item"):
+    farm_location = get_location(root,'Farm')
+    for item in farm_location.find('objects').iter("item"):
         f = False
         obj = item.find('value').find('Object')
         name = obj.find('name').text
@@ -124,7 +125,7 @@ def getFarmInfo(saveFile):
 
     tf = []
     crops = []
-    for item in locations[1].find('terrainFeatures').iter('item'):
+    for item in farm_location.find('terrainFeatures').iter('item'):
         s = None
         loc = None
         f = False
@@ -194,7 +195,7 @@ def getFarmInfo(saveFile):
     # Resource Clumps
     s = []
 
-    for item in locations[1].find('resourceClumps').iter('ResourceClump'):
+    for item in farm_location.find('resourceClumps').iter('ResourceClump'):
         name = item.get(ns+'type')
         if name is None:
             name = 'ResourceClump'
@@ -208,7 +209,7 @@ def getFarmInfo(saveFile):
     farm['resourceClumps'] = s
 
     s = []
-    for item in locations[1].find('buildings').iter('Building'):
+    for item in farm_location.find('buildings').iter('Building'):
         name = 'Building'
         x = int(item.find('tileX').text)
         y = int(item.find('tileY').text)
@@ -228,11 +229,13 @@ def getFarmInfo(saveFile):
                    None)
 
     hasGreenhouse = False
-    for location in locations:
-        if location.find('name').text == "CommunityCenter":
-            cats = location.find('areasComplete').findall('boolean')
-            if cats[0].text == 'true':
-                hasGreenhouse = True
+    try:
+        community_center = get_location(root,'CommunityCenter')
+        cats = community_center.find('areasComplete').findall('boolean')
+        if cats[0].text == 'true':
+            hasGreenhouse = True
+    except AttributeError:
+        pass
 
     # Check for letter to confirm player has unlocked greenhouse, thanks /u/BumbleBHE
     for letter in root.find('player').find('mailReceived').iter('string'):

@@ -144,7 +144,7 @@ h1 {
 p, li, dl, .pixeltext, .tooltip-inner, .popover-content, .popover-title {
 	line-height: 1;
 	font-family: 'VT323','FZXS15';
-	font-size: 16pt;
+	font-size: 20pt;
 	margin: 0;
 	color: #333;
 }
