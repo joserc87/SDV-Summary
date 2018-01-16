@@ -7,5 +7,7 @@ To build on Windows:
 To build on Mac:
 
 1. use PyInstaller
-2. pyinstaller __init__.py
+2. pyinstaller build_app.spec 
+ or 
+2. pyinstaller build_debug.spec (for unpackaged output)
 3. output in dist directory

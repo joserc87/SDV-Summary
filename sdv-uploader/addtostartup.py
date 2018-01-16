@@ -10,7 +10,7 @@ else:
 
 
 REGISTRY_NAME = 'uploadfarm'
-MAC_APP_LABEL = "farm.upload.uploader".format(REGISTRY_NAME)
+MAC_APP_LABEL = "farm.upload.uploader"
 MAC_PLIST_LOCATION = os.path.expanduser('~/Library/LaunchAgents/{}.plist'.format(MAC_APP_LABEL))
  
 
@@ -27,7 +27,7 @@ def create_plist_mac(filename,state):
 	plist_info = {'ProgramArguments': filename.split(' '),
 		'ProcessType': 'Interactive', 'Label': MAC_APP_LABEL,
 		'KeepAlive': False, 'RunAtLoad': state}
-	os.makedirs(MAC_PLIST_LOCATION,exist_ok=True)
+	os.makedirs(os.path.split(MAC_PLIST_LOCATION)[0],exist_ok=True)
 	with open(MAC_PLIST_LOCATION,'wb') as f:
 		plistlib.dump(plist_info,f)
 

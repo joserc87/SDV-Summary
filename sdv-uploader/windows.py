@@ -25,13 +25,14 @@ from multiprocessing import freeze_support
 from addtostartup import add_to_startup, remove_from_startup, check_startup
 from setup import version
 from versioninfo import version_is_current
+from pyinstallerresourcesupport import resource_path
 
 AUTHENTICATION_URL = server_location+"/auth?client_id="+client_id
 ACCOUNT_URL = server_location+"/acc"
 BACKUP_DIRECTORY = backup_directory
 RUN_STARDEW_VALLEY_STEAM = 'steam://rungameid/413150'
-HELP_FILE_LOCATION = "file:///{}".format(os.path.abspath("help/help.html"))
-LOGO_ICON = "images/logo.png"
+HELP_FILE_LOCATION = "file:///{}".format(os.path.abspath(resource_path("help/help.html")))
+LOGO_ICON = resource_path("images/logo.png")
 __version__ = version
 
 
@@ -101,7 +102,7 @@ class WaitingWindow(QMainWindow):
 
 
 	def set_bg_image(self):
-		self.bgimage = QtGui.QImage("images/bg.png").scaled(self.size(), transformMode=QtCore.Qt.SmoothTransformation)
+		self.bgimage = QtGui.QImage(resource_path("images/bg.png")).scaled(self.size(), transformMode=QtCore.Qt.SmoothTransformation)
 		palette = QtGui.QPalette()
 		palette.setBrush(QtGui.QPalette.Window,QtGui.QBrush(self.bgimage))
 		self.setPalette(palette)
@@ -115,7 +116,7 @@ class WaitingWindow(QMainWindow):
 	def init_ui(self):
 		self.name_of_application = "upload.farm uploader v{}".format(__version__)
 		self.setWindowTitle(self.name_of_application)
-		self.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
+		self.setWindowIcon(QtGui.QIcon(resource_path('icons/windows_icon.ico')))
 		self._create_layouts_and_widgets()
 		self.show()
 
@@ -253,7 +254,7 @@ class MainWindow(QMainWindow):
 
 
 	def set_bg_image(self):
-		self.bgimage = QtGui.QImage("images/bg.png").scaled(self.size(), transformMode=QtCore.Qt.SmoothTransformation)
+		self.bgimage = QtGui.QImage(resource_path("images/bg.png")).scaled(self.size(), transformMode=QtCore.Qt.SmoothTransformation)
 		palette = QtGui.QPalette()
 		palette.setBrush(QtGui.QPalette.Window,QtGui.QBrush(self.bgimage))
 		self.setPalette(palette)
@@ -268,7 +269,7 @@ class MainWindow(QMainWindow):
 		self.name_of_application = "upload.farm uploader v{}".format(__version__)
 		self.add_email_to_application_name()
 		self.setWindowTitle(self.name_of_application)
-		self.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
+		self.setWindowIcon(QtGui.QIcon(resource_path('icons/windows_icon.ico')))
 		self._create_layouts_and_widgets()
 
 
@@ -285,7 +286,7 @@ class MainWindow(QMainWindow):
 
 	def init_tray(self):
 		self._popup_shown = False
-		self.trayIcon = QSystemTrayIcon(QtGui.QIcon("icons/windows_icon.ico"),self)
+		self.trayIcon = QSystemTrayIcon(QtGui.QIcon(resource_path("icons/windows_icon.ico")),self)
 		self.trayIconMenu = QMenu()
 
 		self.openAction = QAction("&Show/Hide", self, triggered=self._showhide)
@@ -534,7 +535,10 @@ class MainWindow(QMainWindow):
 
 
 	def open_browse_backups(self):
-		os.startfile(BACKUP_DIRECTORY)
+		if sys.platform == 'darwin':
+			subprocess.call(['open',BACKUP_DIRECTORY])
+		elif sys.platform == 'win32':
+			os.startfile(BACKUP_DIRECTORY)
 
 
 	def open_help(self):
@@ -554,7 +558,7 @@ class MainWindow(QMainWindow):
 		if not self.isVisible():
 			restore_mac_dock_icon()
 			if sys.platform == 'darwin':
-				qApp.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
+				qApp.setWindowIcon(QtGui.QIcon(resource_path('icons/windows_icon.ico')))
 			self.activate_main_window()
 		else:
 			remove_mac_dock_icon()
@@ -610,7 +614,7 @@ def launch():
 	if sys.platform == 'win32':
 		windows_appusermodelid()
 	app = QApplication(sys.argv)
-	app.setWindowIcon(QtGui.QIcon('icons/windows_icon.ico'))
+	app.setWindowIcon(QtGui.QIcon(resource_path('icons/windows_icon.ico')))
 	QApplication.setQuitOnLastWindowClosed(False)
 	if check_settings() == False or is_user_info_invalid() == True:
 		waiting = WaitingWindow()
