@@ -24,7 +24,11 @@ def add_to_startup(filename='"{}" --silent'.format(os.path.abspath(sys.argv[0]))
 
 
 def create_plist_mac(filename,state):
-	plist_info = {'ProgramArguments': filename.split(' '),
+	params = filename.split('--')
+	plist_filename = [params[0].strip('" ')]
+	for item in params[1:]:
+		plist_filename.append('--{}'.format(item))
+	plist_info = {'ProgramArguments': plist_filename,
 		'ProcessType': 'Interactive', 'Label': MAC_APP_LABEL,
 		'KeepAlive': False, 'RunAtLoad': state}
 	os.makedirs(os.path.split(MAC_PLIST_LOCATION)[0],exist_ok=True)
