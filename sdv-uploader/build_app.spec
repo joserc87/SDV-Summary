@@ -1,6 +1,14 @@
 # -*- mode: python -*-
-LOGO = 'logo.icns'
-MAC_APP_LABEL = 'farm.upload.uploader'
+import sys
+
+if sys.platform == 'darwin':
+  LOGO = 'logo.icns'
+  MAC_APP_LABEL = 'farm.upload.uploader'
+  pathex = '/Users/bob/SDV/sdv-uploader'
+elif sys.platform == 'win32':
+  LOGO = 'logo.ico'
+  pathex = 'C:\\Users\\Femto\\Dropbox\\GitHub\\SDV-Summary1.1\\SDV-Summary\\sdv-uploader'
+
 version = '2.0'
 name = 'upload.farm uploader'
 include_files = [(i,i) for i in ['images','help','icons']]
@@ -8,7 +16,7 @@ include_files = [(i,i) for i in ['images','help','icons']]
 block_cipher = None
 
 a = Analysis(['__init__.py'],
-             pathex=['/Users/bob/SDV/sdv-uploader'],
+             pathex=[pathex],
              binaries=[],
              datas=include_files,
              hiddenimports=[],
@@ -32,7 +40,8 @@ exe = EXE(pyz,
           runtime_tmpdir=None,
           console=False,
           icon=LOGO)
-app = BUNDLE(exe,
+if sys.platform == 'darwin':
+  app = BUNDLE(exe,
              name='{}.app'.format(name),
              icon=LOGO,
              bundle_identifier=MAC_APP_LABEL,
