@@ -14,6 +14,11 @@ def get_user_email():
 	return _send_request('/api/v1/get_user_info',payload)
 
 
+def get_series_info(url):
+	payload = _make_api_payload(url=url)
+	return _send_request('/api/v1/get_series_info',payload)
+
+
 def upload_zip(filename):
 	payload = _make_api_payload()
 	return _send_request_with_zipfile('/api/v1/upload_zipped',payload,filename)
@@ -97,6 +102,7 @@ def _get_token(**kwargs):
 def main():
 	print(get_user_email())
 	print(get_uploader_version())
+	print(get_series_info('1B3RNh'))
 
 
 if __name__ == "__main__":

@@ -738,6 +738,21 @@ def api_v1_get_user_info():
         else:
             return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}),400)
 
+@app.route('/api/v1/get_series_info',methods=['POST'])
+def api_v1_get_series_info():
+    if request.method == 'POST':
+        if 'url' in request.form:
+            credential_check = check_api_credentials(request.form)
+            if 'user' in credential_check:
+                db = get_db()
+                cur = db.cursor()
+                set_api_user(credential_check['user'])
+                entries = get_entries(n=10000,series=request.form.get('url'),sort_by='chronological',include_failed=False)
+                return make_response(jsonify(entries))
+            else:
+                return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}),400)
+    else:
+        return make_response(jsonify({"error": "no_url_error"}),400)
 
 @app.route('/api/v1/upload_zipped',methods=['POST'])
 def api_v1_upload_zipped():
