@@ -26,6 +26,7 @@ from addtostartup import add_to_startup, remove_from_startup, check_startup
 from setup import version
 from versioninfo import version_is_current
 from pyinstallerresourcesupport import resource_path
+from animator import make_animation_in_process
 
 AUTHENTICATION_URL = server_location+"/auth?client_id="+client_id
 ACCOUNT_URL = server_location+"/acc"
@@ -316,12 +317,13 @@ class MainWindow(QMainWindow):
 
 	def _create_layouts_and_widgets(self):
 		self._table_layout = QGridLayout()
-		self._table = QTableWidget(0,6,self)
+		self._table = QTableWidget(0,7,self)
 		self._table_header = QHeaderView(QtCore.Qt.Horizontal)
 		self._table_header.setSectionResizeMode(QHeaderView.ResizeToContents)
 		# self._table_header.stretchLastSection()
 		self._table.setHorizontalHeader(self._table_header)
-		self._table.setHorizontalHeaderLabels(['Savegame','Last backed up','Auto\nbackup','Upload\nbackups','Manual\nbackup','Latest URL'])
+		self._table.setHorizontalHeaderLabels(['Savegame',
+			'Last backed up','Auto\nbackup','Upload\nbackups','Manual\nbackup','Latest URL','Animation\nwizard'])
 		self._table.itemClicked.connect(self.item_clicked_handler)
 
 		self._logo = QLabel()
@@ -406,7 +408,7 @@ class MainWindow(QMainWindow):
 				datestring = None
 			j, uploadable, uploaded = get_latest_log_entry_for(item[0],successfully_uploaded=True)
 			url = j.get('url','...' if uploadable and not uploaded else None)
-			row = [item[0],datestring,True if item[4]==1 else False,True if item[5]==1 else False,None,url]
+			row = [item[0],datestring,True if item[4]==1 else False,True if item[5]==1 else False,None,url,None]
 			self._table_state.append(row)
 			self._add_table_row(row)
 
@@ -428,6 +430,11 @@ class MainWindow(QMainWindow):
 				if i == 4:
 					new_item = QPushButton('Backup!')
 					new_item.clicked.connect(self.handle_manual_backup)
+					self._table.setCellWidget(new_row-1,i,new_item)
+					continue
+				if i == 6:
+					new_item = QPushButton('GIF series!')
+					new_item.clicked.connect(self.animate)
 					self._table.setCellWidget(new_row-1,i,new_item)
 					continue
 				elif i == 5 and item != None:
@@ -481,17 +488,34 @@ class MainWindow(QMainWindow):
 				QtGui.QDesktopServices.openUrl(QUrl(server_location+'/'+self._table_state[item.row()][item.column()]))
 
 
-	def handle_manual_backup(self):
+	def _get_button(self):
 		if sys.platform == 'win32':
 			button = qApp.focusWidget()
 		elif sys.platform == 'darwin':
 			abs_position = QtGui.QCursor().pos()
 			button = qApp.widgetAt(abs_position)
+		return button
+
+
+	def handle_manual_backup(self):
+		button = self._get_button()
 		index = self._table.indexAt(button.pos())
 		row = index.row()
 		if index.isValid():
 			manual_process(self._table_state[row][0],BACKUP_DIRECTORY)
 			self.update_gui()
+
+
+	def animate(self):
+		button = self._get_button()
+		index = self._table.indexAt(button.pos())
+		row = index.row()
+		if index.isValid():
+			if self._table_state[row][5] == None:
+				QMessageBox.information(self, "No uploads recorded!",
+						"Building an animation requires you to have uploaded this save at least once.")
+			else:
+				make_animation_in_process(self._table_state[row][0],self._table_state[row][5],annotated=True)
 
 
 	def _icon_exit(self):

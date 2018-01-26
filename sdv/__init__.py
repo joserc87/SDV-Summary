@@ -748,6 +748,7 @@ def api_v1_get_series_info():
                 cur = db.cursor()
                 set_api_user(credential_check['user'])
                 entries = get_entries(n=10000,series=request.form.get('url'),sort_by='chronological',include_failed=False)
+                entries['posts'] = entries['posts'][::-1]
                 return make_response(jsonify(entries))
             else:
                 return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}),400)
