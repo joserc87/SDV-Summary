@@ -725,6 +725,7 @@ def api_auth():
         g.error = "Referrer didn't include client_id in request! Please contact whoever linked you here."
         return render_template("error.html", **page_args())
 
+
 @app.route('/api/v1/get_user_info',methods=['POST'])
 def api_v1_get_user_info():
     if request.method == 'POST':
@@ -737,6 +738,7 @@ def api_v1_get_user_info():
             return make_response(jsonify({'email':result[0]}))
         else:
             return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}),400)
+
 
 @app.route('/api/v1/get_series_info',methods=['POST'])
 def api_v1_get_series_info():
@@ -754,6 +756,35 @@ def api_v1_get_series_info():
                 return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}),400)
     else:
         return make_response(jsonify({"error": "no_url_error"}),400)
+
+
+@app.route('/api/v1/get_user_uploads',methods=['POST'])
+def api_v1_get_user_uploads():
+    if request.method == 'POST':
+        credential_check = check_api_credentials(request.form)
+        if 'user' in credential_check:
+            db = get_db()
+            cur = db.cursor()
+            set_api_user(credential_check['user'])
+
+            user = get_logged_in_user()
+            cur.execute('SELECT id,auto_key_json FROM series WHERE owner='+app.sqlesc+' ORDER BY id ASC',(user,))
+            r = cur.fetchall()
+            claimed_ids = []
+            for row in r:
+                cur.execute('SELECT url,statsDaysPlayed,dayOfMonthForSaveGame,seasonForSaveGame,yearForSaveGame FROM playerinfo WHERE series_id='+app.sqlesc+' AND owner_id='+app.sqlesc+' ORDER BY millisecondsPlayed DESC LIMIT 1',(row[0],user))
+                s = cur.fetchall()
+                for i, entry in enumerate(s):
+                    url = entry[0]
+                    date = get_date({'statsDaysPlayed':entry[1],'dayOfMonthForSaveGame':entry[2],'seasonForSaveGame':entry[3],'yearForSaveGame':entry[4]})
+                cur.execute('SELECT count(*) FROM playerinfo WHERE series_id='+app.sqlesc+' AND owner_id='+app.sqlesc,(row[0],user))
+                total = cur.fetchone()[0]
+                claimed_ids.append(json.loads(row[1])[1:] + [url, date, total])
+
+            return make_response(jsonify(claimed_ids))
+        else:
+            return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}),400)
+
 
 @app.route('/api/v1/upload_zipped',methods=['POST'])
 def api_v1_upload_zipped():
@@ -994,6 +1025,7 @@ def check_rate_limiter():
     cur = db.cursor()
     cur.execute('SELECT count(*) FROM plans WHERE added_time>'+app.sqlesc,(time.time()-app.config['API_V1_PLAN_TIME'],))
     assert cur.fetchone()[0] <= app.config['API_V1_PLAN_LIMIT']
+
 
 def check_max_renders():
     db = get_db()

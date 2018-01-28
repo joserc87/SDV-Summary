@@ -19,7 +19,7 @@ from database import (check_settings, get_current_savegame_filenames, set_monito
 				get_user_info, set_user_info)
 from watcherlib import Watcher, manual_process
 from config import server_location, client_id, backup_directory
-from ufapi import get_user_email
+from ufapi import get_user_email, get_user_uploads
 from uploadmonitor import launch_uploadmonitor_as_thread
 from multiprocessing import freeze_support
 from addtostartup import add_to_startup, remove_from_startup, check_startup
@@ -213,6 +213,190 @@ class WaitingWindow(QMainWindow):
 		event.accept()
 
 
+class GifferWindow(QMainWindow):
+	def __init__(self,aboutToQuit):
+		super().__init__()
+		self.init_ui()
+		self.set_bg_image()
+		aboutToQuit.connect(self.close)
+		self.renderComplete.connect(self.open_render)
+		self.populate_table()
+
+
+	renderComplete = Signal(str)
+
+
+	def open_render(self,output_filename):
+		print(output_filename)
+		# location = os.path.split(output_filename)[0]
+		# if sys.platform == 'darwin':
+		# 	subprocess.call(['open',location])
+		# elif sys.platform == 'win32':
+		# 	os.startfile(location)
+
+
+	def set_bg_image(self):
+		self.bgimage = QtGui.QImage(resource_path("images/bg.png")).scaled(self.size(), transformMode=QtCore.Qt.SmoothTransformation)
+		palette = QtGui.QPalette()
+		palette.setBrush(QtGui.QPalette.Window,QtGui.QBrush(self.bgimage))
+		self.setPalette(palette)
+
+
+	def resizeEvent(self,event):
+		self.set_bg_image()
+		event.accept()
+
+
+	def init_ui(self):
+		self.name_of_application = "upload.farm giffer"
+		self.setWindowTitle(self.name_of_application)
+		self.setWindowIcon(QtGui.QIcon(resource_path('icons/windows_icon.ico')))
+		self._create_layouts_and_widgets()
+		self.show()
+
+
+	def _create_layouts_and_widgets(self):
+		self._table_layout = QGridLayout()
+		self._table = QTableWidget(0,7,self)
+		self._table_header = QHeaderView(QtCore.Qt.Horizontal)
+		self._table_header.setSectionResizeMode(QHeaderView.ResizeToContents)
+		# self._table_header.stretchLastSection()
+		self._table.setHorizontalHeader(self._table_header)
+		self._table.setHorizontalHeaderLabels(['Farmer','Farm name','Latest date','Num\nuploads','Latest\nURL','GIF','MP4'])
+		self._table.itemClicked.connect(self.item_clicked_handler)
+		try:
+			self.user_uploads = get_user_uploads()
+		except:
+			QMessageBox.information(self, "Couldn't reach upload.farm!",
+					"This tool requires internet access to function, please try again later!")
+			self.close()
+
+
+		self._logo = QLabel()
+		self._logo.setPixmap(QtGui.QPixmap(LOGO_ICON))
+		self._exit_button = QPushButton("C&lose")
+		self._exit_button.clicked.connect(self.close)
+
+		self._table_layout.addWidget(self._table)
+
+		self._vbox = QVBoxLayout()
+		self._hbox_title = QHBoxLayout()
+		self._vbox_title = QVBoxLayout()
+		self._menubar = QVBoxLayout()
+
+		self._hbox_title.addWidget(self._logo)
+		self._hbox_title.addStretch(1)
+		self._hbox_title.addLayout(self._vbox_title)
+		self._vbox_title.addLayout(self._menubar)
+		self._vbox_title.setAlignment(QtCore.Qt.AlignTop)
+		self._menubar.addWidget(self._exit_button)
+		self._vbox.addLayout(self._hbox_title)
+		self._vbox.addLayout(self._table_layout)
+
+		self._main_widget = QWidget()
+		self._main_widget.setLayout(self._vbox)
+		self._main_widget.setMinimumWidth(600)
+		self._main_widget.setMinimumHeight(400)
+		self.setCentralWidget(self._main_widget)
+
+
+	def populate_table(self):
+		"""takes db data, compares with internal state,
+		_add_table_row's or _remove_table_row's as required"""
+		self._table_state = []
+		self._clear_table()
+		for item in self.user_uploads:
+			row = [item[0],item[1],item[3],str(item[4]),item[2],None,None]
+			self._table_state.append(row)
+			self._add_table_row(row)
+
+
+	def _clear_table(self):
+		for i in reversed(range(self._table.rowCount())):
+			self._remove_table_row(i)
+
+
+	def _remove_table_row(self,row_id):
+		self._table.removeRow(row_id)
+
+
+	def _add_table_row(self,items):
+		new_row = self._table.rowCount()+1
+		self._table.setRowCount(new_row)
+		for i, item in enumerate(items):
+			if i == 5:
+				new_item = QPushButton('GIF!')
+				new_item.clicked.connect(self.animate)
+				self._table.setCellWidget(new_row-1,i,new_item)
+				continue
+			if i == 6:
+				new_item = QPushButton('MP4!')
+				new_item.clicked.connect(self.animate)
+				self._table.setCellWidget(new_row-1,i,new_item)
+				continue
+			elif i == 4 and item != None:
+				new_item = QTableWidgetItem('{}'.format(item))
+				link_font = QtGui.QFont(new_item.font())
+				link_font.setUnderline(True)
+				new_item.setFont(link_font)
+				new_item.setTextAlignment(QtCore.Qt.AlignCenter)
+				new_item.setForeground(QtGui.QBrush(QtGui.QColor("teal")))
+			else:
+				new_item = QTableWidgetItem(item)
+			new_item.setFlags(QtCore.Qt.ItemIsEnabled)
+			self._table.setItem(new_row-1,i,new_item)
+
+
+	def item_clicked_handler(self, item):
+		column_fieldname = {2:'monitoring',3:'uploading'}
+		if item.column() in column_fieldname:
+			if item.checkState() == QtCore.Qt.Checked:
+				checkstate = True
+			elif item.checkState() == QtCore.Qt.Unchecked:
+				checkstate = False
+			if checkstate != self._table_state[item.row()][item.column()]:
+				if item.column() == 2:
+					update_monitor(self._table_state[item.row()][0],monitoring=checkstate)
+					if checkstate == True:
+						self._table.item(item.row(),3).setFlags(QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled)
+					else:
+						self._table.item(item.row(),3).setFlags(QtCore.Qt.ItemFlags() & ~QtCore.Qt.ItemIsEnabled)
+						self._table.item(item.row(),3).setCheckState(QtCore.Qt.Unchecked)
+				elif item.column() == 3:
+					update_monitor(self._table_state[item.row()][0],uploading=checkstate)
+				self._table_state[item.row()][item.column()] = checkstate
+		if item.column() == 4:
+			if self._table_state[item.row()][item.column()] != None:
+				QtGui.QDesktopServices.openUrl(QUrl(server_location+'/'+self._table_state[item.row()][item.column()]))
+
+
+	def _get_button(self):
+		if sys.platform == 'win32':
+			button = qApp.focusWidget()
+		elif sys.platform == 'darwin':
+			abs_position = QtGui.QCursor().pos()
+			button = qApp.widgetAt(abs_position)
+		return button
+
+
+	def animate(self):
+		button = self._get_button()
+		index = self._table.indexAt(button.pos())
+		row = index.row()
+		col = index.column()
+		if index.isValid():
+			if self.user_uploads[row][4] <= 1:
+				QMessageBox.information(self, "Only one upload!",
+						"Building an animation requires more than one frame!")
+			else:
+				if col == 5:
+					anim_type = 'gif'
+				if col == 6:
+					anim_type = 'mp4'
+				name = "{}, {} Farm, {}".format(self._table_state[row][0],self._table_state[row][1],self._table_state[row][2])
+				make_animation_in_process(name,self._table_state[row][4],annotated=True,type=anim_type,signal=self.renderComplete)
+
+
 class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
@@ -317,13 +501,13 @@ class MainWindow(QMainWindow):
 
 	def _create_layouts_and_widgets(self):
 		self._table_layout = QGridLayout()
-		self._table = QTableWidget(0,7,self)
+		self._table = QTableWidget(0,6,self)
 		self._table_header = QHeaderView(QtCore.Qt.Horizontal)
 		self._table_header.setSectionResizeMode(QHeaderView.ResizeToContents)
 		# self._table_header.stretchLastSection()
 		self._table.setHorizontalHeader(self._table_header)
 		self._table.setHorizontalHeaderLabels(['Savegame',
-			'Last backed up','Auto\nbackup','Upload\nbackups','Manual\nbackup','Latest URL','Animation\nwizard'])
+			'Last backed up','Auto\nbackup','Upload\nbackups','Manual\nbackup','Latest URL'])
 		self._table.itemClicked.connect(self.item_clicked_handler)
 
 		self._logo = QLabel()
@@ -334,6 +518,8 @@ class MainWindow(QMainWindow):
 		self._run_sdv_button.clicked.connect(self.run_stardew_valley)
 		self._browse_button = QPushButton("&Backups")
 		self._browse_button.clicked.connect(self.open_browse_backups)
+		self._launch_gif_button = QPushButton("&Make GIFs")
+		self._launch_gif_button.clicked.connect(self.launch_giffer)
 		self._logout_button = QPushButton("&Logout")
 		self._logout_button.clicked.connect(self._logout)
 		self._exit_button = QPushButton("E&xit")
@@ -348,20 +534,25 @@ class MainWindow(QMainWindow):
 		self._vbox = QVBoxLayout()
 		self._hbox_title = QHBoxLayout()
 		self._vbox_title = QVBoxLayout()
-		self._menubar = QHBoxLayout()
+		self._menubar = QVBoxLayout()
+		self._menubar1 = QHBoxLayout()
+		self._menubar2 = QHBoxLayout()
 
 		self._hbox_title.addWidget(self._logo)
 		self._hbox_title.addStretch(1)
 		self._hbox_title.addLayout(self._vbox_title)
 		self._vbox_title.addLayout(self._menubar)
 		self._vbox_title.setAlignment(QtCore.Qt.AlignTop)
-		self._menubar.addWidget(self._profile_button)
-		self._menubar.addWidget(self._run_sdv_button)
-		self._menubar.addWidget(self._browse_button)
-		self._menubar.addWidget(self._logout_button)
-		self._menubar.addWidget(self._exit_button)
-		self._menubar.addWidget(self._help_button)
-		self._menubar.addWidget(self._update_button)
+		self._menubar.addLayout(self._menubar1)
+		self._menubar.addLayout(self._menubar2)
+		self._menubar1.addWidget(self._profile_button)
+		self._menubar1.addWidget(self._run_sdv_button)
+		self._menubar1.addWidget(self._browse_button)
+		self._menubar1.addWidget(self._launch_gif_button)
+		self._menubar2.addWidget(self._help_button)
+		self._menubar2.addWidget(self._update_button)
+		self._menubar2.addWidget(self._logout_button)
+		self._menubar2.addWidget(self._exit_button)
 		self._vbox.addLayout(self._hbox_title)
 		self._vbox.addLayout(self._table_layout)
 
@@ -372,11 +563,18 @@ class MainWindow(QMainWindow):
 		self.setCentralWidget(self._main_widget)
 
 
+	def launch_giffer(self):
+		self.giffer = GifferWindow(self.aboutToQuit)
+		self.giffer.activateWindow()
+		self.giffer.raise_()
+
+
 	def check_for_update(self):
 		if not version_is_current():
 			QMessageBox.information(self,"upload.farm uploader","There is a new version of this tool! Please visit <a href='{}'>upload.farm</a> to download!".format(server_location))
 		else:
 			QMessageBox.information(self,"upload.farm uploader","Your uploader version appears up-to-date!")			
+
 
 	def update_gui(self):
 		"""activates on Signal, updates GUI table from db"""
@@ -408,7 +606,7 @@ class MainWindow(QMainWindow):
 				datestring = None
 			j, uploadable, uploaded = get_latest_log_entry_for(item[0],successfully_uploaded=True)
 			url = j.get('url','...' if uploadable and not uploaded else None)
-			row = [item[0],datestring,True if item[4]==1 else False,True if item[5]==1 else False,None,url,None]
+			row = [item[0],datestring,True if item[4]==1 else False,True if item[5]==1 else False,None,url]
 			self._table_state.append(row)
 			self._add_table_row(row)
 
@@ -430,11 +628,6 @@ class MainWindow(QMainWindow):
 				if i == 4:
 					new_item = QPushButton('Backup!')
 					new_item.clicked.connect(self.handle_manual_backup)
-					self._table.setCellWidget(new_row-1,i,new_item)
-					continue
-				if i == 6:
-					new_item = QPushButton('GIF series!')
-					new_item.clicked.connect(self.animate)
 					self._table.setCellWidget(new_row-1,i,new_item)
 					continue
 				elif i == 5 and item != None:
@@ -506,18 +699,6 @@ class MainWindow(QMainWindow):
 			self.update_gui()
 
 
-	def animate(self):
-		button = self._get_button()
-		index = self._table.indexAt(button.pos())
-		row = index.row()
-		if index.isValid():
-			if self._table_state[row][5] == None:
-				QMessageBox.information(self, "No uploads recorded!",
-						"Building an animation requires you to have uploaded this save at least once.")
-			else:
-				make_animation_in_process(self._table_state[row][0],self._table_state[row][5],annotated=True)
-
-
 	def _icon_exit(self):
 		self.set_okayToClose(True)
 		self.close()
@@ -538,9 +719,9 @@ class MainWindow(QMainWindow):
 
 
 	def closeEvent(self,event):
+		self.aboutToQuit.emit()
 		if self.okayToClose():
 			self.trayIcon.hide()
-			self.aboutToQuit.emit()
 			QtCore.QCoreApplication.instance().quit()
 			event.accept()
 		else:
