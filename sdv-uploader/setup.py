@@ -12,7 +12,7 @@ exclude_modules = ['tcl',
 				   'tkinter',
            'PySide']
 
-packages = ['asyncio','idna','six','pkg_resources']
+packages = ['asyncio','idna','six','pkg_resources','numpy.core._methods','numpy.lib.format']
 # if sys.platform == 'darwin':
 #     packages += ['asyncio',
 #                  'idna',

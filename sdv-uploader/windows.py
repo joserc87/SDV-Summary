@@ -26,7 +26,7 @@ from addtostartup import add_to_startup, remove_from_startup, check_startup
 from setup import version
 from versioninfo import version_is_current
 from pyinstallerresourcesupport import resource_path
-from animator import make_animation_in_process
+from animator import make_animation_in_process, make_animation, AnimationThread
 
 AUTHENTICATION_URL = server_location+"/auth?client_id="+client_id
 ACCOUNT_URL = server_location+"/acc"
@@ -220,19 +220,24 @@ class GifferWindow(QMainWindow):
 		self.set_bg_image()
 		aboutToQuit.connect(self.close)
 		self.renderComplete.connect(self.open_render)
-		self.populate_table()
-
+		try:
+			self.user_uploads = get_user_uploads()
+			self.populate_table()
+		except KeyError:
+			QMessageBox.information(self, "Couldn't reach upload.farm!",
+					"Can't reach upload.farm! This tool requires it to function, please try again later!")
+			self.close()
+		
 
 	renderComplete = Signal(str)
 
 
 	def open_render(self,output_filename):
-		print(output_filename)
-		# location = os.path.split(output_filename)[0]
-		# if sys.platform == 'darwin':
-		# 	subprocess.call(['open',location])
-		# elif sys.platform == 'win32':
-		# 	os.startfile(location)
+		location = os.path.split(output_filename)[0]
+		if sys.platform == 'darwin':
+			subprocess.call(['open',location])
+		elif sys.platform == 'win32':
+			os.startfile(location)
 
 
 	def set_bg_image(self):
@@ -264,13 +269,6 @@ class GifferWindow(QMainWindow):
 		self._table.setHorizontalHeader(self._table_header)
 		self._table.setHorizontalHeaderLabels(['Farmer','Farm name','Latest date','Num\nuploads','Latest\nURL','GIF','MP4'])
 		self._table.itemClicked.connect(self.item_clicked_handler)
-		try:
-			self.user_uploads = get_user_uploads()
-		except:
-			QMessageBox.information(self, "Couldn't reach upload.farm!",
-					"This tool requires internet access to function, please try again later!")
-			self.close()
-
 
 		self._logo = QLabel()
 		self._logo.setPixmap(QtGui.QPixmap(LOGO_ICON))
@@ -394,7 +392,9 @@ class GifferWindow(QMainWindow):
 				if col == 6:
 					anim_type = 'mp4'
 				name = "{}, {} Farm, {}".format(self._table_state[row][0],self._table_state[row][1],self._table_state[row][2])
-				make_animation_in_process(name,self._table_state[row][4],annotated=True,type=anim_type,signal=self.renderComplete)
+				# make_animation_in_process(name,self._table_state[row][4],annotated=True,type=anim_type,signal=self.renderComplete)
+				self.at = AnimationThread(name,self._table_state[row][4],annotated=True,type=anim_type,signal=self.renderComplete)
+				self.at.run()
 
 
 class MainWindow(QMainWindow):
