@@ -26,7 +26,7 @@ from addtostartup import add_to_startup, remove_from_startup, check_startup
 from setup import version
 from versioninfo import version_is_current
 from pyinstallerresourcesupport import resource_path
-from animator import make_animation_in_process, make_animation, AnimationThread
+from animator import AnimationThread
 
 AUTHENTICATION_URL = server_location+"/auth?client_id="+client_id
 ACCOUNT_URL = server_location+"/acc"
@@ -46,6 +46,8 @@ QLabel = QtWidgets.QLabel
 QHBoxLayout = QtWidgets.QHBoxLayout
 QVBoxLayout = QtWidgets.QVBoxLayout
 QTextEdit = QtWidgets.QTextEdit
+QCheckBox = QtWidgets.QCheckBox
+QDoubleSpinBox = QtWidgets.QDoubleSpinBox
 QPushButton = QtWidgets.QPushButton
 QGridLayout = QtWidgets.QGridLayout
 QHeaderView = QtWidgets.QHeaderView
@@ -57,6 +59,7 @@ QMessageBox = QtWidgets.QMessageBox
 QTableWidgetItem = QtWidgets.QTableWidgetItem
 qApp = QtWidgets.qApp
 QUrl = QtCore.QUrl
+QThreadPool = QtCore.QThreadPool
 
 NSApplicationActivationPolicyRegular = 0
 NSApplicationActivationPolicyAccessory = 1
@@ -220,6 +223,7 @@ class GifferWindow(QMainWindow):
 		self.set_bg_image()
 		aboutToQuit.connect(self.close)
 		self.renderComplete.connect(self.open_render)
+		self.threadpool = QThreadPool()
 		try:
 			self.user_uploads = get_user_uploads()
 			self.populate_table()
@@ -229,10 +233,12 @@ class GifferWindow(QMainWindow):
 			self.close()
 		
 
-	renderComplete = Signal(str)
+	renderComplete = Signal(str,QPushButton)
 
 
-	def open_render(self,output_filename):
+	def open_render(self,output_filename,button):
+		button.setEnabled(True)
+		button.setText('GIF!')
 		location = os.path.split(output_filename)[0]
 		if sys.platform == 'darwin':
 			subprocess.call(['open',location])
@@ -241,7 +247,7 @@ class GifferWindow(QMainWindow):
 
 
 	def set_bg_image(self):
-		self.bgimage = QtGui.QImage(resource_path("images/bg.png")).scaled(self.size(), transformMode=QtCore.Qt.SmoothTransformation)
+		self.bgimage = QtGui.QImage(resource_path("images/bg2.png")).scaled(self.size(), transformMode=QtCore.Qt.SmoothTransformation)
 		palette = QtGui.QPalette()
 		palette.setBrush(QtGui.QPalette.Window,QtGui.QBrush(self.bgimage))
 		self.setPalette(palette)
@@ -262,16 +268,27 @@ class GifferWindow(QMainWindow):
 
 	def _create_layouts_and_widgets(self):
 		self._table_layout = QGridLayout()
-		self._table = QTableWidget(0,7,self)
+		self._table = QTableWidget(0,6,self)
 		self._table_header = QHeaderView(QtCore.Qt.Horizontal)
 		self._table_header.setSectionResizeMode(QHeaderView.ResizeToContents)
 		# self._table_header.stretchLastSection()
 		self._table.setHorizontalHeader(self._table_header)
-		self._table.setHorizontalHeaderLabels(['Farmer','Farm name','Latest date','Num\nuploads','Latest\nURL','GIF','MP4'])
+		self._table.setHorizontalHeaderLabels(['Farmer','Farm name','Latest date','Num\nuploads','Latest\nURL','GIF'])
 		self._table.itemClicked.connect(self.item_clicked_handler)
 
 		self._logo = QLabel()
 		self._logo.setPixmap(QtGui.QPixmap(LOGO_ICON))
+
+		self._annotated = QCheckBox("D&isplay farm info on gif")
+		self._annotated.setChecked(True)
+		self._frametime = QDoubleSpinBox()
+		self._frametime.setSuffix(' sec/frame')
+		self._frametime.setRange(0,10)
+		self._frametime.setSpecialValueText('default framerate')
+		self._frametime.setValue(0)
+		self._frametime.setAccelerated(True)
+		self._frametime.setSingleStep(0.1)
+
 		self._exit_button = QPushButton("C&lose")
 		self._exit_button.clicked.connect(self.close)
 
@@ -280,13 +297,16 @@ class GifferWindow(QMainWindow):
 		self._vbox = QVBoxLayout()
 		self._hbox_title = QHBoxLayout()
 		self._vbox_title = QVBoxLayout()
-		self._menubar = QVBoxLayout()
+		self._menubar = QHBoxLayout()
 
 		self._hbox_title.addWidget(self._logo)
 		self._hbox_title.addStretch(1)
 		self._hbox_title.addLayout(self._vbox_title)
 		self._vbox_title.addLayout(self._menubar)
 		self._vbox_title.setAlignment(QtCore.Qt.AlignTop)
+		self._menubar.addWidget(self._annotated)
+		self._menubar.addWidget(self._frametime)
+		self._menubar.addStretch(1)
 		self._menubar.addWidget(self._exit_button)
 		self._vbox.addLayout(self._hbox_title)
 		self._vbox.addLayout(self._table_layout)
@@ -304,7 +324,7 @@ class GifferWindow(QMainWindow):
 		self._table_state = []
 		self._clear_table()
 		for item in self.user_uploads:
-			row = [item[0],item[1],item[3],str(item[4]),item[2],None,None]
+			row = [item[0],item[1],item[3],str(item[4]),item[2],None]
 			self._table_state.append(row)
 			self._add_table_row(row)
 
@@ -327,11 +347,11 @@ class GifferWindow(QMainWindow):
 				new_item.clicked.connect(self.animate)
 				self._table.setCellWidget(new_row-1,i,new_item)
 				continue
-			if i == 6:
-				new_item = QPushButton('MP4!')
-				new_item.clicked.connect(self.animate)
-				self._table.setCellWidget(new_row-1,i,new_item)
-				continue
+			# if i == 6:
+			# 	new_item = QPushButton('MP4!')
+			# 	new_item.clicked.connect(self.animate)
+			# 	self._table.setCellWidget(new_row-1,i,new_item)
+			# 	continue
 			elif i == 4 and item != None:
 				new_item = QTableWidgetItem('{}'.format(item))
 				link_font = QtGui.QFont(new_item.font())
@@ -389,12 +409,14 @@ class GifferWindow(QMainWindow):
 			else:
 				if col == 5:
 					anim_type = 'gif'
-				if col == 6:
-					anim_type = 'mp4'
+				button.setEnabled(False)
+				button.setText('working...')
+				annotated = self._annotated.isChecked()
+				duration = self._frametime.value()
 				name = "{}, {} Farm, {}".format(self._table_state[row][0],self._table_state[row][1],self._table_state[row][2])
 				# make_animation_in_process(name,self._table_state[row][4],annotated=True,type=anim_type,signal=self.renderComplete)
-				self.at = AnimationThread(name,self._table_state[row][4],annotated=True,type=anim_type,signal=self.renderComplete)
-				self.at.run()
+				at = AnimationThread(name,self._table_state[row][4],annotated=annotated,type=anim_type,signal=self.renderComplete,button=button,duration=duration)
+				self.threadpool.start(at)
 
 
 class MainWindow(QMainWindow):

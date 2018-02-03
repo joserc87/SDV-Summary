@@ -6,13 +6,15 @@ from cx_Freeze import setup, Executable
 # fine tuning.
 include_files = ['images',
 				 'help',
-				 'icons']
+				 'icons',
+         'gifsicle',
+         'fonts']
 exclude_modules = ['tcl',
 				   'tk',
 				   'tkinter',
            'PySide']
 
-packages = ['asyncio','idna','six','pkg_resources','numpy.core._methods','numpy.lib.format']
+packages = ['asyncio','idna','six','pkg_resources']
 # if sys.platform == 'darwin':
 #     packages += ['asyncio',
 #                  'idna',
