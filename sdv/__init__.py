@@ -809,7 +809,7 @@ def api_v1_upload_zipped():
 
 @app.route('/api/v1/uploader_version',methods=['GET'])
 def api_v1_uploader_version():
-    return make_response(jsonify({"version":"1.0"}))
+    return make_response(jsonify({"version":"2.0"}))
 
 def set_privacy_for_api(userid):
     db = get_db()
