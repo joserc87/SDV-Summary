@@ -11,7 +11,7 @@ elif sys.platform == 'win32':
 
 version = '2.0'
 name = 'upload.farm uploader'
-include_files = [(i,i) for i in ['images','help','icons']]
+include_files = [(i,i) for i in ['images','help','icons','fonts']]
 
 block_cipher = None
 

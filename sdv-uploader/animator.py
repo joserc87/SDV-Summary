@@ -2,6 +2,7 @@ import os
 import glob
 from urllib.parse import urljoin
 import subprocess
+import sys
 from math import log
 
 import requests
@@ -11,9 +12,9 @@ from PyQt5 import QtCore
 
 from ufapi import get_series_info
 from config import root_directory, server_location, gifsicle_executable
+from pyinstallerresourcesupport import resource_path
 
-
-FONT_PATH = 'fonts/VT323.ttf'
+FONT_PATH = resource_path('fonts/VT323.ttf')
 FINAL_PANEL_MULTIPLIER = 4
 
 
@@ -114,9 +115,22 @@ def build_gif_with_pillow(files,output_filename,**kwargs):
 	durations = [duration*1000]*(len(files)-1) + [duration*1000 * FINAL_PANEL_MULTIPLIER]
 	files[0].save(output_filename,save_all=True,append_images=files[1:],duration=durations,loop=0)
 	if gifsicle_executable:
-		subprocess.run([gifsicle_executable,output_filename,'--colors','256','-O3','-o',output_filename],
-			stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
+		subprocess.run([gifsicle_executable,'-b','--colors','256','-O3',output_filename])
+		
+		# if sys.platform == 'win32':
+		# 	subprocess.run([gifsicle_executable,'-b','--colors','256','-O3',output_filename])
+		# elif sys.platform == 'darwin':
+		# 	try:
+		# 		s = subprocess.Popen([gifsicle_executable,'-b',
+		# 			'--colors','256','-O3',output_filename])
+		# 		# ,env={'PATH':os.getenv('PATH')},
+		# 		# shell=True, stdout = subprocess.PIPE,
+		# 		# stderr=subprocess.STDOUT, stdin = subprocess.PIPE)
+		# 		# with open(output_filename+'error.txt','wb') as f:
+		# 		# 	f.write(str(s))
+		# 	except OSError as e:
+		# 		with open(output_filename+'error.txt','wb') as f:
+		# 			f.write(str(e))
 
 # def build_mp4_with_imageio(list_of_files,output_filename,**kwargs):
 # 	fps = 1 if 'fps' not in kwargs else kwargs.get('fps')

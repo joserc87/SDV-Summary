@@ -18,7 +18,7 @@ from database import (check_settings, get_current_savegame_filenames, set_monito
 				update_monitor, is_user_info_invalid, clear_user_info, get_latest_log_entry_for,
 				get_user_info, set_user_info)
 from watcherlib import Watcher, manual_process
-from config import server_location, client_id, backup_directory
+from config import server_location, client_id, backup_directory, gifsicle_executable
 from ufapi import get_user_email, get_user_uploads
 from uploadmonitor import launch_uploadmonitor_as_thread
 from multiprocessing import freeze_support
@@ -288,6 +288,9 @@ class GifferWindow(QMainWindow):
 		self._frametime.setValue(0)
 		self._frametime.setAccelerated(True)
 		self._frametime.setSingleStep(0.1)
+		# if gifsicle_executable == None:
+		# 	self._gifsicle_button = QPushButton("Your GIFs\naren't optimized!")
+		# 	self._gifsicle_button.clicked.connect(self.gifpopup)
 
 		self._exit_button = QPushButton("C&lose")
 		self._exit_button.clicked.connect(self.close)
@@ -304,6 +307,8 @@ class GifferWindow(QMainWindow):
 		self._hbox_title.addLayout(self._vbox_title)
 		self._vbox_title.addLayout(self._menubar)
 		self._vbox_title.setAlignment(QtCore.Qt.AlignTop)
+		# if gifsicle_executable == None:
+		# 	self._menubar.addWidget(self._gifsicle_button)
 		self._menubar.addWidget(self._annotated)
 		self._menubar.addWidget(self._frametime)
 		self._menubar.addStretch(1)
@@ -317,6 +322,12 @@ class GifferWindow(QMainWindow):
 		self._main_widget.setMinimumHeight(400)
 		self.setCentralWidget(self._main_widget)
 
+
+	def gifpopup(self):
+		QMessageBox.information(self,'GIF optimizing','Your GIFs are not being optimized, which means they'
+			' have a <b>much</b> larger filesize than they need to. You can fix this by installing <b>gifsicle</b>'
+			' (<a href="http://www.lcdf.org/gifsicle">website</a>).\n\n<a href="http://macappstore.org/gifsicle">Click here</a>'
+			' to see installation instructions from MacAppStore.org')
 
 	def populate_table(self):
 		"""takes db data, compares with internal state,
