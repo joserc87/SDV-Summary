@@ -1,6 +1,7 @@
 from math import floor, ceil
 from flask_babel import _, lazy_gettext
 
+
 day_list = {'1':lazy_gettext('1st'),
                '2':lazy_gettext('2nd'),
                '3':lazy_gettext('3rd'),
@@ -30,10 +31,12 @@ day_list = {'1':lazy_gettext('1st'),
                '27':lazy_gettext('27th'),
                '28':lazy_gettext('28th')}
 
+
 season_list = {'0':lazy_gettext('Spring'),
                '1':lazy_gettext('Summer'),
                '2':lazy_gettext('Autumn'),
                '3':lazy_gettext('Winter')}
+
 
 def get_date_string(dayOfMonthForSaveGame,seasonForSaveGame,yearForSaveGame):
     daystring = day_list.get(str(dayOfMonthForSaveGame),str(dayOfMonthForSaveGame))
@@ -42,15 +45,40 @@ def get_date_string(dayOfMonthForSaveGame,seasonForSaveGame,yearForSaveGame):
     formatted_string = _('%(day)s of %(season)s, Year %(year)s',day=daystring,season=seastring,year=yearForSaveGame)
     return formatted_string
 
+
+def preprocess_data(data):
+    if data.get('dayOfMonthForSaveGame') != None and int(data.get('dayOfMonthForSaveGame')) > 28:
+        data['dayOfMonthForSaveGame'] = str(int(data.get('dayOfMonthForSaveGame')) % 28)
+        data['seasonForSaveGame'] = str(int(data['seasonForSaveGame']) + 1)
+    if data.get('seasonForSaveGame') != None and int(data.get('seasonForSaveGame')) > 3:
+        data['seasonForSaveGame'] = str(int(data.get('seasonForSaveGame')) % 4)
+        data['yearForSaveGame'] = str(int(data['yearForSaveGame']) + 1)
+    return data
+
+
 def get_date_data(statsDaysPlayed):
     dayOfMonthForSaveGame = int(((statsDaysPlayed - 1) % 28) + 1)
     yearForSaveGame = int(floor((statsDaysPlayed - dayOfMonthForSaveGame) / (28*4)) + 1)
     seasonForSaveGame = int((floor((statsDaysPlayed - dayOfMonthForSaveGame)/28)) - ((yearForSaveGame-1)*4))
     return str(dayOfMonthForSaveGame), str(seasonForSaveGame), str(yearForSaveGame)
 
+
 def get_date(data):
+    data = preprocess_data(data)
     if data.get('dayOfMonthForSaveGame') != None and data.get('seasonForSaveGame') != None and data.get('yearForSaveGame') != None:
         return get_date_string(data['dayOfMonthForSaveGame'],data['seasonForSaveGame'],data['yearForSaveGame'])
     else:
         assert data.get('statsDaysPlayed') != None
         return get_date_string(*get_date_data(data['statsDaysPlayed']))
+
+
+def main():
+    data = {'dayOfMonthForSaveGame':'29',
+            'seasonForSaveGame':'3',
+            'yearForSaveGame':'2',
+            'statsDaysPlayed':197+28}
+    print(get_date(data))
+    print(get_date_string(*get_date_data(data.get('statsDaysPlayed'))))
+
+if __name__ == "__main__":
+    main()
