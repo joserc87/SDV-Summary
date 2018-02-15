@@ -33,7 +33,7 @@ ACCOUNT_URL = server_location+"/acc"
 BACKUP_DIRECTORY = backup_directory
 RUN_STARDEW_VALLEY_STEAM = 'steam://rungameid/413150'
 HELP_FILE_LOCATION = "file:///{}".format(os.path.abspath(resource_path("help/help.html")))
-LOGO_ICON = resource_path("images/logo.png")
+LOGO_ICON = "images/logo.png"
 __version__ = version
 
 
@@ -127,7 +127,7 @@ class WaitingWindow(QMainWindow):
 
 	def _create_layouts_and_widgets(self):
 		self._logo = QLabel()
-		self._logo.setPixmap(QtGui.QPixmap(LOGO_ICON))
+		self._logo.setPixmap(QtGui.QPixmap(resource_path(LOGO_ICON)))
 
 		self._explanation = QTextEdit("This tool is a thank-you to supporters of "
 			"upload.farm.<br><br>It allows you to automatically backup your Stardew Valley "
@@ -277,7 +277,7 @@ class GifferWindow(QMainWindow):
 		self._table.itemClicked.connect(self.item_clicked_handler)
 
 		self._logo = QLabel()
-		self._logo.setPixmap(QtGui.QPixmap(LOGO_ICON))
+		self._logo.setPixmap(QtGui.QPixmap(resource_path(LOGO_ICON)))
 
 		self._annotated = QCheckBox("D&isplay farm info on gif")
 		self._annotated.setChecked(True)
@@ -544,7 +544,7 @@ class MainWindow(QMainWindow):
 		self._table.itemClicked.connect(self.item_clicked_handler)
 
 		self._logo = QLabel()
-		self._logo.setPixmap(QtGui.QPixmap(LOGO_ICON))
+		self._logo.setPixmap(QtGui.QPixmap(resource_path(LOGO_ICON)))
 		self._profile_button = QPushButton("&My Account")
 		self._profile_button.clicked.connect(self.open_acc_page)
 		self._run_sdv_button = QPushButton("Launch &Game!")
