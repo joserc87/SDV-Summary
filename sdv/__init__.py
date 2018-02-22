@@ -681,7 +681,7 @@ def api_auth():
                         try:
                             assert len(results)<2
                         except AssertionError:
-                            g.error = "Multiple entries for this client_id! Please contact the site administrator!"
+                            g.error = _("Multiple entries for this client_id! Please contact the site administrator!")
                             return render_template("error.html", **page_args())
                         # try:
                         flash({'message':'<p>'+_('You have granted access to %(client)s, you may now close this tab',client=results[0][1])+'</p>'})
@@ -691,7 +691,7 @@ def api_auth():
                         #     return render_template("error.html", **page_args())
                     except psycopg2.IntegrityError:
                         db.rollback()
-                g.error = "Unable to generate unique key! Something bad has happened, report to site administrator!"
+                g.error = _("Unable to generate unique key! Something bad has happened, report to site administrator!")
                 return render_template("error.html", **page_args())
             else:
                 eligible = check_api_eligibility()
@@ -701,10 +701,10 @@ def api_auth():
                     try:
                         assert len(results)<2
                     except AssertionError:
-                        g.error = "Multiple entries for this client_id! Please contact the site administrator!"
+                        g.error = _("Multiple entries for this client_id! Please contact the site administrator!")
                         return render_template("error.html", **page_args())
                     if len(results) == 0:
-                        g.error = "Referrer client_id is invalid!"
+                        g.error = _("Referrer client_id is invalid!")
                         return render_template("error.html", **page_args())
                     else:
                         cur.execute('SELECT COUNT(*) FROM api_users WHERE userid = '+app.sqlesc+' AND clientid = (SELECT id FROM api_clients WHERE key = '+app.sqlesc+')',(get_logged_in_user(),request.args.get('client_id')))
@@ -715,14 +715,14 @@ def api_auth():
                             flash({'message':'<p>'+_('You have previously approved %(client)s to access your account - reauthorising will generate a new API key',client=api_client_name)+'</p>'})
                         return render_template("api_auth.html", api_client_name=api_client_name, **page_args())
                 else:
-                    g.error = "At this time, the upload.farm API and uploader are for upload.farm supporters only. If you are already a supporter, please connect your Patreon account on your account panel. If your Patreon account is already linked, please check you have active pledges. If you think this is in error, please contact us via the About page!"
+                    g.error = _("At this time, the upload.farm API and uploader are for upload.farm supporters only. If you are already a supporter, please connect your Patreon account on your account panel. If your Patreon account is already linked, please check you have active pledges. If you think this is in error, please contact us via the About page!")
                     return render_template('error.html', **page_args())
         else:
             flash({'message':'<p>'+_('Please log in first')+'</p>'})
             session['login_redir'] = url_for('api_auth',client_id=request.args.get('client_id'))
             return redirect(url_for('login'))
     else:
-        g.error = "Referrer didn't include client_id in request! Please contact whoever linked you here."
+        g.error = _("Referrer didn't include client_id in request! Please contact whoever linked you here.")
         return render_template("error.html", **page_args())
 
 

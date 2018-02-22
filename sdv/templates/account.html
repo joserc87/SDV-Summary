@@ -73,8 +73,8 @@ $(function () {
 					
 				{% if acc_info.patreon and not acc_info.patreon.csrf and acc_info.patreon.name %}
 				<h3>{{_("uploader tool")}}</h3>
-					<p><a href="{{url_for('static',filename='uploader/uploader_v2.0_setup_win32.zip')}}">Download v2.0 for Windows</a>
-						<br><a href="{{url_for('static',filename='uploader/uploader_v2.0_installer_mac.dmg')}}">Download v2.0 for Mac</a></p>
+					<p><a href="{{url_for('static',filename='uploader/uploader_v2.0_setup_win32.zip')}}">{{_("Download v2.0 for Windows")}}</a>
+						<br><a href="{{url_for('static',filename='uploader/uploader_v2.0_installer_mac.dmg')}}">{{_("Download v2.0 for Mac")}}</a></p>
 				{% endif %}
 				</div>
 

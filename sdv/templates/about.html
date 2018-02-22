@@ -14,9 +14,9 @@
 			{{_("All source code is available on %(githubrepo)s, which can also be used to file bug reports. Stardew Valley assets are used with the kind permission of %(concernedape)s and %(chucklefish)s.", githubrepo="<a href='https://github.com/Sketchy502/SDV-Summary'>GitHub</a>", concernedape='<a href="http://twitter.com/concernedape">Concerned Ape</a>',chucklefish='<a href="http://chuckle.fish">Chucklefish</a>')}}
 		</p>
 		<br>
-		{% endautoescape %}
 		<p>
-			We would also like to thank to all who support the site on <a href="http://patreon.com/uploadfarm">Patreon</a>, especially:
+			{{_("We would also like to thank to all who support the site on %(patreon)s, especially:",patreon="<a href="http://patreon.com/uploadfarm">Patreon</a>")}}
+		{% endautoescape %}
 			{% include "patreon.html" %}
 		</p>
 		<br>
