@@ -1,14 +1,14 @@
 # Translations template for PROJECT.
-# Copyright (C) 2017 ORGANIZATION
+# Copyright (C) 2018 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-05-14 17:02+0100\n"
+"POT-Creation-Date: 2018-02-22 16:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,144 +17,191 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: ../sdv/__init__.py:192 ../sdv/__init__.py:259 ../sdv/__init__.py:303
+#: ../sdv/__init__.py:275 ../sdv/__init__.py:355 ../sdv/__init__.py:399
 msgid "Username not found!"
 msgstr ""
 
-#: ../sdv/__init__.py:204
-msgid "Unable to interpret stored password hash!"
-msgstr ""
-
-#: ../sdv/__init__.py:215
+#: ../sdv/__init__.py:300
 msgid "Incorrect password!"
 msgstr ""
 
-#: ../sdv/__init__.py:238
+#: ../sdv/__init__.py:326
 msgid "Missing email or password for login!"
 msgstr ""
 
-#: ../sdv/__init__.py:244
+#: ../sdv/__init__.py:332
+msgid "Please reset your password to log in!"
+msgstr ""
+
+#: ../sdv/__init__.py:335
 msgid "Logged in successfully!"
 msgstr ""
 
-#: ../sdv/__init__.py:262
+#: ../sdv/__init__.py:358
 msgid ""
 "Email address not verified; please verify your account using the "
 "verification email sent when you registered before attempting to reset "
 "password!"
 msgstr ""
 
-#: ../sdv/__init__.py:271
+#: ../sdv/__init__.py:367
 msgid "Password reset email sent!"
 msgstr ""
 
-#: ../sdv/__init__.py:273
+#: ../sdv/__init__.py:369
 msgid "Previous password reset email still waiting to be sent... (sorry)"
 msgstr ""
 
-#: ../sdv/__init__.py:281 ../sdv/__init__.py:317
+#: ../sdv/__init__.py:377 ../sdv/__init__.py:413
 msgid "Cannot reset password: account does not exist"
 msgstr ""
 
-#: ../sdv/__init__.py:284
+#: ../sdv/__init__.py:380
 msgid "This reset link has already been used!</p>"
 msgstr ""
 
-#: ../sdv/__init__.py:291
+#: ../sdv/__init__.py:387
 msgid "Password reset, please log in!"
 msgstr ""
 
-#: ../sdv/__init__.py:293 ../sdv/__init__.py:325 ../sdv/__init__.py:1657
+#: ../sdv/__init__.py:389 ../sdv/__init__.py:421 ../sdv/__init__.py:2223
 msgid "Malformed verification string!"
 msgstr ""
 
-#: ../sdv/__init__.py:296
+#: ../sdv/__init__.py:392
 msgid "Password insufficiently long, please try again"
 msgstr ""
 
-#: ../sdv/__init__.py:308
+#: ../sdv/__init__.py:404
 msgid "A new verification email has been sent to you"
 msgstr ""
 
-#: ../sdv/__init__.py:310
+#: ../sdv/__init__.py:406
 msgid "Please enter the email address you used to register"
 msgstr ""
 
-#: ../sdv/__init__.py:320
+#: ../sdv/__init__.py:416
 msgid "This reset link has already been used!"
 msgstr ""
 
-#: ../sdv/__init__.py:343
+#: ../sdv/__init__.py:439
 msgid "You are already logged in!"
 msgstr ""
 
-#: ../sdv/__init__.py:346
+#: ../sdv/__init__.py:442
 msgid "Missing email or password!"
 msgstr ""
 
-#: ../sdv/__init__.py:348
+#: ../sdv/__init__.py:444
 msgid "Password too short!"
 msgstr ""
 
-#: ../sdv/__init__.py:363
+#: ../sdv/__init__.py:459
 msgid ""
 "You have successfully registered. A verification email has been sent to "
 "you. Now, please sign in!"
 msgstr ""
 
-#: ../sdv/__init__.py:366
+#: ../sdv/__init__.py:462
 msgid "Invalid email address!"
 msgstr ""
 
-#: ../sdv/__init__.py:368
+#: ../sdv/__init__.py:464
 msgid "This email address has already registered"
 msgstr ""
 
-#: ../sdv/__init__.py:370
+#: ../sdv/__init__.py:466
 msgid "Captcha failed! If you are human, please try again!"
 msgstr ""
 
-#: ../sdv/__init__.py:378
+#: ../sdv/__init__.py:474
 msgid "You must be signed in to view your profile!"
 msgstr ""
 
-#: ../sdv/__init__.py:479
+#: ../sdv/__init__.py:588
 msgid "I don't think that's very funny"
 msgstr ""
 
-#: ../sdv/__init__.py:482
+#: ../sdv/__init__.py:591
 msgid ""
 "Savegame failed sanity check (if you think this is in error please let us"
 " know)"
 msgstr ""
 
-#: ../sdv/__init__.py:489
+#: ../sdv/__init__.py:598
 msgid ""
 "Not valid save file - did you select file 'SaveGameInfo' instead of "
 "'playername_number'?"
 msgstr ""
 
-#: ../sdv/__init__.py:493
+#: ../sdv/__init__.py:602
 msgid "Not well-formed xml"
 msgstr ""
 
-#: ../sdv/__init__.py:496
+#: ../sdv/__init__.py:605
 msgid "Savegame failed an internal check (often caused by mods) sorry :("
 msgstr ""
 
-#: ../sdv/__init__.py:520
+#: ../sdv/__init__.py:629
 msgid "Error occurred inserting information into the database!"
 msgstr ""
 
-#: ../sdv/__init__.py:932
+#: ../sdv/__init__.py:684 ../sdv/__init__.py:704
+msgid ""
+"Multiple entries for this client_id! Please contact the site "
+"administrator!"
+msgstr ""
+
+#: ../sdv/__init__.py:687
+#, python-format
+msgid "You have granted access to %(client)s, you may now close this tab"
+msgstr ""
+
+#: ../sdv/__init__.py:694
+msgid ""
+"Unable to generate unique key! Something bad has happened, report to site"
+" administrator!"
+msgstr ""
+
+#: ../sdv/__init__.py:707
+msgid "Referrer client_id is invalid!"
+msgstr ""
+
+#: ../sdv/__init__.py:715
+#, python-format
+msgid ""
+"You have previously approved %(client)s to access your account - "
+"reauthorising will generate a new API key"
+msgstr ""
+
+#: ../sdv/__init__.py:718
+msgid ""
+"At this time, the upload.farm API and uploader are for upload.farm "
+"supporters only. If you are already a supporter, please connect your "
+"Patreon account on your account panel. If your Patreon account is already"
+" linked, please check you have active pledges. If you think this is in "
+"error, please contact us via the About page!"
+msgstr ""
+
+#: ../sdv/__init__.py:721
+msgid "Please log in first"
+msgstr ""
+
+#: ../sdv/__init__.py:725
+msgid ""
+"Referrer didn't include client_id in request! Please contact whoever "
+"linked you here."
+msgstr ""
+
+#: ../sdv/__init__.py:1347
 msgid "Save file incompatible with current database: error is "
 msgstr ""
 
-#: ../sdv/__init__.py:944 ../sdv/__init__.py:998
+#: ../sdv/__init__.py:1359 ../sdv/__init__.py:1413
 msgid "There is nothing here... is this URL correct?"
 msgstr ""
 
-#: ../sdv/__init__.py:986
+#: ../sdv/__init__.py:1401
 msgid ""
 "It looks like you have uploaded multiple files, but are not logged in: if"
 " you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link "
@@ -162,253 +209,273 @@ msgid ""
 "to imgur!"
 msgstr ""
 
-#: ../sdv/__init__.py:1018
+#: ../sdv/__init__.py:1433
 msgid ""
 "This plan failed to render, probably because of a bug. It's logged and "
 "we'll look into it as soon as possible! Sorry!"
 msgstr ""
 
-#: ../sdv/__init__.py:1104
+#: ../sdv/__init__.py:1519
 msgid "Unknown or insufficient credentials"
 msgstr ""
 
-#: ../sdv/__init__.py:1135
+#: ../sdv/__init__.py:1550
 msgid "You do not own this farm"
 msgstr ""
 
-#: ../sdv/__init__.py:1146
+#: ../sdv/__init__.py:1561
 msgid "You do not own at least one of the farms"
 msgstr ""
 
-#: ../sdv/__init__.py:1167
+#: ../sdv/__init__.py:1582
 msgid "You do not have sufficient credentials to claim this page"
 msgstr ""
 
-#: ../sdv/__init__.py:1177
+#: ../sdv/__init__.py:1592
 msgid "You do not have sufficient credentials to claim one of these pages"
 msgstr ""
 
-#: ../sdv/__init__.py:1192
+#: ../sdv/__init__.py:1607
 msgid "You do not have sufficient credentials to perform this action"
 msgstr ""
 
-#: ../sdv/__init__.py:1207
+#: ../sdv/__init__.py:1622
 msgid ""
 "You have uploaded this page to imgur in the last 2 hours: please wait to "
 "upload again"
 msgstr ""
 
-#: ../sdv/__init__.py:1209
+#: ../sdv/__init__.py:1624
 msgid ""
 "There was an issue with uploading the file to imgur. Please try again "
 "later!"
 msgstr ""
 
-#: ../sdv/__init__.py:1216
+#: ../sdv/__init__.py:1631
 msgid ""
 "Either you or upload.farm are out of imgur credits for the day! Sorry :( "
 "Try again tomorrow"
 msgstr ""
 
-#: ../sdv/__init__.py:1219
+#: ../sdv/__init__.py:1634
 msgid "You must be logged in to post your farm to imgur!"
 msgstr ""
 
-#: ../sdv/__init__.py:1227
+#: ../sdv/__init__.py:1642
 msgid ""
 "Sorry, the stardew.info planner API is over its rate limit: please try "
 "again in a few minutes!"
 msgstr ""
 
-#: ../sdv/__init__.py:1231
+#: ../sdv/__init__.py:1646
 msgid "There was a problem accessing the planner. Error was: {}"
 msgstr ""
 
-#: ../sdv/__init__.py:1260
+#: ../sdv/__init__.py:1675
 msgid "You do not have the correct session information to perform this action!"
 msgstr ""
 
-#: ../sdv/__init__.py:1298
+#: ../sdv/__init__.py:1713
 msgid "Problem authenticating!"
 msgstr ""
 
-#: ../sdv/__init__.py:1300
+#: ../sdv/__init__.py:1715
 msgid "You are not logged in!"
 msgstr ""
 
-#: ../sdv/__init__.py:1439
+#: ../sdv/__init__.py:1854
 msgid "No browse with that ID!"
 msgstr ""
 
-#: ../sdv/__init__.py:1458
+#: ../sdv/__init__.py:1873
 msgid "Malformed request for entries!"
 msgstr ""
 
-#: ../sdv/__init__.py:1570 ../sdv/__init__.py:1572
+#: ../sdv/__init__.py:1985 ../sdv/__init__.py:1987
 msgid "No blog with that ID!"
 msgstr ""
 
-#: ../sdv/__init__.py:1598
+#: ../sdv/__init__.py:2013
 msgid "URL does not exist"
 msgstr ""
 
-#: ../sdv/__init__.py:1600
+#: ../sdv/__init__.py:2015
 msgid "You are unable to download this farm data at this time."
 msgstr ""
 
-#: ../sdv/__init__.py:1630
+#: ../sdv/__init__.py:2045
 msgid "Problem authenticating at imgur!"
 msgstr ""
 
-#: ../sdv/__init__.py:1633
+#: ../sdv/__init__.py:2048
 msgid "Cannot connect to imgur if not logged in!"
 msgstr ""
 
-#: ../sdv/__init__.py:1646
+#: ../sdv/__init__.py:2078
+msgid "Error authorising with Patreon. Please try again later!"
+msgstr ""
+
+#: ../sdv/__init__.py:2090
+msgid "Connected to Patreon. Thank you for your support!"
+msgstr ""
+
+#: ../sdv/__init__.py:2092
+msgid "Connected to Patreon!"
+msgstr ""
+
+#: ../sdv/__init__.py:2095
+msgid "Cross-site request forgery check failed!"
+msgstr ""
+
+#: ../sdv/__init__.py:2098
+msgid "Cannot connect to Patreon if not logged in!"
+msgstr ""
+
+#: ../sdv/__init__.py:2212
 msgid "Account does not exist!"
 msgstr ""
 
-#: ../sdv/__init__.py:1649
+#: ../sdv/__init__.py:2215
 msgid "Already confirmed email address!"
 msgstr ""
 
-#: ../sdv/__init__.py:1655
+#: ../sdv/__init__.py:2221
 msgid "Account email address confirmed!"
 msgstr ""
 
-#: ../sdv/__init__.py:1668
+#: ../sdv/__init__.py:2234
 msgid "not logged in"
 msgstr ""
 
-#: ../sdv/getDate.py:4
+#: ../sdv/getDate.py:5
 msgid "1st"
 msgstr ""
 
-#: ../sdv/getDate.py:5
+#: ../sdv/getDate.py:6
 msgid "2nd"
 msgstr ""
 
-#: ../sdv/getDate.py:6
+#: ../sdv/getDate.py:7
 msgid "3rd"
 msgstr ""
 
-#: ../sdv/getDate.py:7
+#: ../sdv/getDate.py:8
 msgid "4th"
 msgstr ""
 
-#: ../sdv/getDate.py:8
+#: ../sdv/getDate.py:9
 msgid "5th"
 msgstr ""
 
-#: ../sdv/getDate.py:9
+#: ../sdv/getDate.py:10
 msgid "6th"
 msgstr ""
 
-#: ../sdv/getDate.py:10
+#: ../sdv/getDate.py:11
 msgid "7th"
 msgstr ""
 
-#: ../sdv/getDate.py:11
+#: ../sdv/getDate.py:12
 msgid "8th"
 msgstr ""
 
-#: ../sdv/getDate.py:12
+#: ../sdv/getDate.py:13
 msgid "9th"
 msgstr ""
 
-#: ../sdv/getDate.py:13
+#: ../sdv/getDate.py:14
 msgid "10th"
 msgstr ""
 
-#: ../sdv/getDate.py:14
+#: ../sdv/getDate.py:15
 msgid "11th"
 msgstr ""
 
-#: ../sdv/getDate.py:15
+#: ../sdv/getDate.py:16
 msgid "12th"
 msgstr ""
 
-#: ../sdv/getDate.py:16
+#: ../sdv/getDate.py:17
 msgid "13th"
 msgstr ""
 
-#: ../sdv/getDate.py:17
+#: ../sdv/getDate.py:18
 msgid "14th"
 msgstr ""
 
-#: ../sdv/getDate.py:18
+#: ../sdv/getDate.py:19
 msgid "15th"
 msgstr ""
 
-#: ../sdv/getDate.py:19
+#: ../sdv/getDate.py:20
 msgid "16th"
 msgstr ""
 
-#: ../sdv/getDate.py:20
+#: ../sdv/getDate.py:21
 msgid "17th"
 msgstr ""
 
-#: ../sdv/getDate.py:21
+#: ../sdv/getDate.py:22
 msgid "18th"
 msgstr ""
 
-#: ../sdv/getDate.py:22
+#: ../sdv/getDate.py:23
 msgid "19th"
 msgstr ""
 
-#: ../sdv/getDate.py:23
+#: ../sdv/getDate.py:24
 msgid "20th"
 msgstr ""
 
-#: ../sdv/getDate.py:24
+#: ../sdv/getDate.py:25
 msgid "21st"
 msgstr ""
 
-#: ../sdv/getDate.py:25
+#: ../sdv/getDate.py:26
 msgid "22nd"
 msgstr ""
 
-#: ../sdv/getDate.py:26
+#: ../sdv/getDate.py:27
 msgid "23rd"
 msgstr ""
 
-#: ../sdv/getDate.py:27
+#: ../sdv/getDate.py:28
 msgid "24th"
 msgstr ""
 
-#: ../sdv/getDate.py:28
+#: ../sdv/getDate.py:29
 msgid "25th"
 msgstr ""
 
-#: ../sdv/getDate.py:29
+#: ../sdv/getDate.py:30
 msgid "26th"
 msgstr ""
 
-#: ../sdv/getDate.py:30
+#: ../sdv/getDate.py:31
 msgid "27th"
 msgstr ""
 
-#: ../sdv/getDate.py:31
+#: ../sdv/getDate.py:32
 msgid "28th"
 msgstr ""
 
-#: ../sdv/getDate.py:33
+#: ../sdv/getDate.py:35
 msgid "Spring"
 msgstr ""
 
-#: ../sdv/getDate.py:34
+#: ../sdv/getDate.py:36
 msgid "Summer"
 msgstr ""
 
-#: ../sdv/getDate.py:35
+#: ../sdv/getDate.py:37
 msgid "Autumn"
 msgstr ""
 
-#: ../sdv/getDate.py:36
+#: ../sdv/getDate.py:38
 msgid "Winter"
 msgstr ""
 
-#: ../sdv/getDate.py:42
+#: ../sdv/getDate.py:45
 #, python-format
 msgid "%(day)s of %(season)s, Year %(year)s"
 msgstr ""
@@ -438,213 +505,269 @@ msgid ""
 "permission of %(concernedape)s and %(chucklefish)s."
 msgstr ""
 
-#: ../sdv/templates/account.html:13 ../sdv/templates/titlebar.html:26
+#: ../sdv/templates/about.html:18
+#, python-format
+msgid ""
+"We would also like to thank to all who support the site on %(patreon)s, "
+"especially:"
+msgstr ""
+
+#: ../sdv/templates/account.html:14 ../sdv/templates/titlebar.html:26
 #: ../sdv/templates/titlebar.html:40
 msgid "Account"
 msgstr ""
 
-#: ../sdv/templates/account.html:21
+#: ../sdv/templates/account.html:42
 msgid "Account info"
 msgstr ""
 
-#: ../sdv/templates/account.html:22
+#: ../sdv/templates/account.html:43
 #, python-format
 msgid "Email: %(email)s"
 msgstr ""
 
-#: ../sdv/templates/account.html:24
+#: ../sdv/templates/account.html:45
 msgid "Imgur: "
 msgstr ""
 
-#: ../sdv/templates/account.html:26
+#: ../sdv/templates/account.html:47 ../sdv/templates/account.html:54
 #, python-format
 msgid "Logged in as %(username)s"
 msgstr ""
 
-#: ../sdv/templates/account.html:27
+#: ../sdv/templates/account.html:48
 msgid "connect to imgur"
 msgstr ""
 
-#: ../sdv/templates/account.html:29
+#: ../sdv/templates/account.html:49
+msgid "Patreon: "
+msgstr ""
+
+#: ../sdv/templates/account.html:57
+msgid "Reconnect patreon?"
+msgstr ""
+
+#: ../sdv/templates/account.html:61
+msgid "connect patreon"
+msgstr ""
+
+#: ../sdv/templates/account.html:66
 msgid "Browse my liked farms"
 msgstr ""
 
-#: ../sdv/templates/account.html:34
+#: ../sdv/templates/account.html:71
 msgid "Preferences"
 msgstr ""
 
-#: ../sdv/templates/account.html:35
+#: ../sdv/templates/account.html:72
 msgid "Upload default: "
 msgstr ""
 
-#: ../sdv/templates/account.html:35
+#: ../sdv/templates/account.html:72
 msgid "Change to listed?"
 msgstr ""
 
-#: ../sdv/templates/account.html:35
+#: ../sdv/templates/account.html:72
 msgid ""
 "This will allow new uploads it to appear in searches on the site by "
 "default"
 msgstr ""
 
-#: ../sdv/templates/account.html:35
+#: ../sdv/templates/account.html:72
 msgid "Change&nbsp;to&nbsp;listed!"
 msgstr ""
 
-#: ../sdv/templates/account.html:35
+#: ../sdv/templates/account.html:72
 msgid "New uploads will not appear on the site by default"
 msgstr ""
 
-#: ../sdv/templates/account.html:35
+#: ../sdv/templates/account.html:72
 msgid "Change to unlisted?"
 msgstr ""
 
-#: ../sdv/templates/account.html:35
+#: ../sdv/templates/account.html:72
 msgid "This will prevent new uploads appearing to others on the site by default"
 msgstr ""
 
-#: ../sdv/templates/account.html:35
+#: ../sdv/templates/account.html:72
 msgid "Change&nbsp;to&nbsp;unlisted!"
 msgstr ""
 
-#: ../sdv/templates/account.html:35
+#: ../sdv/templates/account.html:72
 msgid "New uploads will appear listed on the site by default"
 msgstr ""
 
-#: ../sdv/templates/account.html:41 ../sdv/templates/account.html:86
-#: ../sdv/templates/all.html:93 ../sdv/templates/error.html:9
-#: ../sdv/templates/index.html:60 ../sdv/templates/login.html:55
+#: ../sdv/templates/account.html:75
+msgid "uploader tool"
+msgstr ""
+
+#: ../sdv/templates/account.html:76
+msgid "Download v2.0 for Windows"
+msgstr ""
+
+#: ../sdv/templates/account.html:77
+msgid "Download v2.0 for Mac"
+msgstr ""
+
+#: ../sdv/templates/account.html:85 ../sdv/templates/account.html:130
+#: ../sdv/templates/all.html:94 ../sdv/templates/error.html:9
+#: ../sdv/templates/index.html:59 ../sdv/templates/login.html:55
 #: ../sdv/templates/profile.html:361 ../sdv/templates/signup.html:39
 msgid "Error:"
 msgstr ""
 
-#: ../sdv/templates/account.html:52
+#: ../sdv/templates/account.html:96
 msgid "Claimable farms"
 msgstr ""
 
-#: ../sdv/templates/account.html:53
+#: ../sdv/templates/account.html:97
 msgid ""
 "The following farms are not associated with your user account, but were "
 "uploaded from your computer:"
 msgstr ""
 
-#: ../sdv/templates/account.html:57
+#: ../sdv/templates/account.html:101
 msgid "Claim"
 msgstr ""
 
-#: ../sdv/templates/account.html:61
+#: ../sdv/templates/account.html:105
 msgid "Or, claim all"
 msgstr ""
 
-#: ../sdv/templates/account.html:64
+#: ../sdv/templates/account.html:108
 msgid "Your farm series"
 msgstr ""
 
-#: ../sdv/templates/account.html:65
+#: ../sdv/templates/account.html:109
 msgid "Linked series of farms you have uploaded:"
 msgstr ""
 
-#: ../sdv/templates/account.html:69 ../sdv/templates/recents.html:11
+#: ../sdv/templates/account.html:113 ../sdv/templates/recents.html:11
 #, python-format
 msgid "%(name)s, %(farmname)s Farm"
 msgstr ""
 
-#: ../sdv/templates/account.html:73
+#: ../sdv/templates/account.html:117
 msgid "imgur"
 msgstr ""
 
-#: ../sdv/templates/all.html:15 ../sdv/templates/titlebar.html:22
+#: ../sdv/templates/all.html:16 ../sdv/templates/titlebar.html:22
 #: ../sdv/templates/titlebar.html:35
 msgid "Browse"
 msgstr ""
 
-#: ../sdv/templates/all.html:19
+#: ../sdv/templates/all.html:20
 msgid "Search"
 msgstr ""
 
-#: ../sdv/templates/all.html:27
+#: ../sdv/templates/all.html:28
 msgid "Search for farms by user or farm name, or change sort type"
 msgstr ""
 
-#: ../sdv/templates/all.html:31
+#: ../sdv/templates/all.html:32
 #, python-format
 msgid "Sorting %(number)s results by "
 msgstr ""
 
-#: ../sdv/templates/all.html:32
+#: ../sdv/templates/all.html:33
 msgid "top rated"
 msgstr ""
 
-#: ../sdv/templates/all.html:32
+#: ../sdv/templates/all.html:33
 msgid "most views"
 msgstr ""
 
-#: ../sdv/templates/all.html:32 ../sdv/templates/all.html:34
+#: ../sdv/templates/all.html:33 ../sdv/templates/all.html:35
 msgid "most recent"
 msgstr ""
 
-#: ../sdv/templates/all.html:45
+#: ../sdv/templates/all.html:46
 msgid "showing"
 msgstr ""
 
-#: ../sdv/templates/all.html:46
+#: ../sdv/templates/all.html:47
 msgid "only downloadable"
 msgstr ""
 
-#: ../sdv/templates/all.html:48 ../sdv/templates/all.html:52
+#: ../sdv/templates/all.html:49 ../sdv/templates/all.html:53
 msgid "all farms"
 msgstr ""
 
-#: ../sdv/templates/all.html:57
+#: ../sdv/templates/all.html:58
 msgid "with"
 msgstr ""
 
-#: ../sdv/templates/all.html:58
+#: ../sdv/templates/all.html:59
 msgid "full"
 msgstr ""
 
-#: ../sdv/templates/all.html:60 ../sdv/templates/all.html:64
+#: ../sdv/templates/all.html:61 ../sdv/templates/all.html:65
 msgid "minimap"
 msgstr ""
 
-#: ../sdv/templates/all.html:69
+#: ../sdv/templates/all.html:70
 msgid "thumbnail"
 msgstr ""
 
-#: ../sdv/templates/all.html:71
+#: ../sdv/templates/all.html:72
 msgid "limiting results to"
 msgstr ""
 
-#: ../sdv/templates/all.html:75
+#: ../sdv/templates/all.html:76
 msgid "farms in same series as"
 msgstr ""
 
-#: ../sdv/templates/all.html:75 ../sdv/templates/all.html:83
+#: ../sdv/templates/all.html:76 ../sdv/templates/all.html:84
 msgid "remove limit"
 msgstr ""
 
-#: ../sdv/templates/all.html:83
+#: ../sdv/templates/all.html:84
 msgid "farms I upvoted"
 msgstr ""
 
-#: ../sdv/templates/all.html:104 ../sdv/templates/all.html:106
+#: ../sdv/templates/all.html:105 ../sdv/templates/all.html:107
 #: ../sdv/templates/blog.html:13 ../sdv/templates/blog.html:15
 msgid "newest"
 msgstr ""
 
-#: ../sdv/templates/all.html:110 ../sdv/templates/all.html:112
+#: ../sdv/templates/all.html:111 ../sdv/templates/all.html:113
 #: ../sdv/templates/blog.html:18 ../sdv/templates/blog.html:20
 msgid "previous"
 msgstr ""
 
-#: ../sdv/templates/all.html:125 ../sdv/templates/all.html:127
+#: ../sdv/templates/all.html:126 ../sdv/templates/all.html:128
 #: ../sdv/templates/blog.html:28 ../sdv/templates/blog.html:30
 msgid "next"
 msgstr ""
 
-#: ../sdv/templates/all.html:131 ../sdv/templates/all.html:133
+#: ../sdv/templates/all.html:132 ../sdv/templates/all.html:134
 #: ../sdv/templates/blog.html:33 ../sdv/templates/blog.html:35
 msgid "oldest"
+msgstr ""
+
+#: ../sdv/templates/api_auth.html:2 ../sdv/templates/api_auth.html:32
+msgid "Authorisation requested"
+msgstr ""
+
+#: ../sdv/templates/api_auth.html:37
+#, python-format
+msgid "Authorise use of your account by %(client)s"
+msgstr ""
+
+#: ../sdv/templates/api_auth.html:39
+#, python-format
+msgid ""
+"%(client)s wants to ability to upload farms to your account. Please "
+"ensure you trust this application before proceeding. To grant this "
+"permission, please click Authorise."
+msgstr ""
+
+#: ../sdv/templates/api_auth.html:43
+msgid "Authorise"
+msgstr ""
+
+#: ../sdv/templates/api_auth.html:49 ../sdv/templates/reset.html:71
+msgid "Error"
 msgstr ""
 
 #: ../sdv/templates/base.html:4
@@ -871,15 +994,27 @@ msgid ""
 " support!"
 msgstr ""
 
-#: ../sdv/templates/index.html:40
+#: ../sdv/templates/faq.html:57
+msgid "What is the upload.farm uploader?"
+msgstr ""
+
+#: ../sdv/templates/faq.html:58
+#, python-format
+msgid ""
+"The uploader is a thank-you to upload.farm users who support the site "
+"through our %(patreon)s. It runs on Windows, and automatically backs up "
+"and optionally uploads savegames from Stardew Valley."
+msgstr ""
+
+#: ../sdv/templates/index.html:39
 msgid "Upload your farm"
 msgstr ""
 
-#: ../sdv/templates/index.html:44
+#: ../sdv/templates/index.html:43
 msgid "Upload!"
 msgstr ""
 
-#: ../sdv/templates/index.html:52
+#: ../sdv/templates/index.html:51
 #, python-format
 msgid ""
 "%(stardew_valley)s save files can be found under %(appdata)s and are "
@@ -960,16 +1095,16 @@ msgstr ""
 msgid "Farm plan render - upload.farm"
 msgstr ""
 
-#: ../sdv/templates/plan.html:79
+#: ../sdv/templates/plan.html:80
 #, python-format
 msgid "Farm plan in %(season)s"
 msgstr ""
 
-#: ../sdv/templates/plan.html:87
+#: ../sdv/templates/plan.html:88
 msgid "view plan"
 msgstr ""
 
-#: ../sdv/templates/plan.html:93
+#: ../sdv/templates/plan.html:94
 msgid "Plan re-rendering, will automatically load when complete"
 msgstr ""
 
@@ -1640,389 +1775,389 @@ msgid ""
 "downloading the savegame."
 msgstr ""
 
-#: ../sdv/templates/profile.html:400
+#: ../sdv/templates/profile.html:401
 msgid "Stats"
 msgstr ""
 
-#: ../sdv/templates/profile.html:401
+#: ../sdv/templates/profile.html:402
 msgid "Summary"
 msgstr ""
 
-#: ../sdv/templates/profile.html:402
+#: ../sdv/templates/profile.html:403
 msgid "Skills"
 msgstr ""
 
-#: ../sdv/templates/profile.html:413
+#: ../sdv/templates/profile.html:414
 msgid "Name"
 msgstr ""
 
-#: ../sdv/templates/profile.html:414
+#: ../sdv/templates/profile.html:415
 msgid "Current Funds"
 msgstr ""
 
-#: ../sdv/templates/profile.html:415
+#: ../sdv/templates/profile.html:416
 msgid "Total Earnings"
 msgstr ""
 
-#: ../sdv/templates/profile.html:416
+#: ../sdv/templates/profile.html:417
 msgid "Gender"
 msgstr ""
 
-#: ../sdv/templates/profile.html:416
+#: ../sdv/templates/profile.html:417
 msgid "Male"
 msgstr ""
 
-#: ../sdv/templates/profile.html:416
+#: ../sdv/templates/profile.html:417
 msgid "Female"
 msgstr ""
 
-#: ../sdv/templates/profile.html:418
+#: ../sdv/templates/profile.html:419
 msgid "Favorite Thing"
 msgstr ""
 
-#: ../sdv/templates/profile.html:419
+#: ../sdv/templates/profile.html:420
 msgid "Health"
 msgstr ""
 
-#: ../sdv/templates/profile.html:420
+#: ../sdv/templates/profile.html:421
 msgid "Stamina"
 msgstr ""
 
-#: ../sdv/templates/profile.html:421
+#: ../sdv/templates/profile.html:422
 msgid "Steps Taken"
 msgstr ""
 
-#: ../sdv/templates/profile.html:423
+#: ../sdv/templates/profile.html:424
 msgid "Mines Depth"
 msgstr ""
 
-#: ../sdv/templates/profile.html:423 ../sdv/templates/profile.html:424
-#: ../sdv/templates/profile.html:426
+#: ../sdv/templates/profile.html:424 ../sdv/templates/profile.html:425
+#: ../sdv/templates/profile.html:427
 msgid "level"
 msgstr ""
 
-#: ../sdv/templates/profile.html:424
+#: ../sdv/templates/profile.html:425
 msgid "Cavern Depth"
 msgstr ""
 
-#: ../sdv/templates/profile.html:424 ../sdv/templates/profile.html:426
+#: ../sdv/templates/profile.html:425 ../sdv/templates/profile.html:427
 #, python-format
 msgid "%(word_level)s %(number)s"
 msgstr ""
 
-#: ../sdv/templates/profile.html:426
+#: ../sdv/templates/profile.html:427
 msgid "Mine Depth"
 msgstr ""
 
-#: ../sdv/templates/profile.html:428
+#: ../sdv/templates/profile.html:429
 msgid "Time Played"
 msgstr ""
 
-#: ../sdv/templates/profile.html:428
+#: ../sdv/templates/profile.html:429
 msgid "hours"
 msgstr ""
 
-#: ../sdv/templates/profile.html:442
+#: ../sdv/templates/profile.html:443
 msgid "is married to"
 msgstr ""
 
-#: ../sdv/templates/profile.html:442 ../sdv/templates/profile.html:444
-#: ../sdv/templates/profile.html:448
+#: ../sdv/templates/profile.html:443 ../sdv/templates/profile.html:445
+#: ../sdv/templates/profile.html:449
 msgid "and"
 msgstr ""
 
-#: ../sdv/templates/profile.html:444
+#: ../sdv/templates/profile.html:445
 msgid "is unmarried"
 msgstr ""
 
-#: ../sdv/templates/profile.html:448
+#: ../sdv/templates/profile.html:449
 msgid "has"
 msgstr ""
 
-#: ../sdv/templates/profile.html:449
+#: ../sdv/templates/profile.html:450
 #, python-format
 msgid "a %(n)s day old"
 msgstr ""
 
-#: ../sdv/templates/profile.html:450
+#: ../sdv/templates/profile.html:451
 msgid "son"
 msgstr ""
 
-#: ../sdv/templates/profile.html:450
+#: ../sdv/templates/profile.html:451
 msgid "daughter"
 msgstr ""
 
-#: ../sdv/templates/profile.html:451 ../sdv/templates/profile.html:458
+#: ../sdv/templates/profile.html:452 ../sdv/templates/profile.html:459
 msgid "named"
 msgstr ""
 
-#: ../sdv/templates/profile.html:455
+#: ../sdv/templates/profile.html:456
 msgid "has no children"
 msgstr ""
 
-#: ../sdv/templates/profile.html:458
+#: ../sdv/templates/profile.html:459
 msgid "and has a pet"
 msgstr ""
 
-#: ../sdv/templates/profile.html:458
+#: ../sdv/templates/profile.html:459
 msgid "cat"
 msgstr ""
 
-#: ../sdv/templates/profile.html:458
+#: ../sdv/templates/profile.html:459
 msgid "dog"
 msgstr ""
 
-#: ../sdv/templates/profile.html:468
+#: ../sdv/templates/profile.html:469
 msgid "Farm horse:"
 msgstr ""
 
-#: ../sdv/templates/profile.html:473
+#: ../sdv/templates/profile.html:474
 #, python-format
 msgid "%(number)s %(animal)s"
 msgstr ""
 
-#: ../sdv/templates/profile.html:475
+#: ../sdv/templates/profile.html:476
 #, python-format
 msgid "%(n)s days old"
 msgstr ""
 
-#: ../sdv/templates/profile.html:535
+#: ../sdv/templates/profile.html:536
 msgid "(Hover for professions)"
 msgstr ""
 
-#: ../sdv/templates/profile.html:553 ../sdv/templates/profile.html:555
+#: ../sdv/templates/profile.html:554 ../sdv/templates/profile.html:556
 msgid "This will claim"
 msgstr ""
 
-#: ../sdv/templates/profile.html:553 ../sdv/templates/profile.html:577
+#: ../sdv/templates/profile.html:554 ../sdv/templates/profile.html:578
 msgid "only this"
 msgstr ""
 
-#: ../sdv/templates/profile.html:553
+#: ../sdv/templates/profile.html:554
 msgid "upload"
 msgstr ""
 
-#: ../sdv/templates/profile.html:553
+#: ../sdv/templates/profile.html:554
 msgid "Claim&nbsp;it!"
 msgstr ""
 
-#: ../sdv/templates/profile.html:553
+#: ../sdv/templates/profile.html:554
 msgid "Claim this farm (link it to your account)"
 msgstr ""
 
-#: ../sdv/templates/profile.html:555
+#: ../sdv/templates/profile.html:556
 msgid "all unclaimed uploads"
 msgstr ""
 
-#: ../sdv/templates/profile.html:555
+#: ../sdv/templates/profile.html:556
 msgid "made from this browser."
 msgstr ""
 
-#: ../sdv/templates/profile.html:555
+#: ../sdv/templates/profile.html:556
 msgid "Claim&nbsp;all!"
 msgstr ""
 
-#: ../sdv/templates/profile.html:555
+#: ../sdv/templates/profile.html:556
 msgid "Claim all unclaimed farms (link them to your account)"
 msgstr ""
 
-#: ../sdv/templates/profile.html:559
+#: ../sdv/templates/profile.html:560
 msgid "Send to"
 msgstr ""
 
-#: ../sdv/templates/profile.html:559
+#: ../sdv/templates/profile.html:560
 msgid "stardew.info planner"
 msgstr ""
 
-#: ../sdv/templates/profile.html:559
+#: ../sdv/templates/profile.html:560
 msgid "?"
 msgstr ""
 
-#: ../sdv/templates/profile.html:559
+#: ../sdv/templates/profile.html:560
 msgid "(this is a separate site not part of upload.farm)"
 msgstr ""
 
-#: ../sdv/templates/profile.html:559
+#: ../sdv/templates/profile.html:560
 msgid "Plan&nbsp;my&nbsp;farm!"
 msgstr ""
 
-#: ../sdv/templates/profile.html:559
+#: ../sdv/templates/profile.html:560
 msgid "Plan my farm (send to stardew.info planner)"
 msgstr ""
 
-#: ../sdv/templates/profile.html:562
+#: ../sdv/templates/profile.html:563
 msgid "Disable downloads?"
 msgstr ""
 
-#: ../sdv/templates/profile.html:562
+#: ../sdv/templates/profile.html:563
 msgid "Disables sharing of the savegame you uploaded"
 msgstr ""
 
-#: ../sdv/templates/profile.html:562
+#: ../sdv/templates/profile.html:563
 msgid "Disable!"
 msgstr ""
 
-#: ../sdv/templates/profile.html:562
+#: ../sdv/templates/profile.html:563
 msgid "Downloads currently enabled"
 msgstr ""
 
-#: ../sdv/templates/profile.html:565
+#: ../sdv/templates/profile.html:566
 msgid "Enable downloads?"
 msgstr ""
 
-#: ../sdv/templates/profile.html:565
+#: ../sdv/templates/profile.html:566
 msgid "Enables download of the savegame you uploaded by yourself and others"
 msgstr ""
 
-#: ../sdv/templates/profile.html:565
+#: ../sdv/templates/profile.html:566
 msgid "Enable!"
 msgstr ""
 
-#: ../sdv/templates/profile.html:565
+#: ../sdv/templates/profile.html:566
 msgid "Downloads currently disabled"
 msgstr ""
 
-#: ../sdv/templates/profile.html:567
+#: ../sdv/templates/profile.html:568
 msgid "To enable savegame download please first"
 msgstr ""
 
-#: ../sdv/templates/profile.html:567
+#: ../sdv/templates/profile.html:568
 msgid "sign up"
 msgstr ""
 
-#: ../sdv/templates/profile.html:567
+#: ../sdv/templates/profile.html:568
 msgid "sign in"
 msgstr ""
 
-#: ../sdv/templates/profile.html:567
+#: ../sdv/templates/profile.html:568
 msgid ", then"
 msgstr ""
 
-#: ../sdv/templates/profile.html:567
+#: ../sdv/templates/profile.html:568
 msgid "claim this page."
 msgstr ""
 
-#: ../sdv/templates/profile.html:567
+#: ../sdv/templates/profile.html:568
 msgid "Sign up or sign in to enable downloads!"
 msgstr ""
 
-#: ../sdv/templates/profile.html:571
+#: ../sdv/templates/profile.html:572
 msgid "List your farm?"
 msgstr ""
 
-#: ../sdv/templates/profile.html:571
+#: ../sdv/templates/profile.html:572
 msgid "Allows it to appear in searches on the site"
 msgstr ""
 
-#: ../sdv/templates/profile.html:571
+#: ../sdv/templates/profile.html:572
 msgid "List!"
 msgstr ""
 
-#: ../sdv/templates/profile.html:571
+#: ../sdv/templates/profile.html:572
 msgid "Farm currently unlisted"
 msgstr ""
 
-#: ../sdv/templates/profile.html:573
+#: ../sdv/templates/profile.html:574
 msgid "Unlist your farm?"
 msgstr ""
 
-#: ../sdv/templates/profile.html:573
+#: ../sdv/templates/profile.html:574
 msgid "Prevents it appearing on the site except to you and people with the URL"
 msgstr ""
 
-#: ../sdv/templates/profile.html:573
+#: ../sdv/templates/profile.html:574
 msgid "Unlist!"
 msgstr ""
 
-#: ../sdv/templates/profile.html:573
+#: ../sdv/templates/profile.html:574
 msgid "Farm currently listed"
 msgstr ""
 
-#: ../sdv/templates/profile.html:577
+#: ../sdv/templates/profile.html:578
 msgid "Delete this farm?"
 msgstr ""
 
-#: ../sdv/templates/profile.html:577 ../sdv/templates/profile.html:579
+#: ../sdv/templates/profile.html:578 ../sdv/templates/profile.html:580
 msgid "This will delete "
 msgstr ""
 
-#: ../sdv/templates/profile.html:577
+#: ../sdv/templates/profile.html:578
 msgid " upload"
 msgstr ""
 
-#: ../sdv/templates/profile.html:577
+#: ../sdv/templates/profile.html:578
 msgid "Delete&nbsp;it!"
 msgstr ""
 
-#: ../sdv/templates/profile.html:577
+#: ../sdv/templates/profile.html:578
 msgid "Delete farm"
 msgstr ""
 
-#: ../sdv/templates/profile.html:579
+#: ../sdv/templates/profile.html:580
 msgid "Delete all for this farm?"
 msgstr ""
 
-#: ../sdv/templates/profile.html:579
+#: ../sdv/templates/profile.html:580
 msgid "all uploads in this series."
 msgstr ""
 
-#: ../sdv/templates/profile.html:579
+#: ../sdv/templates/profile.html:580
 msgid ""
 "This will remove this farm and all associated farms, be sure you mean to "
 "do this!"
 msgstr ""
 
-#: ../sdv/templates/profile.html:579
+#: ../sdv/templates/profile.html:580
 msgid "Delete&nbsp;entire&nbsp;series!"
 msgstr ""
 
-#: ../sdv/templates/profile.html:579
+#: ../sdv/templates/profile.html:580
 msgid "Delete entire farm series"
 msgstr ""
 
-#: ../sdv/templates/profile.html:592
+#: ../sdv/templates/profile.html:593
 msgid "You use the contents of this zip at your own risk!"
 msgstr ""
 
-#: ../sdv/templates/profile.html:592
+#: ../sdv/templates/profile.html:593
 msgid "I understand, download!"
 msgstr ""
 
-#: ../sdv/templates/profile.html:592
+#: ../sdv/templates/profile.html:593
 msgid "download savegame"
 msgstr ""
 
-#: ../sdv/templates/profile.html:602
+#: ../sdv/templates/profile.html:603
 msgid "Friendships"
 msgstr ""
 
-#: ../sdv/templates/profile.html:620
+#: ../sdv/templates/profile.html:621
 msgid "Monster Kills"
 msgstr ""
 
-#: ../sdv/templates/profile.html:633
+#: ../sdv/templates/profile.html:634
 #, python-format
 msgid "%(name)s has not killed any monsters yet."
 msgstr ""
 
-#: ../sdv/templates/profile.html:643
+#: ../sdv/templates/profile.html:644
 #, python-format
 msgid "Map of %(farmname)s Farm"
 msgstr ""
 
-#: ../sdv/templates/profile.html:648
+#: ../sdv/templates/profile.html:649
 msgid "Click to open farm gallery"
 msgstr ""
 
-#: ../sdv/templates/profile.html:657
+#: ../sdv/templates/profile.html:658
 msgid "view on imgur"
 msgstr ""
 
-#: ../sdv/templates/profile.html:664
+#: ../sdv/templates/profile.html:665
 msgid "reupload to imgur"
 msgstr ""
 
-#: ../sdv/templates/profile.html:664
+#: ../sdv/templates/profile.html:665
 msgid "upload to imgur"
 msgstr ""
 
@@ -2059,10 +2194,6 @@ msgstr ""
 
 #: ../sdv/templates/reset.html:57
 msgid "Reset password for user account on upload.farm"
-msgstr ""
-
-#: ../sdv/templates/reset.html:71
-msgid "Error"
 msgstr ""
 
 #: ../sdv/templates/reset.html:73
