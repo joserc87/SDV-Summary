@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-22 16:25+0000\n"
+"POT-Creation-Date: 2018-02-27 14:08+0000\n"
 "PO-Revision-Date: 2017-05-14 17:54+0100\n"
 "Last-Translator: \n"
 "Language: pt_BR\n"
@@ -553,6 +553,10 @@ msgstr "Informações da conta"
 #, python-format
 msgid "Email: %(email)s"
 msgstr "Email: %(email)s"
+
+#: ../sdv/templates/account.html:44
+msgid "Change password"
+msgstr ""
 
 #: ../sdv/templates/account.html:45
 msgid "Imgur: "
@@ -1202,6 +1206,13 @@ msgstr ""
 #: ../sdv/templates/privacy.html:2
 msgid "Privacy Policy"
 msgstr "Política de Privacidade"
+
+#: ../sdv/templates/privacy.html:9
+msgid ""
+"Our privacy policy is currently only available in English to ensure "
+"consistency. If you use the site in a language other than English, sorry "
+"for the inconvenience!"
+msgstr ""
 
 #: ../sdv/templates/profile.html:5 ../sdv/templates/profile.html:9
 #: ../sdv/templates/profile.html:16 ../sdv/templates/profile.html:28
