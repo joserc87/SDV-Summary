@@ -310,8 +310,9 @@ def generateFarm(season, data, assets=None):
                     print(e)
 
             if item.name == "House":
+                house_index = 2 if item.index == 3 else item.index
                 try:
-                    house_img = cropImg(assets['buildings']['house'], item.index,
+                    house_img = cropImg(assets['buildings']['house'], house_index,
                                         defaultSize=(160, 144), objectSize=(160, 144))
                     farm_base.paste(house_img, (item.x * 16, item.y * 16 - 16 * item.h), house_img)
                 except Exception as e:
