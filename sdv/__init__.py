@@ -1518,6 +1518,8 @@ def operate_on_url(url,instruction):
                 return _op_toggle_boolean_param(url,'private',True)
         g.error = _("Unknown or insufficient credentials")
         return render_template("error.html", **page_args())
+    elif request.method == 'GET' and url == '.well-known':
+        return redirect(url_for('static',filename='.well-known/{}'.format(instruction)))
     else:
         return redirect(url_for('display_data',url=url))
 
@@ -2278,6 +2280,7 @@ def get_votes(url):
         return result[url] if url in result else None
     else:
         return None
+
 
 if __name__ == "__main__":
     app.run()

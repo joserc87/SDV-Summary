@@ -138,6 +138,9 @@ def generateFarm(season, data, assets=None):
                     overlay = cropImg(assets['craftables'], 176,
                                       (16, 32), (16, 32))
                     obj_img.paste(overlay, box=(0, 0), mask=overlay)
+
+                if item.flipped:
+                    obj_img = obj_img.transpose(Image.FLIP_LEFT_RIGHT)
                 farm_base.paste(obj_img, (item.x * 16, item.y * 16 - offset), obj_img)
 
             if item.name == 'Fence':
@@ -169,6 +172,49 @@ def generateFarm(season, data, assets=None):
                                     fence_img)
                 except Exception as e:
                     print(e)
+
+            if item.name == 'Bush':
+
+                sprite_sizes = [(16, 32), (32, 48), (48, 48)]
+
+                sprite_size = sprite_sizes[item.growth]
+                season_offset = 0
+                if item.growth == 0:
+                    if season == 'spring':
+                        season_offset = 0
+                    elif season == 'summer':
+                        season_offset = 2
+                    elif season == 'fall':
+                        season_offset = 4
+                    elif season == 'winter':
+                        season_offset = 6
+                elif item.growth == 1:
+                    if season == 'spring':
+                        season_offset = 0
+                    elif season == 'summer':
+                        season_offset = 4 + item.index * 2
+                    elif season == 'fall':
+                        season_offset = 8*3
+                    elif season == 'winter':
+                        season_offset = 8*3 + 4
+                elif item.growth == 2:
+                    if season == 'spring':
+                        season_offset = 0
+                    elif season == 'summer':
+                        season_offset = 0
+                    elif season == 'fall':
+                        season_offset = 3
+                    elif season == 'winter':
+                        season_offset = 8*3
+
+                sprite_index = [8*14, 8*0, 8*8][item.growth] + season_offset
+
+                obj_img = cropImg(assets['bushes'], sprite_index, objectSize=sprite_size)
+
+                if item.flipped:
+                    obj_img = obj_img.transpose(Image.FLIP_LEFT_RIGHT)
+
+                farm_base.paste(obj_img, (item.x * 16, item.y * 16 - (sprite_size[1])+16), obj_img)
 
             if item.name == 'ResourceClump':
                 obj_img = cropImg(assets['objects'], item.type, objectSize=(32, 32))
@@ -264,8 +310,9 @@ def generateFarm(season, data, assets=None):
                     print(e)
 
             if item.name == "House":
+                house_index = 2 if item.index == 3 else item.index
                 try:
-                    house_img = cropImg(assets['buildings']['house'], item.index,
+                    house_img = cropImg(assets['buildings']['house'], house_index,
                                         defaultSize=(160, 144), objectSize=(160, 144))
                     farm_base.paste(house_img, (item.x * 16, item.y * 16 - 16 * item.h), house_img)
                 except Exception as e:

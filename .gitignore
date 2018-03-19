@@ -87,3 +87,8 @@ test
 
 logs/
 *.log*
+
+dev/
+
+tests/reference_images
+tests/reference_saves
