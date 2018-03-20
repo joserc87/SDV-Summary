@@ -9,6 +9,7 @@ from flask_mail import Mail, Message
 from werkzeug import secure_filename, check_password_hash
 from werkzeug.contrib.fixers import ProxyFix
 from werkzeug.security import generate_password_hash
+from werkzeug.contrib.cache import SimpleCache
 from google_measurement_protocol import Event, report
 import time
 import os
@@ -66,6 +67,8 @@ mail = Mail()
 censor = Censor()
 
 random.seed()
+
+cache = SimpleCache()
 
 def create_app(config_name=None):
     logger.info('Creating flask app...')
@@ -639,6 +642,7 @@ def file_uploaded(inputfile):
             logger.error(f'An error occurred when inserting save to databae: {g.error}')
             return {'type':'render', 'target':'index.html', 'parameters': {"error": user_error}}
         imageDrone.process_queue()
+        cache.delete('recent_uploads')
         memfile.close()
     if outcome != False:
         session.permanent = True
@@ -1258,8 +1262,11 @@ def get_planner_link(url):
             return {'status':'unknown_error'}
 
 
-def get_recents(n=6,**kwargs):
-    recents = get_entries(n,**kwargs)
+def get_recents(n=6, **kwargs):
+    recents = cache.get('recent_uploads')
+    if not recents:
+        recents = get_entries(n,**kwargs)
+        cache.set('recent_uploads', recents, timeout=60*60)
     return recents
 
 
@@ -2244,6 +2251,7 @@ def submit_vote():
     if logged_in():
         if request.method == 'POST':
             if 'vote' in request.form:
+                cache.delete('recent_uploads')
                 return json.dumps(handle_vote(get_logged_in_user(),request.form))
     else:
         return _('not logged in')
