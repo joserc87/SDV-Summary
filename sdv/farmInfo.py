@@ -1,5 +1,6 @@
 from PIL import Image
 from collections import namedtuple
+from sdv.savefile import get_location
 
 map_types = [
     'Default',
@@ -8,6 +9,7 @@ map_types = [
     'Mining',
     'Combat'
 ]
+
 
 # Check adj. tiles for all tiles on map to determine orientation. Uses bit mask to  select correct tile from spritesheet
 def checkSurrounding(tiles):
@@ -40,7 +42,8 @@ def checkSurrounding(tiles):
                         current_tile = None
                     try:
                         if floor_map[y + dy][x + dx] is not None:
-                            if tile.name == 'Flooring' or (tile.name == 'Fence' and not tile.growth):
+                            if tile.name == 'Flooring' or (
+                                    tile.name == 'Fence' and not tile.growth):
                                 if floor_map[y + dy][x + dx].type == tile.type:
                                     a += b
                             else:
@@ -70,12 +73,11 @@ def getFarmInfo(saveFile):
 
     root = saveFile.getRoot()
 
-
     # Farm Objects
 
-    locations = root.find('locations').findall("GameLocation")
     s = []
-    for item in locations[1].find('objects').iter("item"):
+    farm_location = get_location(root, 'Farm')
+    for item in farm_location.find('objects').iter("item"):
         f = False
         obj = item.find('value').find('Object')
         name = obj.find('name').text
@@ -124,11 +126,11 @@ def getFarmInfo(saveFile):
 
     tf = []
     crops = []
-    for item in locations[1].find('terrainFeatures').iter('item'):
+    for item in farm_location.find('terrainFeatures').iter('item'):
         s = None
         loc = None
         f = False
-        name = item.find('value').find('TerrainFeature').get(ns+'type')
+        name = item.find('value').find('TerrainFeature').get(ns + 'type')
         if name == 'Tree':
             t = int(item.find('value').find('TerrainFeature').find('treeType').text)
             s = int(item.find('value').find('TerrainFeature').find('growthStage').text)
@@ -163,11 +165,12 @@ def getFarmInfo(saveFile):
                 crop_dead = False
                 if crop.find('dead').text == 'true':
                     crop_dead = True
-                crops.append(sprite('HoeDirtCrop', crop_x, crop_y, 1, 1, crop_dead, crop_location, crop_phase, crop_flip, o))
+                crops.append(sprite('HoeDirtCrop', crop_x, crop_y, 1, 1, crop_dead, crop_location,
+                                    crop_phase, crop_flip, o))
         if name == "FruitTree":
             t = int(item.find('value').find('TerrainFeature').find('treeType').text)
             s = int(item.find('value').find('TerrainFeature').find('growthStage').text)
-            if item.find('value').find('TerrainFeature').find('flipped').text == 'true': f= True
+            if item.find('value').find('TerrainFeature').find('flipped').text == 'true': f = True
         if name == "Grass":
             t = int(item.find('value').find('TerrainFeature').find('grassType').text)
             s = int(item.find('value').find('TerrainFeature').find('numberOfWeeds').text)
@@ -191,11 +194,28 @@ def getFarmInfo(saveFile):
     except:
         pass
 
+    # Large Terrain Features
+
+    large_terrain_features = []
+    for ltf in farm_location.find('largeTerrainFeatures'):
+        name = ltf.get(ns + 'type')
+        flipped = ltf.find('flipped').text == 'true'
+        size = int(ltf.find('size').text)
+        x = int(ltf.find('tilePosition').find('X').text)
+        y = int(ltf.find('tilePosition').find('Y').text)
+        tile_sheet_offset = int(ltf.find('tileSheetOffset').text)
+
+        large_terrain_features.append(
+                sprite(name, x, y, 1, 1, tile_sheet_offset, None, size, flipped, None)
+        )
+
+    farm['largeTerrainFeatures'] = large_terrain_features
+
     # Resource Clumps
     s = []
 
-    for item in locations[1].find('resourceClumps').iter('ResourceClump'):
-        name = item.get(ns+'type')
+    for item in farm_location.find('resourceClumps').iter('ResourceClump'):
+        name = item.get(ns + 'type')
         if name is None:
             name = 'ResourceClump'
         t = int(item.find('parentSheetIndex').text)
@@ -208,7 +228,7 @@ def getFarmInfo(saveFile):
     farm['resourceClumps'] = s
 
     s = []
-    for item in locations[1].find('buildings').iter('Building'):
+    for item in farm_location.find('buildings').iter('Building'):
         name = 'Building'
         x = int(item.find('tileX').text)
         y = int(item.find('tileY').text)
@@ -228,11 +248,13 @@ def getFarmInfo(saveFile):
                    None)
 
     hasGreenhouse = False
-    for location in locations:
-        if location.find('name').text == "CommunityCenter":
-            cats = location.find('areasComplete').findall('boolean')
-            if cats[0].text == 'true':
-                hasGreenhouse = True
+    try:
+        community_center = get_location(root, 'CommunityCenter')
+        cats = community_center.find('areasComplete').findall('boolean')
+        if cats[0].text == 'true':
+            hasGreenhouse = True
+    except AttributeError:
+        pass
 
     # Check for letter to confirm player has unlocked greenhouse, thanks /u/BumbleBHE
     for letter in root.find('player').find('mailReceived').iter('string'):
@@ -261,7 +283,7 @@ def colourBox(x, y, colour, pixels, scale=8):
     for i in range(scale):
         for j in range(scale):
             try:
-                pixels[x*scale + i, y*scale + j] = colour
+                pixels[x * scale + i, y * scale + j] = colour
             except IndexError:
                 pass
     return pixels
@@ -334,21 +356,15 @@ def generateImage(data):
             elif tile.type == 600:
                 for i in range(tile[3]):
                     for j in range(tile[3]):
-                        colourBox(tile.x+i, tile.y + j, (75, 75, 75), pixels)
+                        colourBox(tile.x + i, tile.y + j, (75, 75, 75), pixels)
     return image
 
 
 def regenerateFarmInfo(json_from_db):
-    sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
+    sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped',
+                                   'orientation'])
 
     for key in json_from_db['data'].keys():
         for i, item in enumerate(json_from_db['data'][key]):
             json_from_db['data'][key][i] = sprite(*item)
     return json_from_db
-
-
-def main():
-    generateImage(getFarmInfo('./saves/Crono_116230451')).save('farm.png')
-
-if __name__ == '__main__':
-    main()

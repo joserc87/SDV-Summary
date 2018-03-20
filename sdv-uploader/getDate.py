@@ -41,6 +41,15 @@ def get_date_string(dayOfMonthForSaveGame,seasonForSaveGame,yearForSaveGame):
     formatted_string = '{} of {}, Year {}'.format(daystring,seastring,yearForSaveGame)
     return formatted_string
 
+def preprocess_data(data):
+    if data.get('dayOfMonthForSaveGame') != None and int(data.get('dayOfMonthForSaveGame')) > 28:
+        data['dayOfMonthForSaveGame'] = str(int(data.get('dayOfMonthForSaveGame')) % 28)
+        data['seasonForSaveGame'] = str(int(data['seasonForSaveGame']) + 1)
+    if data.get('seasonForSaveGame') != None and int(data.get('seasonForSaveGame')) > 3:
+        data['seasonForSaveGame'] = str(int(data.get('seasonForSaveGame')) % 4)
+        data['yearForSaveGame'] = str(int(data['yearForSaveGame']) + 1)
+    return data
+
 def get_date_data(statsDaysPlayed):
     dayOfMonthForSaveGame = int(((statsDaysPlayed - 1) % 28) + 1)
     yearForSaveGame = int(floor((statsDaysPlayed - dayOfMonthForSaveGame) / (28*4)) + 1)
@@ -48,7 +57,20 @@ def get_date_data(statsDaysPlayed):
     return str(dayOfMonthForSaveGame), str(seasonForSaveGame), str(yearForSaveGame)
 
 def get_date(data):
+    data = preprocess_data(data)
     if data.get('dayOfMonthForSaveGame') != None and data.get('seasonForSaveGame') != None and data.get('yearForSaveGame') != None:
         return get_date_string(data['dayOfMonthForSaveGame'],data['seasonForSaveGame'],data['yearForSaveGame'])
     else:
         return None
+
+
+def main():
+    data = {'dayOfMonthForSaveGame':29,
+            'seasonForSaveGame':3,
+            'yearForSaveGame':2,
+            'statsDaysPlayed':197+28}
+    print(get_date(data))
+    print(get_date_string(*get_date_data(data.get('statsDaysPlayed'))))
+
+if __name__ == "__main__":
+    main()

@@ -1,6 +1,6 @@
 import json
 from sdv import validate
-import sdv.savefile
+from sdv.savefile import get_location
 from sdv.achievements.checker import fish_ids, recipe_ids, craftable_items, museum_ids, shipping_ids, crop_ids
 
 ns = "{http://www.w3.org/2001/XMLSchema-instance}"
@@ -68,9 +68,9 @@ def getNPCs(root, loc, types):
 
 
 def getAnimals(root):
-    locations = root.find('locations').findall("GameLocation")
+    farm_location = get_location(root,'Farm')
     animals = {}
-    for item in locations[1].find('buildings').iter('Building'):
+    for item in farm_location.find('buildings').iter('Building'):
         buildingtype = item.get(ns+'type')
         name = item.find('buildingType').text 
         if buildingtype in animal_habitable_buildings:

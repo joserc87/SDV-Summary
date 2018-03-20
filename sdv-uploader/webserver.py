@@ -1,10 +1,11 @@
-from multiprocessing import Process
+from multiprocessing import Process, set_start_method
 from flask import Flask, request, redirect
 from database import set_user_info
 from config import server_location
 
 
 def launch_webserver_as_process():
+	set_start_method('spawn')
 	p = Process(target=run_flask)
 	p.start()
 	return p
@@ -22,4 +23,5 @@ def home():
 
 
 if __name__ == "__main__":
-	run_flask()
+	launch_webserver_as_process()
+	# run_flask() # works on mac; maybe process doesnt?

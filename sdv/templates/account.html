@@ -41,7 +41,7 @@ $(function () {
 				<div class="col-md-12" style="padding-left:2%;padding-right:2%;">
 					<h3>{{_("Account info")}}</h3>
 					<p>{{_("Email: %(email)s", email=acc_info.email)}}</p>
-					<p><a href="{{url_for('reset_password')}}">Change password</a></p>
+					<p><a href="{{url_for('reset_password')}}">{{_("Change password")}}</a></p>
 					<p>{{_("Imgur: ")}}{%if acc_info.imgur %}
 					{% autoescape false %} {{
 					_("Logged in as %(username)s",username="<a href='http://{}.imgur.com'>{}</a>".format(acc_info.imgur.account_username,acc_info.imgur.account_username))
@@ -72,7 +72,9 @@ $(function () {
 					<p>{{_("Upload default: ")}}{%if acc_info.privacy_default %}<button type="button" class="btn-link reducedpadding" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='<b>{{_("Change to listed?")}}</b><br>{{_("This will allow new uploads it to appear in searches on the site by default")}}<br><form action="{{url_for('account_page')}}" method="post"><button type="submit" name="privacy_default" value="False" class="btn-link">{{_("Change&nbsp;to&nbsp;listed!")}}</button></form>'><img title="{{_('New uploads will not appear on the site by default')}}" src="{{url_for('static',filename='css/cpanel/unlist32.png')}}"></button>{%else%}<button type="button" class="btn-link reducedpadding" data-toggle="tooltip" data-container="body" data-placement="bottom" data-html="true" data-trigger="click" title='<b>{{_("Change to unlisted?")}}</b><br>{{_("This will prevent new uploads appearing to others on the site by default")}}<br><form action="{{url_for('account_page')}}" method="post"><button type="submit" name="privacy_default" value="True" class="btn-link">{{_("Change&nbsp;to&nbsp;unlisted!")}}</button></form>'><img title="{{_('New uploads will appear listed on the site by default')}}" src="{{url_for('static',filename='css/cpanel/list32.png')}}"></button>{%endif%}</p>
 					
 				{% if acc_info.patreon and not acc_info.patreon.csrf and acc_info.patreon.name %}
-					<p><br><a href="{{url_for('static',filename='uploader/uploader_setup.exe')}}">Download uploader tool</a></p>
+				<h3>{{_("uploader tool")}}</h3>
+					<p><a href="{{url_for('static',filename='uploader/uploader_v2.0_setup_win32.zip')}}">{{_("Download v2.0 for Windows")}}</a>
+						<br><a href="{{url_for('static',filename='uploader/uploader_v2.0_installer_mac.dmg')}}">{{_("Download v2.0 for Mac")}}</a></p>
 				{% endif %}
 				</div>
 

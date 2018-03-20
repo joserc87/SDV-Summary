@@ -64,6 +64,7 @@ bcrypt = Bcrypt()
 mail = Mail()
 censor = Censor()
 
+random.seed()
 
 def create_app(config_name=None):
     logger.info('Creating flask app...')
@@ -178,11 +179,15 @@ def page_args():
 
 
 def get_advert():
+    random.seed()
     if request.path == '/':
-        try:
-            fpads = app.config['FRONT_PAGE_ADVERTS']
-            result = None if fpads == None else random.choice(fpads)
-        except KeyError:
+        if not logged_in() or check_api_eligibility() != True:
+            try:
+                fpads = app.config['FRONT_PAGE_ADVERTS']
+                result = None if fpads == None else random.choice(fpads)
+            except KeyError:
+                result = None
+        else:
             result = None
     else:
         if not logged_in() or check_api_eligibility() != True:
@@ -677,7 +682,7 @@ def api_auth():
                         try:
                             assert len(results)<2
                         except AssertionError:
-                            g.error = "Multiple entries for this client_id! Please contact the site administrator!"
+                            g.error = _("Multiple entries for this client_id! Please contact the site administrator!")
                             return render_template("error.html", **page_args())
                         # try:
                         flash({'message':'<p>'+_('You have granted access to %(client)s, you may now close this tab',client=results[0][1])+'</p>'})
@@ -687,7 +692,7 @@ def api_auth():
                         #     return render_template("error.html", **page_args())
                     except psycopg2.IntegrityError:
                         db.rollback()
-                g.error = "Unable to generate unique key! Something bad has happened, report to site administrator!"
+                g.error = _("Unable to generate unique key! Something bad has happened, report to site administrator!")
                 return render_template("error.html", **page_args())
             else:
                 eligible = check_api_eligibility()
@@ -697,10 +702,10 @@ def api_auth():
                     try:
                         assert len(results)<2
                     except AssertionError:
-                        g.error = "Multiple entries for this client_id! Please contact the site administrator!"
+                        g.error = _("Multiple entries for this client_id! Please contact the site administrator!")
                         return render_template("error.html", **page_args())
                     if len(results) == 0:
-                        g.error = "Referrer client_id is invalid!"
+                        g.error = _("Referrer client_id is invalid!")
                         return render_template("error.html", **page_args())
                     else:
                         cur.execute('SELECT COUNT(*) FROM api_users WHERE userid = '+app.sqlesc+' AND clientid = (SELECT id FROM api_clients WHERE key = '+app.sqlesc+')',(get_logged_in_user(),request.args.get('client_id')))
@@ -711,15 +716,16 @@ def api_auth():
                             flash({'message':'<p>'+_('You have previously approved %(client)s to access your account - reauthorising will generate a new API key',client=api_client_name)+'</p>'})
                         return render_template("api_auth.html", api_client_name=api_client_name, **page_args())
                 else:
-                    g.error = "At this time, the upload.farm API and uploader are for upload.farm supporters only. If you are already a supporter, please connect your Patreon account on your account panel. If your Patreon account is already linked, please check you have active pledges. If you think this is in error, please contact us via the About page!"
+                    g.error = _("At this time, the upload.farm API and uploader are for upload.farm supporters only. If you are already a supporter, please connect your Patreon account on your account panel. If your Patreon account is already linked, please check you have active pledges. If you think this is in error, please contact us via the About page!")
                     return render_template('error.html', **page_args())
         else:
             flash({'message':'<p>'+_('Please log in first')+'</p>'})
             session['login_redir'] = url_for('api_auth',client_id=request.args.get('client_id'))
             return redirect(url_for('login'))
     else:
-        g.error = "Referrer didn't include client_id in request! Please contact whoever linked you here."
+        g.error = _("Referrer didn't include client_id in request! Please contact whoever linked you here.")
         return render_template("error.html", **page_args())
+
 
 @app.route('/api/v1/get_user_info',methods=['POST'])
 def api_v1_get_user_info():
@@ -731,6 +737,52 @@ def api_v1_get_user_info():
             cur.execute('SELECT email FROM users WHERE id = '+app.sqlesc,(credential_check.get('user'),))
             result = cur.fetchone()
             return make_response(jsonify({'email':result[0]}))
+        else:
+            return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}),400)
+
+
+@app.route('/api/v1/get_series_info',methods=['POST'])
+def api_v1_get_series_info():
+    if request.method == 'POST':
+        if 'url' in request.form:
+            credential_check = check_api_credentials(request.form)
+            if 'user' in credential_check:
+                db = get_db()
+                cur = db.cursor()
+                set_api_user(credential_check['user'])
+                entries = get_entries(n=10000,series=request.form.get('url'),sort_by='chronological',include_failed=False)
+                entries['posts'] = entries['posts'][::-1]
+                return make_response(jsonify(entries))
+            else:
+                return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}),400)
+    else:
+        return make_response(jsonify({"error": "no_url_error"}),400)
+
+
+@app.route('/api/v1/get_user_uploads',methods=['POST'])
+def api_v1_get_user_uploads():
+    if request.method == 'POST':
+        credential_check = check_api_credentials(request.form)
+        if 'user' in credential_check:
+            db = get_db()
+            cur = db.cursor()
+            set_api_user(credential_check['user'])
+
+            user = get_logged_in_user()
+            cur.execute('SELECT id,auto_key_json FROM series WHERE owner='+app.sqlesc+' ORDER BY id ASC',(user,))
+            r = cur.fetchall()
+            claimed_ids = []
+            for row in r:
+                cur.execute('SELECT url,statsDaysPlayed,dayOfMonthForSaveGame,seasonForSaveGame,yearForSaveGame FROM playerinfo WHERE series_id='+app.sqlesc+' AND owner_id='+app.sqlesc+' ORDER BY millisecondsPlayed DESC LIMIT 1',(row[0],user))
+                s = cur.fetchall()
+                for i, entry in enumerate(s):
+                    url = entry[0]
+                    date = get_date({'statsDaysPlayed':entry[1],'dayOfMonthForSaveGame':entry[2],'seasonForSaveGame':entry[3],'yearForSaveGame':entry[4]})
+                cur.execute('SELECT count(*) FROM playerinfo WHERE series_id='+app.sqlesc+' AND owner_id='+app.sqlesc,(row[0],user))
+                total = cur.fetchone()[0]
+                claimed_ids.append(json.loads(row[1])[1:] + [url, date, total])
+
+            return make_response(jsonify(claimed_ids))
         else:
             return make_response(jsonify({key:value for key, value in credential_check.items() if key in ['error', 'error_description']}),400)
 
@@ -758,7 +810,7 @@ def api_v1_upload_zipped():
 
 @app.route('/api/v1/uploader_version',methods=['GET'])
 def api_v1_uploader_version():
-    return make_response(jsonify({"version":"1.0"}))
+    return make_response(jsonify({"version":"2.0"}))
 
 def set_privacy_for_api(userid):
     db = get_db()
@@ -974,6 +1026,7 @@ def check_rate_limiter():
     cur = db.cursor()
     cur.execute('SELECT count(*) FROM plans WHERE added_time>'+app.sqlesc,(time.time()-app.config['API_V1_PLAN_TIME'],))
     assert cur.fetchone()[0] <= app.config['API_V1_PLAN_LIMIT']
+
 
 def check_max_renders():
     db = get_db()
@@ -1471,6 +1524,8 @@ def operate_on_url(url,instruction):
                 return _op_toggle_boolean_param(url,'private',True)
         g.error = _("Unknown or insufficient credentials")
         return render_template("error.html", **page_args())
+    elif request.method == 'GET' and url == '.well-known':
+        return redirect(url_for('static',filename='.well-known/{}'.format(instruction)))
     else:
         return redirect(url_for('display_data',url=url))
 
@@ -2231,6 +2286,7 @@ def get_votes(url):
         return result[url] if url in result else None
     else:
         return None
+
 
 if __name__ == "__main__":
     app.run()
