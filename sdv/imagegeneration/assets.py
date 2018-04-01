@@ -2,6 +2,7 @@ import os
 
 from PIL import Image
 from sdv import app
+from sdv.imagegeneration.tools import cropImg
 
 asset_dir = app.config.get('ASSET_PATH')
 
@@ -10,6 +11,75 @@ overlay_layers = {
     'AlwaysFront',
     'Buildings'
 }
+
+SEASONS = {
+    'spring', 'summer', 'fall', 'winter'
+}
+
+outdoor_tile_sheets = {
+    season: Image.open(os.path.join(asset_dir, 'farm', f'{season}_outdoorsTileSheet.png'))
+    for season in SEASONS
+}
+
+
+def get_spouse_area(spouse_name, season):
+    sprite_sheet = outdoor_tile_sheets[season]
+    spouse_area = Image.new('RGBA', (16 * 4, 16 * 4), (255, 255, 255, 0))
+
+    if spouse_name == 'sam':
+        half_pipe_left = cropImg(sprite_sheet, 25 * 124 + 23, objectSize=(16, 32))
+        half_pipe_right = cropImg(sprite_sheet, 25 * 124 + 24, objectSize=(16, 32))
+        half_pipe_middle = cropImg(sprite_sheet, 25 * 126 + 23, objectSize=(32, 32))
+
+        spouse_area.paste(half_pipe_left, (0, 16), half_pipe_left)
+        spouse_area.paste(half_pipe_middle, (16, 16 * 2), half_pipe_middle)
+        spouse_area.paste(half_pipe_right, (16 * 3, 16), half_pipe_right)
+    elif spouse_name == 'maru':
+        gadget = cropImg(sprite_sheet, 25 * 123 + 24, objectSize=(16, 16))
+
+        spouse_area.paste(gadget, (16 * 2, 16 * 2), gadget)
+    elif spouse_name in {'abigail', 'penny', 'harvey', 'elliott'}:
+        plant_pot_empty = cropImg(sprite_sheet, 25 * 123 + 23, objectSize=(16, 16))
+        plant_pot_full = cropImg(sprite_sheet, 25 * 122 + 23, objectSize=(16, 16))
+
+        spouse_area.paste(plant_pot_full, (0, 16 * 2), plant_pot_full)
+        spouse_area.paste(plant_pot_empty, (16 * 1, 16 * 2), plant_pot_empty)
+        spouse_area.paste(plant_pot_full, (16 * 3, 16 * 2), plant_pot_full)
+    elif spouse_name == 'leah':
+        sculpture = cropImg(sprite_sheet, 25 * 122 + 22, objectSize=(16, 32))
+
+        spouse_area.paste(sculpture, (16, 16), sculpture)
+    elif spouse_name == 'sebastian':
+        bike = cropImg(sprite_sheet, 25 * 155 + 2, objectSize=(16 * 3, 16 * 2))
+
+        spouse_area.paste(bike, (16, 16), bike)
+    elif spouse_name == 'alex':
+        kettle_bell = cropImg(sprite_sheet, 25 * 122 + 24, objectSize=(16, 16))
+        spouse_area.paste(kettle_bell, (0, 16 * 2), kettle_bell)
+    elif spouse_name == 'emily':
+        crystal_blue = cropImg(sprite_sheet, 25 * 153 + 16, objectSize=(16, 16))
+        crystal_green = cropImg(sprite_sheet, 25 * 152 + 17, objectSize=(16, 16 * 2))
+        crystal_pink = cropImg(sprite_sheet, 25 * 157 + 17, objectSize=(16, 16))
+
+        spouse_area.paste(crystal_blue, (16 * 2, 16 * 2), crystal_blue)
+        spouse_area.paste(crystal_blue, (0, 16 * 3), crystal_blue)
+        spouse_area.paste(crystal_green, (0, 16 * 1), crystal_green)
+        spouse_area.paste(crystal_green, (16 * 3, 16 * 1), crystal_green)
+        spouse_area.paste(crystal_pink, (16, 16 * 2), crystal_pink)
+        spouse_area.paste(crystal_pink, (16 * 3, 16 * 3), crystal_pink)
+    elif spouse_name == 'haley':
+        palm = cropImg(sprite_sheet, 25 * 119 + 24, objectSize=(16, 16 * 3))
+
+        spouse_area.paste(palm, (0, 0), palm)
+        spouse_area.paste(palm, (16 * 3, 0), palm)
+    elif spouse_name == 'shane':
+        roof = cropImg(sprite_sheet, 25 * 148 + 22, objectSize=(16 * 3, 16 * 2))
+        body = cropImg(sprite_sheet, 25 * 155 + 15, objectSize=(16 * 3, 16 * 2))
+
+        spouse_area.paste(roof, (16, 0), roof)
+        spouse_area.paste(body, (16, 16 * 2), body)
+
+    return spouse_area
 
 
 def open_nicely(filename):
@@ -131,7 +201,21 @@ def loadFarmAssets(season='spring', base='Default'):
             'water obelisk': Image.open(
                     os.path.join(asset_dir, 'farm', 'buildings', 'Water Obelisk.png'))
         },
-        'binLid': Image.open(os.path.join(asset_dir, 'farm', 'looseSprites', 'binLid.png'))
+        'binLid': Image.open(os.path.join(asset_dir, 'farm', 'looseSprites', 'binLid.png')),
+        'spouseArea': {
+            'sam': {season: get_spouse_area('sam', season) for season in SEASONS},
+            'maru': {season: get_spouse_area('maru', season) for season in SEASONS},
+            'abigail': {season: get_spouse_area('abigail', season) for season in SEASONS},
+            'leah': {season: get_spouse_area('leah', season) for season in SEASONS},
+            'sebastian': {season: get_spouse_area('sebastian', season) for season in SEASONS},
+            'alex': {season: get_spouse_area('alex', season) for season in SEASONS},
+            'penny': {season: get_spouse_area('penny', season) for season in SEASONS},
+            'harvey': {season: get_spouse_area('harvey', season) for season in SEASONS},
+            'elliott': {season: get_spouse_area('elliott', season) for season in SEASONS},
+            'emily': {season: get_spouse_area('emily', season) for season in SEASONS},
+            'haley': {season: get_spouse_area('haley', season) for season in SEASONS},
+            'shane': {season: get_spouse_area('shane', season) for season in SEASONS}
+        }
     }
     return assets
 

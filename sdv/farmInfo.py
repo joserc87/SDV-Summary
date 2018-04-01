@@ -1,5 +1,7 @@
 from PIL import Image
 from collections import namedtuple
+
+from sdv.playerInfo import getPartners
 from sdv.savefile import get_location
 
 map_types = [
@@ -276,7 +278,9 @@ def getFarmInfo(saveFile):
     except Exception as e:
         mapType = 0
 
-    return {'type': map_types[mapType], 'data': farm}
+    spouses = getPartners(root)
+    spouse = spouses[0].find('name').text.lower() if spouses else None
+    return {'type': map_types[mapType], 'data': farm, 'spouse': spouse}
 
 
 def colourBox(x, y, colour, pixels, scale=8):

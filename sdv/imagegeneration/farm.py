@@ -61,6 +61,10 @@ def generateFarm(season, data, assets=None):
     # seed the random number generator so we render the same way every time
     random.seed(0)
 
+    spouse = data.get('spouse')
+    if spouse:
+        farm['buildings'].append(sprite('spouse_area', 69, 8, 4*16, 4*16, 0, 0, 0, 0, 0))
+
     farm = sorted(chain.from_iterable(farm.values()), key=lambda x: x.y)
     floor_types = ['Flooring', 'HoeDirt']
     floor = [i for i in farm if i.name in floor_types]
@@ -293,6 +297,10 @@ def generateFarm(season, data, assets=None):
                                         assets['buildings'][item.type.lower()])
                 except Exception as e:
                     print(e)
+
+            if item.name == 'spouse_area':
+                sprite = assets['spouseArea'][spouse][season]
+                farm_base.paste(sprite, (item.x * 16, item.y*16 - 16 * 2), sprite)
 
             if item.name == "Grass":
                 try:
