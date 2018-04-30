@@ -278,8 +278,8 @@ def getFarmInfo(saveFile):
     except Exception as e:
         mapType = 0
 
-    spouses = getPartners(root)
-    spouse = spouses[0].find('name').text.lower() if spouses else None
+    spouse = getPartners(root)
+    spouse = spouse.lower() if spouse else None
     return {'type': map_types[mapType], 'data': farm, 'spouse': spouse}
 
 

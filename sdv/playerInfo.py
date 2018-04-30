@@ -21,13 +21,28 @@ class player:
         print(achievements)
 
 
+# def getPartners(root):
+#     partners = []
+#     for location in root.find('locations').iter('GameLocation'):
+#         for npc in location.iter('NPC'):
+#             if int(npc.find('daysMarried').text) > 0:
+#                 partners.append(npc)
+#     return partners
+
+
 def getPartners(root):
-    partners = []
-    for location in root.find('locations').iter('GameLocation'):
-        for npc in location.iter('NPC'):
-            if int(npc.find('daysMarried').text) > 0:
-                partners.append(npc)
-    return partners
+    '''
+    for v1.3; returns partner name
+    '''
+    player = root.find("player")
+    try:
+        if player.find("spouse").text:
+            partner = player.find("spouse").text
+            if partner in validate.marriage_candidates:
+                return partner
+    except AttributeError:
+        pass
+    return None
 
 
 def getChildren(root):
@@ -40,7 +55,13 @@ def getChildren(root):
 
 def getStats(root):
     game_stats = {}
+
     stats_node = root.find('stats')
+    # pre v1.3
+    if stats_node == None:
+        stats_node = root.find("player").find('stats')
+        # v1.3
+
     for statistic in stats_node:
         stattag = statistic.tag[0].upper() + statistic.tag[1:]
         if stattag not in game_stats.keys():
@@ -181,17 +202,10 @@ def playerInfo(saveFile):
         info['petName'] = getNPCs(root, petLocations, petTypes)[0].find('name').text
     except IndexError:
         pass
-
-    # Information for portrait generation
+        
     p = {}
-    partners = getPartners(root)
-    if partners:
-        partner_name = partners[0].find('name').text
-        # print(partner_name)
-        assert partner_name in validate.marriage_candidates
-        p['partner'] = partner_name
-    else:
-        p['partner'] = None
+    # Information for portrait generation
+    p['partner'] = getPartners(root)
     p['cat'] = strToBool(info['catPerson'])
     p['children'] = [(int(child.find('gender').text), strToBool(child.find('darkSkinned').text),int(child.find('daysOld').text),child.find('name').text) for child in player_children]
 
@@ -202,7 +216,7 @@ def playerInfo(saveFile):
 
 
 def main():
-    saveFile = savefile.savefile("./saves/Kristi_119549314")
+    saveFile = savefile.savefile("./OneDotThree_184790837")
     p = player(saveFile)
     (p.getPlayerInfo())
 
