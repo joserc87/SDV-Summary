@@ -4,7 +4,17 @@ from sdv.savefile import get_location
 
 ns = "{http://www.w3.org/2001/XMLSchema-instance}"
 animal_habitable_buildings = ['Coop', 'Barn', 'SlimeHutch']
-
+playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel',
+            'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina',
+            'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin',
+            'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor','dayOfMonthForSaveGame','seasonForSaveGame','yearForSaveGame']
+            # 'dateStringForSaveGame' removed
+professions = ['Rancher', 'Tiller', 'Coopmaster', 'Shepherd', 'Artisan', 'Agriculturist', 'Fisher', 'Trapper',
+            'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist',
+            'Tracker','Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout',
+            'Brute', 'Defender','Acrobat', 'Desperado']
+petTypes = ['Cat', 'Dog']
+petLocations = ['Farm', 'FarmHouse']
 
 class player:
     """docstring for player"""
@@ -30,14 +40,13 @@ class player:
 #     return partners
 
 
-def getPartners(root):
-    '''
-    for v1.3; returns partner name
-    '''
-    player = root.find("player")
+def getPartners(rpof):
+    # rpof = "root, player, or farmhand" - indicates the variable can be any one of these three (depending on the save version)
+
+    # player = root.find("player")
     try:
-        if player.find("spouse").text:
-            partner = player.find("spouse").text
+        if rpof.find("spouse").text:
+            partner = rpof.find("spouse").text
             if partner in validate.marriage_candidates:
                 return partner
     except AttributeError:
@@ -45,22 +54,18 @@ def getPartners(root):
     return None
 
 
-def getChildren(root):
+def getChildren(rpof):
     children = []
     childType = ['Child']
     childLocation = ['Farm', 'FarmHouse']
-    child_nodes = getNPCs(root, childLocation, childType)
+    child_nodes = getNPCs(rpof, childLocation, childType)
     return child_nodes
 
 
-def getStats(root):
+def getStats(rpof):
     game_stats = {}
 
-    stats_node = root.find('stats')
-    # pre v1.3
-    if stats_node == None:
-        stats_node = root.find("player").find('stats')
-        # v1.3
+    stats_node = rpof.find('stats')
 
     for statistic in stats_node:
         stattag = statistic.tag[0].upper() + statistic.tag[1:]
@@ -119,32 +124,63 @@ def strToBool(x):
     else:
         return False
 
+def v1_3(root):
+    try:
+        v1_3 = True if strToBool(root.find('hasApplied1_3_UpdateChanges').text) else False
+    except:
+        v1_3 = False
+    return v1_3
 
 def playerInfo(saveFile):
-    playerTags = ['name', 'isMale', 'farmName', 'favoriteThing', 'catPerson', 'deepestMineLevel', 'farmingLevel',
-                'miningLevel', 'combatLevel', 'foragingLevel', 'fishingLevel', 'professions', 'maxHealth', 'maxStamina',
-                'maxItems', 'money', 'totalMoneyEarned', 'millisecondsPlayed', 'friendships', 'shirt', 'hair', 'skin',
-                'accessory', 'facialHair', 'hairstyleColor', 'pantsColor', 'newEyeColor','dayOfMonthForSaveGame','seasonForSaveGame','yearForSaveGame']
-                # 'dateStringForSaveGame' removed
-    professions = ['Rancher', 'Tiller', 'Coopmaster', 'Shepherd', 'Artisan', 'Agriculturist', 'Fisher', 'Trapper',
-                'Angler', 'Pirate', 'Mariner', 'Luremaster', 'Forester', 'Gatherer', 'Lumberjack', 'Tapper', 'Botanist',
-                'Tracker','Miner', 'Geologist', 'Blacksmith', 'Prospector', 'Excavator', 'Gemologist', 'Fighter', 'Scout',
-                'Brute', 'Defender','Acrobat', 'Desperado']
     root = saveFile.getRoot()
 
-    player = root.find("player")
+    if v1_3(root):
+        players = [root.find('player')]
+        for value in root.iter('farmhand'):
+            if value.find('name').text:
+                players.append(value)
+    else:
+        players = [root]
+
     player_children = getChildren(root)
+    info = get_player_or_farmhand_info(players[0],player_children)
+
+    # Information from elsewhere
+    # UID for save file
+    info['uniqueIDForThisGame'] = int(root.find('uniqueIDForThisGame').text)
+
+    season = root.find('currentSeason').text
+    assert season in validate.seasons
+    info['currentSeason'] = season
+
+    # Collecting pet name
+    try:
+        info['petName'] = getNPCs(root, petLocations, petTypes)[0].find('name').text
+    except IndexError:
+        pass
+
+    info['animals'] = json.dumps(getAnimals(root))
+
+    if len(players) > 1:
+        info['farmhands'] = {}
+        for farmhand in players[1:]:
+            info['farmhands'][farmhand.find('name').text] = get_player_or_farmhand_info(farmhand)
+
+    # print(info)
+
+    return info
+
+def get_player_or_farmhand_info(node,player_children=[]):
+    # Collect information stored in the player tag
     child_names = [c.find('name').text for c in player_children]
     info = {}
-
-    # Collect information stored in the player tag
     for tag in playerTags:
         try:
-            if player.find(tag).text != None:
-                s = player.find(tag).text
+            if node.find(tag).text != None:
+                s = node.find(tag).text
             else:
                 if tag == "professions":
-                    profs = player.find(tag)
+                    profs = node.find(tag)
                     s = []
                     for a in profs.iter("int"):
                         a = int(a.text)
@@ -152,7 +188,7 @@ def playerInfo(saveFile):
                             s.append(professions[a])
                 if tag == "friendships":
                     s = {}
-                    fship = player.find(tag)
+                    fship = node.find(tag)
                     for item in fship:
                         name = item.find("key").find('string').text
                         if name not in child_names:
@@ -162,16 +198,16 @@ def playerInfo(saveFile):
                                 s[name] = rating
 
                 if tag in ['hairstyleColor', 'pantsColor', 'newEyeColor']:
-                    red = int(player.find(tag).find('R').text)
+                    red = int(node.find(tag).find('R').text)
                     assert red >= 0 and red <= 255
 
-                    green = int(player.find(tag).find('G').text)
+                    green = int(node.find(tag).find('G').text)
                     assert green >= 0 and green <= 255
 
-                    blue = int(player.find(tag).find('B').text)
+                    blue = int(node.find(tag).find('B').text)
                     assert blue >= 0 and blue <= 255
 
-                    alpha = int(player.find(tag).find('A').text)
+                    alpha = int(node.find(tag).find('A').text)
                     assert alpha >= 0 and alpha <= 255
 
                     s = [red, green, blue, alpha]
@@ -184,33 +220,16 @@ def playerInfo(saveFile):
         except AttributeError:
             pass
 
-    # Information from elsewhere
-    # UID for save file
-    info['uniqueIDForThisGame'] = int(root.find('uniqueIDForThisGame').text)
-
-    season = root.find('currentSeason').text
-    assert season in validate.seasons
-    info['currentSeason'] = season
-
     # Collecting player stats
-    info['stats'] = getStats(root)
+    info['stats'] = getStats(node)
 
-    # Collecting pet name
-    petTypes = ['Cat', 'Dog']
-    petLocations = ['Farm', 'FarmHouse']
-    try:
-        info['petName'] = getNPCs(root, petLocations, petTypes)[0].find('name').text
-    except IndexError:
-        pass
-        
     p = {}
     # Information for portrait generation
-    p['partner'] = getPartners(root)
-    p['cat'] = strToBool(info['catPerson'])
+    p['partner'] = getPartners(node) #returns the name of the partner, nothing else
+    p['cat'] = strToBool(info['catPerson']) #true or false
+    #children is a problem though. because it doesn't identify parenthood.
     p['children'] = [(int(child.find('gender').text), strToBool(child.find('darkSkinned').text),int(child.find('daysOld').text),child.find('name').text) for child in player_children]
-
     info['portrait_info'] = json.dumps(p)
-    info['animals'] = json.dumps(getAnimals(root))
 
     return info
 

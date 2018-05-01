@@ -26,6 +26,8 @@ import sdv.imgur
 import patreon
 import defusedxml
 import psycopg2
+import psycopg2.extras
+psycopg2.extras.register_json(oid=3802, array_oid=3807, globally=True)
 import requests
 
 from sdv.utils.log import app_logger
@@ -1283,7 +1285,10 @@ def insert_info(player_info,farm_info,md5_info):
     values = []
     # player_info['date'] = ['Spring','Summer','Autumn','Winter'][int(((player_info['stats']['DaysPlayed']%(28*4))-((player_info['stats']['DaysPlayed']%(28*4))%(28)))/28)]+' '+str((player_info['stats']['DaysPlayed']%(28*4))%(28))+', Year '+str(((player_info['stats']['DaysPlayed']-player_info['stats']['DaysPlayed']%(28*4))/(28*4))+1)
     for key in player_info.keys():
-        if type(player_info[key]) == list:
+        if key == 'farmhands':
+            columns.append(key)
+            values.append(json.dumps(player_info[key]))
+        elif type(player_info[key]) == list:
             for i,item in enumerate(player_info[key]):
                 columns.append(key.replace(' ','_') + str(i))
                 values.append(str(item))

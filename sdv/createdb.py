@@ -207,7 +207,8 @@ database_structure_dict = {'md5':'TEXT',
 'statsItemsForaged':'BIGINT',
 'dayOfMonthForSaveGame':'TEXT',
 'seasonForSaveGame':'TEXT',
-'yearForSaveGame':'TEXT'}
+'yearForSaveGame':'TEXT',
+'farmhands':'JSONB'}
 
 if app.config['USE_SQLITE']==True:
 	database_structure_dict['id']='INTEGER PRIMARY KEY AUTOINCREMENT'
