@@ -63,7 +63,7 @@ def generateFarm(season, data, assets=None):
 
     spouse = data.get('spouse')
     if spouse:
-        farm['buildings'].append(sprite('spouse_area', 69, 8, 4*16, 4*16, 0, 0, 0, 0, 0))
+        farm['buildings'].append(sprite('spouse_area', 69, 8, 4 * 16, 4 * 16, 0, 0, 0, 0, 0))
 
     farm = sorted(chain.from_iterable(farm.values()), key=lambda x: x.y)
     floor_types = ['Flooring', 'HoeDirt']
@@ -198,9 +198,9 @@ def generateFarm(season, data, assets=None):
                     elif season == 'summer':
                         season_offset = 4 + item.index * 2
                     elif season == 'fall':
-                        season_offset = 8*3
+                        season_offset = 8 * 3
                     elif season == 'winter':
-                        season_offset = 8*3 + 4
+                        season_offset = 8 * 3 + 4
                 elif item.growth == 2:
                     if season == 'spring':
                         season_offset = 0
@@ -209,16 +209,17 @@ def generateFarm(season, data, assets=None):
                     elif season == 'fall':
                         season_offset = 3
                     elif season == 'winter':
-                        season_offset = 8*3
+                        season_offset = 8 * 3
 
-                sprite_index = [8*14, 8*0, 8*8][item.growth] + season_offset
+                sprite_index = [8 * 14, 8 * 0, 8 * 8][item.growth] + season_offset
 
                 obj_img = cropImg(assets['bushes'], sprite_index, objectSize=sprite_size)
 
                 if item.flipped:
                     obj_img = obj_img.transpose(Image.FLIP_LEFT_RIGHT)
 
-                farm_base.paste(obj_img, (item.x * 16, item.y * 16 - (sprite_size[1])+16), obj_img)
+                farm_base.paste(obj_img, (item.x * 16, item.y * 16 - (sprite_size[1]) + 16),
+                                obj_img)
 
             if item.name == 'ResourceClump':
                 obj_img = cropImg(assets['objects'], item.type, objectSize=(32, 32))
@@ -286,21 +287,29 @@ def generateFarm(season, data, assets=None):
                 try:
                     if item.type.lower() == "junimo hut":
                         offsety = assets['buildings'][item.type.lower()][season].height - (
-                        item.h) * 16
+                            item.h) * 16
                         farm_base.paste(assets['buildings'][item.type.lower()][season],
                                         (item.x * 16, item.y * 16 - offsety),
                                         assets['buildings'][item.type.lower()][season])
                     else:
                         offsety = assets['buildings'][item.type.lower()].height - (item.h) * 16
-                        farm_base.paste(assets['buildings'][item.type.lower()],
+                        asset = assets['buildings'][item.type.lower()]
+                        if "cabin" in item.type.lower():
+                            asset = cropImg(
+                                    asset,
+                                    item.orientation,
+                                    (item.w * 16, asset.height),
+                                    (item.w * 16, asset.height),
+                            )
+                        farm_base.paste(asset,
                                         (item.x * 16, item.y * 16 - offsety),
-                                        assets['buildings'][item.type.lower()])
+                                        asset)
                 except Exception as e:
                     print(e)
 
             if item.name == 'spouse_area':
                 sprite = assets['spouseArea'][spouse][season]
-                farm_base.paste(sprite, (item.x * 16, item.y*16 - 16 * 2), sprite)
+                farm_base.paste(sprite, (item.x * 16, item.y * 16 - 16 * 2), sprite)
 
             if item.name == "Grass":
                 try:

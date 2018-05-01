@@ -22,6 +22,17 @@ outdoor_tile_sheets = {
 }
 
 
+def bin_lid():
+    return Image.open(os.path.join(asset_dir, 'farm', 'looseSprites', 'binLid.png'))
+
+
+def shipping_bin():
+    base = Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Shipping Bin.png'))
+    lid = bin_lid()
+    base.paste(lid, (-1, 2), lid)
+    return base
+
+
 def get_spouse_area(spouse_name, season):
     sprite_sheet = outdoor_tile_sheets[season]
     spouse_area = Image.new('RGBA', (16 * 4, 16 * 4), (255, 255, 255, 0))
@@ -199,9 +210,19 @@ def loadFarmAssets(season='spring', base='Default'):
             'mill': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Mill.png')),
             'shed': Image.open(os.path.join(asset_dir, 'farm', 'buildings', 'Shed.png')),
             'water obelisk': Image.open(
-                    os.path.join(asset_dir, 'farm', 'buildings', 'Water Obelisk.png'))
+                    os.path.join(asset_dir, 'farm', 'buildings', 'Water Obelisk.png')),
+            'log cabin': Image.open(
+                    os.path.join(asset_dir, 'farm', 'buildings', 'Log Cabin.png')
+            ),
+            'plank cabin': Image.open(
+                    os.path.join(asset_dir, 'farm', 'buildings', 'Plank Cabin.png')
+            ),
+            'stone cabin': Image.open(
+                    os.path.join(asset_dir, 'farm', 'buildings', 'Stone Cabin.png')
+            ),
+            'shipping bin': shipping_bin(),
         },
-        'binLid': Image.open(os.path.join(asset_dir, 'farm', 'looseSprites', 'binLid.png')),
+        'binLid': bin_lid(),
         'spouseArea': {
             'sam': {season: get_spouse_area('sam', season) for season in SEASONS},
             'maru': {season: get_spouse_area('maru', season) for season in SEASONS},

@@ -237,7 +237,10 @@ def getFarmInfo(saveFile):
         w = int(item.find('tilesWide').text)
         h = int(item.find('tilesHigh').text)
         t = item.find('buildingType').text
-        s.append(sprite(name, x, y, w, h, None, t, None, None, None))
+        o = None
+        if 'cabin' in t.lower():
+            o = min(int(item.find('indoors').find('farmhand').find('houseUpgradeLevel').text), 2)
+        s.append(sprite(name, x, y, w, h, None, t, None, None, o))
 
     farm['buildings'] = s
 
