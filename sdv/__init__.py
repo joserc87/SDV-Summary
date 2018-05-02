@@ -9,6 +9,7 @@ from flask_mail import Mail, Message
 from werkzeug import secure_filename, check_password_hash
 from werkzeug.contrib.fixers import ProxyFix
 from werkzeug.security import generate_password_hash
+from werkzeug.contrib.cache import SimpleCache
 from google_measurement_protocol import Event, report
 import time
 import os
@@ -67,6 +68,8 @@ mail = Mail()
 censor = Censor()
 
 random.seed()
+
+cache = SimpleCache()
 
 def create_app(config_name=None):
     logger.info('Creating flask app...')
@@ -241,7 +244,16 @@ def jsonifyRecents():
 
 @app.route('/_full_recents')
 def get_formatted_recents():
+    token = request.args.get('token')
+
     recents = get_recents()
+    mini_recents = [str(post[0])+str(post[5])+str(post[6])+str(post[8])+str(get_votes(post[0])) for post in recents['posts']]
+    mini_string = ''.join(mini_recents).encode()
+    new_token = hashlib.md5(mini_string).hexdigest()
+
+    if token == new_token:
+        return '', 202
+
     vote = None
     votes = None
     if logged_in():
@@ -250,7 +262,7 @@ def get_formatted_recents():
         for recent in recents['posts']:
             votes[recent[0]] = get_votes(recent[0])
     text = render_template('recents.html',recents=recents,vote=vote)
-    return jsonify(text=text,votes=votes)
+    return jsonify(text=text, votes=votes, token=new_token)
 
 
 def generate_bcrypt_password_hash(word):
@@ -584,7 +596,6 @@ def file_uploaded(inputfile):
     memfile = io.BytesIO()
     inputfile.save(memfile)
     md5_info = md5(memfile)
-    save = savefile(memfile.getvalue(), True)
     try:
         save = savefile(memfile.getvalue(), True)
         player_info = GameInfo(save).get_info()
@@ -608,6 +619,11 @@ def file_uploaded(inputfile):
     except AssertionError as e:
         g.error = _("Savegame failed an internal check (often caused by mods) sorry :(")
         return {'type':'render','target':'index.html','parameters':{"error":g.error}}
+    except Exception as e:
+        logger.error(f"An unexpected error occoured: {e}")
+        g.error = _("An unexpected error has occoured.")
+        return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
+
     dupe = is_duplicate(md5_info,player_info)
     if dupe != False:
         session[dupe[0]] = md5_info
@@ -629,10 +645,13 @@ def file_uploaded(inputfile):
             cur.execute('UPDATE playerinfo SET savefileLocation='+app.sqlesc+', series_id='+app.sqlesc+', owner_id='+app.sqlesc+' WHERE url='+app.sqlesc+';',(filename,series_id,owner_id,outcome))
             db.commit()
         else:
-            if g.error == None:
+            user_error = _("An error occurred whilst processing the save file.")
+            if g.error is None:
                 g.error = _("Error occurred inserting information into the database!")
-            return {'type':'render','target':'index.html','parameters':{"error":g.error}}
+            logger.error(f'An error occurred when inserting save to databae: {g.error}')
+            return {'type':'render', 'target':'index.html', 'parameters': {"error": user_error}}
         imageDrone.process_queue()
+        cache.delete('recent_uploads')
         memfile.close()
     if outcome != False:
         session.permanent = True
@@ -1252,8 +1271,11 @@ def get_planner_link(url):
             return {'status':'unknown_error'}
 
 
-def get_recents(n=6,**kwargs):
-    recents = get_entries(n,**kwargs)
+def get_recents(n=6, **kwargs):
+    recents = cache.get('recent_uploads')
+    if not recents:
+        recents = get_entries(n,**kwargs)
+        cache.set('recent_uploads', recents, timeout=60*60)
     return recents
 
 
@@ -1555,6 +1577,7 @@ def _op_del(url):
             return redirect(url_for('home'))
         else:
             g.error = outcome
+        cache.delete('recent_uploads')
     else:
         g.error = _('You do not own this farm')
     return render_template("error.html", **page_args())
@@ -1575,6 +1598,7 @@ def _op_delall(url):
         if outcome != True:
             g.error = outcome
             return render_template("error.html", **page_args())
+    cache.delete('recent_uploads')
     return redirect(url_for('home'))
 
 
@@ -2238,6 +2262,7 @@ def submit_vote():
     if logged_in():
         if request.method == 'POST':
             if 'vote' in request.form:
+                cache.delete('recent_uploads')
                 return json.dumps(handle_vote(get_logged_in_user(),request.form))
     else:
         return _('not logged in')
