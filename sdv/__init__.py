@@ -583,6 +583,7 @@ def file_uploaded(inputfile):
     memfile = io.BytesIO()
     inputfile.save(memfile)
     md5_info = md5(memfile)
+
     try:
         save = savefile(memfile.getvalue(), True)
         player_info = playerInfo(save)
@@ -606,6 +607,11 @@ def file_uploaded(inputfile):
     except AssertionError as e:
         g.error = _("Savegame failed an internal check (often caused by mods) sorry :(")
         return {'type':'render','target':'index.html','parameters':{"error":g.error}}
+    except Exception as e:
+        logger.error(f"An unexpected error occoured: {e}")
+        g.error = _("An unexpected error has occoured.")
+        return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
+
     dupe = is_duplicate(md5_info,player_info)
     if dupe != False:
         session[dupe[0]] = md5_info
@@ -627,9 +633,11 @@ def file_uploaded(inputfile):
             cur.execute('UPDATE playerinfo SET savefileLocation='+app.sqlesc+', series_id='+app.sqlesc+', owner_id='+app.sqlesc+' WHERE url='+app.sqlesc+';',(filename,series_id,owner_id,outcome))
             db.commit()
         else:
-            if g.error == None:
+            user_error = _("An error occurred whilst processing the save file.")
+            if g.error is None:
                 g.error = _("Error occurred inserting information into the database!")
-            return {'type':'render','target':'index.html','parameters':{"error":g.error}}
+            logger.error(f'An error occurred when inserting save to databae: {g.error}')
+            return {'type':'render', 'target':'index.html', 'parameters': {"error": user_error}}
         imageDrone.process_queue()
         memfile.close()
     if outcome != False:
