@@ -243,7 +243,16 @@ def jsonifyRecents():
 
 @app.route('/_full_recents')
 def get_formatted_recents():
+    token = request.args.get('token')
+
     recents = get_recents()
+    mini_recents = [str(post[0])+str(post[5])+str(post[6])+str(post[8])+str(get_votes(post[0])) for post in recents['posts']]
+    mini_string = ''.join(mini_recents).encode()
+    new_token = hashlib.md5(mini_string).hexdigest()
+
+    if token == new_token:
+        return '', 202
+
     vote = None
     votes = None
     if logged_in():
@@ -252,7 +261,7 @@ def get_formatted_recents():
         for recent in recents['posts']:
             votes[recent[0]] = get_votes(recent[0])
     text = render_template('recents.html',recents=recents,vote=vote)
-    return jsonify(text=text,votes=votes)
+    return jsonify(text=text, votes=votes, token=new_token)
 
 
 def generate_bcrypt_password_hash(word):
