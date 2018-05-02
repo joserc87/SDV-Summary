@@ -1577,6 +1577,7 @@ def _op_del(url):
             return redirect(url_for('home'))
         else:
             g.error = outcome
+        cache.delete('recent_uploads')
     else:
         g.error = _('You do not own this farm')
     return render_template("error.html", **page_args())
@@ -1597,6 +1598,7 @@ def _op_delall(url):
         if outcome != True:
             g.error = outcome
             return render_template("error.html", **page_args())
+    cache.delete('recent_uploads')
     return redirect(url_for('home'))
 
 
