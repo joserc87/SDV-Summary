@@ -32,7 +32,8 @@ import requests
 
 from sdv.utils.log import app_logger
 
-from sdv.playerInfo import playerInfo
+# from sdv.playerInfo import playerInfo
+from sdv.playerinfo2 import GameInfo
 from sdv.farmInfo import getFarmInfo
 from sdv.bigbase import dec2big
 from sdv.parsers.json import parse_json, json_layout_map
@@ -583,9 +584,10 @@ def file_uploaded(inputfile):
     memfile = io.BytesIO()
     inputfile.save(memfile)
     md5_info = md5(memfile)
+    save = savefile(memfile.getvalue(), True)
     try:
         save = savefile(memfile.getvalue(), True)
-        player_info = playerInfo(save)
+        player_info = GameInfo(save).get_info()
     except defusedxml.common.EntitiesForbidden:
         g.error = _("I don't think that's very funny")
         return {'type':'render','target':'index.html','parameters':{"error":g.error}}
@@ -826,7 +828,7 @@ def _api_zip_uploaded(inputfile):
     error = None
     try:
         save = savefile(memfile, True)
-        player_info = playerInfo(save)
+        player_info = GameInfo(save).get_info()
     except (defusedxml.common.EntitiesForbidden,IOError,AttributeError,ParseError,AssertionError):
         return {"error":"invalid_file_error"}
     dupe = is_duplicate(md5_info,player_info)

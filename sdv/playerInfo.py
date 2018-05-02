@@ -143,7 +143,7 @@ def playerInfo(saveFile):
         players = [root]
 
     player_children = getChildren(root)
-    info = get_player_or_farmhand_info(players[0],player_children)
+    info = get_player_or_farmhand_info(players[0],v1_3,player_children)
 
     # Information from elsewhere
     # UID for save file
@@ -164,13 +164,13 @@ def playerInfo(saveFile):
     if len(players) > 1:
         info['farmhands'] = {}
         for farmhand in players[1:]:
-            info['farmhands'][farmhand.find('name').text] = get_player_or_farmhand_info(farmhand)
+            info['farmhands'][farmhand.find('name').text] = get_player_or_farmhand_info(farmhand,v1_3,player_children)
 
     # print(info)
 
     return info
 
-def get_player_or_farmhand_info(node,player_children=[]):
+def get_player_or_farmhand_info(node,v1_3,player_children=[]):
     # Collect information stored in the player tag
     child_names = [c.find('name').text for c in player_children]
     info = {}
@@ -188,7 +188,10 @@ def get_player_or_farmhand_info(node,player_children=[]):
                             s.append(professions[a])
                 if tag == "friendships":
                     s = {}
-                    fship = node.find(tag)
+                    if v1_3:
+                        fship = node.find("friendshipData")
+                    else:
+                        fship = node.find(tag)
                     for item in fship:
                         name = item.find("key").find('string').text
                         if name not in child_names:

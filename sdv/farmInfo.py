@@ -1,7 +1,8 @@
 from PIL import Image
 from collections import namedtuple
 
-from sdv.playerInfo import getPartners
+# from sdv.playerInfo import getPartners
+from sdv.playerinfo2 import get_partner
 from sdv.savefile import get_location
 
 map_types = [
@@ -281,7 +282,7 @@ def getFarmInfo(saveFile):
     except Exception as e:
         mapType = 0
 
-    spouse = getPartners(root.find('player'))
+    spouse = get_partner(root.find('player'))
     spouse = spouse.lower() if spouse else None
     print(spouse)
     return {'type': map_types[mapType], 'data': farm, 'spouse': spouse}
