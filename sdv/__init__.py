@@ -9,7 +9,6 @@ from flask_mail import Mail, Message
 from werkzeug import secure_filename, check_password_hash
 from werkzeug.contrib.fixers import ProxyFix
 from werkzeug.security import generate_password_hash
-from werkzeug.contrib.cache import SimpleCache
 from google_measurement_protocol import Event, report
 import time
 import os
@@ -68,8 +67,6 @@ mail = Mail()
 censor = Censor()
 
 random.seed()
-
-cache = SimpleCache()
 
 def create_app(config_name=None):
     logger.info('Creating flask app...')
@@ -244,16 +241,7 @@ def jsonifyRecents():
 
 @app.route('/_full_recents')
 def get_formatted_recents():
-    token = request.args.get('token')
-
     recents = get_recents()
-    mini_recents = [str(post[0])+str(post[5])+str(post[6])+str(post[8])+str(get_votes(post[0])) for post in recents['posts']]
-    mini_string = ''.join(mini_recents).encode()
-    new_token = hashlib.md5(mini_string).hexdigest()
-
-    if token == new_token:
-        return '', 202
-
     vote = None
     votes = None
     if logged_in():
@@ -262,7 +250,7 @@ def get_formatted_recents():
         for recent in recents['posts']:
             votes[recent[0]] = get_votes(recent[0])
     text = render_template('recents.html',recents=recents,vote=vote)
-    return jsonify(text=text, votes=votes, token=new_token)
+    return jsonify(text=text,votes=votes)
 
 
 def generate_bcrypt_password_hash(word):
@@ -651,7 +639,6 @@ def file_uploaded(inputfile):
             logger.error('An error occurred when inserting save to database: {}'.format(g.error))
             return {'type':'render', 'target':'index.html', 'parameters': {"error": user_error}}
         imageDrone.process_queue()
-        cache.delete('recent_uploads')
         memfile.close()
     if outcome != False:
         session.permanent = True
@@ -1271,11 +1258,8 @@ def get_planner_link(url):
             return {'status':'unknown_error'}
 
 
-def get_recents(n=6, **kwargs):
-    recents = cache.get('recent_uploads')
-    if not recents:
-        recents = get_entries(n,**kwargs)
-        cache.set('recent_uploads', recents, timeout=60*60)
+def get_recents(n=6,**kwargs):
+    recents = get_entries(n,**kwargs)
     return recents
 
 
@@ -1577,7 +1561,6 @@ def _op_del(url):
             return redirect(url_for('home'))
         else:
             g.error = outcome
-        cache.delete('recent_uploads')
     else:
         g.error = _('You do not own this farm')
     return render_template("error.html", **page_args())
@@ -1598,7 +1581,6 @@ def _op_delall(url):
         if outcome != True:
             g.error = outcome
             return render_template("error.html", **page_args())
-    cache.delete('recent_uploads')
     return redirect(url_for('home'))
 
 
@@ -2262,7 +2244,6 @@ def submit_vote():
     if logged_in():
         if request.method == 'POST':
             if 'vote' in request.form:
-                cache.delete('recent_uploads')
                 return json.dumps(handle_vote(get_logged_in_user(),request.form))
     else:
         return _('not logged in')

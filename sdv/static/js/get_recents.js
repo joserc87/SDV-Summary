@@ -1,26 +1,29 @@
-var token = undefined;
-
 function get_success(fulldata) {
-  token = fulldata.token;
-  $('#recentFarms').replaceWith(fulldata.text);
-  votestate = fulldata.votes;
-  voting_setup();
+	$('#recentFarms').replaceWith(fulldata.text);
+	//console.log('added new html...')
+	votestate = fulldata.votes;
+	voting_setup();
+	//console.log('done voting setup, complete!')
 };
 
-function get_recents() {
-  $.ajax(
-      '/_full_recents',
-      {
-        data: { token: token },
-        statusCode: {
-          202: function () {
-          },
-          200: get_success,
-        },
-      },
-  );
+function get_recents(){
+	$.getJSON('/_mini_recents', {}, function(data){
+		//console.log('requested new data...')
+		if (JSON.stringify(data) != current_data) {
+				//console.log('data was new!')
+				current_data = JSON.stringify(data);
+				$.getJSON('/_full_recents', {}, function(fulldata){
+					get_success(fulldata);
+				});
+		}
+	});
 }
 
-$(document).ready(function () {
-  setInterval(get_recents, 3000);
+var current_data;
+
+$(document).ready(function(){
+	$.getJSON('/_mini_recents', {}, function(data) {
+			current_data = JSON.stringify(data);
+	});
+	setInterval(get_recents, 3000);
 });
