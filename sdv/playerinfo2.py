@@ -133,6 +133,13 @@ class Player:
         self.node = node
         self.set_children(children)
         self.v1_3 = v1_3
+        self.get_player_tags()
+
+
+    def get_player_tags(self):
+        self.player_tags = list(playerTags)
+        if self.v1_3:
+            self.player_tags[self.player_tags.index("friendships")] = "friendshipData"
 
 
     def set_children(self,children):
@@ -143,24 +150,24 @@ class Player:
     def get_info(self):
         if not hasattr(self,'info'):
             self.info = {}
-            for tag in playerTags:
+            for tag in self.player_tags:
                 try:
                     if self.node.find(tag).text != None:
                         self.info[tag] = self.node.find(tag).text
                     else:
                         if tag == "professions":
                             self.info["professions"] = get_professions(self.node)
-                        if tag == "friendships":
-                            self.info["friendships"] = get_friendships(self.node)
-                        if tag in ['hairstyleColor', 'pantsColor', 'newEyeColor']:
+                        elif tag in ["friendships", "friendshipData"]:
+                            self.info["friendships"] = get_friendships(self.node,self.v1_3)
+                        elif tag in ['hairstyleColor', 'pantsColor', 'newEyeColor']:
                             self.info[tag] = [
                             int(self.node.find(tag).find('R').text),
                             int(self.node.find(tag).find('G').text),
                             int(self.node.find(tag).find('B').text),
                             int(self.node.find(tag).find('A').text)]
                             assert all([True if i >= 0 and i <= 255 else False for i in self.info[tag]])
-                    if tag in ['name', 'farmName', 'favoriteThing']:
-                        assert len(tag) <= 32
+                    # if tag in ['name', 'farmName', 'favoriteThing']:
+                    #     assert len(tag) <= 32
                 except AttributeError:
                     pass
 
@@ -196,7 +203,10 @@ def get_friendships(node,v1_3):
     for item in fship:
         name = item.find("key").find('string').text
         if name in validate.giftable_npcs:
-            rating = int(item.find('value').find('ArrayOfInt').find('int').text)
+            if v1_3:
+                rating = int(item.find('value').find('Friendship').find('Points').text)
+            else:
+                rating = int(item.find('value').find('ArrayOfInt').find('int').text)
             assert rating >= 0 and rating < 14*250
             s[name] = rating
     return s

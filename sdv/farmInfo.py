@@ -284,7 +284,6 @@ def getFarmInfo(saveFile):
 
     spouse = get_partner(root.find('player'))
     spouse = spouse.lower() if spouse else None
-    print(spouse)
     return {'type': map_types[mapType], 'data': farm, 'spouse': spouse}
 
 
