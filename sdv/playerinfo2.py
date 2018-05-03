@@ -131,6 +131,7 @@ class Player:
     def __init__(self,node,children,v1_3):
         super().__init__()
         self.node = node
+        self.player_node = self.node if v1_3 else self.node.find('player')
         self.set_children(children)
         self.v1_3 = v1_3
         self.get_player_tags()
@@ -152,19 +153,19 @@ class Player:
             self.info = {}
             for tag in self.player_tags:
                 try:
-                    if self.node.find(tag).text != None:
-                        self.info[tag] = self.node.find(tag).text
+                    if self.player_node.find(tag).text != None:
+                        self.info[tag] = self.player_node.find(tag).text
                     else:
                         if tag == "professions":
-                            self.info["professions"] = get_professions(self.node)
+                            self.info["professions"] = get_professions(self.player_node)
                         elif tag in ["friendships", "friendshipData"]:
-                            self.info["friendships"] = get_friendships(self.node,self.v1_3)
+                            self.info["friendships"] = get_friendships(self.player_node,self.v1_3)
                         elif tag in ['hairstyleColor', 'pantsColor', 'newEyeColor']:
                             self.info[tag] = [
-                            int(self.node.find(tag).find('R').text),
-                            int(self.node.find(tag).find('G').text),
-                            int(self.node.find(tag).find('B').text),
-                            int(self.node.find(tag).find('A').text)]
+                            int(self.player_node.find(tag).find('R').text),
+                            int(self.player_node.find(tag).find('G').text),
+                            int(self.player_node.find(tag).find('B').text),
+                            int(self.player_node.find(tag).find('A').text)]
                             assert all([True if i >= 0 and i <= 255 else False for i in self.info[tag]])
                     # if tag in ['name', 'farmName', 'favoriteThing']:
                     #     assert len(tag) <= 32
