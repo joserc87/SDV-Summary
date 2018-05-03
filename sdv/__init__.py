@@ -620,7 +620,7 @@ def file_uploaded(inputfile):
         g.error = _("Savegame failed an internal check (often caused by mods) sorry :(")
         return {'type':'render','target':'index.html','parameters':{"error":g.error}}
     except Exception as e:
-        logger.error(f"An unexpected error occoured: {e}")
+        logger.error("An unexpected error occoured: {}".format(e))
         g.error = _("An unexpected error has occoured.")
         return {'type': 'render', 'target': 'index.html', 'parameters': {"error": g.error}}
 
@@ -648,7 +648,7 @@ def file_uploaded(inputfile):
             user_error = _("An error occurred whilst processing the save file.")
             if g.error is None:
                 g.error = _("Error occurred inserting information into the database!")
-            logger.error(f'An error occurred when inserting save to databae: {g.error}')
+            logger.error('An error occurred when inserting save to database: {}'.format(g.error))
             return {'type':'render', 'target':'index.html', 'parameters': {"error": user_error}}
         imageDrone.process_queue()
         cache.delete('recent_uploads')
