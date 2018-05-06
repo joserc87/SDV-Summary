@@ -31,3 +31,21 @@ class TestWordfilter():
         test_text = 'scunthorpe'
         result = self.censor.censor(test_text)
         assert result != test_text
+
+    def test_wordfilter_none_input(self):
+        """
+        Ensure None input returns None
+        """
+
+        test_text = None
+        result = self.censor.censor(test_text)
+        assert result is None
+
+    def test_wordfilter_int_input(self):
+        """
+        Ensure None input returns None
+        """
+
+        test_text = 1
+        result = self.censor.censor(test_text)
+        assert result is 1
