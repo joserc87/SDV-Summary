@@ -35,7 +35,10 @@ class Censor:
 		self._temp_string = input_string
 		for word in self.words:
 			regex = re.compile(re.escape(word), re.IGNORECASE)
-			self._temp_string = regex.sub(self._get_redacted_string(word),self._temp_string)
+			try:
+				self._temp_string = regex.sub(self._get_redacted_string(word),self._temp_string)
+			except TypeError:
+				pass
 		return self._temp_string
 
 	def set_censorchars(self,censorchars):
