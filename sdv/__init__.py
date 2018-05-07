@@ -1288,27 +1288,39 @@ def get_privacy():
             g.logged_in_privacy_default = None
     return g.logged_in_privacy_default
 
+
+def key_in_database_structure(key):
+    if key in database_structure_dict:
+        return True
+    else:
+        return False
+
+
 def insert_info(player_info,farm_info,md5_info):
     columns = []
     values = []
     # player_info['date'] = ['Spring','Summer','Autumn','Winter'][int(((player_info['stats']['DaysPlayed']%(28*4))-((player_info['stats']['DaysPlayed']%(28*4))%(28)))/28)]+' '+str((player_info['stats']['DaysPlayed']%(28*4))%(28))+', Year '+str(((player_info['stats']['DaysPlayed']-player_info['stats']['DaysPlayed']%(28*4))/(28*4))+1)
     for key in player_info.keys():
         if key == 'farmhands':
-            columns.append(key)
-            values.append(json.dumps(player_info[key]))
+            if key_in_database_structure(key):
+                columns.append(key)
+                values.append(json.dumps(player_info[key]))
         elif type(player_info[key]) == list:
             for i,item in enumerate(player_info[key]):
-                columns.append(key.replace(' ','_') + str(i))
-                values.append(str(item))
+                if key_in_database_structure(key.replace(' ','_') + str(i)):
+                    columns.append(key.replace(' ','_') + str(i))
+                    values.append(str(item))
         elif type(player_info[key]) == dict:
             for subkey in player_info[key]:
                 if type(player_info[key][subkey]) == dict:
                     for subsubkey in player_info[key][subkey]:
-                        columns.append((key+subkey+subsubkey).replace(' ','_'))
-                        values.append((player_info[key][subkey][subsubkey]))
+                        if key_in_database_structure((key+subkey+subsubkey).replace(' ','_')):
+                            columns.append((key+subkey+subsubkey).replace(' ','_'))
+                            values.append((player_info[key][subkey][subsubkey]))
                 else:
-                    columns.append((key + subkey).replace(' ','_'))
-                    values.append(str(player_info[key][subkey]))
+                    if key_in_database_structure((key + subkey).replace(' ','_')):
+                        columns.append((key + subkey).replace(' ','_'))
+                        values.append(str(player_info[key][subkey]))
         else:
             columns.append(key)
             values.append(str(player_info[key]))
