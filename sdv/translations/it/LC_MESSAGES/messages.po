@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2018-02-27 14:08+0000\n"
-"PO-Revision-Date: 2018-05-07 20:47+0200\n"
+"PO-Revision-Date: 2018-05-07 23:16+0100\n"
 "Language: it\n"
 "Language-Team: it <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.3\n"
 "Last-Translator: \n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.0.2\n"
 
 #: ../sdv/__init__.py:275 ../sdv/__init__.py:355 ../sdv/__init__.py:399
 msgid "Username not found!"
@@ -44,7 +44,7 @@ msgid ""
 "Email address not verified; please verify your account using the verification "
 "email sent when you registered before attempting to reset password!"
 msgstr ""
-"Indirizzo email non verificato; verifica il tuo account usando l'email di "
+"Indirizzo email non verificato; verifica il tuo account usando l&#39;email di "
 "verifica che ti è stata inviata prima di tentare il reset della password!"
 
 #: ../sdv/__init__.py:367
@@ -59,7 +59,7 @@ msgstr ""
 
 #: ../sdv/__init__.py:377 ../sdv/__init__.py:413
 msgid "Cannot reset password: account does not exist"
-msgstr "Non è possibile reimpostare la password: l'account non esiste"
+msgstr "Non è possibile reimpostare la password: l&#39;account non esiste"
 
 #: ../sdv/__init__.py:380
 msgid "This reset link has already been used!</p>"
@@ -83,7 +83,7 @@ msgstr "Una nuova email di verifica ti è stata inviata"
 
 #: ../sdv/__init__.py:406
 msgid "Please enter the email address you used to register"
-msgstr "Inserisci il l'indirizzo email che hai usato per registrarti"
+msgstr "Inserisci il l&#39;indirizzo email che hai usato per registrarti"
 
 #: ../sdv/__init__.py:416
 msgid "This reset link has already been used!"
@@ -106,7 +106,7 @@ msgid ""
 "You have successfully registered. A verification email has been sent to you. "
 "Now, please sign in!"
 msgstr ""
-"La registrazione è avvenuta con successo. Ti è stata inviata un'email di "
+"La registrazione è avvenuta con successo. Ti è stata inviata un&#39;email di "
 "verifica. Ora puoi fare il login!"
 
 #: ../sdv/__init__.py:462
@@ -142,8 +142,8 @@ msgid ""
 "Not valid save file - did you select file 'SaveGameInfo' instead of "
 "'playername_number'?"
 msgstr ""
-"File di salvataggio non valido - hai selezionato il file 'SaveGameInfo' al "
-"posto di 'nomeutente_numero'?"
+"File di salvataggio non valido - hai selezionato il file &#39;SaveGameInfo&#39; al "
+"posto di &#39;nomeutente_numero&#39;?"
 
 #: ../sdv/__init__.py:602
 msgid "Not well-formed xml"
@@ -157,27 +157,27 @@ msgstr ""
 
 #: ../sdv/__init__.py:629
 msgid "Error occurred inserting information into the database!"
-msgstr "C'è stato un errore nell'inserire le informazioni nel database!"
+msgstr "C&#39;è stato un errore nell&#39;inserire le informazioni nel database!"
 
 #: ../sdv/__init__.py:684 ../sdv/__init__.py:704
 msgid ""
 "Multiple entries for this client_id! Please contact the site administrator!"
 msgstr ""
-"Accessi multipli per questo client_id! Per favore contatta l'amministratore "
+"Accessi multipli per questo client_id! Per favore contatta l&#39;amministratore "
 "del sito!"
 
 #: ../sdv/__init__.py:687
 #, python-format
 msgid "You have granted access to %(client)s, you may now close this tab"
-msgstr "Hai garantito l'accesso a %(client)s, ora puoi chiudere questa scheda"
+msgstr "Hai garantito l&#39;accesso a %(client)s, ora puoi chiudere questa scheda"
 
 #: ../sdv/__init__.py:694
 msgid ""
 "Unable to generate unique key! Something bad has happened, report to site "
 "administrator!"
 msgstr ""
-"Impossibile generare una chiave unica! E' successo qualcosa di brutto, "
-"segnalalo all'amministratore del sito!"
+"Impossibile generare una chiave unica! E&#39; successo qualcosa di brutto, "
+"segnalalo all&#39;amministratore del sito!"
 
 #: ../sdv/__init__.py:707
 msgid "Referrer client_id is invalid!"
@@ -200,7 +200,7 @@ msgid ""
 "you have active pledges. If you think this is in error, please contact us via "
 "the About page!"
 msgstr ""
-"Al momento, l'API di upload.farm e l'uploader sono solo per i sostenitori di "
+"Al momento, l&#39;API di upload.farm e l&#39;uploader sono solo per i sostenitori di "
 "upload.farm. Se sei già un sostenitore, connetti il tuo account Patreon dal "
 "tuo pannello utente. Se il tuo account Patreon è già collegato, controlla i "
 "tuoi pledge attivi. Se pensi che questo sia un errore, contattaci attraverso "
@@ -212,7 +212,7 @@ msgstr "Devi prima loggarti"
 
 #: ../sdv/__init__.py:725
 msgid ""
-"Referrer didn't include client_id in request! Please contact whoever linked "
+"Referrer didn&#39;t include client_id in request! Please contact whoever linked "
 "you here."
 msgstr ""
 "Il tuo referrer non ha incluso il suo client_id nella richiesta! Contatta chi "
@@ -221,11 +221,11 @@ msgstr ""
 #: ../sdv/__init__.py:1347
 msgid "Save file incompatible with current database: error is "
 msgstr ""
-"Il file di salvataggio è incompatibile con l'attuale database: l'errore è "
+"Il file di salvataggio è incompatibile con l&#39;attuale database: l&#39;errore è "
 
 #: ../sdv/__init__.py:1359 ../sdv/__init__.py:1413
 msgid "There is nothing here... is this URL correct?"
-msgstr "Qua non c'è niente... l'URL è giusto?"
+msgstr "Qua non c&#39;è niente... l&#39;URL è giusto?"
 
 #: ../sdv/__init__.py:1401
 msgid ""
@@ -243,8 +243,8 @@ msgid ""
 "This plan failed to render, probably because of a bug. It's logged and we'll "
 "look into it as soon as possible! Sorry!"
 msgstr ""
-"C'è stato un problema nel renderizzare questo progetto, probabilmente a causa "
-"di un bug. E' stato registrato e lo esamineremo il prima possibile! Ci "
+"C&#39;è stato un problema nel renderizzare questo progetto, probabilmente a causa "
+"di un bug. E&#39; stato registrato e lo esamineremo il prima possibile! Ci "
 "dispiace!"
 
 #: ../sdv/__init__.py:1519
@@ -282,7 +282,7 @@ msgstr ""
 #: ../sdv/__init__.py:1624
 msgid ""
 "There was an issue with uploading the file to imgur. Please try again later!"
-msgstr "C'è stato un problema nel caricare il file su imgur. Riprova più tardi!"
+msgstr "C&#39;è stato un problema nel caricare il file su imgur. Riprova più tardi!"
 
 #: ../sdv/__init__.py:1631
 msgid ""
@@ -301,12 +301,12 @@ msgid ""
 "Sorry, the stardew.info planner API is over its rate limit: please try again "
 "in a few minutes!"
 msgstr ""
-"Scusa, l'API di stardew.info planner è oltre il suo limite massimo: riprova "
+"Scusa, l&#39;API di stardew.info planner è oltre il suo limite massimo: riprova "
 "tra qualche minuto!"
 
 #: ../sdv/__init__.py:1646
 msgid "There was a problem accessing the planner. Error was: {}"
-msgstr "C'è stato un errore nell'accedere al planner. L'errore è stato: {}"
+msgstr "C&#39;è stato un errore nell&#39;accedere al planner. L&#39;errore è stato: {}"
 
 #: ../sdv/__init__.py:1675
 msgid "You do not have the correct session information to perform this action!"
@@ -323,19 +323,19 @@ msgstr "Non sei loggato!"
 
 #: ../sdv/__init__.py:1854
 msgid "No browse with that ID!"
-msgstr "Nessun risultato con quell'ID!"
+msgstr "Nessun risultato con quell&#39;ID!"
 
 #: ../sdv/__init__.py:1873
 msgid "Malformed request for entries!"
-msgstr "Richiesta per l'accesso malformata!"
+msgstr "Richiesta per l&#39;accesso malformata!"
 
 #: ../sdv/__init__.py:1985 ../sdv/__init__.py:1987
 msgid "No blog with that ID!"
-msgstr "Nessun articolo con quell'ID!"
+msgstr "Nessun articolo con quell&#39;ID!"
 
 #: ../sdv/__init__.py:2013
 msgid "URL does not exist"
-msgstr "L'URL non esiste"
+msgstr "L&#39;URL non esiste"
 
 #: ../sdv/__init__.py:2015
 msgid "You are unable to download this farm data at this time."
@@ -379,7 +379,7 @@ msgstr "Indirizzo email già confermato!"
 
 #: ../sdv/__init__.py:2221
 msgid "Account email address confirmed!"
-msgstr "Indirizzo email dell'account già confermato!"
+msgstr "Indirizzo email dell&#39;account già confermato!"
 
 #: ../sdv/__init__.py:2234
 msgid "not logged in"
@@ -540,7 +540,7 @@ msgstr ""
 "developer presso Marbella, Spagna. Abbiamo creato questo sito principalmente "
 "per noi dopo che Stardew Valley è stato rilasciato perché non avevamo modo di "
 "fare screenshot delle farm intere per confrontarle. Grazie allo sviluppo "
-"ulteriore delle funzionalità, sembra essere cresciuto un po' oltre questo "
+"ulteriore delle funzionalità, sembra essere cresciuto un po&#39; oltre questo "
 "utilizzo."
 
 #: ../sdv/templates/about.html:14
@@ -570,7 +570,7 @@ msgstr "Account"
 
 #: ../sdv/templates/account.html:42
 msgid "Account info"
-msgstr "Info sull'account"
+msgstr "Info sull&#39;account"
 
 #: ../sdv/templates/account.html:43
 #, python-format
@@ -639,7 +639,7 @@ msgstr "I nuovi caricamenti non appariranno sul sito come predefinito"
 
 #: ../sdv/templates/account.html:72
 msgid "Change to unlisted?"
-msgstr "Togliere dall'elenco?"
+msgstr "Togliere dall&#39;elenco?"
 
 #: ../sdv/templates/account.html:72
 msgid "This will prevent new uploads appearing to others on the site by default"
@@ -812,7 +812,7 @@ msgstr "Autorizzazione richiesta"
 #: ../sdv/templates/api_auth.html:37
 #, python-format
 msgid "Authorise use of your account by %(client)s"
-msgstr "Autorizza l'utilizzo del tuo account per %(client)s"
+msgstr "Autorizza l&#39;utilizzo del tuo account per %(client)s"
 
 #: ../sdv/templates/api_auth.html:39
 #, python-format
@@ -842,7 +842,7 @@ msgid ""
 "This website uses cookies when you upload a savegame to determine ownership"
 msgstr ""
 "Questo sito usa cookies quando carichi un salvataggio per determinarne "
-"l'appartenenza"
+"l&#39;appartenenza"
 
 #: ../sdv/templates/base.html:41
 msgid "Okay!"
@@ -905,7 +905,7 @@ msgid ""
 "like %(gedosato)s."
 msgstr ""
 "Genera una mappa e un riepilogo di una farm di Stardew Valley, con il tuo "
-"avatar e un ritratto della tua famiglia. E' un'alternativa a strumenti per "
+"avatar e un ritratto della tua famiglia. E&#39; un&#39;alternativa a strumenti per "
 "screenshot come %(gedosato)s."
 
 #: ../sdv/templates/faq.html:14
@@ -921,7 +921,7 @@ msgid ""
 "SaveGameInfo)."
 msgstr ""
 "I salvataggi sono in %(appdata)s. Questo può essere incollato nella finestra "
-"di caricamento file per trovare la cartella corretta. All'interno di questa "
+"di caricamento file per trovare la cartella corretta. All&#39;interno di questa "
 "ci sono sottocartelle per ogni salvataggio. Il file che dovresti caricare è "
 "chiamato in base al tuo giocatore (non chiamato SaveGameInfo)."
 
@@ -941,7 +941,7 @@ msgstr ""
 "dei salvataggi</a> al sito è diventato necessario introdurre gli account, in "
 "modo da poter stabilire la proprietà delle pagine. Il vantaggio di tutto ciò "
 "è che siamo stati in grado di aggiungere altre funzionalità al sito molto "
-"facilmente, come i caricamenti rapidi a imgur, e l'abilità di collegare serie "
+"facilmente, come i caricamenti rapidi a imgur, e l&#39;abilità di collegare serie "
 "di farm."
 
 #: ../sdv/templates/faq.html:25
@@ -1001,7 +1001,7 @@ msgid ""
 "enable savegame sharing. This enables them for <em>all</em> users of the "
 "site, and may be enabled or disabled as you like."
 msgstr ""
-"Se sei %(signed_up)s e possiedi la pagina, sotto la minimap c'è un bottone "
+"Se sei %(signed_up)s e possiedi la pagina, sotto la minimap c&#39;è un bottone "
 "per attivare la condivisione dei salvataggi. Questo lo attiva per <em>tutti</"
 "em> gli utenti sul sito, e può essere attivato o disattivato a tuo piacere."
 
@@ -1032,15 +1032,15 @@ msgid ""
 msgstr ""
 "Puoi togliere dalla lista le farm se sei registrato e loggato. Puoi anche "
 "impostare il tuo account per rendere automaticamente i caricamenti privati "
-"sulla tua pagina dell'account."
+"sulla tua pagina dell&#39;account."
 
 #: ../sdv/templates/faq.html:40
 msgid "What is the stardew.info planner?"
-msgstr "Cos'è il planner di stardew.info?"
+msgstr "Cos&#39;è il planner di stardew.info?"
 
 #: ../sdv/templates/faq.html:41
 msgid ""
-"The <a href='https://stardew.info/planner/'' target='_blank'>Stardew planner</"
+"The <a href='https://stardew.info/planner/' target='_blank'>Stardew planner</"
 "a> by <a href='https://github.com/hpeinar/stardewplanner' "
 "target='_blank'>Henrik Peinar</a> is a tool that allows you to plan your "
 "farm. We have integrated support for the planner to the site for uploads you "
@@ -1049,12 +1049,12 @@ msgid ""
 "worked with Henrik to allow rendering of farms from the planner. These are "
 "separate to normal savegame uploads, and are accessed from the planner itself."
 msgstr ""
-"Lo <a href='https://stardew.info/planner/'' target='_blank'>Stardew planner</"
+"Lo <a href='https://stardew.info/planner/' target='_blank'>Stardew planner</"
 "a> di <a href='https://github.com/hpeinar/stardewplanner' "
 "target='_blank'>Henrik Peinar</a> è uno strumento che ti consente di "
 "progettare la tua farm. Abbiamo integrato il supporto del sito per il planner "
 "per i caricamenti che possiedi. Per utilizzare questa funzionalità, clicca "
-"l'icona del progetto nel pannello di controllo sulla pagina del profilo della "
+"l&#39;icona del progetto nel pannello di controllo sulla pagina del profilo della "
 "tua farm per caricarla nel planner. Inoltre abbiamo lavorato con Henrik per "
 "permettere di renderizzare le farm dal planner. Queste sono separate dai "
 "normali salvataggi caricati, e vi si può accedere dal planner stesso."
@@ -1086,10 +1086,10 @@ msgid ""
 "deleting."
 msgstr ""
 "Quando carichi un salvataggio viene impostato un cookie per indicarne la "
-"proprietà. Sotto il nome della farm dovrebbe apparire un pulsante 'elimina "
-"questa pagina'. Se sei %(logged_in)s e hai caricato più farm della stessa "
-"partita avrai anche un'opzione per eliminare 'tutto per questa farm. Entrambe "
-"chiedono conferma prima dell'eliminazione."
+"proprietà. Sotto il nome della farm dovrebbe apparire un pulsante &#39;elimina "
+"questa pagina&#39;. Se sei %(logged_in)s e hai caricato più farm della stessa "
+"partita avrai anche un&#39;opzione per eliminare &#39;tutto per questa farm. Entrambe "
+"chiedono conferma prima dell&#39;eliminazione."
 
 #: ../sdv/templates/faq.html:54
 msgid "Do you support [modname]?"
@@ -1108,7 +1108,7 @@ msgstr ""
 
 #: ../sdv/templates/faq.html:57
 msgid "What is the upload.farm uploader?"
-msgstr "Cos'è l'uploader di upload.farm?"
+msgstr "Cos&#39;è l&#39;uploader di upload.farm?"
 
 #: ../sdv/templates/faq.html:58
 #, python-format
@@ -1117,7 +1117,7 @@ msgid ""
 "our %(patreon)s. It runs on Windows, and automatically backs up and "
 "optionally uploads savegames from Stardew Valley."
 msgstr ""
-"L'uploader è un ringraziamento agli utenti di upload.farm che supportano il "
+"L&#39;uploader è un ringraziamento agli utenti di upload.farm che supportano il "
 "sito tramite il nostro %(patreon)s. Va su Windows, e fa il backup e "
 "facoltativamente carica i salvataggi da Stardew Valley in modo automatico."
 
@@ -1239,7 +1239,7 @@ msgid ""
 msgstr ""
 "La nostra politica sulla Privacy è al momento disponibile solamente in "
 "inglese per garantirne la coerenza. Se stai usando questo sito in un "
-"linguaggio diverso dall'inglese, ci dispiace per l'inconveniente!"
+"linguaggio diverso dall&#39;inglese, ci dispiace per l&#39;inconveniente!"
 
 #: ../sdv/templates/profile.html:5 ../sdv/templates/profile.html:9
 #: ../sdv/templates/profile.html:16 ../sdv/templates/profile.html:28
@@ -1853,7 +1853,7 @@ msgstr "Serpente"
 
 #: ../sdv/templates/profile.html:309
 msgid "Shadow Brute"
-msgstr "Bestia d'Ombra"
+msgstr "Bestia d&#39;Ombra"
 
 #: ../sdv/templates/profile.html:310
 msgid "Skeleton"
@@ -1907,7 +1907,7 @@ msgid ""
 "contents. It might be modded, or malicious. Be aware if downloading the "
 "savegame."
 msgstr ""
-"Questa farm ha fallito l'elaborazione dell'imagine, il che significa che il "
+"Questa farm ha fallito l&#39;elaborazione dell&#39;imagine, il che significa che il "
 "salvataggio ha contenuti non previsti. Potrebbe essere moddata, o malevola. "
 "Tienilo presente se scarichi il salvataggio."
 
@@ -2199,7 +2199,7 @@ msgstr "Rendere privata la tua farm?"
 
 #: ../sdv/templates/profile.html:574
 msgid "Prevents it appearing on the site except to you and people with the URL"
-msgstr "Le impedisce di apparire sul sito tranne a te e alle persone con l'URL"
+msgstr "Le impedisce di apparire sul sito tranne a te e alle persone con l&#39;URL"
 
 #: ../sdv/templates/profile.html:574
 msgid "Unlist!"
@@ -2247,11 +2247,11 @@ msgstr ""
 
 #: ../sdv/templates/profile.html:580
 msgid "Delete&nbsp;entire&nbsp;series!"
-msgstr "Elimina&nbsp;l'intera&nbsp;serie!"
+msgstr "Elimina&nbsp;l&#39;intera&nbsp;serie!"
 
 #: ../sdv/templates/profile.html:580
 msgid "Delete entire farm series"
-msgstr "Elimina l'intera serie di farm"
+msgstr "Elimina l&#39;intera serie di farm"
 
 #: ../sdv/templates/profile.html:593
 msgid "You use the contents of this zip at your own risk!"
@@ -2335,7 +2335,7 @@ msgstr "Imposta nuova password"
 
 #: ../sdv/templates/reset.html:57
 msgid "Reset password for user account on upload.farm"
-msgstr "Reimposta password per l'account utente su upload.farm"
+msgstr "Reimposta password per l&#39;account utente su upload.farm"
 
 #: ../sdv/templates/reset.html:73
 msgid "Re-send verification"
