@@ -177,7 +177,7 @@ class Player:
 
             self._portrait_info = {}
             # Information for portrait generation
-            self._portrait_info['partner'] = get_partner(self.node) #returns the name of the partner, nothing else
+            self._portrait_info['partner'] = get_partner(self.player_node) #returns the name of the partner, nothing else
             self._portrait_info['cat'] = str_to_bool(self.info['catPerson']) #true or false
             #children is a problem though. because it doesn't identify parenthood.
             self._portrait_info['children'] = [(int(child.find('gender').text), str_to_bool(child.find('darkSkinned').text),int(child.find('daysOld').text),child.find('name').text) for child in self.children]

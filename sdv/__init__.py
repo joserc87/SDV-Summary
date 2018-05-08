@@ -2140,7 +2140,7 @@ def update_patreon_info(access_token,refresh_token,expiry):
     if time.time() >= expiry:
         result = refresh_patreon_token(refresh_token,expiry)
         access_token = result.get('new_access_token')
-        print(result)
+        # print(result)
         if access_token == None:
             return {'error':result}
     # get info
