@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2018-02-27 14:08+0000\n"
-"PO-Revision-Date: 2018-05-07 23:16+0100\n"
+"PO-Revision-Date: 2018-05-08 14:31+0200\n"
 "Language: it\n"
 "Language-Team: it <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.3\n"
 "Last-Translator: \n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.0.7\n"
 
 #: ../sdv/__init__.py:275 ../sdv/__init__.py:355 ../sdv/__init__.py:399
 msgid "Username not found!"
@@ -142,8 +142,8 @@ msgid ""
 "Not valid save file - did you select file 'SaveGameInfo' instead of "
 "'playername_number'?"
 msgstr ""
-"File di salvataggio non valido - hai selezionato il file &#39;SaveGameInfo&#39; al "
-"posto di &#39;nomeutente_numero&#39;?"
+"File di salvataggio non valido - hai selezionato il file 'SaveGameInfo' al "
+"posto di 'nomeutente_numero'?"
 
 #: ../sdv/__init__.py:602
 msgid "Not well-formed xml"
@@ -212,7 +212,7 @@ msgstr "Devi prima loggarti"
 
 #: ../sdv/__init__.py:725
 msgid ""
-"Referrer didn&#39;t include client_id in request! Please contact whoever linked "
+"Referrer didn't include client_id in request! Please contact whoever linked "
 "you here."
 msgstr ""
 "Il tuo referrer non ha incluso il suo client_id nella richiesta! Contatta chi "
@@ -700,7 +700,7 @@ msgstr "La tua serie di farm"
 
 #: ../sdv/templates/account.html:109
 msgid "Linked series of farms you have uploaded:"
-msgstr "Serie collegata di farm che hai caricato:"
+msgstr "Serie di farm collegate che hai caricato:"
 
 #: ../sdv/templates/account.html:113 ../sdv/templates/recents.html:11
 #, python-format
@@ -731,15 +731,15 @@ msgstr "Ordinando %(number)s risultati per "
 
 #: ../sdv/templates/all.html:33
 msgid "top rated"
-msgstr "più votati"
+msgstr "voti"
 
 #: ../sdv/templates/all.html:33
 msgid "most views"
-msgstr "più visti"
+msgstr "visualizzazioni"
 
 #: ../sdv/templates/all.html:33 ../sdv/templates/all.html:35
 msgid "most recent"
-msgstr "più recenti"
+msgstr "data"
 
 #: ../sdv/templates/all.html:46
 msgid "showing"
@@ -747,7 +747,7 @@ msgstr "mostrando"
 
 #: ../sdv/templates/all.html:47
 msgid "only downloadable"
-msgstr "solo scaricabili"
+msgstr "solo farm scaricabili"
 
 #: ../sdv/templates/all.html:49 ../sdv/templates/all.html:53
 msgid "all farms"
@@ -878,7 +878,7 @@ msgstr "Blog di sviluppo"
 #: ../sdv/templates/blogcontent.html:7
 #, python-format
 msgid "by %(name)s at %(time)s"
-msgstr "per %(name)s a %(time)s"
+msgstr "di %(name)s postato in data %(time)s"
 
 #: ../sdv/templates/error.html:7
 msgid "Error!"
@@ -905,7 +905,7 @@ msgid ""
 "like %(gedosato)s."
 msgstr ""
 "Genera una mappa e un riepilogo di una farm di Stardew Valley, con il tuo "
-"avatar e un ritratto della tua famiglia. E&#39; un&#39;alternativa a strumenti per "
+"avatar e un ritratto della tua famiglia. E' un'alternativa a strumenti per "
 "screenshot come %(gedosato)s."
 
 #: ../sdv/templates/faq.html:14
@@ -1040,7 +1040,7 @@ msgstr "Cos&#39;è il planner di stardew.info?"
 
 #: ../sdv/templates/faq.html:41
 msgid ""
-"The <a href='https://stardew.info/planner/' target='_blank'>Stardew planner</"
+"The <a href='https://stardew.info/planner/'' target='_blank'>Stardew planner</"
 "a> by <a href='https://github.com/hpeinar/stardewplanner' "
 "target='_blank'>Henrik Peinar</a> is a tool that allows you to plan your "
 "farm. We have integrated support for the planner to the site for uploads you "
@@ -1086,8 +1086,8 @@ msgid ""
 "deleting."
 msgstr ""
 "Quando carichi un salvataggio viene impostato un cookie per indicarne la "
-"proprietà. Sotto il nome della farm dovrebbe apparire un pulsante &#39;elimina "
-"questa pagina&#39;. Se sei %(logged_in)s e hai caricato più farm della stessa "
+"proprietà. Sotto il nome della farm dovrebbe apparire un pulsante 'elimina "
+"questa pagina'. Se sei %(logged_in)s e hai caricato più farm della stessa "
 "partita avrai anche un&#39;opzione per eliminare &#39;tutto per questa farm. Entrambe "
 "chiedono conferma prima dell&#39;eliminazione."
 
@@ -1965,7 +1965,7 @@ msgstr "Passi"
 
 #: ../sdv/templates/profile.html:424
 msgid "Mines Depth"
-msgstr "Profondità nelle Miniere"
+msgstr "Miniere"
 
 #: ../sdv/templates/profile.html:424 ../sdv/templates/profile.html:425
 #: ../sdv/templates/profile.html:427
@@ -1974,7 +1974,7 @@ msgstr "livello"
 
 #: ../sdv/templates/profile.html:425
 msgid "Cavern Depth"
-msgstr "Profondità nelle Caverne"
+msgstr "Caverne"
 
 #: ../sdv/templates/profile.html:425 ../sdv/templates/profile.html:427
 #, python-format
@@ -2004,7 +2004,7 @@ msgstr "e"
 
 #: ../sdv/templates/profile.html:445
 msgid "is unmarried"
-msgstr "è divorziato/a"
+msgstr "non è sposato"
 
 #: ../sdv/templates/profile.html:449
 msgid "has"
@@ -2025,7 +2025,7 @@ msgstr "una figlia"
 
 #: ../sdv/templates/profile.html:452 ../sdv/templates/profile.html:459
 msgid "named"
-msgstr "chiamato/a"
+msgstr "di nome"
 
 #: ../sdv/templates/profile.html:456
 msgid "has no children"
