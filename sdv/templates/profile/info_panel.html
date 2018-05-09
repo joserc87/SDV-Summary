@@ -1,0 +1,220 @@
+<div class="col-md-8 col-sm-12 panel info-panel">
+    <div class="info--navigation">
+        <ul class="info--navigation nav" style="margin-bottom: 15px;">
+            <li class="active">
+                <a href="#playerInfo" data-toggle="pill">
+                    <img src="{{ url_for('static', filename='icon/player-nav-icon.png') }}"
+                         class="nav--icon">
+                    <span>{{ _('Stats') }}</span>
+                </a>
+            </li>
+            <li>
+                <a href="#familyPortrait" data-toggle="pill">
+                    <img src="{{ url_for('static', filename='icon/summary-nav-icon.png') }}"
+                         class="nav--icon">
+                    <span>{{ _('Summary') }}</span>
+                </a>
+            </li>
+            <li>
+                <a href="#skills" data-toggle="pill">
+                    <img src="{{ url_for('static', filename='icon/skills-nav-icon.png') }}"
+                         class="nav--icon">
+                    <span>{{ _('Skills') }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="info--details interiorpanel tabbable">
+        <div class="info-header row">
+            <div class="info-name">
+                <h1>{{ data['name'] }}</h1>
+            </div>
+        </div>
+        <div class=" tab-content text-left">
+            <div id="playerInfo" class="tab-pane active">
+                <div class="info--body">
+                    <div class="avatarPanel">
+                        <img src="{{ data.avatar_url }}" class="playerAvatar">
+                    </div>
+                    <dl class="dl-horizontal">
+                        <div>
+                            <dt>{{ _('Current Funds') }}</dt>
+                            <dd>{{ data.money }}g</dd>
+                        </div>
+                        <div>
+                            <dt>{{ _('Total Earnings') }}</dt>
+                            <dd>{{ data.totalMoneyEarned }}g</dd>
+                        </div>
+                        <div>
+                            <dt>{{ _('Gender') }}</dt>
+                            <dd>{% if data.isMale == 'true' %} {{ _('Male') }} {% else %}
+                                {{ _('Female') }} {% endif %}</dd>
+                            </dd>
+                        </div>
+                        <div>
+                            <dt>{{ _('Favorite Thing') }}</dt>
+                            <dd>{{ data.favoriteThing|censor }}</dd>
+                        </div>
+                        <div>
+                            <dt>{{ _('Health') }}</dt>
+                            <dd>{{ data.maxHealth }}</dd>
+                        </div>
+                        <div>
+                            <dt>{{ _('Stamina') }}</dt>
+                            <dd>{{ data.maxStamina }}</dd>
+                        </div>
+                        <div>
+                            <dt>{{ _('Steps Taken') }}</dt>
+                            <dd>{{ data.statsStepsTaken }}</dd>
+                        </div>
+                        <div>
+                            {% if data.deepestMineLevel > 120 %}
+                                <dt>{{ _('Mines Depth') }}</dt>
+                                <dd>{{ _('level') }} 120</dd>
+                                </div>
+                                <div>
+                                <dt>{{ _('Cavern Depth') }}</dt>
+                                <dd>{{ _('%(word_level)s %(number)s',word_level=_('level'), number=data.deepestMineLevel-120) }}</dd>
+                            {% else %}
+                                <dt>{{ _('Mine Depth') }}</dt>
+                                <dd>{{ _('%(word_level)s %(number)s',word_level=_('level'), number=data.deepestMineLevel) }}</dd>
+                            {% endif %}
+                            </div>
+                        <div>
+                            <dt>{{ _('Time Played') }}</dt>
+                            <dd>{{ data.millisecondsPlayed }} {{ _('hours') }}</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+            <div id="familyPortrait" class="tab-pane">
+                <div class="info--body">
+                    <div class="portraitPanel">
+                        <img src="{{ data.portrait_url }}" class="playerPortrait">
+                    </div>
+                    <div class="info--summary-text">
+                        <p>
+                            {% if data.portrait_info['partner'] != None %}
+                                <b>{{ data.name|censor }}</b> {{ _('is married to') }}
+                                <b>{{ translated_friends.get(data.portrait_info['partner'],None) }}</b>
+                                {% if data.petName!=None %}, {% else %}{{ _('and') }}{% endif %}
+                            {% else %}
+                                <b>{{ data.name|censor }}</b>
+                                {{ _('is unmarried') }}{% if data.petName!=None %},{% else %}
+                                    {{ _('and') }}{% endif %}
+                            {% endif %}
+                            {% if data.portrait_info['children']|length > 0 %}
+                                {% for child in data.portrait_info['children'] %}
+                                    {% if loop.index0 == 0 %}{{ _('has') }}{% else %}
+                                        {{ _('and') }}{% endif %}
+                                    {{ _('a %(n)s day old',n=child[2]) }}
+                                    {% if child[0] == 0 %}{{ _('son') }}{% else %}
+                                        {{ _('daughter') }}{% endif %}
+                                    {{ _('named') }} <b>{{ child[3]|censor }}</b>
+                                    {% if not loop.last %} {% endif %}
+                                    {% if loop.last and data.petName!=None %},{% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {{ _('has no children') }}{% if data.petName!=None %},{% else %}
+                                    .{% endif %}
+                            {% endif %}
+                            {% if data.petName != None %}
+                                {{ _('and has a pet') }} {% if data.catPerson == 'true' %}
+                                {{ _('cat') }} {% else %} {{ _('dog') }} {% endif %}
+                                {{ _('named') }} <b>{{ data.petName|censor }}</b>.
+                            {% endif %}
+                        </p>
+                        <div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">
+
+                            {% if data.animals %}
+                                <!--<h3>Farm Animals</h3>-->
+                                <br>
+                                {% if data.animals['horse'] %}
+                                    <p>{{ _('Farm horse:') }} {{ data.animals['horse']|censor }}</p>
+                                {% endif %}
+                                {% for key in data.animals.keys() %}
+                                    {% if key != 'horse' %}
+                                        {% if data.animals[key]|length>1 %}
+                                            {% set animal_name = translated_animals[key+'s'] %}{% else %}
+                                            {% set animal_name = translated_animals[key] %}{% endif %}
+                                        <p>{{ _('%(number)s %(animal)s',number=data.animals[key]|length, animal=animal_name) }}:
+                                            {% for row in data.animals[key] %}
+                                                <span class="clickable" data-toggle="tooltip"
+                                                      title="{{ _('%(n)s days old',n=row[1]) }}">{{ row[0]|censor }}</span>
+                                                {% if not loop.last %},{% endif %}
+                                            {% endfor %}
+                                        </p>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="skills" class="tab-pane">
+                <dl class="dl-horizontal">
+
+                    {% for skill in [('Farming',data.farmingLevel),('Mining',data.miningLevel),('Foraging',data.foragingLevel),('Fishing',data.fishingLevel),('Combat',data.combatLevel)] %}
+                        <dt>{{ translated_skills[skill[0]] }}</dt>
+                        <dd>
+                            <div class="col-sm-12">
+                                <div class="pipdivhalf">
+                                    {% for level in range(skill[1]) %}
+                                        <div class="pipdiv">
+                                            {% if (level + 1) % 5 != 0 %}
+                                                <img class="pip"
+                                                     src="{{ url_for('static', filename='assets/skills/point_active.png') }}">
+                                            {% else %}
+                                                <a style="text-decoration: none;"
+                                                   tabindex="0" role="button"
+                                                   data-toggle="popover"
+                                                   data-trigger="hover"
+                                                   data-container="body" data-html="true"
+                                                   {% for value in profindex[skill[0]][level] %}{% if value in professions %}title="<img src='{{ url_for('static', filename='assets/professions/'+value+'.png') }}'>{{ translated_titles[value] }}"
+                                                   data-content="{{ blurbs[value] }}"
+                                                   {% endif %}{% endfor %}>
+                                                    <img class="pip"
+                                                         src="{{ url_for('static', filename='assets/skills/profession_active.png') }}">
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                        {% if level == 4 %}
+                                            </div>
+                                            <div class="pipdivhalf">
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% for level in range(skill[1] + 1, 11) %}
+                                        <div class="pipdiv">
+                                            {% if (level) % 5 != 0 %}
+                                                <img class="pip"
+                                                     src="{{ url_for('static', filename='assets/skills/point_inactive.png') }}">
+                                            {% else %}
+                                                <img class="pip"
+                                                     src="{{ url_for('static', filename='assets/skills/profession_inactive.png') }}">
+                                            {% endif %}
+                                        </div>
+                                        {% if level == 4 %}
+                                            </div>
+                                            <div class="pipdivhalf">
+                                        {% endif %}
+                                    {% endfor %}
+                                    </div>
+                                <div class="pipdivhalf text-center">
+                                    <span class="pixeltext">{{ skill[1] }}</span>
+                                </div>
+                            </div>
+                        </dd>
+                    {% endfor %}
+                </dl>
+                <p class="text-center">{{ _('(Hover for professions)') }}</p>
+            </div>
+        </div>
+
+        <script>
+          $(document).ready(function () {
+            $('#myTab a:last').tab('show');
+          });
+        </script>
+
+    </div>
+</div>

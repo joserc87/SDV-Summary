@@ -1,0 +1,116 @@
+<div class="admin-panel bulletinpanel">
+    <div class="row center-block">
+        <div class="admin-buttons col-md-12">
+            {% if claimable %}
+                <button type="button" class="btn-link cpanel-object"
+                        data-toggle="tooltip" data-container="body"
+                        data-placement="bottom" data-html="true"
+                        data-trigger="click"
+                        title='{{ _("This will claim") }} <b>{{ _("only this") }}</b> {{ _("upload") }}.<br><form action="{{ data.url }}/claim" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">{{ _("Claim&nbsp;it!") }}</button></form>'>
+                    <img title="{{ _('Claim this farm (link it to your account)') }}"
+                         src="{{ url_for('static',filename='css/cpanel/clm32.png') }}">
+                </button>
+                {% if claimables|length > 1 %}
+                    <button type="button" class="btn-link cpanel-object"
+                            data-toggle="tooltip" data-container="body"
+                            data-placement="bottom" data-html="true"
+                            data-trigger="click"
+                            title='{{ _("This will claim") }} <b>{{ _("all unclaimed uploads") }}</b> {{ _("made from this browser.") }}<br><form action="{{ data.url }}/claimall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">{{ _("Claim&nbsp;all!") }}</button></form>'>
+                        <img title="{{ _('Claim all unclaimed farms (link them to your account)') }}"
+                             src="{{ url_for('static',filename='css/cpanel/clmall32.png') }}">
+                    </button>
+                {% endif %}
+            {% endif %}
+            {% if logged_in() or deletable %}
+                <button type="button" class="btn-link cpanel-object"
+                        data-toggle="tooltip" data-container="body"
+                        data-placement="bottom" data-html="true"
+                        data-trigger="click"
+                        title='{{ _("Send to") }} <b>{{ _("stardew.info planner") }}</b>{{ _("?") }}<br>{{ _("(this is a separate site not part of upload.farm)") }}<br><form action="{{ data.url }}/plan" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">{{ _("Plan&nbsp;my&nbsp;farm!") }}</button></form>'>
+                    <img title="{{ _('Plan my farm (send to stardew.info planner)') }}"
+                         src="{{ url_for('static',filename='css/cpanel/plan32.png') }}">
+                </button>
+            {% endif %}
+            {% if data.download_enabled == True and deletable %}
+                <button type="button"
+                        class="btn-link cpanel-object cpanel-state-on"
+                        data-toggle="tooltip" data-container="body"
+                        data-placement="bottom" data-html="true"
+                        data-trigger="click"
+                        title='<b>{{ _("Disable downloads?") }}</b><br>{{ _("Disables sharing of the savegame you uploaded") }}<br><form action="{{ data.url }}/disable-dl" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">{{ _("Disable!") }}</button></form>'>
+                    <img title="{{ _('Downloads currently enabled') }}"
+                         src="{{ url_for('static',filename='css/cpanel/dl32.png') }}">
+                </button>
+            {% endif %}
+            {% if data.download_enabled != True and logged_in() and data.download_enabled != True and deletable %}
+                <button type="button"
+                        class="btn-link cpanel-object cpanel-state-off"
+                        data-toggle="tooltip" data-container="body"
+                        data-placement="bottom" data-html="true"
+                        data-trigger="click"
+                        title='<b>{{ _("Enable downloads?") }}</b><br>{{ _("Enables download of the savegame you uploaded by yourself and others") }}<br><form action="{{ data.url }}/enable-dl" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">{{ _("Enable!") }}</button></form>'>
+                    <img title="{{ _('Downloads currently disabled') }}"
+                         src="{{ url_for('static',filename='css/cpanel/dldis32.png') }}">
+                </button>
+            {% elif data.download_enabled != True and (claimable or deletable) %}
+                <button type="button"
+                        class="btn-link cpanel-object cpanel-state-off"
+                        data-toggle="tooltip" data-container="body"
+                        data-placement="bottom" data-html="true"
+                        data-trigger="click"
+                        title='{{ _("To enable savegame download please first") }}
+                                {% if not logged_in() %}
+                                <a href="{{ url_for('signup') }}">{{ _('sign up') }}</a>
+                                or <a href="{{ url_for('login') }}">{{ _('sign in') }}</a>{{ _(', then') }}
+                                {% endif %} {{ _('claim this page.') }}'
+                >
+                    <img title="{{ _('Sign up or sign in to enable downloads!') }}"
+                         src="{{ url_for('static',filename='css/cpanel/dl32.png') }}">
+                </button>
+            {% endif %}
+            {% if logged_in() and deletable %}
+                {% if data.private %}
+                    <button type="button"
+                            class="btn-link cpanel-object cpanel-state-off"
+                            data-toggle="tooltip" data-container="body"
+                            data-placement="bottom" data-html="true"
+                            data-trigger="click"
+                            title='<b>{{ _("List your farm?") }}</b><br>{{ _("Allows it to appear in searches on the site") }}<br><form action="{{ data.url }}/list" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">{{ _("List!") }}</button></form>'>
+                        <img title="{{ _('Farm currently unlisted') }}"
+                             src="{{ url_for('static',filename='css/cpanel/unlist32.png') }}">
+                    </button>
+                {% else %}
+                    <button type="button"
+                            class="btn-link cpanel-object cpanel-state-on"
+                            data-toggle="tooltip" data-container="body"
+                            data-placement="bottom" data-html="true"
+                            data-trigger="click"
+                            title='<b>{{ _("Unlist your farm?") }}</b><br>{{ _("Prevents it appearing on the site except to you and people with the URL") }}<br><form action="{{ data.url }}/unlist" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">{{ _("Unlist!") }}</button></form>'>
+                        <img title="{{ _('Farm currently listed') }}"
+                             src="{{ url_for('static',filename='css/cpanel/list32.png') }}">
+                    </button>
+                {% endif %}
+            {% endif %}
+            {% if not claimable and deletable %}
+                <button type="button" class="btn-link cpanel-object"
+                        data-toggle="tooltip" data-container="body"
+                        data-placement="bottom" data-html="true"
+                        data-trigger="click"
+                        title='<b>{{ _("Delete this farm?") }}</b><br>{{ _("This will delete ") }}<b>{{ _("only this") }}</b>{{ _(" upload") }}<br><form action="{{ data.url }}/del" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">{{ _("Delete&nbsp;it!") }}</button></form>'>
+                    <img title="{{ _('Delete farm') }}"
+                         src="{{ url_for('static',filename='css/cpanel/del32.png') }}">
+                </button>
+                {% if others|length > 1 %}
+                    <button type="button" class="btn-link cpanel-object"
+                            data-toggle="tooltip" data-container="body"
+                            data-placement="bottom" data-html="true"
+                            data-trigger="click"
+                            title='<b>{{ _("Delete all for this farm?") }}</b><br>{{ _("This will delete ") }}<b>{{ _("all uploads in this series.") }}</b> {{ _("This will remove this farm and all associated farms, be sure you mean to do this!") }}<br><form action="{{ data.url }}/delall" method="post"><button type="submit" name="strangerdanger" value="strangerdanger" class="btn-link">{{ _("Delete&nbsp;entire&nbsp;series!") }}</button></form>'>
+                        <img title="{{ _('Delete entire farm series') }}"
+                             src="{{ url_for('static',filename='css/cpanel/delall32.png') }}">
+                    </button>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
