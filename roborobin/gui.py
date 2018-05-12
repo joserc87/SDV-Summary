@@ -213,13 +213,13 @@ class MainWindow(QMainWindow):
 	def _add_cabin(self,cabinname = None):
 		self.xcoord = self._xposslider.value()
 		self.ycoord = 62 - self._yposslider.value()
-		try:
-			self.cabinname = cabinname if cabinname else self.savegame.get_unique_cabin_name()
-			self.nc = new_cabin(self.xcoord,self.ycoord,self.cabinname,self.cabin_type)
-			self.savegame.add_cabin(self.nc)
-			self.render_minimap()
-		except (TypeError, AttributeError):
-			pass
+		# try:
+		self.cabinname = cabinname if cabinname else self.savegame.get_unique_cabin_name()
+		self.nc = new_cabin(self.xcoord,self.ycoord,self.cabinname,self.cabin_type)
+		self.savegame.add_cabin(self.nc)
+		self.render_minimap()
+		# except (TypeError, AttributeError):
+		# 	pass
 
 	def open_help(self):
 		QtGui.QDesktopServices.openUrl(QUrl(HELP_FILE_LOCATION))

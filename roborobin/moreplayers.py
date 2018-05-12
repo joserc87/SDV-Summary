@@ -3,6 +3,7 @@ import shutil
 import time
 import copy
 import random
+from collections import OrderedDict
 
 import xmltodict
 
@@ -58,7 +59,7 @@ class SaveGame:
 		self.filename = filename
 		self.load_filename()
 		self._get_farm()
-		self.v1_3()
+		self._prep_buildings()
 
 
 	def v1_3(self):
@@ -76,15 +77,20 @@ class SaveGame:
 
 
 	def add_cabin(self,cabin):
+		# if not isinstance(self.farm['buildings'],OrderedDict):
+		# 	self.farm['buildings'] = OrderedDict()
 		self.farm['buildings']['Building'].append(cabin['Building'])
 
 
 	def pop_cabin(self):
 		self._last_cabin = None
-		for b, building in enumerate(self.farm['buildings']['Building']):
-			if building.get('indoors') and building.get('indoors').get('@xsi:type') == 'Cabin':
-				self._last_cabin = b
-		if self._last_cabin:
+		try:
+			for b, building in enumerate(self.farm['buildings']['Building']):
+				if building.get('indoors') and building.get('indoors').get('@xsi:type') == 'Cabin':
+					self._last_cabin = b
+		except TypeError:
+			pass
+		if self._last_cabin != None:
 			self._last_cabin = self.farm['buildings']['Building'].pop(self._last_cabin)
 		return self._last_cabin
 
@@ -119,6 +125,14 @@ class SaveGame:
 				self.cabins.append(building)
 		# print(self.cabins)
 		return self.cabins
+
+
+	def _prep_buildings(self):
+		if self.v1_3():
+			if not isinstance(self.farm.get('buildings'),OrderedDict):
+				self.farm['buildings'] = OrderedDict()
+			if not isinstance(self.farm['buildings'].get('Building'),list):
+				self.farm['buildings']['Building'] = []
 
 
 	def save(self,filename):
