@@ -82,7 +82,6 @@ sdv/templates/analytics.html
 /.idea
 logfile
 assets/
-render_test.py
 test
 
 logs/
