@@ -3,7 +3,7 @@
 	<head>
 		<title>{% block title %}{{_("upload.farm Stardew Valley Summary Generator")}}{% endblock %}</title>
 		{% block header %}
-		
+
 		<!-- Load Things -->
 		<link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='icon/apple-touch-icon-57x57.png') }}">
 		<link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='icon/apple-touch-icon-60x60.png') }}">
@@ -23,10 +23,13 @@
 		<!-- Thanks to http://realfavicongenerator.net/ for the favicons -->
 
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		
+
 		<!-- Load Style Sheets -->
 		<link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet" media="screen">
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+        {% assets "common_css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+        {% endassets %}
 
 		<!-- Load External Fonts -->
 		<link href='https://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
@@ -42,7 +45,7 @@
 		</script>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
 		<!-- End Cookie Consent plugin -->
-		
+
 		{% endblock %}
 		{% include "analytics.html" %}
 	</head>

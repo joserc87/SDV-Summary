@@ -27,6 +27,9 @@ import patreon
 import defusedxml
 import psycopg2
 import psycopg2.extras
+
+from sdv.asset_bundles import assets
+
 psycopg2.extras.register_json(oid=3802, array_oid=3807, globally=True)
 import requests
 
@@ -68,6 +71,7 @@ censor = Censor()
 
 random.seed()
 
+
 def create_app(config_name=None):
     logger.info('Creating flask app...')
     app = Flask(__name__)
@@ -79,10 +83,12 @@ def create_app(config_name=None):
 
     logger.info('Initialising extensions')
     app.config.from_object(config[config_name])
+
     recaptcha.init_app(app=app)
     bcrypt.init_app(app)
     mail.init_app(app)
     censor.init_app(app=app)
+    assets.init_app(app)
 
     app.secret_key = app.config['SECRET_KEY']
     app.jinja_env.trim_blocks = True
