@@ -27,7 +27,31 @@
     <div class="info--details interiorpanel tabbable">
         <div class="info-header row">
             <div class="info-name">
+            {% if data['farmhands'] %}
+                <div class="selected-player dropdown">
+                    <div class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                            data-toggle="dropdown" title="View other players" aria-haspopup="true" aria-expanded="true">
+                        {{ data['name'] }}
+                        <span class="caret"></span>
+                    </div>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li class="dropdown-header">Farm Owner</li>
+                        <li><a href="#">
+                            <img src="{{ data['avatar_url'] }}" alt="{{ data['name']}} avatar">
+                            {{ data['name'] }}
+                        </a></li>
+                        <li class="dropdown-header">Farmhands</li>
+                        {% for farmhand in data['farmhands'] %}
+                            <li><a href="#">
+                                <img src="{{ farmhand['avatar_url'] }}" alt="{{ farmhand['name']}} avatar">
+                                {{ farmhand['name']}}
+                            </a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% else %}
                 <h1>{{ data['name'] }}</h1>
+            {% endif %}
             </div>
         </div>
         <div class=" tab-content text-left">

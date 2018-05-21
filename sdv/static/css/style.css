@@ -818,6 +818,57 @@ p.cc_message {
     margin-bottom: 10px;
 }
 
+/* Player Select Dropdown */
+
+.selected-player .open > .dropdown-toggle.btn-default  {
+    background-color: red !important;
+}
+
+.selected-player .dropdown-toggle {
+    background: transparent;
+    padding: 0 25px;
+    font-size: 56px;
+    border: none;
+    font-family: 'Architects Daughter', cursive;
+}
+
+.selected-player.open .dropdown-toggle {
+    background-color: transparent;
+}
+
+.selected-player.open .dropdown-toggle:hover {
+    background-color: transparent;
+}
+
+.selected-player.open .dropdown-toggle:active {
+    background-color: transparent;
+}
+
+.selected-player.open .dropdown-toggle:focus {
+    background-color: transparent;
+}
+
+.selected-player .dropdown-toggle:focus {
+    background-color: transparent;
+}
+
+.selected-player .dropdown-toggle:active {
+    background-color: transparent;
+}
+
+.selected-player .dropdown-toggle:active {
+    box-shadow: none;
+}
+
+.selected-player .dropdown-menu img {
+    height: 64px;
+}
+
+.selected-player .dropdown-header {
+    font-size: 20pt;
+}
+
+
 /* Media Queries */
 
 @media (max-width: 1500px) {
