@@ -382,3 +382,11 @@
         </div>
     </div>
 {% endblock %}
+
+{% block javascript %}
+    {{ super() }}
+
+    {% assets "profile_js" %}
+        <script src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{% endblock %}
