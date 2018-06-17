@@ -28,6 +28,9 @@ from versioninfo import version_is_current
 from pyinstallerresourcesupport import resource_path
 from animator import AnimationThread
 
+import logging
+logger = logging.getLogger(__name__)
+
 AUTHENTICATION_URL = server_location+"/auth?client_id="+client_id
 ACCOUNT_URL = server_location+"/acc"
 BACKUP_DIRECTORY = backup_directory
@@ -91,6 +94,7 @@ def restore_mac_dock_icon():
 
 class WaitingWindow(QMainWindow):
 	def __init__(self):
+		logger.debug('creating waitingwindow')
 		super().__init__()
 		remove_from_startup()
 		self.webserver = launch_webserver_as_process()
@@ -100,6 +104,7 @@ class WaitingWindow(QMainWindow):
 		self.timer.timeout.connect(self.check_db)
 		self.timer.start(1000)
 		self.fully_kill = True
+		logger.debug('waitingwindow created')
 
 
 	aboutToQuit = Signal()
@@ -218,6 +223,7 @@ class WaitingWindow(QMainWindow):
 
 class GifferWindow(QMainWindow):
 	def __init__(self,aboutToQuit):
+		logger.debug('creating gifferwindow')
 		super().__init__()
 		self.init_ui()
 		self.set_bg_image()
@@ -231,6 +237,7 @@ class GifferWindow(QMainWindow):
 			QMessageBox.information(self, "Couldn't reach upload.farm!",
 					"Can't reach upload.farm! This tool requires it to function, please try again later!")
 			self.close()
+		logger.debug('created')
 		
 
 	renderComplete = Signal(str,QPushButton)
@@ -432,6 +439,7 @@ class GifferWindow(QMainWindow):
 
 class MainWindow(QMainWindow):
 	def __init__(self):
+		logger.debug('creating mainwindow')
 		super().__init__()
 		self.init_ui()
 		self.init_tray()
@@ -451,6 +459,7 @@ class MainWindow(QMainWindow):
 			self.show()
 		else:
 			remove_mac_dock_icon()
+		logger.debug('mainwindow created')
 
 
 	updateGui = Signal()
