@@ -108,6 +108,7 @@ def parse_json(data):
     # Deal with different sized building footprints
     buildings2 = ['stable', 'gold-clock', 'junimo-hut', 'mill']
     buildings3 = ['silo', 'well', 'coop', 'water-obelisk', 'earth-obelisk', 'shed']
+    multiplayer_cabins = ['log-cabin', 'stone-cabin', 'plank-cabin']
     buildings4 = ['barn']
     buildings7 = ['slime-hutch']
 
@@ -168,6 +169,10 @@ def parse_json(data):
             objects.append(
                     sprite('Building', x, y - 1, 4, 7, None, obj.replace('-', ' '), None, None,
                            None)
+            )
+        elif obj in multiplayer_cabins:
+            objects.append(
+                    sprite('Building', x, y, 5, 3, None, obj.replace('-', ' '), None, None, 0)
             )
         elif obj in craftable_index:
             objects.append(
