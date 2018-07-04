@@ -34,6 +34,7 @@ psycopg2.extras.register_json(oid=3802, array_oid=3807, globally=True)
 import requests
 
 from sdv.utils.log import app_logger
+from sdv.utils.helpers import random_id
 
 # from sdv.playerInfo import playerInfo
 from sdv.playerinfo2 import GameInfo
@@ -1430,6 +1431,10 @@ def display_data(url):
         vote = json.dumps({url:get_votes(url)})
         if logged_in() == False and len(claimables) > 1 and request.cookies.get('no_signup')!='true':
             flash({'message':'<p>'+_("It looks like you have uploaded multiple files, but are not logged in: if you <a href='{}'>sign up</a> or <a href='{}'>sign in</a> you can link these uploads, enable savegame sharing, and one-click-post farm renders to imgur!")+'</p>'.format(url_for('signup'),url_for('login')),'cookie_controlled':'no_signup'})
+
+        datadict['uf_id'] = random_id()
+        for fh in datadict['farmhands']:
+            fh['uf_id'] = random_id()
         return render_template("profile/profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote, data=datadict, kills=kills, friendships=friendships, others=other_saves, gallery_set=gallery_set, **page_args())
 
 

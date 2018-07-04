@@ -1,26 +1,26 @@
 {% import 'text_constants.html' as text %}
 
 {% macro info_panel(player, data, hidden=False) %}
-    <div id='{{ player['name'] }}-info-panel'
+    <div id='{{ player['uf_id'] }}-info-panel'
          class="col-md-8 col-sm-12 panel info-panel {% if hidden %}hidden{% endif %}">
         <div class="info--navigation">
             <ul class="info--navigation nav" style="margin-bottom: 15px;">
                 <li class="active">
-                    <a href="#playerInfo" data-toggle="pill">
+                    <a href="#playerInfo-{{ player['uf_id'] }}" data-toggle="pill">
                         <img src="{{ url_for('static', filename='icon/player-nav-icon.png') }}"
                              class="nav--icon">
                         <span>{{ _('Stats') }}</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#familyPortrait" data-toggle="pill">
+                    <a href="#familyPortrait-{{ player['uf_id'] }}" data-toggle="pill">
                         <img src="{{ url_for('static', filename='icon/summary-nav-icon.png') }}"
                              class="nav--icon">
                         <span>{{ _('Summary') }}</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#skills" data-toggle="pill">
+                    <a href="#skills-{{ player['uf_id'] }}" data-toggle="pill">
                         <img src="{{ url_for('static', filename='icon/skills-nav-icon.png') }}"
                              class="nav--icon">
                         <span>{{ _('Skills') }}</span>
@@ -43,13 +43,13 @@
                             </div>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                 <li class="dropdown-header">Farm Owner</li>
-                                <li class="player-select-item" data-target="{{ data['name'] }}-info-panel">
+                                <li class="player-select-item" data-target="{{ data['uf_id'] }}-info-panel">
                                     <img src="{{ data['avatar_url'] }}"
                                          alt="{{ data['name'] }} avatar">
                                     {{ data['name'] }}</li>
                                 <li class="dropdown-header">Farmhands</li>
                                 {% for farmhand in data['farmhands'] %}
-                                    <li class="player-select-item" data-target="{{ farmhand['name'] }}-info-panel">
+                                    <li class="player-select-item" data-target="{{ farmhand['uf_id'] }}-info-panel">
                                         <img src="{{ farmhand['avatar_url'] }}"
                                              alt="{{ farmhand['name'] }} avatar">
                                         {{ farmhand['name'] }}</li>
@@ -62,7 +62,7 @@
                 </div>
             </div>
             <div class=" tab-content text-left">
-                <div id="playerInfo" class="tab-pane active">
+                <div id="playerInfo-{{ player['uf_id'] }}" class="tab-pane active">
                     <div class="info--body">
                         <div class="avatarPanel">
                             <img src="{{ player.avatar_url }}" class="playerAvatar">
@@ -118,7 +118,7 @@
                         </dl>
                     </div>
                 </div>
-                <div id="familyPortrait" class="tab-pane">
+                <div id="familyPortrait-{{ player['uf_id'] }}" class="tab-pane">
                     <div class="info--body">
                         <div class="portraitPanel">
                             <img src="{{ player.portrait_url }}" class="playerPortrait">
@@ -186,7 +186,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="skills" class="tab-pane">
+                <div id="skills-{{ player['uf_id'] }}" class="tab-pane">
                     <dl class="dl-horizontal">
 
                         {% for skill in [('Farming',player.farmingLevel),('Mining',player.miningLevel),('Foraging',player.foragingLevel),('Fishing',player.fishingLevel),('Combat',player.combatLevel)] %}
