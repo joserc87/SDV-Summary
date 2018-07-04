@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% from 'profile/info_panel.html' import info_panel %}
+
 {% block header %}
     {{ super() }}
     <!-- Place this data between the <head> tags of your website -->
@@ -264,7 +267,12 @@
         {% endif %}
     {% endwith %}
     <div class="row center-block">
-        {% include 'profile/info_panel.html' %}
+
+        {{ farmhands }}
+        {{ info_panel(data, data) }}
+        {% for farmhand in data['farmhands'] %}
+            {{ info_panel(farmhand, data, hidden=True) }}
+        {% endfor %}
         <div class="col-md-4 col-sm-12 panel"><!--col-md-offset-1-->
             <div class="text-center">
                 <div class="panel interiorpanel">
