@@ -121,7 +121,7 @@
                 <div id="familyPortrait-{{ player['uf_id'] }}" class="tab-pane">
                     <div class="info--body">
                         <div class="portraitPanel">
-                            <img src="{{ player.portrait_url }}" class="playerPortrait">
+                            <img src="{{ player.portrait_url or player['avatar_url'] }}" class="playerPortrait">
                         </div>
                         <div class="info--summary-text">
                             <p>
