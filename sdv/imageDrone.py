@@ -85,16 +85,17 @@ def process_queue():
 
                 # Farmhands
                 farmhands = data.get('farmhands', [])
-                for i, farmhand in enumerate(farmhands):
-                    farmhand_path = base_path_fmt.format(image_type=f'fh-{i}')
-                    farmhand_avatar = generateAvatar(farmhand)
+                if farmhands:
+                    for i, farmhand in enumerate(farmhands):
+                        farmhand_path = base_path_fmt.format(image_type=f'fh-{i}')
+                        farmhand_avatar = generateAvatar(farmhand)
 
-                    farmhand_avatar.resize((avatar.width * 4, avatar.height * 4))
-                    farmhand_avatar.save(legacy_location(farmhand_path), compress_level=9)
-                    cur.execute(
-                            sql.UPDATE_FARMHAND_AVATAR_URL,
-                            (farmhand_path, farmhand.get('name'), farm_id)
-                    )
+                        farmhand_avatar.resize((avatar.width * 4, avatar.height * 4))
+                        farmhand_avatar.save(legacy_location(farmhand_path), compress_level=9)
+                        cur.execute(
+                                sql.UPDATE_FARMHAND_AVATAR_URL,
+                                (farmhand_path, farmhand.get('name'), farm_id)
+                        )
 
                 # Minimap, Thumbnail and Main Map
                 farm_data = regenerateFarmInfo(json.loads(data['farm_info']))

@@ -269,9 +269,11 @@
     <div class="row center-block">
         {{ farmhands }}
         {{ info_panel(data, data) }}
-        {% for farmhand in data['farmhands'] %}
-            {{ info_panel(farmhand, data, hidden=True) }}
-        {% endfor %}
+        {% if data['farmhands'] %}
+            {% for farmhand in data['farmhands'] %}
+                {{ info_panel(farmhand, data, hidden=True) }}
+            {% endfor %}
+        {% endif %}
         <div class="col-md-4 col-sm-12 panel"><!--col-md-offset-1-->
             <div class="text-center">
                 <div class="panel interiorpanel">
