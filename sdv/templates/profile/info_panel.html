@@ -43,13 +43,15 @@
                             </div>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                 <li class="dropdown-header">Farm Owner</li>
-                                <li class="player-select-item" data-target="{{ data['uf_id'] }}-info-panel">
+                                <li class="player-select-item"
+                                    data-target="{{ data['uf_id'] }}-info-panel">
                                     <img src="{{ data['avatar_url'] }}"
                                          alt="{{ data['name'] }} avatar">
                                     {{ data['name'] }}</li>
                                 <li class="dropdown-header">Farmhands</li>
                                 {% for farmhand in data['farmhands'] %}
-                                    <li class="player-select-item" data-target="{{ farmhand['uf_id'] }}-info-panel">
+                                    <li class="player-select-item"
+                                        data-target="{{ farmhand['uf_id'] }}-info-panel">
                                         <img src="{{ farmhand['avatar_url'] }}"
                                              alt="{{ farmhand['name'] }} avatar">
                                         {{ farmhand['name'] }}</li>
@@ -121,7 +123,8 @@
                 <div id="familyPortrait-{{ player['uf_id'] }}" class="tab-pane">
                     <div class="info--body">
                         <div class="portraitPanel">
-                            <img src="{{ player.portrait_url or player['avatar_url'] }}" class="playerPortrait">
+                            <img src="{{ player.portrait_url or player['avatar_url'] }}"
+                                 class="playerPortrait">
                         </div>
                         <div class="info--summary-text">
                             <p>
@@ -144,17 +147,17 @@
                                             {{ _('daughter') }}{% endif %}
                                         {{ _('named') }} <b>{{ child[3]|censor }}</b>
                                         {% if not loop.last %} {% endif %}
-                                        {% if loop.last and player.petName!=None %},{% endif %}
+                                        {% if loop.last and data.petName!=None %},{% endif %}
                                     {% endfor %}
                                 {% else %}
                                     {{ _('has no children') }}{% if player.petName!=None %},
                                     {% else %}
                                         .{% endif %}
                                 {% endif %}
-                                {% if player.petName != None %}
-                                    {{ _('and has a pet') }} {% if player.catPerson == 'true' %}
+                                {% if data.petName != None %}
+                                    {{ _('and has a pet') }} {% if data.catPerson == 'true' %}
                                     {{ _('cat') }} {% else %} {{ _('dog') }} {% endif %}
-                                    {{ _('named') }} <b>{{ player.petName|censor }}</b>.
+                                    {{ _('named') }} <b>{{ data.petName|censor }}</b>.
                                 {% endif %}
                             </p>
                             <div class="col-md-7 col-sm-offset-0 col-lg-offset-0 col-md-offset-1 col-sm-8 col-xs-12">

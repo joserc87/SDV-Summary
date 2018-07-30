@@ -1435,6 +1435,8 @@ def display_data(url):
         datadict['uf_id'] = random_id()
         if datadict['farmhands']:
             for fh in datadict['farmhands']:
+                # parse partner json
+                fh['portrait_info'] = json.loads(fh.get('portrait_info', '{}'))
                 fh['uf_id'] = random_id()
         return render_template("profile/profile.html", deletable=deletable, claimable=claimable, claimables=claimables, vote=vote, data=datadict, kills=kills, friendships=friendships, others=other_saves, gallery_set=gallery_set, **page_args())
 
