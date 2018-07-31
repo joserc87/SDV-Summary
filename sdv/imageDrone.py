@@ -92,10 +92,12 @@ def process_queue():
 
                         farmhand_avatar.resize((avatar.width * 4, avatar.height * 4))
                         farmhand_avatar.save(legacy_location(farmhand_path), compress_level=9)
-                        cur.execute(
-                                sql.UPDATE_FARMHAND_AVATAR_URL,
-                                (farmhand_path, farmhand.get('name'), farm_id)
-                        )
+                        farmhand['avatar_url'] = farmhand_path
+
+                cur.execute(
+                        sql.UPDATE_FARMHANDS,
+                        (json.dumps(farmhands), farm_id)
+                )
 
                 # Minimap, Thumbnail and Main Map
                 farm_data = regenerateFarmInfo(json.loads(data['farm_info']))

@@ -43,23 +43,6 @@ UPDATE_PLAYER_IMAGE_URLS = '''
     id={sql_escape};
 '''.format(sql_escape=sql_escape)
 
-UPDATE_FARMHAND_AVATAR_URL = '''
-                    UPDATE
-                      playerinfo
-                    SET
-                      farmhands = jsonb_set(
-                          farmhands,
-                          array [elem_index :: text, 'avatar_url'],
-                          to_jsonb({sql_escape}::text),
-                          true
-                      )
-                    FROM (SELECT pos - 1 as elem_index
-                          FROM
-                            playerinfo,
-                                jsonb_array_elements(farmhands)
-                                WITH ORDINALITY arr(elem, pos)
-                          WHERE
-                            elem ->> 'name' = {sql_escape}) sub
-                    WHERE
-                    id = {sql_escape};
-                    '''.format(sql_escape=sql_escape)
+UPDATE_FARMHANDS = '''
+    UPDATE playerinfo SET farmhands = {sql_escape} WHERE id = {sql_escape}; 
+'''.format(sql_escape=sql_escape)
