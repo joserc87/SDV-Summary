@@ -76,10 +76,6 @@ def process_queue():
 
                 # Main Player Avatar and Portrait
                 avatar = generateAvatar(data)
-                portrait_info = json.loads(data['portrait_info'])
-                generateFamilyPortrait(avatar, portrait_info).save(legacy_location(portrait_path),
-                                                                   compress_level=9)
-
                 avatar.resize((avatar.width * 4, avatar.height * 4))
                 avatar.save(legacy_location(avatar_path), compress_level=9)
 
@@ -87,7 +83,9 @@ def process_queue():
                 farmhands = data.get('farmhands', [])
                 if farmhands:
                     for i, farmhand in enumerate(farmhands):
-                        farmhand_path = base_path_fmt.format(image_type=f'fh-{i}')
+                        farmhand_path = base_path_fmt.format(
+                                image_type=f'fh-{farmhand["UniqueMultiplayerID"]}'
+                        )
                         farmhand_avatar = generateAvatar(farmhand)
 
                         farmhand_avatar.resize((avatar.width * 4, avatar.height * 4))
@@ -98,6 +96,17 @@ def process_queue():
                         sql.UPDATE_FARMHANDS,
                         (json.dumps(farmhands), farm_id)
                 )
+
+                portrait_info = json.loads(data['portrait_info'])
+
+                partner_image = None
+                partner_id = portrait_info.get('partner_id')
+                if partner_id:
+                    partner = next(filter(lambda f: f['UniqueMultiplayerID'] == partner_id, farmhands))
+                    partner_image = Image.open('.\\sdv\\' + partner['avatar_url'])
+
+                generateFamilyPortrait(avatar, portrait_info, partner_image=partner_image) \
+                    .save(legacy_location(portrait_path), compress_level=9)
 
                 # Minimap, Thumbnail and Main Map
                 farm_data = regenerateFarmInfo(json.loads(data['farm_info']))
