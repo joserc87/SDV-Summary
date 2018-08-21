@@ -107,10 +107,10 @@
                                     </div>
                                     <div>
                                     <dt>{{ _('Cavern Depth') }}</dt>
-                                    <dd>{{ _('%(word_level)s %(number)s',word_level=_('level'), number=player.deepestMineLevel-120) }}</dd>
+                                    <dd>{{ _('%(word_level)s %(number)i',word_level=_('level'), number=(player['deepestMineLevel'] | int) - 120) }}</dd>
                                 {% else %}
                                     <dt>{{ _('Mine Depth') }}</dt>
-                                    <dd>{{ _('%(word_level)s %(number)s',word_level=_('level'), number=player.deepestMineLevel) }}</dd>
+                                    <dd>{{ _('%(word_level)s %(number)i',word_level=_('level'), number=(player['deepestMineLevel'] | string)) }}</dd>
                                 {% endif %}
                                 </div>
                             <div>
@@ -130,7 +130,7 @@
                             <p>
                                 {% if player.portrait_info['partner'] != None %}
                                     <b>{{ player.name|censor }}</b> {{ _('is married to') }}
-                                    <b>{{ text.translated_friends.get(player.portrait_info['partner'],None) }}</b>
+                                    <b>{{ text.translated_friends.get(player.portrait_info['partner'], player.portrait_info['partner']) }}</b>
                                     {% if player.petName!=None %}, {% else %}
                                         {{ _('and') }}{% endif %}
                                 {% else %}

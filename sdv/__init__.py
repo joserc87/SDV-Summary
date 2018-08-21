@@ -1308,6 +1308,8 @@ def insert_info(player_info,farm_info,md5_info):
     values = []
     # player_info['date'] = ['Spring','Summer','Autumn','Winter'][int(((player_info['stats']['DaysPlayed']%(28*4))-((player_info['stats']['DaysPlayed']%(28*4))%(28)))/28)]+' '+str((player_info['stats']['DaysPlayed']%(28*4))%(28))+', Year '+str(((player_info['stats']['DaysPlayed']-player_info['stats']['DaysPlayed']%(28*4))/(28*4))+1)
     for key in player_info.keys():
+        if key == 'UniqueMultiplayerID':
+            continue
         if key == 'farmhands':
             if key_in_database_structure(key):
                 columns.append(key)
