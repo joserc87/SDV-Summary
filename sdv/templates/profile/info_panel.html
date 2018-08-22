@@ -1,6 +1,7 @@
 {% import 'text_constants.html' as text %}
 
 {% macro info_panel(player, data, hidden=False) %}
+    {% set professions = [data.professions0,data.professions1,data.professions2,data.professions3,data.professions4,data.professions5,data.professions6,data.professions7,data.professions8,data.professions9] %}
     <div id='{{ player['uf_id'] }}-info-panel'
          class="col-md-8 col-sm-12 panel info-panel {% if hidden %}hidden{% endif %}">
         <div class="info--navigation">
@@ -208,9 +209,12 @@
                                                        data-toggle="popover"
                                                        data-trigger="hover"
                                                        data-container="body" data-html="true"
-                                                       {% for value in text.profindex[skill[0]][level] %}{% if value in professions %}title="<img src='{{ url_for('static', filename='assets/professions/'+value+'.png') }}'>{{ text.translated_titles[value] }}"
+                                                            {% for value in text.profindex[skill[0]][level] %}
+                                                                {% if value in professions %}
+                                                       title="<img src='{{ url_for('static', filename='assets/professions/'+value+'.png') }}'>{{ text.translated_titles[value] }}"
                                                        data-content="{{ text.blurbs[value] }}"
-                                                       {% endif %}{% endfor %}>
+                                                                {% endif %}
+                                                            {% endfor %}>
                                                         <img class="pip"
                                                              src="{{ url_for('static', filename='assets/skills/profession_active.png') }}">
                                                     </a>

@@ -42,10 +42,8 @@
             charset="utf-8"></script>
     <script>
       $(function () {
-        $('[data-toggle="popover"]').popover();
-      });
-      $(function () {
         $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="popover"]').popover();
       });
     </script>
     {% include "votesetup.html" %}
@@ -54,12 +52,12 @@
           var keyboard_control_enabled = true;
           document.addEventListener('keydown', function (e) {
             {% if 'previous' in others %}
-              if (e.keyCode == 37 && keyboard_control_enabled) {
+              if (e.keyCode === 37 && keyboard_control_enabled) {
               window.location.replace('{{others['previous'].0}}');
             }
             {% endif %}
           {% if 'next' in others and 'previous' in others %}else{%endif%} {%if 'next' in others %}if
-            (e.keyCode == 39 && keyboard_control_enabled) {
+            (e.keyCode === 39 && keyboard_control_enabled) {
               window.location.replace('{{others['next'].0}}');
             }
           {%endif%}
@@ -154,9 +152,6 @@
 
 {# All of the translatable text from the page #}
 {% import 'text_constants.html' as text %}
-
-{% set professions = [data.professions0,data.professions1,data.professions2,data.professions3,data.professions4,data.professions5,data.professions6,data.professions7,data.professions8,data.professions9] %}
-
 
 {% block title %}
     {{ _("%(farmname)s Farm",farmname = data.farmName|censor) }} - {{ super() }}
