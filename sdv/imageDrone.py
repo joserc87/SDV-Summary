@@ -103,7 +103,7 @@ def process_queue():
                 partner_id = portrait_info.get('partner_id')
                 if partner_id:
                     partner = next(filter(lambda f: f['UniqueMultiplayerID'] == partner_id, farmhands))
-                    partner_image = Image.open('.\\sdv\\' + partner['avatar_url'])
+                    partner_image = Image.open(legacy_location(partner['avatar_url']))
 
                 generateFamilyPortrait(avatar, portrait_info, partner_image=partner_image) \
                     .save(legacy_location(portrait_path), compress_level=9)
