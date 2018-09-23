@@ -182,7 +182,7 @@ class Player:
                             self.info["friendships"] = get_friendships(self.player_node, self.v1_3)
                         elif tag in ['hairstyleColor', 'pantsColor', 'newEyeColor']:
                             self.info[tag] = list(map(
-                                    lambda c: int(self.player_node.find(tag).find('R').text),
+                                    lambda c: int(self.player_node.find(tag).find(c).text),
                                     'RGBA'
                             ))
                             assert all([0 <= i <= 255 for i in self.info[tag]])
