@@ -1,4 +1,4 @@
-{% import 'text_constants.html' as text %}
+{% import 'text_constants.html' as text with context %}
 
 {% macro info_panel(player, data, hidden=False) %}
     {% set professions = [data.professions0,data.professions1,data.professions2,data.professions3,data.professions4,data.professions5,data.professions6,data.professions7,data.professions8,data.professions9] %}

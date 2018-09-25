@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% from 'profile/info_panel.html' import info_panel %}
+{% from 'profile/info_panel.html' import info_panel with context%}
 
 {% block header %}
     {{ super() }}
@@ -151,7 +151,7 @@
 {% endblock %}
 
 {# All of the translatable text from the page #}
-{% import 'text_constants.html' as text %}
+{% import 'text_constants.html' as text with context%}
 
 {% block title %}
     {{ _("%(farmname)s Farm",farmname = data.farmName|censor) }} - {{ super() }}
