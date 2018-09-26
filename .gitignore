@@ -91,3 +91,6 @@ dev/
 
 tests/reference_images
 tests/reference_saves
+
+*.min.js
+*.min.css
