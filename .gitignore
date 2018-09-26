@@ -94,3 +94,5 @@ tests/reference_saves
 
 *.min.js
 *.min.css
+
+fabfile.py
