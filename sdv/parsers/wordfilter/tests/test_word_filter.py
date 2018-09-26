@@ -1,7 +1,7 @@
-from sdv.parsers.wordfilter.logic import Censor
+from ..logic import Censor
 
 
-class TestWordfilter():
+class TestWordFilter:
     censor = Censor()
 
     def test_wordfilter_safe_word(self):
@@ -49,3 +49,12 @@ class TestWordfilter():
         test_text = 1
         result = self.censor.censor(test_text)
         assert result is 1
+
+    def test_wordfilter_long_input(self):
+        """
+        Ensure None input returns None
+        """
+
+        test_text = 'fudgepacker'
+        result = self.censor.censor(test_text)
+        assert result != test_text
