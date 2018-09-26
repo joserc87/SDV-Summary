@@ -10,5 +10,5 @@ sys.path.insert(0, './')
 # sys.path.insert(0, './sdv')
 # 
 
-from sdv import app
+from sdv.app import app
 app.run(host="0.0.0.0")

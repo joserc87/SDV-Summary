@@ -1,5 +1,5 @@
 import json
-from sdv import validate
+import sdv.validate as validate
 from sdv.savefile import get_location
 
 ns = "{http://www.w3.org/2001/XMLSchema-instance}"

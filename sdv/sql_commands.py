@@ -1,4 +1,4 @@
-from sdv import app
+from sdv.app import app
 
 sql_escape = app.sqlesc
 

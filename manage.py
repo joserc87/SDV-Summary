@@ -2,7 +2,7 @@
 import sys
 import subprocess
 from flask_script import Manager
-from sdv import app
+from sdv.app import app
 from sdv.createdb import init_db
 from sdv.createadmin import init_admin
 from tools import copy_assets

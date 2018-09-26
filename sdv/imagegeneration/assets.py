@@ -1,7 +1,7 @@
 import os
 
 from PIL import Image
-from sdv import app
+from sdv.app import app
 from sdv.imagegeneration.tools import cropImg
 
 asset_dir = app.config.get('ASSET_PATH')

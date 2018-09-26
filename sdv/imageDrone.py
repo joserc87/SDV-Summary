@@ -1,22 +1,19 @@
 import os
 import time
-import sqlite3
-import psycopg2
 import json
 import math
 
 from PIL import Image
-from flask import Flask
 
 import sdv.sql_commands as sql
-from sdv.createdb import database_structure_dict, database_fields
+from sdv.createdb import database_fields
 from sdv.farmInfo import regenerateFarmInfo
 from sdv.imagegeneration.avatar import generateAvatar
 from sdv.imagegeneration.familyportrait import generateFamilyPortrait
 from sdv.imagegeneration.farm import generateFarm, generateMinimap
 from sdv.imagegeneration.tools import watermark
 from sdv.parsers.json import parse_json
-from sdv import app, connect_db, legacy_location
+from sdv.app import app, connect_db, legacy_location
 
 sqlesc = app.sqlesc
 

@@ -1,7 +1,5 @@
-import json
-from flask import Flask
 from flask_mail import Message
-from sdv import app, connect_db, mail
+from sdv.app import app, connect_db, mail
 import uuid
 import time
 sqlesc = app.sqlesc

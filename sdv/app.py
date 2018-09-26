@@ -1,28 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify, make_response, send_from_directory, abort
-from flask_babel import Babel, _, gettext, ngettext, Locale
+from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify, \
+    make_response
+from flask_babel import Babel, _, Locale
 from flask_recaptcha import ReCaptcha
 from flask_bcrypt import Bcrypt
-from flask_mail import Mail, Message
-from werkzeug import secure_filename, check_password_hash
+from flask_mail import Mail
+from werkzeug.utils import secure_filename
+from werkzeug.security import check_password_hash
 from werkzeug.contrib.fixers import ProxyFix
-from werkzeug.security import generate_password_hash
-from google_measurement_protocol import Event, report
 import time
 import os
 import sys
 import json
 import hashlib
 from xml.etree.ElementTree import ParseError
-import operator
 import random
 import sqlite3
 import datetime
 import uuid
 import io
-import sdv.imgur
+from sdv import imgur
 import patreon
 import defusedxml
 import psycopg2
@@ -36,7 +35,6 @@ import requests
 from sdv.utils.log import app_logger
 from sdv.utils.helpers import random_id
 
-# from sdv.playerInfo import playerInfo
 from sdv.playerinfo2 import GameInfo
 from sdv.farmInfo import getFarmInfo
 from sdv.bigbase import dec2big
@@ -49,7 +47,7 @@ from sdv.createdb import database_structure_dict, database_fields
 from sdv.savefile import savefile
 from sdv.zipuploads import zopen, zwrite, unzip_request_file
 from sdv.getDate import get_date
-import sdv.validate
+from sdv import validate
 
 logger = app_logger.getChild('init')
 
@@ -156,9 +154,9 @@ app.jinja_env.globals.update(legacy_location=legacy_location)
 app.jinja_env.globals.update(get_locale=get_locale)
 app.jinja_env.filters['quote_plus'] = lambda u: quote_plus(u)
 
-import sdv.imageDrone  # noqa
-import sdv.emailDrone  # noqa
-import sdv.generateSavegame # noqa
+from sdv import imageDrone  # noqa
+from sdv import emailDrone  # noqa
+from sdv import generateSavegame # noqa
 
 def get_db():
     # designed to prevent repeated db connections
@@ -1077,7 +1075,7 @@ def verify_json(input_structure):
     assert 'plan_json' in input_structure
     assert 'source_url' in input_structure
     if 'season' in input_structure:
-        assert input_structure['season'] in sdv.validate.seasons
+        assert input_structure['season'] in validate.seasons
 
 
 def add_plan(source_json, planner_url, season, md5_value):

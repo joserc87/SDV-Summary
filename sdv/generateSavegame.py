@@ -1,9 +1,9 @@
-from xml.etree.ElementTree import ElementTree, Element, SubElement, dump
+from xml.etree.ElementTree import Element
 from defusedxml import ElementTree as ET
 import zipfile
 from sdv.zipuploads import zopen
 import os
-from sdv import legacy_location
+from sdv.app import legacy_location
 import sys
 
 if sys.version_info >= (3, 0):

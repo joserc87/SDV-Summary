@@ -4,7 +4,7 @@ from PIL import Image
 from PIL.ImageOps import grayscale, colorize
 from PIL.ImageChops import offset
 
-from sdv import app
+from sdv.app import app
 
 
 # Apply colour to image

@@ -1,9 +1,7 @@
-import psycopg2
 import shutil
 import os
 import math
-from sdv.createdb import database_structure_dict, database_fields
-from sdv import app, connect_db, legacy_location
+from sdv.app import app, connect_db, legacy_location
 sqlesc = app.sqlesc
 
 def processFile(rowid, original_base_path, original_avatar_path, original_portrait_path, original_farm_path, original_map_path, original_thumb_path, url):
