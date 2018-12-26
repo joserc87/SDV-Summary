@@ -97,3 +97,4 @@ fabfile.py
 sdv/static/.webassets-cache/
 sdv/static/messages/
 sdv/static/renders/
+sdv/static/fonts/

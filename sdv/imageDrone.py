@@ -99,7 +99,8 @@ def process_queue():
                 partner_image = None
                 partner_id = portrait_info.get('partner_id')
                 if partner_id:
-                    partner = next(filter(lambda f: f['UniqueMultiplayerID'] == partner_id, farmhands))
+                    partner = next(
+                            filter(lambda f: f['UniqueMultiplayerID'] == partner_id, farmhands))
                     partner_image = Image.open(legacy_location(partner['avatar_url']))
 
                 generateFamilyPortrait(avatar, portrait_info, partner_image=partner_image) \
@@ -145,12 +146,14 @@ def process_plans():
         db.commit()
         if len(tasks) != 0:
             for task in tasks:
-                cur.execute('SELECT source_json, url, season FROM plans WHERE id=(' + sqlesc + ')',
-                            (task[2],))
+                cur.execute(
+                    f'SELECT source_json, url, season, planner_url FROM plans WHERE id=({sqlesc})',
+                    (task[2],))
                 result = cur.fetchone()
                 farm_json = json.loads(result[0])
                 url = result[1]
-                season = 'spring' if result[2] == None else result[2]
+                season = result[2] if result[2] else 'spring'
+                planner_id = [x for x in result[3].split('/') if x][-1]
 
                 base_path = os.path.join(app.config.get('RENDER_FOLDER'), url)
                 try:
@@ -169,7 +172,9 @@ def process_plans():
                     # map_path = os.path.join(base_path, data['url']+'-m.png')
                     # thumb_path = os.path.join(base_path, data['url']+'-t.png')
                     farm = generateFarm(season, farm_data)
-                    farm = watermark(farm, filename='stardew_info.png')
+                    farm = watermark(farm,
+                                     filename='stardew_info.png',
+                                     text=f'Plan ID: {planner_id}')
                     # th = farm.resize((int(farm.width/4), int(farm.height/4)), Image.ANTIALIAS)
                     # th.save(legacy_location(thumb_path))
                     farm.save(legacy_location(farm_path), compress_level=9)

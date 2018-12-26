@@ -1,6 +1,6 @@
 import os
 
-from PIL import Image
+from PIL import Image, ImageFont, ImageDraw
 from PIL.ImageOps import grayscale, colorize
 from PIL.ImageChops import offset
 
@@ -40,14 +40,39 @@ def colourBox(x, y, colour, pixels, scale=8):
     return pixels
 
 
-def watermark(img, mark=None, filename='u.f.png'):
+def watermark(img, mark=None, filename='u.f.png', text=None):
     asset_dir = app.config.get('ASSET_PATH')
+
     if mark is None:
         mark = Image.open(os.path.join(asset_dir, 'watermarks', filename))
-    x = 16
-    y = img.size[1] - 16 - mark.size[1]
+
     if img.mode != 'RGBA':
         img = img.convert('RGBA')
 
+    if text is not None:
+        font = ImageFont.truetype(
+                os.path.join(app.config.get('BASE_DIR'), 'sdv', 'static', 'fonts', 'VT323-Regular.ttf'),
+                16
+        )
+        draw = ImageDraw.Draw(img)
+
+        padding = {'x': 10, 'y': 2}
+        w, h = font.getsize(text)
+
+        text_x = img.size[0] - 16 - w
+        text_y = img.size[1] - 16 - h
+
+        draw.rectangle(
+                (text_x - padding['x'], text_y, text_x + w + padding['x'], text_y + h + padding['y']),
+                fill='black'
+        )
+        draw.text((text_x, text_y), text, 'white', font=font)
+        del draw
+
+    x = 16
+    y = img.size[1] - 16 - mark.size[1]
+
     img.paste(mark, box=(x, y), mask=mark)
-    return img.convert('P', palette=Image.ADAPTIVE, colors=255)
+    img.convert('P', palette=Image.ADAPTIVE, colors=255)
+
+    return img

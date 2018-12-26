@@ -978,47 +978,51 @@ def check_api_credentials(formdata):
         return {'user':result[0][0]}
 
 
-
-@app.route('/api/v1/plan',methods=['POST'])
+@app.route('/api/v1/plan', methods=['POST'])
 def api_v1_plan():
     if request.method == 'POST':
         # check input json for validity (because if it's invalid, why hit db?)
         try:
             input_structure = request.get_json()
-            if input_structure == None:
-                return make_response(jsonify({'status':'no_json_header'}),400)
+            if input_structure is None:
+                return make_response(jsonify({'status': 'no_json_header'}), 400)
             verify_json(input_structure)
         except AssertionError:
-            return make_response(jsonify({'status':'bad_input'}),400)
+            return make_response(jsonify({'status': 'bad_input'}), 400)
 
         # check rate limiter; if all good, continue, else return status:'overlimit'
         try:
             check_rate_limiter()
         except AssertionError:
-            return make_response(jsonify({'status':'over_rate_limit'}),429)
+            return make_response(jsonify({'status': 'over_rate_limit'}), 429)
 
         # check conversion to upload.farm format & map type
         try:
             parsed = parse_json(input_structure['plan_json'])
             if parsed['type'] == 'unsupported_map':
-                return make_response(jsonify({'status':'unsupported_map'}),400)
+                return make_response(jsonify({'status':'unsupported_map'}), 400)
         except:
-            return make_response(jsonify({'status':'failed_conversion_to_local_structure'}),400)
+            return make_response(jsonify({'status':'failed_conversion_to_local_structure'}), 400)
 
         # insert it to the database, checking for duplicates(?)
         season = None if 'season' not in input_structure else input_structure['season']
-        url, md5_value = check_for_duplicate(input_structure['plan_json'],season)
-        if url == None: # if no existing url
+        url, md5_value = check_for_duplicate(input_structure['plan_json'], season)
+
+        if url is None:
             # insert into db
             plan_id, url = add_plan(json.dumps(input_structure['plan_json']),input_structure['source_url'],season,md5_value)
             # queue a rendering job
-            add_task(plan_id,'process_plan_image')
+            add_task(plan_id, 'process_plan_image')
             # optional: run imageDrone
             imageDrone.process_plans()
             # check for number of entries; remove entry if over limit
             check_max_renders()
+
         # return status:'success'
-        return make_response(jsonify({'status':'success','url':url_for('display_plan',url=url,_external=True)}),200)
+        return make_response(jsonify({
+            'status': 'success',
+            'url': url_for('display_plan', url=url, _external=True)
+        }), 200)
 
 
 @app.route('/api/v1/render_exists',methods=['GET'])
