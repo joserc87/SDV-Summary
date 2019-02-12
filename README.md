@@ -56,9 +56,46 @@ As per flask-mail docs and your email server
 
 ## Initialization
 
-Once the config file has been written, run createadmin.py and createdb.py and follow the prompts to create the database structure.
+Install prerequisites using a tool like [pip](https://pypi.org/project/pip/) (`pip3` if you're using Python 3):
+
+```bash
+pip install flask
+pip install psycopg2
+pip install Flask-Babel
+pip install Flask-reCaptcha
+pip install flask-bcrypt
+pip install Flask-Mail
+pip install google-measurement-protocol
+```
+
+You need PostgreSQL installed and running. Then create a database:
+
+```bash
+createdb sdv_summary_development
+```
+
+To create a config file for SDV-Summary:
+
+```bash
+cp sdv/config.py.sample sdv/config.py
+```
+
+Modify sdv/config.py to specify the user name and password for the PostgreSQL database you created.
+
+Once the config file has been written, run createadmin.py and createdb.py and follow the prompts to create the database structure:
+
+```bash
+SDV_APP_SETTINGS=development python sdv/createadmin.py
+SDV_APP_SETTINGS=development python sdv/createdb.py
+```
 
 To run, the templating engine jinja2 needs `sdv\templates\analytics.html` to exist.
+
+Run the app using Flask:
+
+```bash
+FLASK_APP=runserver.py flask run
+```
 
 Assets for image generation go in `sdv\assets\[subfolder]`. Assets used as-is go in `sdv\static\assets\[subfolder]`.
 
