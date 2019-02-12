@@ -2,21 +2,18 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, session, redirect, url_for, request, flash, g, jsonify, make_response, send_from_directory, abort
-from flask_babel import Babel, _, gettext, ngettext, Locale
+from flask_babel import Babel, _, Locale
 from flask_recaptcha import ReCaptcha
 from flask_bcrypt import Bcrypt
-from flask_mail import Mail, Message
+from flask_mail import Mail
 from werkzeug import secure_filename, check_password_hash
 from werkzeug.contrib.fixers import ProxyFix
-from werkzeug.security import generate_password_hash
-from google_measurement_protocol import Event, report
 import time
 import os
 import sys
 import json
 import hashlib
 from xml.etree.ElementTree import ParseError
-import operator
 import random
 import sqlite3
 import datetime

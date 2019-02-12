@@ -56,16 +56,10 @@ As per flask-mail docs and your email server
 
 ## Initialization
 
-Install prerequisites using a tool like [pip](https://pypi.org/project/pip/) (`pip3` if you're using Python 3):
+Install prerequisites using a tool like [pip](https://pypi.org/project/pip/) (`pip3` if you're using Python 3) by running the following command from the root directory:
 
 ```bash
-pip install flask
-pip install psycopg2
-pip install Flask-Babel
-pip install Flask-reCaptcha
-pip install flask-bcrypt
-pip install Flask-Mail
-pip install google-measurement-protocol
+pip install -r requirements.txt
 ```
 
 You need PostgreSQL installed and running. Then create a database:

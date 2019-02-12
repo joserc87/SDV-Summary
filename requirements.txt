@@ -25,7 +25,6 @@ Flask-Script==2.0.5
 Flask-Security==3.0.0
 Flask-SQLAlchemy==2.3.2
 Flask-WTF==0.14.2
-google-measurement-protocol==1.0.0
 idna==2.5
 imgurpython==1.1.7
 invoke==1.2.0
