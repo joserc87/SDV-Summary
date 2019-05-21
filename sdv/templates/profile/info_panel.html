@@ -39,7 +39,7 @@
                                  data-toggle="dropdown" title="View other players"
                                  aria-haspopup="true"
                                  aria-expanded="true">
-                                {{ player['name'] }}
+                                {{ player['name']|censor }}
                                 <span class="caret"></span>
                             </div>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -47,20 +47,20 @@
                                 <li class="player-select-item"
                                     data-target="{{ data['uf_id'] }}-info-panel">
                                     <img src="{{ data['avatar_url'] }}"
-                                         alt="{{ data['name'] }} avatar">
-                                    {{ data['name'] }}</li>
+                                         alt="{{ data['name']|censor }} avatar">
+                                    {{ data['name']|censor }}</li>
                                 <li class="dropdown-header">Farmhands</li>
                                 {% for farmhand in data['farmhands'] %}
                                     <li class="player-select-item"
                                         data-target="{{ farmhand['uf_id'] }}-info-panel">
                                         <img src="{{ farmhand['avatar_url'] }}"
-                                             alt="{{ farmhand['name'] }} avatar">
-                                        {{ farmhand['name'] }}</li>
+                                             alt="{{ farmhand['name']|censor }} avatar">
+                                        {{ farmhand['name']|censor }}</li>
                                 {% endfor %}
                             </ul>
                         </div>
                     {% else %}
-                        <h1>{{ player['name'] }}</h1>
+                        <h1>{{ player['name']|censor }}</h1>
                     {% endif %}
                 </div>
             </div>
