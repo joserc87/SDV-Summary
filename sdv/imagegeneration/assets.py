@@ -105,7 +105,8 @@ def load_overlays(season, base):
     for layer in overlay_layers:
         overlays[layer] = list()
         overlay_path = os.path.join(asset_dir, 'base', base, season, layer)
-        for i in range(65):
+        farm_tile_height = 80 if base == 'FourCorners' else 65
+        for i in range(farm_tile_height):
             overlays[layer].append(
                     open_nicely(os.path.join(overlay_path, '{}-{}.png'.format(layer, i))))
     return overlays

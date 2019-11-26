@@ -1,7 +1,6 @@
 import os
 
-from .renderTiles import TileMap
-
+from tools.renderTiles import TileMap
 
 base_path = os.getcwd() + os.path.join(os.path.sep, 'sdv', 'assets')
 
@@ -19,7 +18,8 @@ def generateBases():
         'Fishing',
         'Foraging',
         'Mining',
-        'default'
+        'default',
+        'FourCorners'
     ]
 
     seasons = [
@@ -38,3 +38,7 @@ def generateBases():
                 farm = 'Farm_{0}.tbin'.format(type)
             dataLoc = os.getcwd() + os.path.join(os.path.sep, 'assets', 'Maps', farm)
             generateBase(None, dataLoc, season, type)
+
+
+if __name__ == '__main__':
+    generateBases()

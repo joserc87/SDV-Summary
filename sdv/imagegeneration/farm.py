@@ -55,7 +55,8 @@ def generateFarm(season, data, assets=None):
         print('\tLoading Assets...')
         assets = loadFarmAssets(season, type)
 
-    farm_base = Image.new('RGBA', (1280, 1040))
+    farm_height = 1280 if type == 'FourCorners' else 1040
+    farm_base = Image.new('RGBA', (1280, farm_height))
     farm_base.paste(assets['base'][type][season], (0, 0))
 
     # seed the random number generator so we render the same way every time
@@ -69,9 +70,10 @@ def generateFarm(season, data, assets=None):
     floor_types = ['Flooring', 'HoeDirt']
     floor = [i for i in farm if i.name in floor_types]
     gates = []
-    other_things = {y: [i for i in farm if (i not in floor and i.y == y)] for y in range(65)}
+    farm_tile_height = farm_height // 16
+    other_things = {y: [i for i in farm if (i not in floor and i.y == y)] for y in range(farm_tile_height)}
 
-    for i in range(65):
+    for i in range(farm_tile_height):
         strip_back = assets['overlays'][type][season]['Buildings'][i]
         farm_base.paste(strip_back, (0, i * 16), strip_back)
 
@@ -375,7 +377,7 @@ def generateFarm(season, data, assets=None):
     except Exception as e:
         print(e)
 
-    for i in range(55, 65):
+    for i in range(55, farm_tile_height):
         strip_back = assets['overlays'][type][season]['AlwaysFront'][i]
         farm_base.paste(strip_back, (0, i * 16), strip_back)
 

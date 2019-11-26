@@ -54,7 +54,7 @@ class TileMap:
             elif (sectionType == 3):
                 sectionValue = self.readString(buf)
             else:
-                throw
+                pass
 
     def getTile(self, buf, isAnim = False):
         tileType = self.readByte(buf)
@@ -82,7 +82,7 @@ class TileMap:
             self.animationFramesLeft = animFrames - 1
             return False
         else:
-            throw
+            pass
         return True
 
     def processData(self):
@@ -170,7 +170,7 @@ class TileMap:
                     sheetName = tileset["sheetName"]
                     if seasonName:
                         sheetName = sheetName.replace("spring", seasonName)
-                    tileset["img"] = Image.open(os.path.join(tilesetDir, sheetName))
+                    tileset["img"] = Image.open(os.path.join(tilesetDir, sheetName+'.png'))
 
                 if not tile["tile"] in tileset["tileCache"]:
                     tileImg = cropImg(tileset["img"], tile["tile"], (tileset["width"], tileset["height"]), (16, 16))

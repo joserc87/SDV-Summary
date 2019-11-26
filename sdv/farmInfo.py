@@ -10,7 +10,8 @@ map_types = [
     'Fishing',
     'Foraging',
     'Mining',
-    'Combat'
+    'Combat',
+    'FourCorners',
 ]
 
 
@@ -270,20 +271,24 @@ def getFarmInfo(saveFile):
         if letter.text == "ccPantry":
             hasGreenhouse = True
 
-    if hasGreenhouse:
-        greenHouse = sprite('Greenhouse',
-                            25, 12, 0, 6, 1,
-                            None, None, None, None)
-    else:
-        greenHouse = sprite('Greenhouse',
-                            25, 12, 0, 6, 0,
-                            None, None, None, None)
-    farm['misc'] = [house, greenHouse]
-
     try:
         mapType = int(root.find('whichFarm').text)
     except Exception as e:
         mapType = 0
+
+    greenhouse_x = 36 if mapType == 5 else 25
+    greenhouse_y = 31 if mapType == 5 else 12
+
+    if hasGreenhouse:
+        greenHouse = sprite('Greenhouse',
+                            greenhouse_x, greenhouse_y, 0, 6, 1,
+                            None, None, None, None)
+    else:
+        greenHouse = sprite('Greenhouse',
+                            greenhouse_x, greenhouse_y, 0, 6, 0,
+                            None, None, None, None)
+    farm['misc'] = [house, greenHouse]
+
 
     spouse = get_partner(root.find('player'))
     spouse = spouse.lower() if spouse else None
