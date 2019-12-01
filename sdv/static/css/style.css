@@ -235,6 +235,7 @@ dt, dd {
 }
 
 .farmimgpreview {
+    max-height: 280px;
     border-style: solid;
     border-width: 20px 21px 21px 20px;
     -moz-border-image: url(frame.png) 28 32 28 32 stretch;
