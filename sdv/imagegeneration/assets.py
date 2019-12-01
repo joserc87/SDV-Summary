@@ -221,6 +221,12 @@ def loadFarmAssets(season='spring', base='Default'):
             'stone cabin': Image.open(
                     os.path.join(asset_dir, 'farm', 'buildings', 'Stone Cabin.png')
             ),
+            'desert obelisk': Image.open(
+                    os.path.join(asset_dir, 'farm', 'buildings', 'Desert Obelisk.png')
+            ),
+            'fish pond': Image.open(
+                    os.path.join(asset_dir, 'farm', 'buildings', 'Fish Pond.png')
+            ),
             'shipping bin': shipping_bin(),
         },
         'binLid': bin_lid(),

@@ -3,6 +3,8 @@ import random
 from PIL import Image
 from itertools import chain
 from collections import namedtuple
+
+from sdv.imagegeneration.buildings.fish_pond import render_fish_pond
 from .tools import colourBox, tintImage, cropImg
 from .assets import loadFarmAssets
 
@@ -314,6 +316,14 @@ def generateFarm(season, data, assets=None):
                         farm_base.paste(assets['buildings'][item.type.lower()][season],
                                         (item.x * 16, item.y * 16 - offsety),
                                         assets['buildings'][item.type.lower()][season])
+                    elif item.type.lower() == 'fish pond':
+                        pond_image = render_fish_pond(item, assets)
+                        pond_offset_y = 2 * 16
+                        farm_base.paste(
+                                pond_image,
+                                (item.x * 16, item.y * 16 - pond_offset_y),
+                                pond_image
+                        )
                     else:
                         offsety = assets['buildings'][item.type.lower()].height - (item.h) * 16
                         asset = assets['buildings'][item.type.lower()]

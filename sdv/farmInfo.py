@@ -268,6 +268,27 @@ def getFarmInfo(saveFile):
                 o = min(int(item.find('indoors').find('farmhand').find('houseUpgradeLevel').text), 2)
             except AttributeError:
                 o = 0
+        if t.lower() == 'fish pond':
+            netting_style = int(item.find('nettingStyle').find('int').text)
+            
+            # Handle water tint, default (25, 155, 178)
+            water_color_element = item.find('overrideWaterColor').find('Color')
+            red = int(water_color_element.find('R').text)
+            green = int(water_color_element.find('G').text)
+            blue = int(water_color_element.find('B').text)
+            if red == 255 and green == 255 and blue == 255:
+                tint = (25, 155, 178)
+            else:
+                tint = (red, green, blue)
+
+            has_output = item.find('output') is not None
+
+            o = {
+                'netting_style': netting_style,
+                'water_color': tint,
+                'has_output': has_output
+            }
+
         s.append(sprite(name, x, y, w, h, None, t, None, None, o))
 
     farm['buildings'] = s
