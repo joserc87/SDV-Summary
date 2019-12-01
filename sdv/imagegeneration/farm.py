@@ -179,6 +179,27 @@ def generateFarm(season, data, assets=None):
                 except Exception as e:
                     print(e)
 
+            if item.name == 'Tea_Bush':
+                season_offset_x = 64 if season in {'summer', 'winter'} else 0
+                season_offset_y = 32 if season in {'fall', 'winter'} else 0
+                tile_sheet_x = 0 + season_offset_x
+                tile_sheet_y = 256 + season_offset_y
+
+                sprite_index_x = tile_sheet_x + item.growth * 16
+                sprite_index = int((sprite_index_x / 16) + ((tile_sheet_y / 32) * 8))
+
+                obj_img = cropImg(
+                        assets['bushes'],
+                        sprite_index,
+                        objectSize=(16, 32),
+                        defaultSize=(16, 32)
+                )
+
+                if item.flipped:
+                    obj_img = obj_img.transpose(Image.FLIP_LEFT_RIGHT)
+
+                farm_base.paste(obj_img, (item.x * 16, item.y * 16), obj_img)
+
             if item.name == 'Bush':
 
                 sprite_sizes = [(16, 32), (32, 48), (48, 48)]

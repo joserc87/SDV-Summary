@@ -81,6 +81,9 @@ def getFarmInfo(saveFile):
 
     s = []
     farm_location = get_location(root, 'Farm')
+    farm_age = int(root.find('player').find('stats').find('DaysPlayed').text)
+    day_of_season = int(root.find('player').find('dayOfMonthForSaveGame').text)
+    is_last_week_of_season = day_of_season > 21
     for item in farm_location.find('objects').iter("item"):
         f = False
         obj = item.find('value').find('Object')
@@ -179,6 +182,26 @@ def getFarmInfo(saveFile):
             t = int(item.find('value').find('TerrainFeature').find('grassType').text)
             s = int(item.find('value').find('TerrainFeature').find('numberOfWeeds').text)
             loc = int(item.find('value').find('TerrainFeature').find('grassSourceOffset').text)
+        if name == "Bush":
+            name = "Tea_Bush"
+            node = item.find('value').find('TerrainFeature')
+            f = node.find('flipped').text.lower() == 'true'
+            t = int(node.find('size').text)
+
+            # Calculate growth stage
+            date_planted = int(node.find('datePlanted').text)
+            age = farm_age - date_planted
+            if age < 10:
+                s = 0
+            elif age < 20:
+                s = 1
+            else:
+                s = 2
+
+            if s == 2 and is_last_week_of_season:
+                s = 3
+
+
         x = int(item.find('key').find('Vector2').find('X').text)
         y = int(item.find('key').find('Vector2').find('Y').text)
         tf.append(sprite(name, x, y, 1, 1, loc, t, s, f, None))
