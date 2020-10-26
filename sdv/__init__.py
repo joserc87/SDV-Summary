@@ -6,8 +6,9 @@ from flask_babel import Babel, _, Locale
 from flask_recaptcha import ReCaptcha
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
-from werkzeug import secure_filename, check_password_hash
-from werkzeug.contrib.fixers import ProxyFix
+from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
+from werkzeug.middleware.proxy_fix import ProxyFix
 import time
 import os
 import sys

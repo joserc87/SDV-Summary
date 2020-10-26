@@ -3,7 +3,7 @@ from flask import Flask
 import os
 import sys
 import getpass
-from werkzeug import check_password_hash
+from werkzeug.security import check_password_hash
 from config import config
 
 app = Flask(__name__)
