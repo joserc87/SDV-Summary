@@ -1708,6 +1708,10 @@ def delete_playerinfo_entry(url,md5,del_token):
             os.rmdir(legacy_location(result[11]))
         except:
             pass
+
+        from sdv.utils.save_image import delete_images
+        delete_images(result[0], result[3])
+
         db.commit()
         session.pop(url, None)
         session.pop(url+'del_token', None)

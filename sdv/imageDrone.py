@@ -23,8 +23,8 @@ sqlesc = app.sqlesc
 
 def save_from_id(save_id, cursor):
     cursor.execute(
-            'SELECT ' + database_fields + ' FROM playerinfo WHERE id=(' + sqlesc + ')',
-            (save_id,)
+        'SELECT ' + database_fields + ' FROM playerinfo WHERE id=(' + sqlesc + ')',
+        (save_id,)
     )
     result = cursor.fetchone()
     data = {key: value for key, value in zip(database_fields.split(','), result)}
@@ -37,6 +37,7 @@ def save_from_id(save_id, cursor):
 
 
 def process_queue():
+    from sdv.utils.save_image import upload_image
     start_time = time.time()
     records_handled = 0
     db = connect_db()
@@ -44,8 +45,8 @@ def process_queue():
 
     while True:
         cur.execute(
-                sql.GET_TODO_TASKS,
-                (True, 'process_image',)
+            sql.GET_TODO_TASKS,
+            (True, 'process_image',)
         )
         tasks = cur.fetchall()
         db.commit()
@@ -57,44 +58,56 @@ def process_queue():
 
                 data = save_from_id(farm_id, cur)
                 base_subfolder = str(
-                        int(math.floor(int(farm_id) / app.config.get('IMAGE_MAX_PER_FOLDER')))
+                    int(math.floor(int(farm_id) / app.config.get('IMAGE_MAX_PER_FOLDER')))
                 )
-                base_path = os.path.join(app.config.get('IMAGE_FOLDER'), base_subfolder,
-                                         data['url'])
+                do_path = os.path.join(base_subfolder, data['url'])
+                base_path = os.path.join(app.config.get('IMAGE_FOLDER'), do_path)
+
                 try:
                     os.makedirs(legacy_location(base_path))
                 except OSError:
                     pass
 
                 base_path_fmt = os.path.join(base_path, data['url'] + '-{image_type}.png')
+                do_path_fmt = os.path.join(do_path, data['url'] + '-{image_type}.png')
 
+                # For compatibility reasons we're still saving the local paths
                 avatar_path = base_path_fmt.format(image_type='a')
                 portrait_path = base_path_fmt.format(image_type='p')
                 farm_path = base_path_fmt.format(image_type='f')
                 map_path = base_path_fmt.format(image_type='m')
                 thumb_path = base_path_fmt.format(image_type='t')
 
+                # New paths to store images in spaces
+                do_avatar_path = do_path_fmt.format(image_type='a')
+                do_portrait_path = do_path_fmt.format(image_type='p')
+                do_farm_path = do_path_fmt.format(image_type='f')
+                do_map_path = do_path_fmt.format(image_type='m')
+                do_thumb_path = do_path_fmt.format(image_type='t')
+
                 # Main Player Avatar and Portrait
                 avatar = generateAvatar(data)
                 avatar.resize((avatar.width * 4, avatar.height * 4))
-                avatar.save(legacy_location(avatar_path), compress_level=9)
 
                 # Farmhands
                 farmhands = data.get('farmhands', [])
                 if farmhands:
                     for i, farmhand in enumerate(farmhands):
                         farmhand_path = base_path_fmt.format(
-                                image_type=f'fh-{farmhand["UniqueMultiplayerID"]}'
+                            image_type=f'fh-{farmhand["UniqueMultiplayerID"]}'
+                        )
+                        do_farmhand_path = do_path_fmt.format(
+                            image_type=f'fh-{farmhand["UniqueMultiplayerID"]}'
                         )
                         farmhand_avatar = generateAvatar(farmhand)
 
                         farmhand_avatar.resize((avatar.width * 4, avatar.height * 4))
-                        farmhand_avatar.save(legacy_location(farmhand_path), compress_level=9)
+                        upload_image(farmhand_avatar, do_farmhand_path)
                         farmhand['avatar_url'] = farmhand_path
 
                 cur.execute(
-                        sql.UPDATE_FARMHANDS,
-                        (json.dumps(farmhands), farm_id)
+                    sql.UPDATE_FARMHANDS,
+                    (json.dumps(farmhands), farm_id)
                 )
 
                 portrait_info = json.loads(data['portrait_info'])
@@ -105,24 +118,28 @@ def process_queue():
                     partner = next(filter(lambda f: f['UniqueMultiplayerID'] == partner_id, farmhands))
                     partner_image = Image.open(legacy_location(partner['avatar_url']))
 
-                generateFamilyPortrait(avatar, portrait_info, partner_image=partner_image) \
-                    .save(legacy_location(portrait_path), compress_level=9)
+                portrait = generateFamilyPortrait(avatar, portrait_info, partner_image=partner_image)
 
                 # Minimap, Thumbnail and Main Map
                 farm_data = regenerateFarmInfo(json.loads(data['farm_info']))
-                generateMinimap(farm_data).save(legacy_location(farm_path), compress_level=9)
+                minimap = generateMinimap(farm_data)
 
                 farm = generateFarm(data['currentSeason'], farm_data)
 
                 th = farm.resize((int(farm.width / 4), int(farm.height / 4)), Image.ANTIALIAS)
-                th.save(legacy_location(thumb_path))
                 farm = watermark(farm, filename='u.f.png')
-                farm.save(legacy_location(map_path), compress_level=9)
+
+                upload_image(portrait, do_portrait_path)
+                upload_image(avatar, do_avatar_path)
+                upload_image(avatar, do_avatar_path)
+                upload_image(th, do_thumb_path)
+                upload_image(minimap, do_farm_path)
+                upload_image(farm, do_map_path)
 
                 cur.execute(
-                        sql.UPDATE_PLAYER_IMAGE_URLS,
-                        (farm_path, avatar_path, portrait_path, map_path, thumb_path, base_path,
-                         data['id'])
+                    sql.UPDATE_PLAYER_IMAGE_URLS,
+                    (farm_path, avatar_path, portrait_path, map_path, thumb_path, base_path,
+                     data['id'])
                 )
                 db.commit()
 
@@ -142,8 +159,8 @@ def process_plans():
     while True:
         # cur.execute('SELECT * FROM todo WHERE task='+sqlesc+' AND currently_processing NOT TRUE',('process_image',))
         cur.execute(
-                'UPDATE todo SET currently_processing=' + sqlesc + ' WHERE id=(SELECT id FROM todo WHERE task=' + sqlesc + ' AND currently_processing IS NOT TRUE LIMIT 1) RETURNING *',
-                (True, 'process_plan_image',))
+            'UPDATE todo SET currently_processing=' + sqlesc + ' WHERE id=(SELECT id FROM todo WHERE task=' + sqlesc + ' AND currently_processing IS NOT TRUE LIMIT 1) RETURNING *',
+            (True, 'process_plan_image',))
         tasks = cur.fetchall()
         db.commit()
         if len(tasks) != 0:
@@ -178,8 +195,8 @@ def process_plans():
                     farm.save(legacy_location(farm_path), compress_level=9)
 
                     cur.execute(
-                            'UPDATE plans SET image_url=' + sqlesc + ', base_path=' + sqlesc + ', render_deleted=FALSE, failed_render=NULL WHERE id=' + sqlesc + '',
-                            (farm_path, base_path, task[2]))
+                        'UPDATE plans SET image_url=' + sqlesc + ', base_path=' + sqlesc + ', render_deleted=FALSE, failed_render=NULL WHERE id=' + sqlesc + '',
+                        (farm_path, base_path, task[2]))
                     db.commit()
                     # # except Exception as e:
                     # #     cur.execute('UPDATE playerinfo SET failed_processing='+sqlesc+' WHERE id='+,(True,data['id']))
