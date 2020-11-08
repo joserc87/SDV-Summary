@@ -103,6 +103,7 @@ def process_queue():
 
                         farmhand_avatar.resize((avatar.width * 4, avatar.height * 4))
                         upload_image(farmhand_avatar, do_farmhand_path)
+                        farmhand_avatar.close()
                         farmhand['avatar_url'] = farmhand_path
 
                 cur.execute(
@@ -131,10 +132,16 @@ def process_queue():
 
                 upload_image(portrait, do_portrait_path)
                 upload_image(avatar, do_avatar_path)
-                upload_image(avatar, do_avatar_path)
                 upload_image(th, do_thumb_path)
                 upload_image(minimap, do_farm_path)
                 upload_image(farm, do_map_path)
+
+                farm.close()
+                portrait.close()
+                avatar.close()
+                th.close()
+                minimap.close()
+
 
                 cur.execute(
                     sql.UPDATE_PLAYER_IMAGE_URLS,
