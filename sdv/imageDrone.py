@@ -17,6 +17,7 @@ from sdv.imagegeneration.farm import generateFarm, generateMinimap
 from sdv.imagegeneration.tools import watermark
 from sdv.parsers.json import parse_json
 from sdv import app, connect_db, legacy_location
+from sdv.utils.save_image import upload_image
 
 sqlesc = app.sqlesc
 
@@ -37,7 +38,6 @@ def save_from_id(save_id, cursor):
 
 
 def process_queue():
-    from sdv.utils.save_image import upload_image
     start_time = time.time()
     records_handled = 0
     db = connect_db()
@@ -60,8 +60,8 @@ def process_queue():
                 base_subfolder = str(
                     int(math.floor(int(farm_id) / app.config.get('IMAGE_MAX_PER_FOLDER')))
                 )
-                do_path = os.path.join(base_subfolder, data['url'])
-                base_path = os.path.join(app.config.get('IMAGE_FOLDER'), do_path)
+                do_path = os.path.join('images', base_subfolder, data['url'])
+                base_path = os.path.join(app.config.get('IMAGE_FOLDER'), base_subfolder, data['url'])
 
                 try:
                     os.makedirs(legacy_location(base_path))
@@ -142,7 +142,6 @@ def process_queue():
                 th.close()
                 minimap.close()
 
-
                 cur.execute(
                     sql.UPDATE_PLAYER_IMAGE_URLS,
                     (farm_path, avatar_path, portrait_path, map_path, thumb_path, base_path,
@@ -179,6 +178,7 @@ def process_plans():
                 url = result[1]
                 season = 'spring' if result[2] == None else result[2]
 
+                do_path = os.path.join('renders', url)
                 base_path = os.path.join(app.config.get('RENDER_FOLDER'), url)
                 try:
                     os.mkdir(legacy_location(base_path))
@@ -191,15 +191,13 @@ def process_plans():
                         continue
 
                     farm_path = os.path.join(base_path, url + '-plan.png')
-                    # generateMinimap(farm_data).save(legacy_location(farm_path), compress_level=9)
+                    do_farm_path = os.path.join(do_path, url + '-plan.png')
 
-                    # map_path = os.path.join(base_path, data['url']+'-m.png')
-                    # thumb_path = os.path.join(base_path, data['url']+'-t.png')
                     farm = generateFarm(season, farm_data)
                     farm = watermark(farm, filename='stardew_info.png')
-                    # th = farm.resize((int(farm.width/4), int(farm.height/4)), Image.ANTIALIAS)
-                    # th.save(legacy_location(thumb_path))
-                    farm.save(legacy_location(farm_path), compress_level=9)
+                    upload_image(farm, do_farm_path)
+
+                    farm.close()
 
                     cur.execute(
                         'UPDATE plans SET image_url=' + sqlesc + ', base_path=' + sqlesc + ', render_deleted=FALSE, failed_render=NULL WHERE id=' + sqlesc + '',

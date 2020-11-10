@@ -40,6 +40,7 @@ from sdv.farmInfo import getFarmInfo
 from sdv.bigbase import dec2big
 from sdv.parsers.json import parse_json, json_layout_map
 from sdv.parsers.wordfilter import Censor
+from sdv.utils.save_image import delete_images, delete_plan_render
 
 from config import config
 
@@ -1056,8 +1057,8 @@ def check_max_renders():
 def remove_render_over_limit(url):
     db = get_db()
     cur = db.cursor()
-    cur.execute('UPDATE plans SET render_deleted=TRUE WHERE url='+app.sqlesc+' RETURNING image_url, base_path',(url,))
-    image_url, base_path = cur.fetchone()
+    cur.execute('UPDATE plans SET render_deleted=TRUE WHERE url='+app.sqlesc+' RETURNING url, image_url, base_path',(url,))
+    url, image_url, base_path = cur.fetchone()
     if image_url != None and os.path.split(os.path.split(image_url)[0])[1] == url:
         # second condition ensures you're in a folder named after the URL which prevents accidentally deleting placeholders
         try:
@@ -1068,6 +1069,8 @@ def remove_render_over_limit(url):
         os.rmdir(legacy_location(base_path))
     except:
         pass
+
+    delete_plan_render(url)
     db.commit()
 
 
@@ -1709,7 +1712,6 @@ def delete_playerinfo_entry(url,md5,del_token):
         except:
             pass
 
-        from sdv.utils.save_image import delete_images
         delete_images(result[0], result[3])
 
         db.commit()
