@@ -234,7 +234,7 @@ def get_friendships(node, v1_3):
                 rating = int(item.find('value').find('Friendship').find('Points').text)
             else:
                 rating = int(item.find('value').find('ArrayOfInt').find('int').text)
-            assert rating >= 0 and rating < 14 * 250
+            assert rating >= 0 and rating < 15 * 250
             s[name] = rating
     return s
 
