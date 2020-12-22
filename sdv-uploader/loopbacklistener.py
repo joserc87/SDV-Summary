@@ -5,29 +5,30 @@ import requests
 from flask import Flask, Response, request, redirect
 
 LOOPBACK_PORT = 6753
-LOOPBACK_ENDPOINT = '/running'
+LOOPBACK_ENDPOINT = "/running"
+
 
 def check_app_running():
-	address = 'http://127.0.0.1:{}{}'.format(LOOPBACK_PORT,LOOPBACK_ENDPOINT)
-	try:
-		r = requests.get(address,timeout=0.3)
-		return r.ok
-	except:
-		return False
+    address = "http://127.0.0.1:{}{}".format(LOOPBACK_PORT, LOOPBACK_ENDPOINT)
+    try:
+        r = requests.get(address, timeout=0.3)
+        return r.ok
+    except:
+        return False
 
 
 def launch_loopback(signal):
-	t = Thread(target=run_flask,args=(signal,))
-	t.setDaemon(True)
-	t.start()
-	return t
+    t = Thread(target=run_flask, args=(signal,))
+    t.setDaemon(True)
+    t.start()
+    return t
 
 
 def run_flask(signal):
-	a = FlaskAppWrapper('wrap')
-	a.add_endpoint(endpoint='/running', endpoint_name='running', handler=signal)
-	a.run()
-	
+    a = FlaskAppWrapper("wrap")
+    a.add_endpoint(endpoint="/running", endpoint_name="running", handler=signal)
+    a.run()
+
 
 class EndpointSignal(object):
     def __init__(self, signal):
@@ -41,6 +42,7 @@ class EndpointSignal(object):
 
 class FlaskAppWrapper(object):
     app = None
+
     def __init__(self, name):
         self.app = Flask(name)
 
@@ -51,6 +53,5 @@ class FlaskAppWrapper(object):
         self.app.add_url_rule(endpoint, endpoint_name, EndpointSignal(handler))
 
 
-
 if __name__ == "__main__":
-	run_flask(None)
+    run_flask(None)

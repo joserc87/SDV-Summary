@@ -2,27 +2,31 @@ import os
 from shutil import copy
 from PIL import Image
 
-dest_directory = os.getcwd() + os.path.join(os.path.sep, 'sdv', 'assets')
-src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets')
+dest_directory = os.getcwd() + os.path.join(os.path.sep, "sdv", "assets")
+src_directory = os.getcwd() + os.path.join(os.path.sep, "assets")
+
 
 def copy_images(file_names, src, dest):
-    src_directory = os.getcwd() + os.path.join(os.path.sep, 'assets', src)
+    src_directory = os.getcwd() + os.path.join(os.path.sep, "assets", src)
     for file in file_names:
         try:
             copy(os.path.join(src_directory, file), os.path.join(dest_directory, dest))
         except Exception as e:
             print(e)
 
+
 def copy_player():
     misc = [
-        'accessories.png',
-        'hairstyles.png',
-        'hats.png',
-        'shirts.png',
-        'shoeColors.png',
+        "accessories.png",
+        "hairstyles.png",
+        "hats.png",
+        "shirts.png",
+        "shoeColors.png",
     ]
 
-    copy_images(misc, os.path.join('Characters', 'Farmer'), os.path.join('player', 'misc'))
+    copy_images(
+        misc, os.path.join("Characters", "Farmer"), os.path.join("player", "misc")
+    )
 
     # Using old custom sprites for now
 
@@ -59,5 +63,5 @@ def copy_player():
     #     legs.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     copy_player()

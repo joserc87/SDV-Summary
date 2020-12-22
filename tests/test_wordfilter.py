@@ -1,7 +1,7 @@
 from sdv.parsers.wordfilter.logic import Censor
 
 
-class TestWordfilter():
+class TestWordfilter:
     censor = Censor()
 
     def test_wordfilter_safe_word(self):
@@ -9,7 +9,7 @@ class TestWordfilter():
         Ensure words not on the filter list are unchanged.
         """
 
-        test_text = 'Hello'
+        test_text = "Hello"
         result = self.censor.censor(test_text)
         assert result == test_text
 
@@ -18,7 +18,7 @@ class TestWordfilter():
         Ensure words on the filter list are censored and all characters are from Censor.censorchars.
         """
 
-        test_text = 'fuck'
+        test_text = "fuck"
         result = self.censor.censor(test_text)
         assert result != test_text
         assert all(char in self.censor.censorchars for char in result)
@@ -28,7 +28,7 @@ class TestWordfilter():
         Ensure substrings are also censored.
         """
 
-        test_text = 'scunthorpe'
+        test_text = "scunthorpe"
         result = self.censor.censor(test_text)
         assert result != test_text
 
