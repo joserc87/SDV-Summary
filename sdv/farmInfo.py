@@ -6,12 +6,12 @@ from sdv.playerinfo2 import get_partner
 from sdv.savefile import get_location
 
 map_types = [
-    'Default',
-    'Fishing',
-    'Foraging',
-    'Mining',
-    'Combat',
-    'FourCorners',
+    "Default",
+    "Fishing",
+    "Foraging",
+    "Mining",
+    "Combat",
+    "FourCorners",
 ]
 
 
@@ -27,10 +27,10 @@ def checkSurrounding(tiles):
     temp = []
     m = []
 
-    if tiles[0].name == 'Fence':
+    if tiles[0].name == "Fence":
         m = [5, 3, 10, 6, 5, 3, 0, 6, 9, 8, 7, 7, 2, 8, 4, 4]
         m_gate = [17, 17, 17, 17, 17, 15, 17, 17, 17, 17, 12, 17, 17, 17, 17, 17]
-    elif tiles[0].name == 'HoeDirt':
+    elif tiles[0].name == "HoeDirt":
         m = [0, 24, 25, 17, 8, 16, 1, 9, 27, 19, 26, 18, 3, 11, 2, 10]
     else:
         m = [0, 12, 13, 9, 4, 8, 1, 5, 15, 11, 14, 10, 3, 7, 2, 6]
@@ -46,8 +46,9 @@ def checkSurrounding(tiles):
                         current_tile = None
                     try:
                         if floor_map[y + dy][x + dx] is not None:
-                            if tile.name == 'Flooring' or (
-                                    tile.name == 'Fence' and not tile.growth):
+                            if tile.name == "Flooring" or (
+                                tile.name == "Fence" and not tile.growth
+                            ):
                                 if floor_map[y + dy][x + dx].type == tile.type:
                                     a += b
                             else:
@@ -68,7 +69,11 @@ def checkSurrounding(tiles):
 # located on the players farm.
 # returns a dict with an array of tuples of the form: (name, x, y)
 
-sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped', 'orientation'])
+sprite = namedtuple(
+    "Sprite",
+    ["name", "x", "y", "w", "h", "index", "type", "growth", "flipped", "orientation"],
+)
+
 
 def getFarmInfo(saveFile):
     ns = "{http://www.w3.org/2001/XMLSchema-instance}"
@@ -80,116 +85,134 @@ def getFarmInfo(saveFile):
     # Farm Objects
 
     s = []
-    farm_location = get_location(root, 'Farm')
-    farm_age = int(root.find('player').find('stats').find('DaysPlayed').text)
-    day_of_season = int(root.find('player').find('dayOfMonthForSaveGame').text)
+    farm_location = get_location(root, "Farm")
+    farm_age = int(root.find("player").find("stats").find("DaysPlayed").text)
+    day_of_season = int(root.find("player").find("dayOfMonthForSaveGame").text)
     is_last_week_of_season = day_of_season > 21
-    for item in farm_location.find('objects').iter("item"):
+    for item in farm_location.find("objects").iter("item"):
         f = False
-        obj = item.find('value').find('Object')
-        name = obj.find('name').text
-        x = int(item.find('key').find('Vector2').find('X').text)
-        y = int(item.find('key').find('Vector2').find('Y').text)
-        i = int(obj.find('parentSheetIndex').text)
+        obj = item.find("value").find("Object")
+        name = obj.find("name").text
+        x = int(item.find("key").find("Vector2").find("X").text)
+        y = int(item.find("key").find("Vector2").find("Y").text)
+        i = int(obj.find("parentSheetIndex").text)
         try:
-            t = obj.find('type').text
+            t = obj.find("type").text
         except:
             continue
         a = False
-        other = obj.find('name').text
-        if name == 'Chest':
-            colours = obj.find('playerChoiceColor')
+        other = obj.find("name").text
+        if name == "Chest":
+            colours = obj.find("playerChoiceColor")
             try:
-                red = int(colours.find('R').text)
-                green = int(colours.find('G').text)
-                blue = int(colours.find('B').text)
+                red = int(colours.find("R").text)
+                green = int(colours.find("G").text)
+                blue = int(colours.find("B").text)
                 tint = (red, green, blue)
                 other = [other, tint]
             except Exception as e:
-                print('Error getting chest colours. Possibly old save file')
+                print("Error getting chest colours. Possibly old save file")
 
-        if obj.find('flipped').text == 'true':
+        if obj.find("flipped").text == "true":
             f = True
-        if 'Fence' in name or name == 'Gate':
-            t = int(obj.find('whichType').text)
+        if "Fence" in name or name == "Gate":
+            t = int(obj.find("whichType").text)
             a = False
-            if name == 'Gate':
+            if name == "Gate":
                 a = True
-            name = 'Fence'
+            name = "Fence"
         else:
-            name = 'Object'
+            name = "Object"
         s.append(sprite(name, x, y, 0, 0, i, t, a, f, other))
 
     d = {k[0]: [a for a in s if a[0] == k[0]] for k in s}
 
     try:
-        farm['Fences'] = checkSurrounding(d['Fence'])
+        farm["Fences"] = checkSurrounding(d["Fence"])
     except Exception as e:
         pass
 
-    farm['objects'] = [a for a in s if a.name != 'Fence']
+    farm["objects"] = [a for a in s if a.name != "Fence"]
 
     # Terrain Features
 
     tf = []
     crops = []
-    for item in farm_location.find('terrainFeatures').iter('item'):
+    for item in farm_location.find("terrainFeatures").iter("item"):
         s = None
         loc = None
         f = False
-        name = item.find('value').find('TerrainFeature').get(ns + 'type')
-        if name == 'Tree':
-            t = int(item.find('value').find('TerrainFeature').find('treeType').text)
-            s = int(item.find('value').find('TerrainFeature').find('growthStage').text)
-            if item.find('value').find('TerrainFeature').find('flipped').text == 'true': f = True
-        if name == 'Flooring':
-            t = int(item.find('value').find('TerrainFeature').find('whichFloor').text)
+        name = item.find("value").find("TerrainFeature").get(ns + "type")
+        if name == "Tree":
+            t = int(item.find("value").find("TerrainFeature").find("treeType").text)
+            s = int(item.find("value").find("TerrainFeature").find("growthStage").text)
+            if item.find("value").find("TerrainFeature").find("flipped").text == "true":
+                f = True
+        if name == "Flooring":
+            t = int(item.find("value").find("TerrainFeature").find("whichFloor").text)
 
             # simple fix to correct missing whichView node in some save files
-            s = item.find('value').find('TerrainFeature').find('whichView')
+            s = item.find("value").find("TerrainFeature").find("whichView")
             if s is None:
                 s = 0
             else:
                 s = int(s.text)
         if name == "HoeDirt":
-            crop = item.find('value').find('TerrainFeature').find('crop')
+            crop = item.find("value").find("TerrainFeature").find("crop")
             if crop is not None:
-                crop_x = int(item.find('key').find('Vector2').find('X').text)
-                crop_y = int(item.find('key').find('Vector2').find('Y').text)
-                crop_phase = int(crop.find('currentPhase').text)
-                crop_location = int(crop.find('rowInSpriteSheet').text)
+                crop_x = int(item.find("key").find("Vector2").find("X").text)
+                crop_y = int(item.find("key").find("Vector2").find("Y").text)
+                crop_phase = int(crop.find("currentPhase").text)
+                crop_location = int(crop.find("rowInSpriteSheet").text)
                 if crop_location in [26, 27, 28, 29, 31]:
-                    r = int(crop.find('tintColor').find('R').text)
-                    g = int(crop.find('tintColor').find('G').text)
-                    b = int(crop.find('tintColor').find('B').text)
-                    days = int(crop.find('dayOfCurrentPhase').text)
+                    r = int(crop.find("tintColor").find("R").text)
+                    g = int(crop.find("tintColor").find("G").text)
+                    b = int(crop.find("tintColor").find("B").text)
+                    days = int(crop.find("dayOfCurrentPhase").text)
                     o = ((r, g, b), days)
                 else:
                     o = None
                 crop_flip = False
-                if crop.find('flip').text == 'true':
+                if crop.find("flip").text == "true":
                     crop_flip = True
                 crop_dead = False
-                if crop.find('dead').text == 'true':
+                if crop.find("dead").text == "true":
                     crop_dead = True
-                crops.append(sprite('HoeDirtCrop', crop_x, crop_y, 1, 1, crop_dead, crop_location,
-                                    crop_phase, crop_flip, o))
+                crops.append(
+                    sprite(
+                        "HoeDirtCrop",
+                        crop_x,
+                        crop_y,
+                        1,
+                        1,
+                        crop_dead,
+                        crop_location,
+                        crop_phase,
+                        crop_flip,
+                        o,
+                    )
+                )
         if name == "FruitTree":
-            t = int(item.find('value').find('TerrainFeature').find('treeType').text)
-            s = int(item.find('value').find('TerrainFeature').find('growthStage').text)
-            if item.find('value').find('TerrainFeature').find('flipped').text == 'true': f = True
+            t = int(item.find("value").find("TerrainFeature").find("treeType").text)
+            s = int(item.find("value").find("TerrainFeature").find("growthStage").text)
+            if item.find("value").find("TerrainFeature").find("flipped").text == "true":
+                f = True
         if name == "Grass":
-            t = int(item.find('value').find('TerrainFeature').find('grassType').text)
-            s = int(item.find('value').find('TerrainFeature').find('numberOfWeeds').text)
-            loc = int(item.find('value').find('TerrainFeature').find('grassSourceOffset').text)
+            t = int(item.find("value").find("TerrainFeature").find("grassType").text)
+            s = int(
+                item.find("value").find("TerrainFeature").find("numberOfWeeds").text
+            )
+            loc = int(
+                item.find("value").find("TerrainFeature").find("grassSourceOffset").text
+            )
         if name == "Bush":
             name = "Tea_Bush"
-            node = item.find('value').find('TerrainFeature')
-            f = node.find('flipped').text.lower() == 'true'
-            t = int(node.find('size').text)
+            node = item.find("value").find("TerrainFeature")
+            f = node.find("flipped").text.lower() == "true"
+            t = int(node.find("size").text)
 
             # Calculate growth stage
-            date_planted = int(node.find('datePlanted').text)
+            date_planted = int(node.find("datePlanted").text)
             age = farm_age - date_planted
             if age < 10:
                 s = 0
@@ -201,122 +224,134 @@ def getFarmInfo(saveFile):
             if s == 2 and is_last_week_of_season:
                 s = 3
 
-
-        x = int(item.find('key').find('Vector2').find('X').text)
-        y = int(item.find('key').find('Vector2').find('Y').text)
+        x = int(item.find("key").find("Vector2").find("X").text)
+        y = int(item.find("key").find("Vector2").find("Y").text)
         tf.append(sprite(name, x, y, 1, 1, loc, t, s, f, None))
 
     d = {k[0]: [a for a in tf if a[0] == k[0]] for k in tf}
-    excludes = ['Flooring', 'HoeDirt', 'Crop']
-    farm['terrainFeatures'] = [a for a in tf if a.name not in excludes]
-    farm['Crops'] = crops
+    excludes = ["Flooring", "HoeDirt", "Crop"]
+    farm["terrainFeatures"] = [a for a in tf if a.name not in excludes]
+    farm["Crops"] = crops
 
     try:
-        farm['Flooring'] = checkSurrounding(d['Flooring'])
+        farm["Flooring"] = checkSurrounding(d["Flooring"])
     except Exception as e:
         pass
 
     try:
-        farm['HoeDirt'] = (checkSurrounding(d['HoeDirt']))
+        farm["HoeDirt"] = checkSurrounding(d["HoeDirt"])
     except:
         pass
 
     # Large Terrain Features
 
     large_terrain_features = []
-    for ltf in farm_location.find('largeTerrainFeatures'):
-        name = ltf.get(ns + 'type')
-        flipped = ltf.find('flipped').text == 'true'
-        size = int(ltf.find('size').text)
-        x = int(ltf.find('tilePosition').find('X').text)
-        y = int(ltf.find('tilePosition').find('Y').text)
-        tile_sheet_offset = int(ltf.find('tileSheetOffset').text)
+    for ltf in farm_location.find("largeTerrainFeatures"):
+        name = ltf.get(ns + "type")
+        flipped = ltf.find("flipped").text == "true"
+        size = int(ltf.find("size").text)
+        x = int(ltf.find("tilePosition").find("X").text)
+        y = int(ltf.find("tilePosition").find("Y").text)
+        tile_sheet_offset = int(ltf.find("tileSheetOffset").text)
 
         large_terrain_features.append(
-                sprite(name, x, y, 1, 1, tile_sheet_offset, None, size, flipped, None)
+            sprite(name, x, y, 1, 1, tile_sheet_offset, None, size, flipped, None)
         )
 
-    farm['largeTerrainFeatures'] = large_terrain_features
+    farm["largeTerrainFeatures"] = large_terrain_features
 
     # Resource Clumps
     s = []
 
-    for item in farm_location.find('resourceClumps').iter('ResourceClump'):
-        name = item.get(ns + 'type')
+    for item in farm_location.find("resourceClumps").iter("ResourceClump"):
+        name = item.get(ns + "type")
         if name is None:
-            name = 'ResourceClump'
-        t = int(item.find('parentSheetIndex').text)
-        x = int(item.find('tile').find('X').text)
-        y = int(item.find('tile').find('Y').text)
-        w = int(item.find('width').text)
-        h = int(item.find('height').text)
+            name = "ResourceClump"
+        t = int(item.find("parentSheetIndex").text)
+        x = int(item.find("tile").find("X").text)
+        y = int(item.find("tile").find("Y").text)
+        w = int(item.find("width").text)
+        h = int(item.find("height").text)
         s.append(sprite(name, x, y, w, h, None, t, None, None, None))
 
-    farm['resourceClumps'] = s
+    farm["resourceClumps"] = s
 
     s = []
-    for item in farm_location.find('buildings').iter('Building'):
-        name = 'Building'
-        x = int(item.find('tileX').text)
-        y = int(item.find('tileY').text)
-        w = int(item.find('tilesWide').text)
-        h = int(item.find('tilesHigh').text)
-        t = item.find('buildingType').text
+    for item in farm_location.find("buildings").iter("Building"):
+        name = "Building"
+        x = int(item.find("tileX").text)
+        y = int(item.find("tileY").text)
+        w = int(item.find("tilesWide").text)
+        h = int(item.find("tilesHigh").text)
+        t = item.find("buildingType").text
         o = None
-        if 'cabin' in t.lower():
+        if "cabin" in t.lower():
             try:
-                o = min(int(item.find('indoors').find('farmhand').find('houseUpgradeLevel').text), 2)
+                o = min(
+                    int(
+                        item.find("indoors")
+                        .find("farmhand")
+                        .find("houseUpgradeLevel")
+                        .text
+                    ),
+                    2,
+                )
             except AttributeError:
                 o = 0
-        if t.lower() == 'fish pond':
-            netting_style = int(item.find('nettingStyle').find('int').text)
-            
+        if t.lower() == "fish pond":
+            netting_style = int(item.find("nettingStyle").find("int").text)
+
             # Handle water tint, default (25, 155, 178)
-            water_color_element = item.find('overrideWaterColor').find('Color')
-            red = int(water_color_element.find('R').text)
-            green = int(water_color_element.find('G').text)
-            blue = int(water_color_element.find('B').text)
+            water_color_element = item.find("overrideWaterColor").find("Color")
+            red = int(water_color_element.find("R").text)
+            green = int(water_color_element.find("G").text)
+            blue = int(water_color_element.find("B").text)
             if red == 255 and green == 255 and blue == 255:
                 tint = (25, 155, 178)
             else:
                 tint = (red, green, blue)
 
-            has_output = item.find('output') is not None
+            has_output = item.find("output") is not None
 
             o = {
-                'netting_style': netting_style,
-                'water_color': tint,
-                'has_output': has_output
+                "netting_style": netting_style,
+                "water_color": tint,
+                "has_output": has_output,
             }
 
         s.append(sprite(name, x, y, w, h, None, t, None, None, o))
 
-    farm['buildings'] = s
+    farm["buildings"] = s
 
-    house = sprite('House',
-                   58, 14, 10, 6,
-                   int(root.find('player').find('houseUpgradeLevel').text),
-                   None,
-                   None,
-                   None,
-                   None)
+    house = sprite(
+        "House",
+        58,
+        14,
+        10,
+        6,
+        int(root.find("player").find("houseUpgradeLevel").text),
+        None,
+        None,
+        None,
+        None,
+    )
 
     hasGreenhouse = False
     try:
-        community_center = get_location(root, 'CommunityCenter')
-        cats = community_center.find('areasComplete').findall('boolean')
-        if cats[0].text == 'true':
+        community_center = get_location(root, "CommunityCenter")
+        cats = community_center.find("areasComplete").findall("boolean")
+        if cats[0].text == "true":
             hasGreenhouse = True
     except AttributeError:
         pass
 
     # Check for letter to confirm player has unlocked greenhouse, thanks /u/BumbleBHE
-    for letter in root.find('player').find('mailReceived').iter('string'):
+    for letter in root.find("player").find("mailReceived").iter("string"):
         if letter.text == "ccPantry":
             hasGreenhouse = True
 
     try:
-        mapType = int(root.find('whichFarm').text)
+        mapType = int(root.find("whichFarm").text)
     except Exception as e:
         mapType = 0
 
@@ -324,19 +359,18 @@ def getFarmInfo(saveFile):
     greenhouse_y = 31 if mapType == 5 else 12
 
     if hasGreenhouse:
-        greenHouse = sprite('Greenhouse',
-                            greenhouse_x, greenhouse_y, 0, 6, 1,
-                            None, None, None, None)
+        greenHouse = sprite(
+            "Greenhouse", greenhouse_x, greenhouse_y, 0, 6, 1, None, None, None, None
+        )
     else:
-        greenHouse = sprite('Greenhouse',
-                            greenhouse_x, greenhouse_y, 0, 6, 0,
-                            None, None, None, None)
-    farm['misc'] = [house, greenHouse]
+        greenHouse = sprite(
+            "Greenhouse", greenhouse_x, greenhouse_y, 0, 6, 0, None, None, None, None
+        )
+    farm["misc"] = [house, greenHouse]
 
-
-    spouse = get_partner(root.find('player'))
+    spouse = get_partner(root.find("player"))
     spouse = spouse.lower() if spouse else None
-    return {'type': map_types[mapType], 'data': farm, 'spouse': spouse}
+    return {"type": map_types[mapType], "data": farm, "spouse": spouse}
 
 
 def colourBox(x, y, colour, pixels, scale=8):
@@ -358,21 +392,21 @@ def colourBox(x, y, colour, pixels, scale=8):
 #      Blue - Water
 #      Off Tan - Tilled Soil
 def generateImage(data):
-    type = data['type']
-    farm = data['data']
+    type = data["type"]
+    farm = data["data"]
 
     image = Image.open("./sdv/assets/base/minimap/{}.png".format(type))
     pixels = image.load()
 
     pixels[1, 1] = (255, 255, 255)
 
-    for building in farm['buildings']:
+    for building in farm["buildings"]:
         for i in range(building[3]):
             for j in range(building[4]):
                 colourBox(building[1] + i, building[2] + j, (255, 150, 150), pixels)
 
-    if 'terrainFeatures' in farm:
-        for tile in farm['terrainFeatures']:
+    if "terrainFeatures" in farm:
+        for tile in farm["terrainFeatures"]:
             name = tile.name
             if name == "Tree":
                 colourBox(tile.x, tile.y, (0, 175, 0), pixels)
@@ -383,20 +417,20 @@ def generateImage(data):
             else:
                 colourBox(tile.x, tile.y, (0, 0, 0), pixels)
 
-    if 'HoeDirt' in farm:
-        for tile in farm['HoeDirt']:
+    if "HoeDirt" in farm:
+        for tile in farm["HoeDirt"]:
             colourBox(tile.x, tile.y, (196, 196, 38), pixels)
 
-    if 'Flooring' in farm:
-        for tile in farm['Flooring']:
+    if "Flooring" in farm:
+        for tile in farm["Flooring"]:
             colourBox(tile.x, tile.y, (50, 50, 50), pixels)
 
-    if 'Fences' in farm:
-        for tile in farm['Fences']:
+    if "Fences" in farm:
+        for tile in farm["Fences"]:
             colourBox(tile.x, tile.y, (200, 200, 200), pixels)
 
-    if 'objects' in farm:
-        for tile in farm['objects']:
+    if "objects" in farm:
+        for tile in farm["objects"]:
             name = tile.orientation
             if name == "Weeds":
                 colourBox(tile.x, tile.y, (0, 255, 0), pixels)
@@ -407,8 +441,8 @@ def generateImage(data):
             else:
                 colourBox(tile.x, tile.y, (255, 0, 0), pixels)
 
-    if 'resourceClumps' in farm:
-        for tile in farm['resourceClumps']:
+    if "resourceClumps" in farm:
+        for tile in farm["resourceClumps"]:
             if tile.type == 672:
                 for i in range(tile[3]):
                     for j in range(tile[3]):
@@ -421,10 +455,23 @@ def generateImage(data):
 
 
 def regenerateFarmInfo(json_from_db):
-    sprite = namedtuple('Sprite', ['name', 'x', 'y', 'w', 'h', 'index', 'type', 'growth', 'flipped',
-                                   'orientation'])
+    sprite = namedtuple(
+        "Sprite",
+        [
+            "name",
+            "x",
+            "y",
+            "w",
+            "h",
+            "index",
+            "type",
+            "growth",
+            "flipped",
+            "orientation",
+        ],
+    )
 
-    for key in json_from_db['data'].keys():
-        for i, item in enumerate(json_from_db['data'][key]):
-            json_from_db['data'][key][i] = sprite(*item)
+    for key in json_from_db["data"].keys():
+        for i, item in enumerate(json_from_db["data"][key]):
+            json_from_db["data"][key][i] = sprite(*item)
     return json_from_db

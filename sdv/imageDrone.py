@@ -23,15 +23,15 @@ sqlesc = app.sqlesc
 
 def save_from_id(save_id, cursor):
     cursor.execute(
-            'SELECT ' + database_fields + ' FROM playerinfo WHERE id=(' + sqlesc + ')',
-            (save_id,)
+        "SELECT " + database_fields + " FROM playerinfo WHERE id=(" + sqlesc + ")",
+        (save_id,),
     )
     result = cursor.fetchone()
-    data = {key: value for key, value in zip(database_fields.split(','), result)}
+    data = {key: value for key, value in zip(database_fields.split(","), result)}
 
-    data['pantsColor'] = [data[f'pantsColor{i}'] for i in range(4)]
-    data['newEyeColor'] = [data[f'newEyeColor{i}'] for i in range(4)]
-    data['hairstyleColor'] = [data[f'hairstyleColor{i}'] for i in range(4)]
+    data["pantsColor"] = [data[f"pantsColor{i}"] for i in range(4)]
+    data["newEyeColor"] = [data[f"newEyeColor{i}"] for i in range(4)]
+    data["hairstyleColor"] = [data[f"hairstyleColor{i}"] for i in range(4)]
 
     return data
 
@@ -44,8 +44,11 @@ def process_queue():
 
     while True:
         cur.execute(
-                sql.GET_TODO_TASKS,
-                (True, 'process_image',)
+            sql.GET_TODO_TASKS,
+            (
+                True,
+                "process_image",
+            ),
         )
         tasks = cur.fetchall()
         db.commit()
@@ -57,22 +60,29 @@ def process_queue():
 
                 data = save_from_id(farm_id, cur)
                 base_subfolder = str(
-                        int(math.floor(int(farm_id) / app.config.get('IMAGE_MAX_PER_FOLDER')))
+                    int(
+                        math.floor(
+                            int(farm_id) / app.config.get("IMAGE_MAX_PER_FOLDER")
+                        )
+                    )
                 )
-                base_path = os.path.join(app.config.get('IMAGE_FOLDER'), base_subfolder,
-                                         data['url'])
+                base_path = os.path.join(
+                    app.config.get("IMAGE_FOLDER"), base_subfolder, data["url"]
+                )
                 try:
                     os.makedirs(legacy_location(base_path))
                 except OSError:
                     pass
 
-                base_path_fmt = os.path.join(base_path, data['url'] + '-{image_type}.png')
+                base_path_fmt = os.path.join(
+                    base_path, data["url"] + "-{image_type}.png"
+                )
 
-                avatar_path = base_path_fmt.format(image_type='a')
-                portrait_path = base_path_fmt.format(image_type='p')
-                farm_path = base_path_fmt.format(image_type='f')
-                map_path = base_path_fmt.format(image_type='m')
-                thumb_path = base_path_fmt.format(image_type='t')
+                avatar_path = base_path_fmt.format(image_type="a")
+                portrait_path = base_path_fmt.format(image_type="p")
+                farm_path = base_path_fmt.format(image_type="f")
+                map_path = base_path_fmt.format(image_type="m")
+                thumb_path = base_path_fmt.format(image_type="t")
 
                 # Main Player Avatar and Portrait
                 avatar = generateAvatar(data)
@@ -80,49 +90,64 @@ def process_queue():
                 avatar.save(legacy_location(avatar_path), compress_level=9)
 
                 # Farmhands
-                farmhands = data.get('farmhands', [])
+                farmhands = data.get("farmhands", [])
                 if farmhands:
                     for i, farmhand in enumerate(farmhands):
                         farmhand_path = base_path_fmt.format(
-                                image_type=f'fh-{farmhand["UniqueMultiplayerID"]}'
+                            image_type=f'fh-{farmhand["UniqueMultiplayerID"]}'
                         )
                         farmhand_avatar = generateAvatar(farmhand)
 
                         farmhand_avatar.resize((avatar.width * 4, avatar.height * 4))
-                        farmhand_avatar.save(legacy_location(farmhand_path), compress_level=9)
-                        farmhand['avatar_url'] = farmhand_path
+                        farmhand_avatar.save(
+                            legacy_location(farmhand_path), compress_level=9
+                        )
+                        farmhand["avatar_url"] = farmhand_path
 
-                cur.execute(
-                        sql.UPDATE_FARMHANDS,
-                        (json.dumps(farmhands), farm_id)
-                )
+                cur.execute(sql.UPDATE_FARMHANDS, (json.dumps(farmhands), farm_id))
 
-                portrait_info = json.loads(data['portrait_info'])
+                portrait_info = json.loads(data["portrait_info"])
 
                 partner_image = None
-                partner_id = portrait_info.get('partner_id')
+                partner_id = portrait_info.get("partner_id")
                 if partner_id:
-                    partner = next(filter(lambda f: f['UniqueMultiplayerID'] == partner_id, farmhands))
-                    partner_image = Image.open(legacy_location(partner['avatar_url']))
+                    partner = next(
+                        filter(
+                            lambda f: f["UniqueMultiplayerID"] == partner_id, farmhands
+                        )
+                    )
+                    partner_image = Image.open(legacy_location(partner["avatar_url"]))
 
-                generateFamilyPortrait(avatar, portrait_info, partner_image=partner_image) \
-                    .save(legacy_location(portrait_path), compress_level=9)
+                generateFamilyPortrait(
+                    avatar, portrait_info, partner_image=partner_image
+                ).save(legacy_location(portrait_path), compress_level=9)
 
                 # Minimap, Thumbnail and Main Map
-                farm_data = regenerateFarmInfo(json.loads(data['farm_info']))
-                generateMinimap(farm_data).save(legacy_location(farm_path), compress_level=9)
+                farm_data = regenerateFarmInfo(json.loads(data["farm_info"]))
+                generateMinimap(farm_data).save(
+                    legacy_location(farm_path), compress_level=9
+                )
 
-                farm = generateFarm(data['currentSeason'], farm_data)
+                farm = generateFarm(data["currentSeason"], farm_data)
 
-                th = farm.resize((int(farm.width / 4), int(farm.height / 4)), Image.ANTIALIAS)
+                th = farm.resize(
+                    (int(farm.width / 4), int(farm.height / 4)), Image.ANTIALIAS
+                )
                 th.save(legacy_location(thumb_path))
-                farm = watermark(farm, filename='u.f.png')
+                farm = watermark(farm, filename="u.f.png")
                 farm.save(legacy_location(map_path), compress_level=9)
 
                 cur.execute(
-                        sql.UPDATE_PLAYER_IMAGE_URLS,
-                        (farm_path, avatar_path, portrait_path, map_path, thumb_path, base_path,
-                         data['id'])
+                    sql.UPDATE_PLAYER_IMAGE_URLS,
+                    (
+                        farm_path,
+                        avatar_path,
+                        portrait_path,
+                        map_path,
+                        thumb_path,
+                        base_path,
+                        data["id"],
+                    ),
                 )
                 db.commit()
 
@@ -142,20 +167,32 @@ def process_plans():
     while True:
         # cur.execute('SELECT * FROM todo WHERE task='+sqlesc+' AND currently_processing NOT TRUE',('process_image',))
         cur.execute(
-                'UPDATE todo SET currently_processing=' + sqlesc + ' WHERE id=(SELECT id FROM todo WHERE task=' + sqlesc + ' AND currently_processing IS NOT TRUE LIMIT 1) RETURNING *',
-                (True, 'process_plan_image',))
+            "UPDATE todo SET currently_processing="
+            + sqlesc
+            + " WHERE id=(SELECT id FROM todo WHERE task="
+            + sqlesc
+            + " AND currently_processing IS NOT TRUE LIMIT 1) RETURNING *",
+            (
+                True,
+                "process_plan_image",
+            ),
+        )
         tasks = cur.fetchall()
         db.commit()
         if len(tasks) != 0:
             for task in tasks:
-                cur.execute('SELECT source_json, url, season FROM plans WHERE id=(' + sqlesc + ')',
-                            (task[2],))
+                cur.execute(
+                    "SELECT source_json, url, season FROM plans WHERE id=("
+                    + sqlesc
+                    + ")",
+                    (task[2],),
+                )
                 result = cur.fetchone()
                 farm_json = json.loads(result[0])
                 url = result[1]
-                season = 'spring' if result[2] == None else result[2]
+                season = "spring" if result[2] == None else result[2]
 
-                base_path = os.path.join(app.config.get('RENDER_FOLDER'), url)
+                base_path = os.path.join(app.config.get("RENDER_FOLDER"), url)
                 try:
                     os.mkdir(legacy_location(base_path))
                 except OSError:
@@ -163,33 +200,46 @@ def process_plans():
                 try:
                     farm_data = parse_json(farm_json)
 
-                    if farm_data['type'] == 'unsupported_map':
+                    if farm_data["type"] == "unsupported_map":
                         continue
 
-                    farm_path = os.path.join(base_path, url + '-plan.png')
+                    farm_path = os.path.join(base_path, url + "-plan.png")
                     # generateMinimap(farm_data).save(legacy_location(farm_path), compress_level=9)
 
                     # map_path = os.path.join(base_path, data['url']+'-m.png')
                     # thumb_path = os.path.join(base_path, data['url']+'-t.png')
                     farm = generateFarm(season, farm_data)
-                    farm = watermark(farm, filename='stardew_info.png')
+                    farm = watermark(farm, filename="stardew_info.png")
                     # th = farm.resize((int(farm.width/4), int(farm.height/4)), Image.ANTIALIAS)
                     # th.save(legacy_location(thumb_path))
                     farm.save(legacy_location(farm_path), compress_level=9)
 
                     cur.execute(
-                            'UPDATE plans SET image_url=' + sqlesc + ', base_path=' + sqlesc + ', render_deleted=FALSE, failed_render=NULL WHERE id=' + sqlesc + '',
-                            (farm_path, base_path, task[2]))
+                        "UPDATE plans SET image_url="
+                        + sqlesc
+                        + ", base_path="
+                        + sqlesc
+                        + ", render_deleted=FALSE, failed_render=NULL WHERE id="
+                        + sqlesc
+                        + "",
+                        (farm_path, base_path, task[2]),
+                    )
                     db.commit()
                     # # except Exception as e:
                     # #     cur.execute('UPDATE playerinfo SET failed_processing='+sqlesc+' WHERE id='+,(True,data['id']))
                     # #     db.commit()
-                    cur.execute('DELETE FROM todo WHERE id=(' + sqlesc + ')', (task[0],))
+                    cur.execute(
+                        "DELETE FROM todo WHERE id=(" + sqlesc + ")", (task[0],)
+                    )
                     db.commit()
                 except:
-                    cur.execute('UPDATE plans SET failed_render=TRUE WHERE id=' + sqlesc,
-                                (task[2],))
-                    cur.execute('DELETE fROM todo WHERE id=(' + sqlesc + ')', (task[0],))
+                    cur.execute(
+                        "UPDATE plans SET failed_render=TRUE WHERE id=" + sqlesc,
+                        (task[2],),
+                    )
+                    cur.execute(
+                        "DELETE fROM todo WHERE id=(" + sqlesc + ")", (task[0],)
+                    )
                 records_handled += 1
         else:
             db.close()

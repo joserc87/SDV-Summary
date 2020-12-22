@@ -15,8 +15,14 @@ def tintImage(img, tint):
 
 
 # Crops sprite from Spritesheet
-def cropImg(img, location, defaultSize=(16, 16), objectSize=(16, 16), resize=False,
-            displacement=(0, 0)):
+def cropImg(
+    img,
+    location,
+    defaultSize=(16, 16),
+    objectSize=(16, 16),
+    resize=False,
+    displacement=(0, 0),
+):
     row = int(img.width / (defaultSize[0]))
     x = (location % row) * defaultSize[0]
     y = (location // row) * defaultSize[1]
@@ -40,14 +46,14 @@ def colourBox(x, y, colour, pixels, scale=8):
     return pixels
 
 
-def watermark(img, mark=None, filename='u.f.png'):
-    asset_dir = app.config.get('ASSET_PATH')
+def watermark(img, mark=None, filename="u.f.png"):
+    asset_dir = app.config.get("ASSET_PATH")
     if mark is None:
-        mark = Image.open(os.path.join(asset_dir, 'watermarks', filename))
+        mark = Image.open(os.path.join(asset_dir, "watermarks", filename))
     x = 16
     y = img.size[1] - 16 - mark.size[1]
-    if img.mode != 'RGBA':
-        img = img.convert('RGBA')
+    if img.mode != "RGBA":
+        img = img.convert("RGBA")
 
     img.paste(mark, box=(x, y), mask=mark)
-    return img.convert('P', palette=Image.ADAPTIVE, colors=255)
+    return img.convert("P", palette=Image.ADAPTIVE, colors=255)

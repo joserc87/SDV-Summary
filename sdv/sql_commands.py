@@ -2,7 +2,7 @@ from sdv import app
 
 sql_escape = app.sqlesc
 
-GET_TODO_TASKS = '''
+GET_TODO_TASKS = """
 UPDATE 
   todo 
 SET 
@@ -20,16 +20,20 @@ WHERE
     LIMIT 1
   )
 RETURNING *;
-'''.format(sql_escape=sql_escape)
+""".format(
+    sql_escape=sql_escape
+)
 
-DELETE_TASK = '''
+DELETE_TASK = """
   DELETE FROM 
     todo 
   WHERE
     id={sql_escape};
-'''.format(sql_escape=sql_escape)
+""".format(
+    sql_escape=sql_escape
+)
 
-UPDATE_PLAYER_IMAGE_URLS = '''
+UPDATE_PLAYER_IMAGE_URLS = """
   UPDATE 
     playerinfo 
   SET
@@ -41,8 +45,12 @@ UPDATE_PLAYER_IMAGE_URLS = '''
     base_path={sql_escape}
   WHERE 
     id={sql_escape};
-'''.format(sql_escape=sql_escape)
+""".format(
+    sql_escape=sql_escape
+)
 
-UPDATE_FARMHANDS = '''
+UPDATE_FARMHANDS = """
     UPDATE playerinfo SET farmhands = {sql_escape} WHERE id = {sql_escape}; 
-'''.format(sql_escape=sql_escape)
+""".format(
+    sql_escape=sql_escape
+)

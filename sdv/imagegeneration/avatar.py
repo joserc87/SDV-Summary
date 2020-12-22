@@ -6,39 +6,64 @@ from .assets import loadAvatarAssets
 
 
 def generateAvatar(player, assets=None):
-    if player['isMale'] == 'true':
-        gender = 'male'
+    if player["isMale"] == "true":
+        gender = "male"
     else:
-        gender = 'female'
+        gender = "female"
 
     if assets is None:
         assets = loadAvatarAssets()
 
-    base = assets['base'][gender]
+    base = assets["base"][gender]
 
-    leg_colour = (int(player['pantsColor'][0]), int(player['pantsColor'][1]), int(player['pantsColor'][2]))
-    legs = tintImage(assets['legs'][gender], leg_colour)
+    leg_colour = (
+        int(player["pantsColor"][0]),
+        int(player["pantsColor"][1]),
+        int(player["pantsColor"][2]),
+    )
+    legs = tintImage(assets["legs"][gender], leg_colour)
 
-    hair = cropImg(assets['hair'], int(player['hair']), defaultSize=(16, 32*3), objectSize=(16, 32), resize=True, displacement=(0, 0))
-    hair_color = tuple(map(int, player['hairstyleColor']))
+    hair = cropImg(
+        assets["hair"],
+        int(player["hair"]),
+        defaultSize=(16, 32 * 3),
+        objectSize=(16, 32),
+        resize=True,
+        displacement=(0, 0),
+    )
+    hair_color = tuple(map(int, player["hairstyleColor"]))
     hair = tintImage(hair, hair_color)
 
-    acc = cropImg(assets['accessories'], int(player['accessory']), defaultSize=(16, 16*2), objectSize=(16, 16), resize=True, displacement=(0, 1))
-    if int(player['accessory']) <= 5:
+    acc = cropImg(
+        assets["accessories"],
+        int(player["accessory"]),
+        defaultSize=(16, 16 * 2),
+        objectSize=(16, 16),
+        resize=True,
+        displacement=(0, 1),
+    )
+    if int(player["accessory"]) <= 5:
         acc = tintImage(acc, hair_color)
 
-    shirt = cropImg(assets['shirts'], int(player['shirt']), defaultSize=(8, 8*4), objectSize=(8, 8), resize=True, displacement=(4, 14))
+    shirt = cropImg(
+        assets["shirts"],
+        int(player["shirt"]),
+        defaultSize=(8, 8 * 4),
+        objectSize=(8, 8),
+        resize=True,
+        displacement=(4, 14),
+    )
 
-    skin_x = int(player['skin']) % 24 * 1
-    skin_y = int(player['skin']) // 24 * 1
-    skin_color = assets['skin colors'].getpixel((skin_x, skin_y))
+    skin_x = int(player["skin"]) % 24 * 1
+    skin_y = int(player["skin"]) // 24 * 1
+    skin_color = assets["skin colors"].getpixel((skin_x, skin_y))
     base = tintImage(base, skin_color)
-    arms = tintImage(assets['arms'][gender], skin_color)
+    arms = tintImage(assets["arms"][gender], skin_color)
 
     body = base.load()
-    eyeColor = tuple(map(int, player['newEyeColor']))
+    eyeColor = tuple(map(int, player["newEyeColor"]))
     white = (255, 255, 255)
-    if player['isMale'] == 'true':
+    if player["isMale"] == "true":
         body[6, 10] = eyeColor
         body[9, 10] = eyeColor
         body[6, 11] = eyeColor
@@ -62,5 +87,5 @@ def generateAvatar(player, assets=None):
     base = Image.alpha_composite(base, legs)
     base = Image.alpha_composite(base, shirt)
     base = Image.alpha_composite(base, acc)
-    base = Image.alpha_composite(base, assets['boots'][gender])
+    base = Image.alpha_composite(base, assets["boots"][gender])
     return base
