@@ -79,8 +79,13 @@ def generateFarm(season, data, assets=None):
         print("\tLoading Assets...")
         assets = loadFarmAssets(season, type)
 
-    farm_height = 1280 if type == "FourCorners" else 1040
-    farm_base = Image.new("RGBA", (1280, farm_height))
+    farm_heights = {"FourCorners": 1280, "Island": 1760}
+    farm_height = farm_heights.get(type, 1040)
+
+    farm_widths = {"Island": 1760}
+    farm_width = farm_widths.get(type, 1280)
+
+    farm_base = Image.new("RGBA", (farm_width, farm_height))
     farm_base.paste(assets["base"][type][season], (0, 0))
 
     # seed the random number generator so we render the same way every time

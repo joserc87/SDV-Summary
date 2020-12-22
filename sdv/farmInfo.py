@@ -12,6 +12,7 @@ map_types = [
     "Mining",
     "Combat",
     "FourCorners",
+    "Island",
 ]
 
 

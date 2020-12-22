@@ -95,14 +95,19 @@ def open_nicely(filename):
     return im
 
 
+farm_tile_heights = {
+    "FourCorners": 80,
+    "Island": 220,
+}
+
+
 def load_overlays(season, base):
     overlays = dict()
 
     for layer in overlay_layers:
         overlays[layer] = list()
         overlay_path = os.path.join(asset_dir, "base", base, season, layer)
-        farm_tile_height = 80 if base == "FourCorners" else 65
-        for i in range(farm_tile_height):
+        for i in range(farm_tile_heights.get(base, 65)):
             overlays[layer].append(
                 open_nicely(os.path.join(overlay_path, "{}-{}.png".format(layer, i)))
             )
