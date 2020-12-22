@@ -93,6 +93,18 @@ FLASK_APP=runserver.py flask run
 
 Assets for image generation go in `sdv\assets\[subfolder]`. Assets used as-is go in `sdv\static\assets\[subfolder]`.
 
+## Code Style
+
+In order to keep the code style consistent, this project is formatted using [Black](https://github.com/psf/black). 
+However, to avoid hiding previous changes in git blame the file `.git-blame-ignore-revs` has been introduced. This file 
+can be used with the flag `--ignore-revs-file` for by adding it to the git config with:
+
+```
+git config blame.ignoreRevsFile .git-blame-ignore-revs
+```
+
+
+
 ## Acknowledgements
 
 Thank you to our translators, specifically:
