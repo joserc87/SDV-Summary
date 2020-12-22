@@ -94,3 +94,6 @@ dev/
 
 tests/reference_images
 tests/reference_saves
+
+# Virtual Environment
+.python-version
