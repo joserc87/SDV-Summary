@@ -356,8 +356,15 @@ def getFarmInfo(saveFile):
     except Exception as e:
         mapType = 0
 
-    greenhouse_x = 36 if mapType == 5 else 25
-    greenhouse_y = 31 if mapType == 5 else 12
+    if mapType == 5:  # Four Corners
+        greenhouse_x = 36
+        greenhouse_y = 31
+    elif mapType == 6:  # Island
+        greenhouse_x = 14
+        greenhouse_y = 16
+    else:
+        greenhouse_x = 25
+        greenhouse_y = 12
 
     if hasGreenhouse:
         greenHouse = sprite(
