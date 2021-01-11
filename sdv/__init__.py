@@ -31,6 +31,7 @@ import random
 import sqlite3
 import datetime
 import uuid
+import logging
 import io
 import sdv.imgur
 import bugsnag
