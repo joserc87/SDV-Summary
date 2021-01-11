@@ -35,6 +35,7 @@ import io
 import sdv.imgur
 import bugsnag
 from bugsnag.flask import handle_exceptions
+from bugsnag.handlers import BugsnagHandler
 import patreon
 import defusedxml
 import psycopg2
@@ -103,6 +104,9 @@ def create_app(config_name=None):
         release_stage = app.config["BUGSNAG_RELEASE_STAGE"]
     )
     handle_exceptions(app)
+    handler = BugsnagHandler()
+    handler.setLevel(logging.ERROR)
+    logger.addHandler(handler)
 
     recaptcha.init_app(app=app)
     bcrypt.init_app(app)
