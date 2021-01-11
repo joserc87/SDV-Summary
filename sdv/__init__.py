@@ -33,6 +33,8 @@ import datetime
 import uuid
 import io
 import sdv.imgur
+import bugsnag
+from bugsnag.flask import handle_exceptions
 import patreon
 import defusedxml
 import psycopg2
@@ -94,6 +96,13 @@ def create_app(config_name=None):
 
     logger.info("Initialising extensions")
     app.config.from_object(config[config_name])
+
+    bugsnag.configure(
+        api_key = app.config["BUGSNAG_API_KEY"],
+        project_root = app.config["BUGSNAG_PROJECT_ROOT"],
+        release_stage = app.config["BUGSNAG_RELEASE_STAGE"]
+    )
+    handle_exceptions(app)
 
     recaptcha.init_app(app=app)
     bcrypt.init_app(app)
