@@ -38,6 +38,7 @@ A Flask webapp using Python Image Library to reconstruct and display a summary o
 
 `USE_SQLITE` NOTE: in testing we've moved to Postgres, so this probably doesn't work any more
 
+
 ##### SQLite
 
 `DB_SQLITE`
@@ -92,6 +93,51 @@ FLASK_APP=runserver.py flask run
 ```
 
 Assets for image generation go in `sdv\assets\[subfolder]`. Assets used as-is go in `sdv\static\assets\[subfolder]`.
+
+## With Docker compose
+
+```bash
+docker compose up
+```
+
+This command:
+- Download necessary docker images for python, postgres and pgAdmin, if not present.
+- Creates a database `postgres` with user:password `postgres:postgres` for administration.
+- Creates a database `sdv_summary_development` and a `user:password`
+  `sdv_summary:sdv_summary` with all rights on the `sdv_summary_development`
+  database.
+- TODO: Creates tables?
+- TODO: Inits data?
+- Runs PGAdmin on port 5050, and postgre on 5432
+  
+## PgAdmin
+You can access it on http://localhost:5050 with:
+- Username: admin@upload.farm
+- Password: admin
+
+Then you should add a server. Call it "docker" for example. For the connection:
+- host: postgres
+- port: 5432
+- maintenance database: postgres
+- username: admin
+- password: admin
+
+CREATE USER sdv_summary WITH PASSWORD = 'sdv_summary';
+CREATE DATABASE sdv_summary_development;
+GRANT ALL PRIVILEGES ON DATABASE sdv_summary_development TO sdv_summary;
+
+
+When you are done for the day, just:
+
+```bash
+docker compose down
+```
+
+And if you want to nuke the databases *LOSING ALL THE DATA*:
+
+```bash
+docker compose down --volumes
+```
 
 ## Code Style
 
