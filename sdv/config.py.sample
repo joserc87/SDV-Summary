@@ -9,6 +9,8 @@ class DevelopmentConfig():
   # Leave commented to use unix socket
   # DB_HOST = 'postgres'
   ASSET_PATH = 'sdv/assets'
+  LANGUAGES = ['en']
+  SECRET_KEY = 'changeme'
 
 config = {
   'development': DevelopmentConfig
