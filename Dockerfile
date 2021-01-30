@@ -1,5 +1,7 @@
 FROM python:3.7-slim
 
+ENV FLASK_APP=runserver.py
+ENV FLASK_RUN_HOST=0.0.0.0
 
 WORKDIR /app
 
@@ -22,6 +24,7 @@ RUN pip install -r /app/dev-requirements.txt
 # RUN apt-get autoremove -y gcc
 
 # COPY . /app
+expose 5000
 
-CMD [ "python", "runserver.py" ]
+CMD [ "flask", "run" ]
 
