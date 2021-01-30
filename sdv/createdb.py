@@ -7,7 +7,7 @@ from werkzeug import check_password_hash
 from config import config
 
 app = Flask(__name__)
-config_name = os.environ.get("SDV_APP_SETTINGS", None)
+config_name = os.environ.get("SDV_APP_SETTINGS", 'development')
 app.config.from_object(config[config_name])
 
 database_structure_dict = {
