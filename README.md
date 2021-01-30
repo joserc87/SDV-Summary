@@ -94,7 +94,27 @@ FLASK_APP=runserver.py flask run
 
 Assets for image generation go in `sdv\assets\[subfolder]`. Assets used as-is go in `sdv\static\assets\[subfolder]`.
 
-## With Docker compose
+## Run With Docker compose
+
+### Create the DB
+
+Build all the containers but start only the postgres one for now. Then, run the
+`createadmin.py` from the webapps container:
+
+```bash
+docker compose build
+docker compose up postges
+docker run \
+    -it \
+    -e PYTHONPATH=. \
+    -v "$(pwd)"/:/app \
+    --network=sdv-summary_postgres \
+    sdv-summary_webapp \
+    bas -c "python sdv/createadmin.py; python sdv/createdb.py"
+docker-compose down
+```
+
+### Run the webapp + database
 
 ```bash
 docker compose up
