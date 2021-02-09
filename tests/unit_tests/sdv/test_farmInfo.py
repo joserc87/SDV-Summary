@@ -1,6 +1,13 @@
+import os
+from sdv.savefile import savefile
 from sdv.farmInfo import (
-    regenerateFarmInfo
+    regenerateFarmInfo,
+    getFarmInfo,
 )
+
+current_directory = os.path.dirname(os.path.realpath(__file__))
+data_directory = os.path.join(current_directory, '__data__')
+sample_savefile = os.path.join(data_directory, 'Eliza_123456789')
 
 
 def test_regenerateFarmInfo():
@@ -32,3 +39,11 @@ def test_regenerateFarmInfo():
             assert sprite.growth == "g" + m
             assert sprite.flipped == "f" + m
             assert sprite.orientation == "o" + m
+
+
+def test_getFarmInfo():
+    with open(sample_savefile, 'r') as f:
+        file = savefile(f)
+
+    info = getFarmInfo(file)
+    assert info is not None
