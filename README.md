@@ -98,6 +98,71 @@ FLASK_APP=runserver.py flask run
 
 Assets for image generation go in `sdv\assets\[subfolder]`. Assets used as-is go in `sdv\static\assets\[subfolder]`.
 
+## Run With Docker compose
+
+### Create the DB
+
+Build all the containers but start only the postgres one for now. Then, run the
+`createadmin.py` from the webapps container:
+
+```bash
+docker compose build
+docker compose up postges
+docker run \
+    -it \
+    -e PYTHONPATH=. \
+    -v "$(pwd)"/:/app \
+    --network=sdv-summary_postgres \
+    sdv-summary_webapp \
+    bas -c "python sdv/createadmin.py; python sdv/createdb.py"
+docker-compose down
+```
+
+### Run the webapp + database
+
+```bash
+docker compose up
+```
+
+This command:
+- Download necessary docker images for python, postgres and pgAdmin, if not present.
+- Creates a database `postgres` with user:password `postgres:postgres` for administration.
+- Creates a database `sdv_summary_development` and a `user:password`
+  `sdv_summary:sdv_summary` with all rights on the `sdv_summary_development`
+  database.
+- TODO: Creates tables?
+- TODO: Inits data?
+- Runs PGAdmin on port 5050, and postgre on 5432
+  
+## PgAdmin
+You can access it on http://localhost:5050 with:
+- Username: admin@upload.farm
+- Password: admin
+
+Then you should add a server. Call it "docker" for example. For the connection:
+- host: postgres
+- port: 5432
+- maintenance database: postgres
+- username: admin
+- password: admin
+
+CREATE USER sdv_summary WITH PASSWORD = 'sdv_summary';
+CREATE DATABASE sdv_summary_development;
+GRANT ALL PRIVILEGES ON DATABASE sdv_summary_development TO sdv_summary;
+
+
+When you are done for the day, just:
+
+```bash
+docker compose down
+```
+
+And if you want to nuke the databases *LOSING ALL THE DATA*:
+
+```bash
+docker compose down --volumes
+```
+
 ## Code Style
 
 In order to keep the code style consistent, this project is formatted using [Black](https://github.com/psf/black). 
