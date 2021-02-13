@@ -3015,7 +3015,7 @@ def get_entries(n=6, **kwargs):
                     search += "("
                 else:
                     search += "OR "
-                search += cur.mogrify(
+                search += mogrify(cur,
                     field + " ILIKE " + app.sqlesc + " ",
                     ("%%" + item.decode("utf-8") + "%%",),
                 ).decode("utf-8")
@@ -3026,7 +3026,7 @@ def get_entries(n=6, **kwargs):
         where_contents.append(search)
     if "series" in kwargs and kwargs["series"] != None:
         where_contents.append(
-            cur.mogrify(
+            mogrify(cur,
                 "series_id=(SELECT series_id FROM playerinfo WHERE url="
                 + app.sqlesc
                 + ")",
@@ -3041,7 +3041,7 @@ def get_entries(n=6, **kwargs):
         ]
         if len(likes) > 0:
             where_contents.append(
-                cur.mogrify("url=ANY(" + app.sqlesc + ")", (likes,)).decode("utf-8")
+                mogrify(cur, "url=ANY(" + app.sqlesc + ")", (likes,)).decode("utf-8")
             )
         else:
             where_contents.append("url=ANY(ARRAY[])")
@@ -3052,7 +3052,7 @@ def get_entries(n=6, **kwargs):
     # do some checking to ensure the person getting the private data is an admin
     else:
         where_contents.append(
-            cur.mogrify(
+            mogrify(cur,
                 "(private IS NOT TRUE OR (private IS TRUE AND owner_id="
                 + app.sqlesc
                 + "))",
@@ -3090,6 +3090,7 @@ def get_entries(n=6, **kwargs):
     if "offset" in kwargs:
         cur.execute(query, (n, offset))
     else:
+        print(query)
         cur.execute(query, (n,))
     entries = {}
     entries["posts"] = cur.fetchall()
@@ -3115,6 +3116,22 @@ def get_entries(n=6, **kwargs):
     if len(entries) == 0:
         entries == None
     return entries
+
+
+def mogrify(cur, query, params):
+    """Hack to have mogrify working for SQL"""
+    # TODO: This is leading to SQL injection! do not use mogrify to generate
+    # the "where", but just add all the parameters into a list.
+    if not app.config.get("USE_SQLITE"):
+        return cur.mogrify(query, params)
+    else:
+        parts = query.split('?')
+        result = ''
+        for query_part, param in zip(parts[:-1], list(params)):
+            result += query_part
+            result += 'NULL' if param is None else '"{}"'.format(param)
+        result += parts[-1]
+        return result.encode('utf-8')
 
 
 @app.route("/blog/<id>")
