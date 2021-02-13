@@ -170,7 +170,10 @@ def set_lang(code):
 
 
 def connect_db():
-    return psycopg2.connect(app.database)
+    if app.config.get("USE_SQLITE"):
+        return sqlite3.connect(app.database)
+    else:
+        return psycopg2.connect(app.database)
 
 
 def legacy_location(location):
