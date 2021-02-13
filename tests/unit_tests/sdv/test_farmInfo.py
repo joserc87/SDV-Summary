@@ -1,13 +1,18 @@
 import os
+import json
+import pytest
+
 from sdv.savefile import savefile
 from sdv.farmInfo import (
     regenerateFarmInfo,
     getFarmInfo,
+    sprite,
 )
 
 current_directory = os.path.dirname(os.path.realpath(__file__))
 data_directory = os.path.join(current_directory, '__data__')
 sample_savefile = os.path.join(data_directory, 'Eliza_123456789')
+sample_infofile = os.path.join(data_directory, 'Eliza_123456789_info.json')
 
 
 def test_regenerateFarmInfo():
@@ -40,10 +45,20 @@ def test_regenerateFarmInfo():
             assert sprite.flipped == "f" + m
             assert sprite.orientation == "o" + m
 
+class EncoderForNamedtuple(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, sprite):
+            return list(o)
 
 def test_getFarmInfo():
     with open(sample_savefile, 'r') as f:
         file = savefile(f)
 
     info = getFarmInfo(file)
-    assert info is not None
+    # Uncomment this to overwrite test file
+    # with open(sample_infofile, 'w') as f:
+    #     json.dump(info, f, indent=4, cls=EncoderForNamedtuple)
+
+    with open(sample_infofile) as f:
+        expected_info = json.load(f)
+        assert info == expected_info
