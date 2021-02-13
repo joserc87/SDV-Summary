@@ -28,6 +28,16 @@ class DevelopmentConfig():
     # Or specify Host if DB is not in the same machine
     # DB_HOST = 'postgres'
 
+    # Mail
+    MAIL_DEFAULT_SENDER = 'info@upload.farm'
+
+
+class TestingConfig(DevelopmentConfig):
+    TESTING = True
+    MAIL_DEFAULT_SENDER = 'info@upload.farm'
+
+
 config = {
-  'development': DevelopmentConfig
+  'development': DevelopmentConfig,
+  'testing': TestingConfig,
 }
