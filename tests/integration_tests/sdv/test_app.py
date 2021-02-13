@@ -4,9 +4,17 @@ import tempfile
 import pytest
 
 from sdv import app
+from sdv.createdb import init_db
 
 @pytest.fixture
-def client():
+def working_sqlite():
+    assert app.config.get('USE_SQLITE'), \
+        'For safety, we only run tests on sqlite. Check config.py USE_SQLITE in TestConfig'
+    init_db(no_prompt=True)
+
+
+@pytest.fixture
+def client(working_sqlite):
     assert app.config.get('USE_SQLITE'), \
         'For safety, we only run tests on sqlite. Check config.py USE_SQLITE in TestConfig'
 
@@ -25,4 +33,4 @@ def client():
 
 def test_root_loaded(client):
     rv = client.get('/')
-    assert b'No entries here so far' in rv.data
+    assert b'upload.farm Stardew Val...' in rv.data
