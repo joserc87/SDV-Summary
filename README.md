@@ -34,9 +34,14 @@ A Flask webapp using Python Image Library to reconstruct and display a summary o
 
 `DEBUG` set to True for helpful debugging; never set to True in production environment
 
+`ASSETS_PATH` where images are stored
+
+`LANGUAGES` List of supported languages
+
 #### Database
 
 `USE_SQLITE` NOTE: in testing we've moved to Postgres, so this probably doesn't work any more
+
 
 ##### SQLite
 
