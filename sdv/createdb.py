@@ -624,50 +624,32 @@ def update_users():
     print("all modifications committed")
 
 
-def init_db(drop_all=False):
+def init_db(drop_all=False, no_prompt=False):
     if drop_all:
         delete_db()
     print("---------")
-    a = raw_input("Generate advertising log database? (y/n): ")
-    if a == "y":
-        generate_ad_log()
-    a = raw_input("Generate playerinfo database? (y/n): ")
-    if a == "y":
-        generate_db()
-    a = raw_input("Generate todo database? (y/n): ")
-    if a == "y":
-        generate_todo()
-    a = raw_input("Generate errors database? (y/n): ")
-    if a == "y":
-        generate_errors()
-    a = raw_input("Generate blog database? (y/n): ")
-    if a == "y":
-        generate_blog()
-    a = raw_input("Generate user database? (y/n): ")
-    if a == "y":
-        generate_users()
-    a = raw_input("Generate serial database? (y/n): ")
-    if a == "y":
-        generate_serial()
-    a = raw_input("Generate api_clients database? (y/n): ")
-    if a == "y":
-        generate_api_clients()
-    a = raw_input("Generate api_users database? (y/n): ")
-    if a == "y":
-        generate_api_users()
-    a = raw_input("Generate plans database? (y/n): ")
-    if a == "y":
-        generate_plans()
-    a = raw_input("Set indexes for optimized db access? (y/n): ")
-    if a == "y":
-        set_indexes()
-    print("--------")
-    a = raw_input("Update playerinfo database? (y/n): ")
-    if a == "y":
-        update_playerinfo()
-    a = raw_input("Update users database? (y/n): ")
-    if a == "y":
-        update_users()
+
+    questions = {
+        "Generate advertising log database? (y/n): ": generate_ad_log,
+        "Generate playerinfo database? (y/n): ": generate_db,
+        "Generate todo database? (y/n): ": generate_todo,
+        "Generate errors database? (y/n): ": generate_errors,
+        "Generate blog database? (y/n): ": generate_blog,
+        "Generate user database? (y/n): ": generate_users,
+        "Generate serial database? (y/n): ": generate_serial,
+        "Generate api_clients database? (y/n): ": generate_api_clients,
+        "Generate api_users database? (y/n): ": generate_api_users,
+        "Generate plans database? (y/n): ": generate_plans,
+        "Set indexes for optimized db access? (y/n): ": set_indexes,
+        "Update playerinfo database? (y/n): ": update_playerinfo,
+        "Update users database? (y/n): ": update_users,
+    }
+
+    for question, action in questions.items():
+        if no_prompt:
+            action()
+        elif raw_input(question) == 'y':
+            action()
 
 
 if __name__ == "__main__":
