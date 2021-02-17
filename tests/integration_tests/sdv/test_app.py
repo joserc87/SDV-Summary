@@ -33,4 +33,6 @@ def client(working_sqlite):
 
 def test_root_loaded(client):
     rv = client.get('/')
-    assert b'upload.farm Stardew Val...' in rv.data
+    text = rv.data.decode()
+    title = '<title>upload.farm Stardew Valley Summary Generator</title>'
+    assert title in text
