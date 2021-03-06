@@ -1,0 +1,20 @@
+language: python
+
+services:
+  - docker
+
+python:
+  - "3.7"
+jobs:
+  include:
+    - stage: "Tests"
+      name: "Unit Tests"
+      install: pip install -r def-requirements.txt
+      script: pytest
+    - stage: "Build Docker Image"
+      name: "Build Docker Image"
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -t "$DOCKER_USERNAME"/sdv-summary:latest -f Dockerfile.production .
+        - docker images
+        - docker push "$DOCKER_USERNAME"/sdv-summary:latest
