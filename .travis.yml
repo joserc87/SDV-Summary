@@ -9,7 +9,9 @@ jobs:
   include:
     - stage: "Tests"
       name: "Unit Tests"
-      install: pip install -r dev-requirements.txt
+      install:
+        - pip install -r dev-requirements.txt
+        - cp sdv/config.py.sample config.py
       script: pytest
     - stage: "Build Docker Image"
       name: "Build Docker Image"
