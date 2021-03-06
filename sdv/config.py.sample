@@ -26,8 +26,19 @@ class DevelopmentConfig():
     DB_PASSWORD = 'sdv_summary'
     # NOTE: Leave commented to use unix socket
     # Or specify Host if DB is not in the same machine
-    # DB_HOST = 'postgres'
+    DB_HOST = 'postgres'
+
+    # Mail
+    MAIL_DEFAULT_SENDER = 'info@upload.farm'
+
+
+class TestingConfig(DevelopmentConfig):
+    TESTING = True
+    USE_SQLITE = True
+    DB_SQLITE = 'sdv_summary.sqlite'
+
 
 config = {
-  'development': DevelopmentConfig
+  'development': DevelopmentConfig,
+  'testing': TestingConfig,
 }
