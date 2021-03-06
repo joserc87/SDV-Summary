@@ -9,7 +9,7 @@ jobs:
   include:
     - stage: "Tests"
       name: "Unit Tests"
-      install: pip install -r def-requirements.txt
+      install: pip install -r dev-requirements.txt
       script: pytest
     - stage: "Build Docker Image"
       name: "Build Docker Image"
