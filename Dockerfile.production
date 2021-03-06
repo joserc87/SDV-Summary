@@ -19,5 +19,4 @@ RUN apt-get autoremove -y gcc
 
 COPY . /app
 
-CMD [ "gunicorn", "-c", "gunicorn_config.py", "runserver:app"]
-
+CMD [ "gunicorn", "-c", "gunicorn_config.py", "sdv:app"]
