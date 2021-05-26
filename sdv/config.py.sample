@@ -11,7 +11,7 @@ class DevelopmentConfig():
     IMGUR_CLIENTID = ''
     IMGUR_SECRET = ''
     IMGUR_DIRECT_UPLOAD = True
-    RECAPTCHA_ENABLED = None
+    RECAPTCHA_ENABLED = False
     RECAPTCHA_SITE_KEY = None
     RECAPTCHA_SECRET_KEY = None
     ANALYTICS_ID = ''
