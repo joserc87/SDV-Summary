@@ -7,7 +7,7 @@ class DevelopmentConfig():
     SECRET_KEY = 'changeme'
     MAX_CONTENT_LENGTH = 16*1024*1024
     PASSWORD_ATTEMPTS_LIMIT = None
-    PASSWORD_MIN_LENGTH = 0
+    PASSWORD_MIN_LENGTH = 6
     IMGUR_CLIENTID = ''
     IMGUR_SECRET = ''
     IMGUR_DIRECT_UPLOAD = True
